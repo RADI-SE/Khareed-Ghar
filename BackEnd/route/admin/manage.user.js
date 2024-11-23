@@ -1,9 +1,7 @@
 import express from "express";
 import {
-  getAllUsers,
-  getSellers,
-  getBuyers,
-  getModerators,
+  
+  getUsersByRole,
   editUserProfile,
   displayUserProfile,
   banUsers,
@@ -14,35 +12,19 @@ import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
 
 const router = express.Router();
 
-router.get(
-  "/moderators",
-  verifyTokenForRole,
-  AuthorizeRoles("admin"),
-  getModerators
-);
-router.get("/sellers", verifyTokenForRole, AuthorizeRoles("admin"), getSellers);
-router.get("/buyers", verifyTokenForRole, AuthorizeRoles("admin"), getBuyers);
-router.get("/display-user/:id", displayUserProfile);
+ 
+const verifyAdmin = [verifyTokenForRole, AuthorizeRoles("admin")];
 
-router.put(
-  "/edit-user/:id",
-  verifyTokenForRole,
-  AuthorizeRoles("admin"),
-  editUserProfile
-);
+router.get("/moderators", verifyAdmin, (req, res) => getUsersByRole(req, res, 'moderator')); 
 
-router.put(
-  "/ban-user/:id",
-  verifyTokenForRole,
-  AuthorizeRoles("admin"),
-  banUsers
-);
+router.post("/sellers", verifyAdmin, getUsersByRole);  
+router.get("/buyers", verifyAdmin, (req, res) => getUsersByRole(req, res, 'buyer')); 
 
-router.put(
-  "/unban-user/:id",
-  verifyTokenForRole,
-  AuthorizeRoles("admin"),
-  unbanUsers
-);
+router.get("/user/:id", verifyTokenForRole, displayUserProfile); 
+
+router.put("/user/:id", verifyTokenForRole, editUserProfile); 
+
+router.put("/ban-user/:id", verifyAdmin, banUsers);  
+router.put("/unban-user/:id", verifyAdmin, unbanUsers);  
 
 export default router;

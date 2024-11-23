@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './UserComponents.css'; // Ensure styles are correct
+import './user.css'; // Ensure styles are correct
 
 const UserCards = () => {
   return (

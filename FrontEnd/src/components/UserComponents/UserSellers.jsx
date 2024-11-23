@@ -1,111 +1,87 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { FaEdit, FaBan } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import "./UserComponents.css"; // Ensure styles are correct
-import EditUserModal from "./EditUser"; // Import the modal
+import { FaEdit, FaBan } from "react-icons/fa";
+import EditUserModal from "./EditUser";
+import { useAdminService } from "../../services/admin/manageUsers";
 
 const UserSellers = () => {
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState(null); // Track selected user for editing
-  const [showEditModal, setShowEditModal] = useState(false); // Show/hide the modal
-  const [error, setError] = useState(null); // Error state
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [error, setError] = useState(null);
+
   const token = sessionStorage.getItem("token");
+  const { displayUser, banUsers } = useAdminService();
+  const role = "seller";
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/admin/view-users/sellers", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (Array.isArray(response.data.sellers)) {
-          setData(response.data.sellers);
-          setFilteredData(response.data.sellers);
-        } else {
-          setError("Unexpected response format");
-          console.error("Unexpected response format", response.data);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError("Error fetching data");
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, [token]);
+    if (token && role) {
+      getSellers();
+    }
+  }, [token, role]);
+
+  const getSellers = async () => {
+    try {
+      setLoading(true);
+      const sellers = await displayUser(token, role);
+      setData(sellers);
+      setFilteredData(sellers);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      setError("Error fetching sellers: " + err.message);
+      console.error("Error fetching sellers:", err);
+    }
+  };
 
   const getStatusBadgeClass = (role) => {
-    switch (role) {
-      case "admin":
-        return "bg-primary";
-      case "seller":
-        return "bg-success";
-      case "moderator":
-        return "bg-warning";
-      case "banned":
-        return "bg-danger";
-      default:
-        return "bg-secondary";
-    }
+    const badgeClasses = {
+      admin: "bg-primary",
+      seller: "bg-success",
+      moderator: "bg-warning",
+      banned: "bg-danger",
+    };
+    return badgeClasses[role] || "bg-secondary";
   };
 
-  const handleBanToggle = (id, currentRole) => {
+  const handleBanToggle = async (id, currentStatus) => {
     const confirmAction = window.confirm(
       `Are you sure you want to ${
-        currentRole === "banned" ? "unban" : "ban"
+        currentStatus === "banned" ? "unban" : "ban"
       } this user?`
     );
-
-    if (confirmAction) {
-      const endpoint =
-        currentRole === "banned"
-          ? `http://localhost:5000/api/admin/view-users/unban-user/${id}`
-          : `http://localhost:5000/api/admin/view-users/ban-user/${id}`;
-
-      axios
-        .put(
-          endpoint,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          alert(
-            `${
-              currentRole === "banned" ? "User unbanned" : "User banned"
-            } successfully!`
-          );
-
-          setData((prevData) =>
-            prevData.map((user) =>
-              user._id === id
-                ? {
-                    ...user,
-                    role: currentRole === "banned" ? "seller" : "banned",
-                  }
-                : user
-            )
-          );
-        })
-        .catch((error) => {
-          console.error(
-            `${currentRole === "banned" ? "Unban" : "Ban"} error:`,
-            error
-          );
-          alert(
-            `Failed to ${currentRole === "banned" ? "unban" : "ban"} user!`
-          );
-        });
+    if (!confirmAction) return;
+  
+    try {
+      const response = await banUsers(token, id, "banned");
+      if (response.status === 200) {
+        alert("User status updated successfully!");
+        // Update local state without fetching data again
+        setData((prevData) =>
+          prevData.map((user) =>
+            user._id === id
+              ? { ...user, role: currentStatus === "banned" ? "seller" : "banned" }
+              : user
+          )
+        );
+  
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.map((user) =>
+            user._id === id
+              ? { ...user, role: currentStatus === "banned" ? "seller" : "banned" }
+              : user
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Error updating user status:", err);
+      alert("Failed to update user status. Please try again later.");
     }
   };
+  
 
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
@@ -119,27 +95,32 @@ const UserSellers = () => {
   };
 
   const handleEditClick = (userId) => {
-    setSelectedUserId(userId); // Set the user ID to be edited
-    setShowEditModal(true); // Show the edit modal
+    setSelectedUserId(userId);
+    setShowEditModal(true);
   };
 
   const handleModalClose = () => {
-    setShowEditModal(false); // Hide the modal when done
-    setSelectedUserId(null); // Clear the selected user
+    setShowEditModal(false);
+    setSelectedUserId(null);
   };
 
-  const handleUserUpdated = () => {
-    console.log("User updated, refresh list if necessary.");
+  const handleUserUpdated = (updatedUser) => {
+    setData((prevData) =>
+      prevData.map((user) =>
+        user._id === updatedUser._id ? updatedUser : user
+      )
+    );
+    handleModalClose();
   };
 
   if (loading) {
-    return <div>Loading...</div>; // You can replace this with a spinner
+    return <div>Loading...</div>;
   }
 
   return (
     <div>
-      {error && <div className="alert alert-danger">{error}</div>} {/* Show error if any */}
-      {data.length === 0 ? (
+      {error && <div className="alert alert-danger">{error}</div>}
+      {filteredData.length === 0 ? (
         <p>No sellers available</p>
       ) : (
         <div className="container mt-4">
@@ -149,14 +130,15 @@ const UserSellers = () => {
           <div className="search-container mb-3">
             <input
               type="text"
-              className="form-control search-input"
+              className="form-control"
               placeholder="Search by name or email"
               value={searchTerm}
               onChange={handleSearch}
             />
           </div>
 
-          <div className="table-responsive d-none d-md-block">
+          {/* Table */}
+          <div className="table-responsive">
             <table className="table table-hover">
               <thead className="table-light">
                 <tr>
@@ -170,7 +152,7 @@ const UserSellers = () => {
               </thead>
               <tbody>
                 {filteredData.map((user) => (
-                  <tr key={user._id} className="border-bottom">
+                  <tr key={user._id}>
                     <td>{user._id}</td>
                     <td>
                       <Link
@@ -195,18 +177,17 @@ const UserSellers = () => {
                     </td>
                     <td>{user.lastLogin}</td>
                     <td>
-                      {/* Edit Button */}
                       <button
                         className="btn btn-warning me-2"
                         onClick={() => handleEditClick(user._id)}
                       >
                         <FaEdit className="me-2" /> Edit
                       </button>
-
-                      {/* Ban/Unban Button */}
                       <button
                         className={`btn ${
-                          user.role === "banned" ? "btn-success" : "btn-danger"
+                          user.role === "banned"
+                            ? "btn-success"
+                            : "btn-danger"
                         } me-2`}
                         onClick={() => handleBanToggle(user._id, user.role)}
                       >
@@ -220,7 +201,6 @@ const UserSellers = () => {
             </table>
           </div>
 
-          {/* Edit User Modal */}
           {selectedUserId && (
             <EditUserModal
               userId={selectedUserId}
@@ -229,7 +209,6 @@ const UserSellers = () => {
               onUserUpdated={handleUserUpdated}
             />
           )}
-             
         </div>
       )}
     </div>

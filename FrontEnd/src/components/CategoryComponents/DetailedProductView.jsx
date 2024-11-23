@@ -17,6 +17,7 @@ const DetailedProductView = () => {
   const fetchCategories = async () => {
     try {
       const fetchedCategories = await displayCategories(token);
+      console.log(fetchCategories)
       setCategories(fetchedCategories || []);
     } catch (err) {
       console.error("Error fetching categories:", err);

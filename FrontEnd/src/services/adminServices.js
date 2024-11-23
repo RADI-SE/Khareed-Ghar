@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/admin";
+const API_URL = "http://localhost:5000/api/";
 
 axios.defaults.withCredentials = true;
 
@@ -18,7 +18,7 @@ export const useAdminService = create((set) => ({
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.post(
-        `${API_URL}/categories/add-category`,
+        `${API_URL}add-category`,
         { name: name, description: description },
         {
           headers: {
@@ -42,7 +42,7 @@ export const useAdminService = create((set) => ({
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.post(
-        `http://localhost:5000/api/admin/categories/add-Subcategory`,
+        `${API_URL}add-Subcategory`,
         {
           name: name,
           description: description,
@@ -76,7 +76,7 @@ export const useAdminService = create((set) => ({
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.put(
-        `${API_URL}/categories/edit-subcategory`,
+        `${API_URL}edit-subcategory`,
         {
           subCategoryId: subCategoryId,
           id: id,
@@ -105,7 +105,7 @@ export const useAdminService = create((set) => ({
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.put(
-        `${API_URL}/categories/edit-category/${parentCategoryId}`,
+        `${API_URL}edit-category/${parentCategoryId}`,
         { name: name, description: description },
         {
           headers: {
@@ -129,7 +129,7 @@ export const useAdminService = create((set) => ({
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.get(
-        `${API_URL}/categories/view-categories`,
+        `${API_URL}view-categories`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -154,7 +154,7 @@ export const useAdminService = create((set) => ({
       set({ isLoading: true, errorMessage: null });
 
       const response = await axios.get(
-        `${API_URL}categories/view-Subcategories/${parentCategoryId}`,
+        `${API_URL}view-Subcategories/${parentCategoryId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -183,7 +183,7 @@ export const useAdminService = create((set) => ({
       console.log("ID is " + categoryId);
       set({ isLoading: true, errorMessage: null });
       const response = await axios.delete(
-        `${API_URL}/categories/delete-category`,
+        `${API_URL}delete-category`,
         {
           data: {
             categoryId: categoryId,
@@ -216,7 +216,7 @@ export const useAdminService = create((set) => ({
       console.log("ID is " + categoryId);
       set({ isLoading: true, errorMessage: null });
       const response = await axios.delete(
-        `${API_URL}/categories/delete-subcategory`,
+        `${API_URL}delete-subcategory`,
         {
           data: {
             categoryId: categoryId,

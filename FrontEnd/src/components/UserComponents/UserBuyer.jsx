@@ -1,114 +1,116 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import {FaEdit, FaBan } from "react-icons/fa";
-import './UserComponents.css';  
-import EditUserModal from "./EditUser";  
+import { Link } from "react-router-dom";
+import { FaEdit, FaBan } from "react-icons/fa";
+import EditUserModal from "./EditUser";
+import { useAdminService } from "../../services/admin/manageUsers";
 
-const UserBuyers = () => {
+const UserBuyer = () => {
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState(null); 
-  const [showEditModal, setShowEditModal] = useState(false);  
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [error, setError] = useState(null);
+
   const token = sessionStorage.getItem("token");
+  const { displayUser, banUsers } = useAdminService();
+  const role = "buyer";
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/admin/view-users/buyers", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (Array.isArray(response.data.buyers)) {
-          setData(response.data.buyers);
-          setFilteredData(response.data.buyers);
-        } else {
-          console.error("Unexpected response format", response.data);
-          setData([]);
-          setFilteredData([]);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, [token]);
+    if (token && role) {
+      getSellers();
+    }
+  }, [token, role]);
+
+  const getSellers = async () => {
+    try {
+      setLoading(true);
+      const sellers = await displayUser(token, role);
+      setData(sellers);
+      setFilteredData(sellers);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      setError("Error fetching sellers: " + err.message);
+      console.error("Error fetching sellers:", err);
+    }
+  };
 
   const getStatusBadgeClass = (role) => {
-    switch (role) {
-      case "admin":
-        return "bg-primary";
-      case "seller":
-        return "bg-success";
-      case "moderator":
-        return "bg-warning";
-      case "banned":
-        return "bg-danger";
-      default:
-        return "bg-secondary";
-    }
+    const badgeClasses = {
+      admin: "bg-primary",
+      seller: "bg-success",
+      moderator: "bg-warning",
+      banned: "bg-danger",
+    };
+    return badgeClasses[role] || "bg-secondary";
   };
 
-  const handleBanToggle = (id, currentRole) => {
+  const handleBanToggle = async (id, currentStatus) => {
     const confirmAction = window.confirm(
-      `Are you sure you want to ${currentRole === "banned" ? "unban" : "ban"} this user?`
+      `Are you sure you want to ${
+        currentStatus === "banned" ? "unban" : "ban"
+      } this user?`
     );
-    
-    if (confirmAction) {
-      const endpoint =
-        currentRole === "banned"
-          ? `http://localhost:5000/api/admin/view-users/unban-user/${id}`
-          : `http://localhost:5000/api/admin/view-users/ban-user/${id}`;
+    if (!confirmAction) return;
   
-      axios
-        .put(endpoint, {}, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          alert(`${currentRole === "banned" ? "User unbanned" : "User banned"} successfully!`);
-          
-           setData((prevData) =>
-            prevData.map((user) =>
-              user._id === id
-                ? { ...user, role: currentRole === "banned" ? "seller" : "banned" }
-                : user
-            )
-          );
-        })
-        .catch((error) => {
-          console.error(`${currentRole === "banned" ? "Unban" : "Ban"} error:`, error);
-          alert(`Failed to ${currentRole === "banned" ? "unban" : "ban"} user!`);
-        });
+    try {
+      const response = await banUsers(token, id, "banned");
+      if (response.status === 200) {
+        alert("User status updated successfully!");
+        // Update local state without fetching data again
+        setData((prevData) =>
+          prevData.map((user) =>
+            user._id === id
+              ? { ...user, role: currentStatus === "banned" ? "seller" : "banned" }
+              : user
+          )
+        );
+  
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.map((user) =>
+            user._id === id
+              ? { ...user, role: currentStatus === "banned" ? "seller" : "banned" }
+              : user
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Error updating user status:", err);
+      alert("Failed to update user status. Please try again later.");
     }
   };
+  
 
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
     const filtered = data.filter(
       (user) =>
-        user.name.toLowerCase().includes(term) || user.email.toLowerCase().includes(term)
+        user.name.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term)
     );
     setFilteredData(filtered);
   };
 
   const handleEditClick = (userId) => {
-    setSelectedUserId(userId); 
-    setShowEditModal(true);  
+    setSelectedUserId(userId);
+    setShowEditModal(true);
   };
 
   const handleModalClose = () => {
-    setShowEditModal(false); 
-    setSelectedUserId(null);  
+    setShowEditModal(false);
+    setSelectedUserId(null);
   };
 
-  const handleUserUpdated = () => {
-     console.log("User updated, refresh list if necessary.");
+  const handleUserUpdated = (updatedUser) => {
+    setData((prevData) =>
+      prevData.map((user) =>
+        user._id === updatedUser._id ? updatedUser : user
+      )
+    );
+    handleModalClose();
   };
 
   if (loading) {
@@ -117,24 +119,25 @@ const UserBuyers = () => {
 
   return (
     <div>
-      {data.length === 0 ? (
-        <p>No Buyers available</p>
+      {error && <div className="alert alert-danger">{error}</div>}
+      {filteredData.length === 0 ? (
+        <p>No Buyer available</p>
       ) : (
         <div className="container mt-4">
-          <h2 className="mb-3">Buyers Data</h2>
-
-          {/* Search Bar */}
+          <h2 className="mb-3">Buyer Data</h2>
+          
           <div className="search-container mb-3">
             <input
               type="text"
-              className="form-control search-input"
+              className="form-control"
               placeholder="Search by name or email"
               value={searchTerm}
               onChange={handleSearch}
             />
           </div>
 
-          <div className="table-responsive d-none d-md-block">
+          {/* Table */}
+          <div className="table-responsive">
             <table className="table table-hover">
               <thead className="table-light">
                 <tr>
@@ -148,31 +151,47 @@ const UserBuyers = () => {
               </thead>
               <tbody>
                 {filteredData.map((user) => (
-                  <tr key={user.id} className="border-bottom">
+                  <tr key={user._id}>
                     <td>{user._id}</td>
-                    <td>{user.name}</td>
+                    <td>
+                      <Link
+                        to={`/admin/users/user/${user._id}`}
+                        className="text-dark"
+                      >
+                        {user.name}
+                      </Link>
+                    </td>
                     <td>{user.email}</td>
                     <td>
                       <span
                         className={`badge ${getStatusBadgeClass(user.role)}`}
-                        style={user.role === "seller" ? { color: '#fff', backgroundColor: '#1A2B49' } : {}}
+                        style={
+                          user.role === "seller"
+                            ? { color: "#fff", backgroundColor: "#1A2B49" }
+                            : {}
+                        }
                       >
                         {user.role}
                       </span>
                     </td>
                     <td>{user.lastLogin}</td>
                     <td>
-                      {/* Edit Button */}
-                      <button className="btn btn-warning me-2" onClick={() => handleEditClick(user._id)}>
+                      <button
+                        className="btn btn-warning me-2"
+                        onClick={() => handleEditClick(user._id)}
+                      >
                         <FaEdit className="me-2" /> Edit
                       </button>
-
-                      {/* Ban/Unban Button */}
                       <button
-                        className={`btn ${user.role === "banned" ? "btn-success" : "btn-danger"} me-2`}
+                        className={`btn ${
+                          user.role === "banned"
+                            ? "btn-success"
+                            : "btn-danger"
+                        } me-2`}
                         onClick={() => handleBanToggle(user._id, user.role)}
                       >
-                        <FaBan className="me-2" /> {user.role === "banned" ? "Unban" : "Ban"}
+                        <FaBan className="me-2" />{" "}
+                        {user.role === "banned" ? "Unban" : "Ban"}
                       </button>
                     </td>
                   </tr>
@@ -181,7 +200,6 @@ const UserBuyers = () => {
             </table>
           </div>
 
-          {/* Edit User Modal */}
           {selectedUserId && (
             <EditUserModal
               userId={selectedUserId}
@@ -196,4 +214,4 @@ const UserBuyers = () => {
   );
 };
 
-export default UserBuyers;
+export default UserBuyer;

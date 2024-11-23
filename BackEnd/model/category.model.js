@@ -50,6 +50,6 @@ const CategorySchema = new mongoose.Schema({
 });
 
 export const Category = mongoose.model('Category', CategorySchema);
-export const SubCategory = mongoose.model('Subcategory', SubcategorySchema);
+export const Subcategory = mongoose.model('Subcategory', SubcategorySchema);
 
  

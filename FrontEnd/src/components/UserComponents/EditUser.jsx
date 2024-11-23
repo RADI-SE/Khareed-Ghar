@@ -1,59 +1,63 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Modal, Button, Form, Alert, Spinner } from "react-bootstrap";
+import { useAdminService } from "../../services/admin/manageUsers";
 
 const EditUserModal = ({ userId, show, handleClose, onUserUpdated }) => {
-  const [user, setUser] = useState({ name: "", email: "", role: "" });
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({ name: "", email: "", role: "" }); // Fix: Properly handle user state
+  const [loading, setLoading] = useState(false); // Adjusted loading state initialization
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const { editUserProfile, displayUserProfile } = useAdminService();
   const token = sessionStorage.getItem("token");
 
-  useEffect(() => {
-    if (!userId) {
-      setError("User ID is missing");
-      setLoading(false);
-      return;
+  // Fetch user profile
+  const fetchUserProfile = async () => {
+    if (userId) {
+      try {
+        setLoading(true);
+        const fetchedUser = await displayUserProfile(token, userId);
+        setUser(fetchedUser); // Correctly set the fetched user data
+      } catch (err) {
+        setError("Error fetching user profile: " + err.message);
+      } finally {
+        setLoading(false);
+      }
     }
-
-    // Fetch user data when modal opens
-    axios
-      .get(`http://localhost:5000/api/admin/view-users/display-user/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setUser(response.data.user);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("Error fetching user data. Please try again later.");
-        setLoading(false);
-      });
-  }, [userId, token]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Effect to load user data when `userId` changes
+  useEffect(() => {
+    if (userId && show) {
+      fetchUserProfile();
+    }
+  }, [userId, show]);
 
-    axios
-      .put(`http://localhost:5000/api/admin/view-users/edit-user/${userId}`, user, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(() => {
-        setSuccessMessage("User updated successfully!");
-        setError("");
-        setTimeout(() => {
-          handleClose();
-          onUserUpdated(); // Notify parent of successful update
-        }, 1000);
-      })
-      .catch(() => {
-        setError("Failed to update user. Please try again.");
-      });
+  // Handle input change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prevUser) => ({ ...prevUser, [name]: value }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccessMessage("");
+    try {
+      setLoading(true);
+      await editUserProfile(token, userId, user);
+      setSuccessMessage("User updated successfully!");
+      fetchUserProfile();
+      onUserUpdated(user); // Notify parent of successful update
+      setTimeout(() => {
+        handleClose(); // Close modal after success
+        setSuccessMessage(""); // Reset success message
+      }, 1500);
+    } catch (err) {
+      setError("Failed to update user. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -99,6 +103,9 @@ const EditUserModal = ({ userId, show, handleClose, onUserUpdated }) => {
               <Form.Group className="mb-3">
                 <Form.Label>Role</Form.Label>
                 <Form.Select name="role" value={user.role} onChange={handleChange} required>
+                  <option value="" disabled>
+                    Select Role
+                  </option>
                   <option value="admin">Admin</option>
                   <option value="seller">Seller</option>
                   <option value="moderator">Moderator</option>
@@ -106,8 +113,8 @@ const EditUserModal = ({ userId, show, handleClose, onUserUpdated }) => {
                 </Form.Select>
               </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Save Changes
+              <Button variant="primary" type="submit" disabled={loading}>
+                {loading ? "Saving..." : "Save Changes"}
               </Button>
             </Form>
           </>

@@ -4,8 +4,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connect } from "./database/db.connection.js";
 import authRoutes from "./route/auth.user.route.js";
-import ManageUsers from "./route/admin/manage.user.js"
-import ManageCategories from "./route/admin/manage.category.js"
+import manageUsers from "./route/admin/manage.user.js"
+import manageCategories from "./route/admin/manage.category.js"
+import manageProducts from "./route/admin/manage.product.js"
 dotenv.config();
 
 const app = express();
@@ -20,8 +21,9 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/admin/view-users", ManageUsers);
-app.use("/api/admin/categories", ManageCategories);
+app.use("/api", manageUsers);
+app.use("/api/", manageCategories);
+app.use("/api/", manageProducts);
 app.listen(PORT, () => {
   connect();
   console.log(`Server is running at http://localhost:${PORT}`);
