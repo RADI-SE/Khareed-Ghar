@@ -149,12 +149,12 @@ export const useAdminService = create((set) => ({
     } catch (error) {}
   },
 
-  displaySubCategories: async (token, parentCategoryId) => {
+  getSubCategories: async (token, parentCategoryId) => {
     try {
       set({ isLoading: true, errorMessage: null });
 
       const response = await axios.get(
-        `${API_URL}view-Subcategories/${parentCategoryId}`,
+        `${API_URL}view-subcategories/${parentCategoryId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

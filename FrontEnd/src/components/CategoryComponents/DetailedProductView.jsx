@@ -6,18 +6,25 @@ import { useAdminService } from "../../services/adminServices";
 
 const DetailedProductView = () => {
   const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]); // Track subcategories for the selected parent category
   const [selectedCategory, setSelectedCategory] = useState(null); // Track selected parent category
   const token = sessionStorage.getItem("token");
-  const { displayCategories } = useAdminService();
+  const { displayCategories  , getSubCategories} = useAdminService();
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
+
+  
   const fetchCategories = async () => {
     try {
       const fetchedCategories = await displayCategories(token);
+      const fetchedSubCategories = await getSubCategories(token,selectedCategory );
       console.log(fetchCategories)
+  
+
+
       setCategories(fetchedCategories || []);
     } catch (err) {
       console.error("Error fetching categories:", err);

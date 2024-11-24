@@ -25,12 +25,12 @@ export const useAdminService = create((set) => ({
         }
       );
       set({ user: response.data, isAuthenticated: true, isLoading: false });
-      console.log(response.data);
       const sellers = response.data.filter(
         (user) =>
           user.role === role ||
-          (user.role === "banned" && user.originalRole === role)
+        (user.role === "banned" && user.originalRole === role)
       );
+      console.log("form  displayUser :  sellers ",sellers);
       return sellers;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });

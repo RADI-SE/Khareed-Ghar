@@ -1,8 +1,8 @@
 .sidebar {
-    position: sticky;
+    position: sticky !important;
     top: 0;
-    height: 100vh;
-    padding-top: 20px;
+    height: 100vh !important;
+    padding-top: 20px !important;
   }
   
   .main-content {
@@ -15,4 +15,5 @@
   }
   
 
+  
   

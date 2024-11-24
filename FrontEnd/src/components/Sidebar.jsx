@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./components.css";
 
 const Sidebar = () => {
@@ -19,30 +19,30 @@ const Sidebar = () => {
           <h4 className="sidebar-heading">Admin Panel</h4>
           <ul className="nav flex-column">
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/dashboard">
+              <NavLink className="nav-link" to="/admin/dashboard">
                 Dashboard
-              </Link>
+              </NavLink>
             </li>
            
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/users">
+              <NavLink className="nav-link" to="/admin/users">
                 User Management
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/orders">
+              <NavLink className="nav-link" to="/admin/orders">
                 Order Management
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/categories">
+              <NavLink className="nav-link" to="/admin/categories">
                 Category Management
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/products">
+              <NavLink className="nav-link" to="/admin/products">
                 Product Management
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import InputField from "../Common/InputFields";
 import "./AuthForm.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signin, isLoading } = useAuthService();
+  const { signin, isLoading , isAuthenticated , user} = useAuthService();
   const { errorMessage, setError, clearError } = useAuthService();
   const navigate = useNavigate();
   useEffect(() => {
@@ -49,24 +49,14 @@ function SignIn() {
 
       const user = await signin(email, password); // Now the user object will have the role
       sessionStorage.setItem("token", user.token);
-      console.log("token", user.token);
-      if (user && user.role) {
-        // Ensure user and user.role are defined
-        if (user.role === "admin") {
-          navigate("/admin");
-        } else {
-          navigate("/");
-        }
-        console.log(user.role); // Should now log the correct role
-        localStorage.setItem("email", email);
-      } else {
-        console.error("User or role is undefined");
-      }
     } catch (error) {
       console.error("Error during sign-in:", error);
     }
   };
 
+  if (isAuthenticated && user?.role === "admin") {
+    return <Navigate to="/admin" />;
+  }
   return (
     <div className="auth-container d-flex flex-column flex-md-row align-items-center">
       <div className="form-section col-12 col-md-6 p-4">
