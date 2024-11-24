@@ -37,6 +37,8 @@ const CategorySchema = new mongoose.Schema({
       _id: { type: mongoose.Schema.Types.ObjectId, auto: true }, // Must exist for .id() to work
       name: { type: String, required: true },
       description: { type: String, required: true },
+      createdAt: { type: Date, required: true},
+      updatedAt: { type: Date, required: true },
     },
   ], 
   createdAt: {

@@ -1,34 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import "./productstyle.css";
 import { useAdminService } from "../../services/adminServices";
+import { useMutation, useQuery } from "@tanstack/react-query"; 
 
 export const Del_C = () => {
-  const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState("");
   const [subCategoryId, setSubCategoryId] = useState("");
-  const [categoryName, setCategoryName] = useState("");
   const [subCategoryName, setSubCategoryName] = useState("");
+  const [confirmationName, setConfirmationName] = useState("");
   const [message, setMessage] = useState("");
   const { deleteSubCategories, displayCategories } = useAdminService();
   const token = sessionStorage.getItem("token");
-  const [showModal, setShowModal] = useState(false); // State for modal visibility
-  const [confirmationName, setConfirmationName] = useState(""); // State for the subcategory name input
+  const [showModal, setShowModal] = useState(false); 
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const fetchedCategories = await displayCategories(token);
-      setCategories(fetchedCategories || []);
-    } catch (err) {
-      console.error("Error fetching categories:", err);
+  const { data: categories, isLoading: categoriesLoading, isError: categoriesError } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => displayCategories(token),
+    onSuccess: (data) => {
+      if (data) {
+        setCategoryId("");  
+        setSubCategoryId(""); 
+        setSubCategoryName("");  
+      }
     }
-  };
+  });
 
-  const handleDelete = async () => {
+ 
+  const { mutate: deleteCategory, isLoading, isError, isSuccess } = useMutation({
+    mutationFn: () => deleteSubCategories(token, categoryId, subCategoryId), 
+    onSuccess: () => {
+      setMessage("Subcategory deleted successfully!");
+      setSubCategoryId("");   
+      setSubCategoryName(""); 
+      setConfirmationName("");  
+      setShowModal(false);
+    },
+    onError: () => {
+      setMessage("Failed to delete subcategory.");
+    }
+  });
+
+  const handleDelete = () => {
     if (!subCategoryId) {
       setMessage("Please select a subcategory to delete.");
       return;
@@ -39,25 +52,14 @@ export const Del_C = () => {
       return;
     }
 
-    try {
-      const response = await deleteSubCategories(token, confirmationName, categoryId,subCategoryId);
-      console.log("Response:", response);
-      setMessage("Subcategory deleted successfully!");
-      setSubCategoryId("");
-      setSubCategoryName("");
-      setShowModal(false);
-      fetchCategories();
-    } catch (error) {
-      console.error("Error deleting subcategory:", error);
-      setMessage("Failed to delete subcategory.");
-    }
+    deleteCategory(confirmationName);
   };
 
   const handleCategoryChange = (event) => {
     const selectedCategoryId = event.target.value;
     setCategoryId(selectedCategoryId);
-    setSubCategoryId("");
-    setSubCategoryName("");
+    setSubCategoryId(""); 
+    setSubCategoryName("");  
   };
 
   const handleSubCategoryChange = (e) => {
@@ -72,15 +74,23 @@ export const Del_C = () => {
       setSubCategoryName(subCategory.name);
     }
 
-    setShowModal(true);
-    setConfirmationName("");
+    setShowModal(true);  
+    setConfirmationName("");  
   };
 
   const handleModalClose = () => setShowModal(false);
 
+  if (categoriesLoading) {
+    return <div>Loading categories...</div>;
+  }
+
+  if (categoriesError) {
+    return <div>Error loading categories!</div>;
+  }
+
   return (
     <div className="edit-category-form">
-      {/* Category selection */}
+    
       <div className="form-group">
         <label>Select Category</label>
         <select value={categoryId} onChange={handleCategoryChange}>
@@ -92,8 +102,7 @@ export const Del_C = () => {
           ))}
         </select>
       </div>
-
-      {/* Subcategory selection */}
+ 
       {categoryId && (
         <div className="form-group">
           <label>Select Subcategory</label>
@@ -109,8 +118,7 @@ export const Del_C = () => {
           </select>
         </div>
       )}
-
-      {/* Modal for subcategory deletion */}
+ 
       {showModal && (
         <Modal show={showModal} onHide={handleModalClose}>
           <Modal.Header closeButton>
@@ -129,8 +137,12 @@ export const Del_C = () => {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={handleDelete}>
-              Delete
+            <Button
+              variant="danger"
+              onClick={handleDelete}
+              disabled={isLoading} // Disable button during loading
+            >
+              {isLoading ? "Deleting..." : "Delete"}
             </Button>
             <Button variant="secondary" onClick={handleModalClose}>
               Cancel
@@ -139,7 +151,7 @@ export const Del_C = () => {
         </Modal>
       )}
 
-      {message && <p className="message">{message}</p>}
+      {message && <p className={`message ${isError ? 'error' : 'success'}`}>{message}</p>}
     </div>
   );
 };

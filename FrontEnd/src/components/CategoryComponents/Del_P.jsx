@@ -1,62 +1,75 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./productstyle.css";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAdminService } from "../../services/adminServices";
-import { Modal, Button } from "react-bootstrap";  
+import { Modal, Button } from "react-bootstrap";
+
 export const Del_P = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [message, setMessage] = useState("");
-  const [category, setCategory] = useState([]);
-  const [showModal, setShowModal] = useState(false);  
-  const [categoryName, setCategoryName] = useState("");  
-  const { displayCategories, deleteCategories } = useAdminService();
-  const [confirmationName, setConfirmationName] = useState("");  
+  const [confirmationName, setConfirmationName] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");  
   const token = sessionStorage.getItem("token");
+  const { displayCategories, deleteCategories } = useAdminService();
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const queryClient = useQueryClient();
 
-  const fetchCategories = async () => {
-    try {
-      const fetchedCategories = await displayCategories(token);
-      setCategory(fetchedCategories || []);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
+   
+  const { data: category = [], isLoading, isError } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => displayCategories(token),
+    staleTime: 5 * 60 * 1000,  
+  });
 
-  const handleDelete = async () => {
+  
+  const deleteCategoryMutation = useMutation({
+    mutationFn: ({ token, confirmationName, selectedCategory }) =>
+      deleteCategories(token, confirmationName, selectedCategory),
+    onSuccess: () => {
+      setModalMessage("");
+      setShowModal(false);
+      queryClient.invalidateQueries({ queryKey: ["categories"] }); 
+    },
+    onError: () => {
+      setModalMessage("Failed to delete category. Please try again.");
+    },
+  });
+
+  const handleDelete = () => {
     if (!selectedCategory) {
-      setMessage("Please select a category to delete.");
+      setModalMessage("No category selected for deletion.");
       return;
     }
 
-    try {
-      console.log("confirmationName" ,confirmationName );
-      await deleteCategories(token, confirmationName , selectedCategory);
-      setMessage("Category deleted successfully!");
-      setSelectedCategory("");
-      setShowModal(false);
-      fetchCategories();
-    } catch (error) {
-      console.error("Error deleting category:", error);
-      setMessage("Failed to delete category.");
+    const selectedCategoryName = category.find((cat) => cat._id === selectedCategory)?.name.trim();
+    if (confirmationName.trim() !== selectedCategoryName) {
+      setModalMessage("Category name does not match. Please try again.");
+      return;
     }
+
+    deleteCategoryMutation.mutate({ token, confirmationName, selectedCategory });
   };
 
   const handleCategoryChange = (event) => {
     const selectedCategoryId = event.target.value;
     setSelectedCategory(selectedCategoryId);
-    const selectedCategoryObj = category.find(cat => cat._id === selectedCategoryId);    
-    if (selectedCategoryObj) {
-      setCategoryName(selectedCategoryObj.name); 
-    }
-
     setShowModal(true);  
-    setConfirmationName(""); 
+    setConfirmationName("");  
+    setModalMessage("");  
   };
 
-  const handleModalClose = () => setShowModal(false); 
+  const handleModalClose = () => {
+    setShowModal(false);
+    setModalMessage(""); 
+  };
+
+  if (isLoading) {
+    return <p>Loading categories...</p>;
+  }
+
+  if (isError) {
+    return <p>Failed to fetch categories. Please try again later.</p>;
+  }
 
   return (
     <div className="delete-category-container">
@@ -89,9 +102,12 @@ export const Del_P = () => {
           </Modal.Header>
           <Modal.Body>
             <p>
-              Are you sure you want to delete "{categoryName}" category?
+              Are you sure you want to delete the category "
+              <strong>{category.find((cat) => cat._id === selectedCategory)?.name}</strong>"?
             </p>
-            
+            <p>
+              <strong>Note:</strong> Enter the category name exactly as confirmation.
+            </p>
             <input
               type="text"
               value={confirmationName}
@@ -99,18 +115,22 @@ export const Del_P = () => {
               placeholder="Enter category name"
               className="form-control"
             />
-
-            <Button variant="danger" onClick={handleDelete}>
-              Delete
+            {modalMessage && <p className="modal-feedback">{modalMessage}</p>}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="danger"
+              onClick={handleDelete}
+              disabled={deleteCategoryMutation.isLoading || !confirmationName.trim()}
+            >
+              {deleteCategoryMutation.isLoading ? "Deleting..." : "Delete"}
             </Button>
             <Button variant="secondary" onClick={handleModalClose}>
               Cancel
             </Button>
-          </Modal.Body>
+          </Modal.Footer>
         </Modal>
       )}
-
-      {message && <p className="message">{message}</p>}
     </div>
   );
 };

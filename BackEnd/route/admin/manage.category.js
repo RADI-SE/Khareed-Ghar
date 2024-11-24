@@ -25,14 +25,14 @@ router.post("/add-subcategory", verifyAdmin, addSubCategory);
 
 router.get("/view-categories", verifyAdminSeller, getCategories);
 
-router.get("/view-subcategories/:id", getSubCategories);
+router.get("/view-subcategories/:parentCategory", getSubCategories);
 
 router.put("/edit-category/:id", verifyAdmin, editCategories);
 
-router.put("/edit-subcategory", verifyAdmin, editSubCategories);
+router.put("/edit-subcategory/:parentCategory", verifyAdmin, editSubCategories);
 
 router.delete("/delete-category", verifyAdmin, deleteCategory);
 
-router.delete("/delete-subcategory", verifyAdmin, deleteSubategory);
+router.delete("/delete-subcategory", deleteSubategory);
 
 export default router;

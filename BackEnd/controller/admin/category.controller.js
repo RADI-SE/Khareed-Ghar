@@ -97,20 +97,12 @@ export const getSubCategories = async (req, res) => {
         .json({ success: false, message: "Parent category not found" });
     }
 
-    const childCategoryObjs = await Subcategory.find({
-      parentCategory: parentCategory,
-    });
-
-    if (childCategoryObjs.length === 0) {
-      return res.json({
-        success: false,
-        message: "No subcategories found within the parent category.",
-      });
-    }
+    const childs  = parentCategoryObj.subcategories ; 
+    console.log("conslone parent object childs  ...","   :",childs)
     res.json({
       success: true,
       message: "Subcategories fetched successfully",
-      subcategories: childCategoryObjs,
+      childs , 
     });
   } catch (error) {
     console.error("Error in getAllSubCategories:", error);
@@ -146,7 +138,15 @@ export const editCategories = async (req, res) => {
 // editSubCategories
 export const editSubCategories = async (req, res) => {
   try {
-    const { subCategoryId, id, name, description } = req.body;
+    const { parentCategory } = req.params;
+    const { subCategoryId,  name, description } = req.body;
+    const category = await Category.findById(parentCategory);
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Parent category not found.",
+      });
+    }
 
     if (!name || !description) {
       return res.status(400).json({
@@ -155,13 +155,6 @@ export const editSubCategories = async (req, res) => {
       });
     }
 
-    const category = await Category.findById(id);
-    if (!category) {
-      return res.status(404).json({
-        success: false,
-        message: "Parent category not found.",
-      });
-    }
     const subCategory = category.subcategories.id(subCategoryId);
     if (!subCategory) {
       return res.status(404).json({
@@ -222,38 +215,39 @@ export const deleteCategory = async (req, res) => {
 
 export const deleteSubategory = async (req, res) => {
   try {
-    const { categoryId, subCategoryId } = req.params;
+ 
+    const {categoryId, subcategoryId } = req.body;
 
-    if (!categoryId || !subCategoryId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid parameters" });
-    }
-
+    
+    console.log("cate id",categoryId);
+    console.log("sub cate id",subcategoryId);
     const category = await Category.findById(categoryId);
     if (!category) {
       return res
         .status(404)
         .json({ success: false, message: "Category not found" });
     }
-
-    const subCategoryIndex = category.subcategories.findIndex(
-      (sub) => sub._id.toString() === subCategoryId
-    );
-
+    
+    const child = category.subcategories;
+    const subCategoryIndex = child.findIndex(sub => sub.id === subcategoryId);
+    
     if (subCategoryIndex === -1) {
       return res
         .status(404)
-        .json({ success: false, message: "Subcategory not found in category" });
+        .json({ success: false, message: "Subcategory not found within the parent category" });
     }
-
-    category.subcategories.splice(subCategoryIndex, 1);
+    
+    // Remove the subcategory from the array
+    child.splice(subCategoryIndex, 1);
+    
+    // Save the updated category
     await category.save();
-    await Product.deleteMany({ subCategory: subCategoryId });
-    const deletedSubcategory = await Subcategory.findByIdAndDelete(
-      subCategoryId
-    );
-    console.log("Subcategory deleted successfully: ", deletedSubcategory);
+
+    // Delete the associated products for the subcategory
+    await Product.deleteMany({ subCategory: subcategoryId });
+
+    // Delete the subcategory itself
+    const deletedSubcategory = await Subcategory.findByIdAndDelete(subcategoryId);
     if (!deletedSubcategory) {
       return res
         .status(404)

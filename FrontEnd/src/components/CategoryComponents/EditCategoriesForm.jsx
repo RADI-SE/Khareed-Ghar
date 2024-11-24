@@ -1,28 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./productstyle.css";
 import { useAdminService } from "../../services/adminServices";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 export const EditCategoriesForm = () => {
-  const [categories, setCategories] = useState([]);  
-  const [CategoryId, setCategoryId] = useState(""); 
+  const [CategoryId, setCategoryId] = useState("");
   const [CategoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
-  const {EditCategoriesForm, displayCategories } = useAdminService();
+  const { EditCategoriesForm, displayCategories } = useAdminService();
   const token = sessionStorage.getItem("token");
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-  const fetchCategories = async () => {
-    try {
-      const fetchedCategories = await displayCategories(token);
-      setCategories(fetchedCategories || []);
-    } catch (err) {
-      console.error("Error fetching categories:", err);
-    }
-  };
+  const queryClient = useQueryClient();
+ 
+  const { data: categories = [], isLoading, isError, error } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => displayCategories(token),
+    staleTime: 60000, // Cache data for 1 minute
+  });
+ 
+  const mutation = useMutation({
+    mutationFn: ({ token, CategoryId, CategoryName, description }) =>
+      EditCategoriesForm(token, CategoryId, CategoryName, description),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["categories"]);
+      setMessage("Subcategory updated successfully!");
+      setCategoryName("");
+      setDescription("");
+    },
+    onError: () => {
+      setMessage("Failed to update subcategory.");
+    },
+  });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!CategoryId) {
       setMessage("Parent category is required");
@@ -32,21 +43,24 @@ export const EditCategoriesForm = () => {
       setMessage("Subcategory name is required");
       return;
     }
-    try {
-      await EditCategoriesForm(token, CategoryId, CategoryName, description);
-      setMessage("");
-      fetchCategories();
-    } catch (err) {
-      console.error("Error adding subcategory:", err);
-      setMessage("Failed to add subcategory");
-    }
+    mutation.mutate({ token, CategoryId, CategoryName, description });
   };
+
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
     setCategoryName("");
     setDescription("");
     setMessage("");
   };
+
+  if (isLoading) {
+    return <p>Loading categories...</p>;
+  }
+
+  if (isError) {
+    return <p>Error loading categories: {error.message}</p>;
+  }
+
   return (
     <div className="add-category-form">
       <div className="form-group">
@@ -87,5 +101,3 @@ export const EditCategoriesForm = () => {
     </div>
   );
 };
-
-

@@ -1,54 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./productstyle.css";
-import { FaArrowLeft } from "react-icons/fa"; // Importing the arrow icon from React Icons
-
+import { FaArrowLeft } from "react-icons/fa"; 
+import { useQuery } from "@tanstack/react-query";
 import { useAdminService } from "../../services/adminServices";
 
 const DetailedProductView = () => {
-  const [categories, setCategories] = useState([]);
-  const [subcategories, setSubcategories] = useState([]); // Track subcategories for the selected parent category
-  const [selectedCategory, setSelectedCategory] = useState(null); // Track selected parent category
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const token = sessionStorage.getItem("token");
-  const { displayCategories  , getSubCategories} = useAdminService();
+  const { displayCategories, getSubCategories } = useAdminService();
+ 
+  const {
+    data: categories = [],
+    isLoading: isLoadingCategories,
+    error: categoriesError,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => displayCategories(token),
+  });
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-
-  
-  const fetchCategories = async () => {
-    try {
-      const fetchedCategories = await displayCategories(token);
-      const fetchedSubCategories = await getSubCategories(token,selectedCategory );
-      console.log(fetchCategories)
-  
-
-
-      setCategories(fetchedCategories || []);
-    } catch (err) {
-      console.error("Error fetching categories:", err);
-    }
-  };
+  const {
+    data: subcategories = [],
+    isLoading: isLoadingSubcategories,
+    error: subcategoriesError,
+    refetch, 
+  } = useQuery({
+    queryKey: ["subcategories", selectedCategory?._id],
+    queryFn: () => getSubCategories(token, selectedCategory._id),
+    enabled: !!selectedCategory, 
+  });
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+    refetch(); 
   };
 
   const handleBackClick = () => {
     setSelectedCategory(null);
   };
 
+  if (isLoadingCategories) return <div>Loading categories...</div>;
+  if (categoriesError)
+    return <div>Error fetching categories: {categoriesError.message}</div>;
+
+  if (selectedCategory && isLoadingSubcategories)
+    return <div>Loading subcategories...</div>;
+  if (selectedCategory && subcategoriesError)
+    return <div>Error fetching subcategories: {subcategoriesError.message}</div>;
+
   return (
     <div className="table-responsive">
       {selectedCategory ? (
         <>
-        <div className="tablecss">
-        <button className="arrow-left btn-light" onClick={handleBackClick}>
-          <FaArrowLeft />
-          </button>
-          <h4>Subcategories of {selectedCategory.name}</h4>
-        </div>
+          <div className="tablecss">
+            <button className="arrow-left btn-light" onClick={handleBackClick}>
+              <FaArrowLeft />
+            </button>
+            <h4>Subcategories of {selectedCategory.name}</h4>
+          </div>
           <table className="table table-striped table-bordered">
             <thead className="thead-dark">
               <tr>
@@ -57,14 +65,18 @@ const DetailedProductView = () => {
               </tr>
             </thead>
             <tbody>
-              {selectedCategory.subcategories.map((subcategory) => (
-                <tr key={subcategory._id}>
-                  <td>{subcategory.name}</td>
-                  <td>
-                    {new Date(subcategory.createdAt).toLocaleDateString()}
-                  </td>
+              {Array.isArray(subcategories) ? (
+                subcategories.map((subcategory) => (
+                  <tr key={subcategory._id}>
+                    <td>{subcategory.name}</td>
+                    <td>{new Date(subcategory.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="2">No subcategories available</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </>
@@ -90,7 +102,7 @@ const DetailedProductView = () => {
                       {category.name}
                     </button>
                   </td>
-                  <td>{category.subcategories.length}</td>
+                  <td>{category.subcategories?.length || 0}</td>
                   <td>{new Date(category.createdAt).toLocaleDateString()}</td>
                 </tr>
               ))}

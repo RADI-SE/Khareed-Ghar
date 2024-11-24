@@ -1,26 +1,41 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Make sure to import axios
-import "./productstyle.css";
 import { useAdminService } from "../../services/adminServices";
+import "./productstyle.css";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const AddCategoriesForm = () => {
   const [categoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
-  const { AddCategoriesForm, isloading } = useAdminService();
+  const [message, setMessage] = useState("");
+  const { AddCategoriesForm } = useAdminService();
   const token = sessionStorage.getItem("token");
 
-  const handleSubmit =  async (e) => {
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await AddCategoriesForm(token, categoryName, description);
+    },
+    onSuccess: () => {
+      setCategoryName("");
+      setDescription("");
+      setError("");
+      setMessage("Category added successfully!");
+    },
+    onError: (error) => {
+      setError("Failed to add category");
+      console.error("Error adding category:", error);
+    },
+  });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!categoryName) {
       setError("Category name is required");
       return;
     }
-    await AddCategoriesForm(token, categoryName, description);
-    setCategoryName("");
-    setDescription("");
-    setError("");
+ 
+    mutation.mutate();
   };
 
   return (
@@ -46,34 +61,68 @@ export const AddCategoriesForm = () => {
         </div>
 
         {error && <p className="error">{error}</p>}
+        {message && <p className="success">{message}</p>}
 
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={mutation.isLoading}>
+          {mutation.isLoading ? "Adding..." : "Submit"}
+        </button>
       </form>
     </div>
   );
 };
 
 export const AddSubCategoriesForm = () => {
-  const [categories, setCategories] = useState([]); // List of parent categories
-  const [parentCategoryId, setParentCategoryId] = useState(""); // Selected parent category ID
+  const [parentCategoryId, setParentCategoryId] = useState("");
   const [subCategoryName, setSubCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
-  const { AddSubCategoriesForm, displayCategories,isloading } = useAdminService();
+  const [message, setMessage] = useState("");
+
+  const { AddSubCategoriesForm, displayCategories } = useAdminService();
   const token = sessionStorage.getItem("token");
-  useEffect(() => {
-    fetchCategories();  
-  }, []);
+
   const fetchCategories = async () => {
     try {
-      const fetchedCategories = await displayCategories(token); 
-      setCategories(fetchedCategories || []); 
+      const fetchedCategories = await displayCategories(token);
+      return fetchedCategories || [];  
     } catch (error) {
       console.error("Error fetching categories:", error);
+      return [];
     }
   };
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+  });
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await AddSubCategoriesForm(
+        token,
+        subCategoryName,
+        description,
+        parentCategoryId
+      );
+    },
+    onSuccess: () => {
+      setSubCategoryName("");
+      setDescription("");
+      setParentCategoryId("");
+      setError("");
+      setMessage("Subcategory added successfully!");
+    },
+    onError: (error) => {
+      setError("Failed to add subcategory");
+      console.error("Error adding subcategory:", error);
+    },
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!parentCategoryId) {
       setError("Parent category is required");
       return;
@@ -82,16 +131,13 @@ export const AddSubCategoriesForm = () => {
       setError("Subcategory name is required");
       return;
     }
-   await AddSubCategoriesForm(token, subCategoryName, description,parentCategoryId);
-    setSubCategoryName("");
-    setDescription("");
-    setError("DONE!");
-
+    mutation.mutate();
   };
+
   return (
     <div className="add-category-form">
       <form onSubmit={handleSubmit}>
-        <h3>Add SubCategory</h3>
+        <h3>Add Subcategory</h3>
         <div className="form-group">
           <label>Parent Category</label>
           <select
@@ -99,7 +145,7 @@ export const AddSubCategoriesForm = () => {
             onChange={(e) => setParentCategoryId(e.target.value)}
           >
             <option value="">Select parent category</option>
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <option key={category._id} value={category._id}>
                 {category.name}
               </option>
@@ -124,7 +170,11 @@ export const AddSubCategoriesForm = () => {
           />
         </div>
         {error && <p className="error">{error}</p>}
-        <button type="submit">Submit</button>
+        {message && <p className="success">{message}</p>}{" "}
+        
+        <button type="submit" disabled={mutation.isLoading}>
+          {mutation.isLoading ? "Adding..." : "Submit"} 
+        </button>
       </form>
     </div>
   );

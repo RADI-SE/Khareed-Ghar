@@ -69,17 +69,16 @@ export const useAdminService = create((set) => ({
   EditSubCategoriesForm: async (
     token,
     subCategoryId,
-    id,
+    parentCategory,
     name,
     description
   ) => {
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.put(
-        `${API_URL}edit-subcategory`,
+        `${API_URL}edit-subcategory/${parentCategory}`,
         {
           subCategoryId: subCategoryId,
-          id: id,
           name: name,
           description: description,
         },
@@ -94,11 +93,13 @@ export const useAdminService = create((set) => ({
           isLoading: false,
           errorMessage: null,
         });
-      } else {
-        set({ isLoading: false, errorMessage: response.data.message });
-      }
-      set({ isLoading: false, errorMessage: null });
-    } catch (error) {}
+        console.log("console data for sub edit ",response.data.subcategory);
+      return response.data.subcategory;
+      } 
+    } catch (error) {
+      set({ isLoading: false, errorMessage: error.message });
+      return null;
+    }
   },
 
   EditCategoriesForm: async (token, parentCategoryId, name, description) => {
@@ -118,11 +119,13 @@ export const useAdminService = create((set) => ({
           isLoading: false,
           errorMessage: null,
         });
-      } else {
-        set({ isLoading: false, errorMessage: response.data.message });
+        return response.data.data;
       }
-      set({ isLoading: false, errorMessage: null });
-    } catch (error) {}
+    } catch (error) {
+      set({ isLoading: false, errorMessage: error.message });
+      return null;
+      
+    }
   },
 
   displayCategories: async (token) => {
@@ -166,7 +169,10 @@ export const useAdminService = create((set) => ({
         isLoading: false,
         isCheckingAuth: false,
       });
-      return response.data;
+      console.log(response.data.childs);
+    
+    //
+      return response.data.childs;
     } catch (error) {
       console.error("Error fetching subcategories:", error);
       set({
@@ -210,23 +216,14 @@ export const useAdminService = create((set) => ({
     }
   },
 
-  deleteSubCategories: async (token, name, categoryId, subcategoryId) => {
+  deleteSubCategories: async (token,  categoryId, subcategoryId) => {
     try {
-      console.log("NAME is " + name);
-      console.log("ID is " + categoryId);
+      console.log("Category ID is " + categoryId);
+      console.log("Subcategory ID is " + subcategoryId);
       set({ isLoading: true, errorMessage: null });
       const response = await axios.delete(
-        `${API_URL}delete-subcategory`,
-        {
-          data: {
-            categoryId: categoryId,
-            name: name,
-            subcategoryId: subcategoryId,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `${API_URL}delete-subcategory`, { data: { categoryId, subcategoryId  }}
+ 
       );
 
       if (response.data.success) {
