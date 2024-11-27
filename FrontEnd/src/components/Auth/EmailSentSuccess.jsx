@@ -8,7 +8,7 @@ function EmailSentSuccess() {
       <p className="auth-subtitle">
         Please check your email for the verification code.
       </p>
-      <Link to="/signin" className="btn btn-primary mt-3">
+      <Link to="/auth/signin" className="btn btn-primary mt-3">
         Go to Login
       </Link>
     </div>

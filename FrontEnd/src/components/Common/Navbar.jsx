@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch, FaShoppingCart, FaUser, FaXbox } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import categories from "../../../public/CategoryData.json"; // Adjust the path based on your file structure
+import categories from "../../../public/CategoryData.json";  
 import { useAuthService } from "../../services/authService";
 
 const Navbar = () => {
@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   const handleLogin = () => {
-    window.location.href = '/signin';
+    window.location.href = '/auth/signin';
   }
   const handleLogout = async () => {
     await signout();
