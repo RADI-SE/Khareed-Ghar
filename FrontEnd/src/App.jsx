@@ -10,15 +10,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AdminRoutes, { adminChildrenRoutes } from "./pages/AdminRoutes";
 import HomePage from "./pages/HomePage";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import EmailSentSuccess from "./pages/ForgotPasswordPage";
 import { useAuthService } from "./services/authService";
 import NotFound from "./components/NotFound";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';  // You need to import the CSS
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AuthRoutes, { authRoutes } from "./pages/AuthRoutes";
+import VerifyEmail from "./components/Auth/VerifyEmail";
 
 const App = () => {
   const { isCheckingAuth, checkAuth, user, isAuthenticated } = useAuthService();
@@ -28,7 +25,7 @@ const App = () => {
   }, [checkAuth]);
 
   if (isCheckingAuth) {
-    return <div>Loading...</div>;  
+    return <div>Loading...</div>;
   }
 
   const router = createBrowserRouter([
@@ -47,27 +44,25 @@ const App = () => {
       children: adminChildrenRoutes,
     },
     {
-      path: "signin",
-      element: <SignInPage />,
+      path: "auth/*",
+      element: <AuthRoutes />,
+      children: authRoutes,
     },
     {
-      path: "signup",
-      element: <SignUpPage />,
-    },
-    {
-      path: "verify-email",
-      element: isAuthenticated && !user?.isVerified ? <VerifyEmailPage /> : <Navigate to="/" />,
-    },
-    {
-      path: "forgot-password",
-      element:<ForgotPasswordPage /> ,
+      path: "auth/verify-email",
+      element:
+        isAuthenticated && !user?.isVerified ? (
+          <VerifyEmail />
+        ) : (
+          <Navigate to="/" />
+        ),
     },
     {
       path: "*",
       element: <NotFound />,
     },
   ]);
- 
+
   const queryClient = new QueryClient();
 
   return (

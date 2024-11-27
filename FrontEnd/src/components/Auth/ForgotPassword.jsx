@@ -52,7 +52,7 @@ function ForgotPassword() {
               Reset Password
             </button>
             <p className="text-center mt-3">
-              <Link to="/signin" className="text-link">
+              <Link to="/auth/signin" className="text-link">
                 Login
               </Link>
             </p>

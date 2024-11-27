@@ -45,7 +45,7 @@ function SignIn() {
     const isVerified = localStorage.getItem("isVerified");
 
     if (!isVerified) {
-      return <Navigate to="/verify-email" />;
+      return <Navigate to="/auth/verify-email" />;
     }
 
     switch (userRole) {
@@ -79,7 +79,7 @@ function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <div className="text-end mb-3">
-            <Link to="/forgot-password" className="text-link">
+            <Link to="/auth/forgot-password" className="text-link">
               Forgot your password?
             </Link>
           </div>
@@ -97,7 +97,7 @@ function SignIn() {
           </button>
           <p className="text-center mt-3">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-link">
+            <Link to="/auth/signup" className="text-link">
               Create account
             </Link>
           </p>

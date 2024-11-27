@@ -66,7 +66,7 @@ function SignUp() {
   if (isRegistered) {
     const isVerified = localStorage.getItem("isVerified") === "true";
     if (!isVerified) {
-      return <Navigate to="/verify-email" />;
+      return <Navigate to="/auth/verify-email" />;
     }
   }
 
@@ -152,7 +152,7 @@ function SignUp() {
             />
             <label className="form-check-label" htmlFor="termsCheckbox">
               I agree to the{" "}
-              <Link to="/terms" className="text-link">
+              <Link to="/auth/terms" className="text-link">
                 Terms and Conditions
               </Link>
             </label>
@@ -168,7 +168,7 @@ function SignUp() {
 
           <p className="text-center mt-3">
             Already have an account?{" "}
-            <Link to="/signin" className="text-link">
+            <Link to="/auth/signin" className="text-link">
               Login
             </Link>
           </p>
