@@ -45,7 +45,7 @@ const App = () => {
     },
     {
       path: "auth/*",
-      element: <AuthRoutes user={user} isAuthenticated={isAuthenticated} />, // Pass user and isAuthenticated as props here
+      element: <AuthRoutes />,
       children: authRoutes,
     },
     {
