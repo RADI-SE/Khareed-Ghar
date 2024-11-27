@@ -1,37 +1,27 @@
 import React, { useState } from "react";
-import "./productstyle.css";
-import { useAdminService } from "../../services/adminServices";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-
+import "../style.css";
+import { useFetchCategories } from "../../../hooks/Categories/useFetchCategories";
+import { useEditCategory } from "../../../hooks/Categories/useEditCategory";
 export const EditCategoriesForm = () => {
   const [CategoryId, setCategoryId] = useState("");
   const [CategoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
-  const { EditCategoriesForm, displayCategories } = useAdminService();
   const token = sessionStorage.getItem("token");
 
-  const queryClient = useQueryClient();
- 
-  const { data: categories = [], isLoading, isError, error } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => displayCategories(token),
-    staleTime: 60000, // Cache data for 1 minute
-  });
- 
-  const mutation = useMutation({
-    mutationFn: ({ token, CategoryId, CategoryName, description }) =>
-      EditCategoriesForm(token, CategoryId, CategoryName, description),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["categories"]);
-      setMessage("Subcategory updated successfully!");
-      setCategoryName("");
-      setDescription("");
-    },
-    onError: () => {
-      setMessage("Failed to update subcategory.");
-    },
-  });
+  const {
+    data: categories = [],
+    isLoading: isLoadingCategories,
+    isError: categoriesError,
+    error: fetchError,
+  } = useFetchCategories(token);
+
+  const {
+    mutate: editCategory,
+    isError: updateCategoryError,
+    error: updateError,
+    isLoading: isUpdating,
+  } = useEditCategory(token);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +33,15 @@ export const EditCategoriesForm = () => {
       setMessage("Subcategory name is required");
       return;
     }
-    mutation.mutate({ token, CategoryId, CategoryName, description });
+    editCategory(
+      { CategoryId, CategoryName, description },
+      {
+        onSuccess: () => {
+          setMessage("Subcategory updated successfully.");
+          setTimeout(() => setMessage(""), 3000);
+        },
+      }
+    );
   };
 
   const handleCategoryChange = (e) => {
@@ -53,12 +51,12 @@ export const EditCategoriesForm = () => {
     setMessage("");
   };
 
-  if (isLoading) {
+  if (isLoadingCategories) {
     return <p>Loading categories...</p>;
   }
 
-  if (isError) {
-    return <p>Error loading categories: {error.message}</p>;
+  if (categoriesError) {
+    return <p>Error loading categories: {fetchError.message}</p>;
   }
 
   return (
@@ -95,7 +93,14 @@ export const EditCategoriesForm = () => {
             />
           </div>
           {message && <p className="message">{message}</p>}
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={isUpdating}>
+            {isUpdating ? "Updating..." : "Submit"}
+          </button>
+          {updateCategoryError && (
+            <p className="error-message">
+              {updateError?.response?.data?.message || "An error occurred."}
+            </p>
+          )}
         </form>
       )}
     </div>

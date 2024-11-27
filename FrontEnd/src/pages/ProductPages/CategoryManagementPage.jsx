@@ -1,5 +1,5 @@
 import React from 'react'
-import CategoryManagement from "../../components/CategoryComponents/CategoryManagement";
+import CategoryManagement from "../../components/Category/rootRoutes";
  
  const CategoryManagementPage =()=> {
   return (

@@ -17,25 +17,35 @@ export const useAdminService = create((set) => ({
   AddCategoriesForm: async (token, name, description) => {
     try {
       set({ isLoading: true, errorMessage: null });
+
       const response = await axios.post(
         `${API_URL}add-category`,
-        { name: name, description: description },
+        { name, description },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+
       if (response.status === 200) {
         set({
           isLoading: false,
           errorMessage: null,
         });
       } else {
-        set({ isLoading: false, errorMessage: response.data.message });
+        set({
+          isLoading: false,
+          errorMessage: response.data.message || "Failed to add category",
+        });
       }
-      set({ isLoading: false, errorMessage: null });
-    } catch (error) {}
+    } catch (error) {
+      set({
+        isLoading: false,
+        errorMessage: error.message || "An unexpected error occurred",
+      });
+      console.error("Error adding category:", error);
+    }
   },
 
   AddSubCategoriesForm: async (token, name, description, parentCategory) => {
@@ -93,9 +103,9 @@ export const useAdminService = create((set) => ({
           isLoading: false,
           errorMessage: null,
         });
-        console.log("console data for sub edit ",response.data.subcategory);
+      }
+      console.log("console data for sub edit ", response.data.subcategory);
       return response.data.subcategory;
-      } 
     } catch (error) {
       set({ isLoading: false, errorMessage: error.message });
       return null;
@@ -124,21 +134,17 @@ export const useAdminService = create((set) => ({
     } catch (error) {
       set({ isLoading: false, errorMessage: error.message });
       return null;
-      
     }
   },
 
   displayCategories: async (token) => {
     try {
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.get(
-        `${API_URL}view-categories`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}view-categories`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.data && response.data.categories) {
         const categories = response.data.categories;
         set({
@@ -170,8 +176,7 @@ export const useAdminService = create((set) => ({
         isCheckingAuth: false,
       });
       console.log(response.data.childs);
-    
-    //
+
       return response.data.childs;
     } catch (error) {
       console.error("Error fetching subcategories:", error);
@@ -185,21 +190,20 @@ export const useAdminService = create((set) => ({
 
   deleteCategories: async (token, name, categoryId) => {
     try {
-      console.log("NAME is " + name);
-      console.log("ID is " + categoryId);
+      console.log("NAME is: ", name);
+      console.log("ID is: ", categoryId);
+
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.delete(
-        `${API_URL}delete-category`,
-        {
-          data: {
-            categoryId: categoryId,
-            name: name,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+
+      const response = await axios.delete(`${API_URL}delete-category`, {
+        data: {
+          categoryId,
+          name,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.data.success) {
         set({
@@ -207,36 +211,73 @@ export const useAdminService = create((set) => ({
           isAuthenticated: true,
           isLoading: false,
         });
-        console.log("categories deleted successfully");
+        console.log("Category deleted successfully.");
+      } else {
+        set({
+          isLoading: false,
+          errorMessage: response.data.message || "Failed to delete category.",
+        });
       }
     } catch (error) {
-      console.log(deleteCategories);
-      set({ isLoading: false, errorMessage: error.response.data.message });
+      console.error("Error in deleteCategories: ", error);
+      set({
+        isLoading: false,
+        errorMessage: error.response?.data?.message || "An error occurred.",
+      });
       throw error;
     }
   },
 
-  deleteSubCategories: async (token,  categoryId, subcategoryId) => {
+  deleteSubCategories: async (token, categoryId, subcategoryId) => {
     try {
       console.log("Category ID is " + categoryId);
       console.log("Subcategory ID is " + subcategoryId);
-      set({ isLoading: true, errorMessage: null });
-      const response = await axios.delete(
-        `${API_URL}delete-subcategory`, { data: { categoryId, subcategoryId  }}
- 
-      );
 
+      // Make sure to check if categoryId and subcategoryId are valid
+      if (!categoryId || !subcategoryId) {
+        console.log("Missing categoryId or subcategoryId");
+        return;
+      }
+
+      set({ isLoading: true, errorMessage: null });
+
+      // Assuming API_URL is properly set
+      const response = await axios.delete(`${API_URL}delete-subcategory`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Ensure you're sending the token for authorization
+        },
+        data: {
+          categoryId,
+          subcategoryId,
+        },
+      });
+
+      // Check if the response is successful
       if (response.data.success) {
         set({
-          categories: null,
+          categories: null, // Or update the categories state as needed
           isAuthenticated: true,
           isLoading: false,
         });
-        console.log("categories deleted successfully");
+        console.log("Subcategory deleted successfully");
+      } else {
+        console.log("Failed to delete subcategory");
       }
     } catch (error) {
-      console.log(deleteCategories);
-      set({ isLoading: false, errorMessage: error.response.data.message });
+      // Log the error for debugging
+      console.error("Error deleting subcategory", error);
+
+      // Handle any specific error messages from the response
+      if (error.response) {
+        console.log("Error Response Data: ", error.response.data);
+        set({ isLoading: false, errorMessage: error.response.data.message });
+      } else {
+        set({
+          isLoading: false,
+          errorMessage: "An error occurred while deleting.",
+        });
+      }
+
       throw error;
     }
   },

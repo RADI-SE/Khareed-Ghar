@@ -1,14 +1,15 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import AdminLayout from "../components/AdminLayout";
+import AdminLayout from "../components/layouts/AdminLayout";
 import {DashBoardViewPage} from "./DashBoardPages/DashBoardViewPage";
 import {UserManagementPage} from "./UsersPages/UserManagementPage";
 import CategoryManagementPage from "../pages/ProductPages/CategoryManagementPage";
 import OrderManagementPanell from "./OrdersPages/OrderManagementPanell";
+import OrderDetails from "../components/OrderComponents/OrderDetails";
 import UserModerator from "../components/UserComponents/UserModerator";
 import UserSellers from "../components/UserComponents/UserSellers";
 import UserProfileView from "../components/UserComponents/UserProfileView";
-import DetailedProductView from "../components/CategoryComponents/DetailedProductView";
+import DetailedProductView from "../components/Category/dashboard/view";
 import NotFound from "../components/NotFound";
 import Dashboard from "../components/Dashboard";
 import UserBuyer from "../components/UserComponents/UserBuyer";
@@ -26,6 +27,7 @@ export const adminChildrenRoutes = [
   { index: true, element: <DashBoardViewPage /> }, // Default route
   { path: "dashboard", element: <DashBoardViewPage /> },
   { path: "orders", element: <OrderManagementPanell /> },
+   {path:"orders/order-details", element:<OrderDetails />},
   { path: "users", element: <UserManagementPage /> },
   { path: "users/mod", element: <UserModerator /> },
   { path: "users/seller", element: <UserSellers /> },

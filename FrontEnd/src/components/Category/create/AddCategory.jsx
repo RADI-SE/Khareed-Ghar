@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import "./productstyle.css"; 
-import { AddCategoriesForm, AddSubCategoriesForm } from "./addCategoriesForm";
+import "../style.css"; 
+ import { AddSubCategoriesForm } from "./chiledCategory";
+import { AddCategoryForm } from "./parentCategory";
 function AddCategory() {
   const [currentView, setCurrentView] = useState("addCategory"); 
   return (
@@ -21,7 +22,7 @@ function AddCategory() {
           Add SubCategory
         </button>
       </div>
-      {currentView === "AddCategoriesForm" && <AddCategoriesForm />}
+      {currentView === "AddCategoriesForm" && <AddCategoryForm />}
       {currentView === "AddSubCategoriesForm" && <AddSubCategoriesForm />}
     </div>
   );

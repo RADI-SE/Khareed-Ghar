@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './productstyle.css';
-import { EditCategoriesForm } from "./EditCategoriesForm.jsx";
-import {EditSubCategoriesForm} from "./EditSubCategoriesForm.jsx";
+import '../style.css';
+import { EditCategoriesForm } from "./parentCategory.jsx";
+import {EditSubCategoriesForm} from "./chiledCategory.jsx";
 
 function EditCategory() {
   const [currentView, setCurrentView] = useState("editCategory"); 

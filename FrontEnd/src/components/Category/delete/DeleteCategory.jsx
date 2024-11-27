@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./productstyle.css"; 
-import { Del_P } from "./Del_P";
-import{Del_C} from "./Del_C.jsx";
+import "../style.css"; 
+import { Del_P } from "./parentCategory.jsx";
+import{Del_C} from "./chiledCategory.jsx";
 
 function DeleteCategory() {
   const [currentView, setCurrentView] = useState("deleteCategory"); 

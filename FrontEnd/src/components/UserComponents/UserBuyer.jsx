@@ -93,11 +93,7 @@ const UserBuyer = () => {
     handleModalClose();
   };
 
-  const filteredData = data?.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchTerm) ||
-      user.email.toLowerCase().includes(searchTerm)
-  );
+  const filteredData = data
 
   if (isLoading) {
     return <div>Loading...</div>;

@@ -126,7 +126,6 @@ export const resendVerificationCode = async (req, res) => {
   }
 };
 
-
 export const verifyEmail = async (req, res) => {
   const { code } = req.body;
   try {
@@ -134,14 +133,6 @@ export const verifyEmail = async (req, res) => {
       verificationToken: code,
       verificationTokenExpiresAt: { $gt: Date.now() },
     });
-
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid or expired verification code",
-      });
-    }
-
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
@@ -191,7 +182,7 @@ export const signin = async (req, res) => {
     }
 
     user.lastLogin = new Date();
-    const token = generatTokenAndSetCookies(res, user._id, user.role);
+    const token = generatTokenAndSetCookies(res, user._id, user.role , user.isVerified );
     await user.save();
     res.status(200).json({
       success: true,
@@ -203,6 +194,8 @@ export const signin = async (req, res) => {
         role: user.role,
         lastLogin: user.lastLogin,
         token,
+        isVerified: user.isVerified // Include isVerified in the token payload
+
       },
     });
   } catch (error) {
