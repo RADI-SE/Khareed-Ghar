@@ -1,0 +1,288 @@
+.container-row{
+    padding: 50px;
+    column-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: grid;
+}
+
+.grid-item{
+    display: grid;
+    grid-template-columns: 70px auto;
+    background-color: #1a2b49;
+    border-radius: 8px;
+    height: 80px;
+    margin-bottom: 5px;
+    
+}
+
+.title{
+    text-decoration: none;
+}
+
+.links{
+    text-decoration: none;
+}
+/* =====================For UserCards================== */
+.card {
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    padding-top: 20px;
+  }
+  
+  
+/* ===================================================== */
+/* =====================UserSeller====================== */
+
+/* Optional additional styling */
+.container {
+  max-width: 100%;
+}
+
+.table {
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* ====================================================== */
+/* =========================UserSeller==UserBuyer==UserModerator=================== */
+
+
+/* UserComponents.css */
+
+/* Table styling */
+.table{
+    width: 100%;
+    border-bottom: #1a2b49;
+}
+
+tr{
+    width: fit-content;
+    border-bottom: 2px solid grey;
+    height: 40px;
+}
+
+.table th{
+    background-color: #1a2b49;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 14px;
+    height: 60px;
+}
+
+.table thead th {
+    font-weight: bold;
+    color: white;
+    background-color: #1a2b49;
+    border-bottom: 2px solid #dee2e6;
+    height: 60px;
+    align-self: center;
+}
+
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Badge styling for role */
+.badge {
+    padding: 0.4em 0.6em;
+    font-size: 0.875em;
+    font-weight: 600;
+    border-radius: 0.5em;
+}
+
+/* Custom badge colors */
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-info {
+    background-color: #17a2b8 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529;
+}
+
+.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+/* Link styling for user names */
+.text-dark {
+    color: #333;
+    text-decoration: none;
+}
+
+.text-dark:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    /* Card styling for mobile view */
+    .card {
+        border: 1px solid #dee2e6;
+        margin-bottom: 1rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-weight: bold;
+    }
+    .card-text {
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: white;
+  }
+  
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+  
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px); /* Slight hover effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .card-description {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 10px;
+  }
+
+  .search-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .search-input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 25px;
+  }
+  
+  .table td, .table th {
+    vertical-align: middle;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+  }
+  
+  .card-text {
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 767px) {
+    .search-container {
+      max-width: 90%;
+    }
+  }
+  
+  
+  .edit-user-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-user-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .alert {
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+  }
+  
+/* =============================================================== */

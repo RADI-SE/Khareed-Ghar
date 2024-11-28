@@ -13,7 +13,7 @@ import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
 const router = express.Router();
 
  
-const verifyAdmin = [verifyTokenForRole, AuthorizeRoles("admin")];
+const verifyAdmin = [verifyTokenForRole, AuthorizeRoles("admin","seller")];
 
 router.get("/moderators", verifyAdmin, (req, res) => getUsersByRole(req, res, 'moderator')); 
 

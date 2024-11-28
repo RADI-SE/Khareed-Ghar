@@ -9,6 +9,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AdminRoutes, { adminChildrenRoutes } from "./pages/AdminRoutes";
+import SellerRoutes, { sellerChildrenRoutes } from "./pages/SellerRoutes";
 import HomePage from "./pages/HomePage";
 import { useAuthService } from "./services/authService";
 import NotFound from "./components/NotFound";
@@ -42,6 +43,16 @@ const App = () => {
           <Navigate to="/" />
         ),
       children: adminChildrenRoutes,
+    },
+    {
+      path: "seller/*",
+      element:
+        isAuthenticated && user?.role === "seller" ? (
+          <SellerRoutes />
+        ) : (
+          <Navigate to="/" />
+        ),
+      children: sellerChildrenRoutes,
     },
     {
       path: "auth/*",
