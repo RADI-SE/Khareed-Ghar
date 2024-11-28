@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { ConfirmationModal } from "../../Common/category/confirmationModal/ConfirmationModel";  
+import { ConfirmationModal } from "../../../Common/category/confirmationModal/ConfirmationModel";  
 import { getSelectedCategoryName, isValidConfirmationName } from "../utils/utils"; 
-import { useFetchCategories } from "../../../hooks/Categories/useFetchCategories";
-import { useDeleteSubCategory } from "../../../hooks/Categories/useDeleteSubCategory";
+import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
+import { useDeleteSubCategory } from "../../../../hooks/Categories/useDeleteSubCategory";
 import "../style.css";
 
 export const Del_C = () => {

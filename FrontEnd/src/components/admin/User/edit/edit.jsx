@@ -1,9 +1,9 @@
 import React, {useEffect } from "react";
 import { Modal, Spinner } from "react-bootstrap";
 import UserForm from "./UserForm";
-import AlertMessage from "../../common/AlertMessage";
-import { useEditUsers } from "../../../hooks/Users/useEditUser";
-import { useProfileData } from "../../../hooks/Users/useUserProfile";
+import AlertMessage from "../../../common/AlertMessage";
+import { useEditUsers } from "../../../../hooks/Users/useEditUser";
+import { useProfileData } from "../../../../hooks/Users/useUserProfile";
 
 const EditUserModal = ({ userId, show, handleClose, onUserUpdated }) => {
   const token = sessionStorage.getItem("token");

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../style.css";
-import { useFetchCategories } from "../../../hooks/Categories/useFetchCategories";
-import { useCreateSubCategory } from "../../../hooks/Categories/useCreateSubCategory";
+import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
+import { useCreateSubCategory } from "../../../../hooks/Categories/useCreateSubCategory";
 
 export const AddSubCategoriesForm = () => {
   const [CategoryId, setParentCategoryId] = useState("");

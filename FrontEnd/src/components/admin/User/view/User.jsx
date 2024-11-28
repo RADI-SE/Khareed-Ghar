@@ -3,11 +3,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { FaEdit, FaBan } from "react-icons/fa";
 import EditUserModal  from "../edit/edit";
-import { useFetchUsers } from "../../../hooks/Users/useFetchUsers";
-import { useBanUsers } from "../../../hooks/Users/useActionUsers";
+import { useFetchUsers } from "../../../../hooks/Users/useFetchUsers";
+import { useBanUsers } from "../../../../hooks/Users/useActionUsers";
 import { getStatusBadgeClass, handleBanToggle, handleSearch } from "../utils/utils";
-import AlertMessage from "../../common/AlertMessage";
-import LoadingSpinner from "../../Common/LoadingSpinner";
+import AlertMessage from "../../../common/AlertMessage";
+import LoadingSpinner from "../../../Common/LoadingSpinner";
 
 const User = ({ role }) => {
   const [searchTerm, setSearchTerm] = useState("");

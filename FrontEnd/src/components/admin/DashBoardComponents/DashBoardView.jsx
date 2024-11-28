@@ -3,7 +3,7 @@ import "./DashBoard.css";
 import dollar from "./icons/dollor.png";
 import reviews from "./icons/reviews.png";
 import sales from "./icons/sales.png";
-import data from "../../mockJsons/orderData.json";
+import data from "../../../mockJsons/orderData.json";
 
 export const DashBoardView = () => {
   const [currentPage, setCurrentPage] = useState(0);

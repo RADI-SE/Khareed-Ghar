@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Alert, Button } from "react-bootstrap";
-import { useProfileData } from "../../../hooks/Users/useUserProfile";
+import { useProfileData } from "../../../../hooks/Users/useUserProfile";
 import "../style.css";
 
 const UserProfileView = () => {

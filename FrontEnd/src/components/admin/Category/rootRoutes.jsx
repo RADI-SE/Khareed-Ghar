@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import data from '../../mockJsons/productData.json';
+import data from '../../../mockJsons/productData.json';
 import AddCategory from './create/AddCategory';
 import EditCategory from './edit/EditCategory';
 import DeleteCategory from './delete/DeleteCategory';

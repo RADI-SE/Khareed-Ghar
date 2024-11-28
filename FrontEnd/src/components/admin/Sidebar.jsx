@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import "./components.css";
+import "../components.css";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);

@@ -1,12 +1,12 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import AdminLayout from "../components/layouts/AdminLayout";
-import { DashBoardView } from "../components/DashBoardComponents/DashBoardView";
-import CategoryManagement from "../components/Category/rootRoutes";
-import OrderDetails from "../components/OrderComponents/OrderDetails";
-import UserManagement from "../components/User/rootRoutes";
-import OrderList from "../components/OrderComponents/OrderList";
-import DetailedProductView from "../components/Category/dashboard/view";
+import { DashBoardView } from "../components/admin/DashBoardComponents/DashBoardView";
+import CategoryManagement from "../components/admin/Category/rootRoutes";
+import OrderDetails from "../components/admin/OrderComponents/OrderDetails";
+import UserManagement from "../components/admin/User/rootRoutes";
+import OrderList from "../components/admin/OrderComponents/OrderList";
+import DetailedProductView from "../components/admin/Category/dashboard/view";
 import NotFound from "../components/NotFound";
 
 const AdminRoutes = () => {

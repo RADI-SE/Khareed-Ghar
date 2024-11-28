@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import "../style.css";
-import { useFetchCategories } from "../../../hooks/Categories/useFetchCategories";
-import { useEditSubCategory } from "../../../hooks/Categories/useEditSubCategory";
-
-export const EditSubCategoriesForm = () => {
+import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
+import { useEditCategory } from "../../../../hooks/Categories/useEditCategory";
+export const EditCategoriesForm = () => {
   const [CategoryId, setCategoryId] = useState("");
-  const [SubCategoryId, setSubCategoryId] = useState("");
   const [CategoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
@@ -23,17 +21,20 @@ export const EditSubCategoriesForm = () => {
     isError: updateCategoryError,
     error: updateError,
     isLoading: isUpdating,
-  } = useEditSubCategory(token);
+  } = useEditCategory(token);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!CategoryId || !SubCategoryId || !CategoryName.trim()) {
-      setMessage("Please fill out all required fields.");
+    if (!CategoryId) {
+      setMessage("Parent category is required");
       return;
     }
-
+    if (!CategoryName.trim()) {
+      setMessage("Subcategory name is required");
+      return;
+    }
     editCategory(
-      { SubCategoryId, CategoryId, CategoryName, description },
+      { CategoryId, CategoryName, description },
       {
         onSuccess: () => {
           setMessage("Subcategory updated successfully.");
@@ -45,24 +46,9 @@ export const EditSubCategoriesForm = () => {
 
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
-    setSubCategoryId("");
     setCategoryName("");
     setDescription("");
-  };
-
-  const handleSubCategoryChange = (e) => {
-    setSubCategoryId(e.target.value);
-    const selectedCategory = categories.find(
-      (category) => category._id === CategoryId
-    );
-    const subCategory = selectedCategory?.subcategories.find(
-      (sub) => sub._id === e.target.value
-    );
-
-    if (subCategory) {
-      setCategoryName(subCategory.name);
-      setDescription(subCategory.description);
-    }
+    setMessage("");
   };
 
   if (isLoadingCategories) {
@@ -70,16 +56,11 @@ export const EditSubCategoriesForm = () => {
   }
 
   if (categoriesError) {
-    return (
-      <p>
-        Error loading categories: {fetchError?.message || "An error occurred."}
-      </p>
-    );
+    return <p>Error loading categories: {fetchError.message}</p>;
   }
 
   return (
-    <div className="edit-category-form">
-      <h2>Edit SubCategory</h2>
+    <div className="add-category-form">
       <div className="form-group">
         <label>Select Category</label>
         <select value={CategoryId} onChange={handleCategoryChange}>
@@ -91,25 +72,9 @@ export const EditSubCategoriesForm = () => {
           ))}
         </select>
       </div>
-
       {CategoryId && (
-        <div className="form-group">
-          <label>Select Subcategory</label>
-          <select value={SubCategoryId} onChange={handleSubCategoryChange}>
-            <option value="">Select subcategory</option>
-            {categories
-              .find((category) => category._id === CategoryId)
-              ?.subcategories.map((subCategory) => (
-                <option key={subCategory._id} value={subCategory._id}>
-                  {subCategory.name}
-                </option>
-              ))}
-          </select>
-        </div>
-      )}
-
-      {SubCategoryId && (
         <form onSubmit={handleSubmit}>
+          <h3>Add SubCategory</h3>
           <div className="form-group">
             <label>Subcategory Name</label>
             <input
@@ -117,7 +82,6 @@ export const EditSubCategoriesForm = () => {
               value={CategoryName}
               onChange={(e) => setCategoryName(e.target.value)}
               placeholder="Enter subcategory name"
-              required
             />
           </div>
           <div className="form-group">
@@ -132,15 +96,12 @@ export const EditSubCategoriesForm = () => {
           <button type="submit" disabled={isUpdating}>
             {isUpdating ? "Updating..." : "Submit"}
           </button>
+          {updateCategoryError && (
+            <p className="error-message">
+              {updateError?.response?.data?.message || "An error occurred."}
+            </p>
+          )}
         </form>
-      )}
-
-      {updateCategoryError && (
-        <p className="error-message">
-          {updateError?.response?.data?.message ||
-            updateError?.message ||
-            "Failed to update subcategory."}
-        </p>
       )}
     </div>
   );

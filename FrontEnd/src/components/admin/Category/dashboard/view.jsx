@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useFetchCategories } from "../../../hooks/Categories/useFetchCategories";
-import CategoryTable from "../../Common/category/parent-category"; 
-import SubcategoryTable from "../../Common/category/sub-category"; 
+import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
+import CategoryTable from "../../../Common/category/parent-category"; 
+import SubcategoryTable from "../../../Common/category/sub-category"; 
 
 const DetailedProductView = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);

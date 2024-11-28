@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../style.css";
-import { useCreateCategory } from "../../../hooks/Categories/useCreateCategory";
+import { useCreateCategory } from "../../../../hooks/Categories/useCreateCategory";
 
 export const AddCategoryForm = () => {
   const [name, setCategoryName] = useState("");
