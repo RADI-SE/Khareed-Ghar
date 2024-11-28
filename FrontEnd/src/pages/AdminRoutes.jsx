@@ -4,7 +4,7 @@ import AdminLayout from "../components/layouts/AdminLayout";
 import { DashBoardView } from "../components/DashBoardComponents/DashBoardView";
 import CategoryManagement from "../components/Category/rootRoutes";
 import OrderDetails from "../components/OrderComponents/OrderDetails";
-import UserManagement from "../components/UserComponents/rootRoutes";
+import UserManagement from "../components/User/rootRoutes";
 import OrderList from "../components/OrderComponents/OrderList";
 import DetailedProductView from "../components/Category/dashboard/view";
 import NotFound from "../components/NotFound";

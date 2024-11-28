@@ -41,13 +41,14 @@ export const useAdminService = create((set) => ({
   displayUserProfile: async (token, id) => {
     try {
       set({ isLoading: true }); // Start loading
+      console.log("id", id);
       const response = await axios.get( `${API_URL}/user/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       // Update state with fetched user data
       set({ user: response.data, isAuthenticated: true, isLoading: false });
-      console.log("User Profile:  ..... ", response.data);
+      console.log("User Profile:  ..... ", response.data.user);
 
       return response.data.user;
     } catch (error) {
@@ -86,15 +87,13 @@ export const useAdminService = create((set) => ({
           headers: { Authorization: `Bearer ${token}` }, 
         }
       );
-
-      // Update Zustand state with response
       set({
         user: response.data.user,
         isAuthenticated: true,
         isLoading: false,
       });
 
-      return response.data.user; // Return the updated user data for further use
+      return response.data.user;
     } catch (error) {
       set({
         errorMessage: error.response?.data?.message || error.message,
@@ -102,7 +101,7 @@ export const useAdminService = create((set) => ({
       });
 
       console.error("Error banning/unbanning user:", error.response || error);
-      throw error; // Re-throw error to handle it where the function is called
+      throw error; 
     }
   },
 }));
