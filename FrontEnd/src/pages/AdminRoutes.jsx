@@ -1,19 +1,13 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import AdminLayout from "../components/layouts/AdminLayout";
-import {DashBoardViewPage} from "./DashBoardPages/DashBoardViewPage";
-import {UserManagementPage} from "./UsersPages/UserManagementPage";
-import CategoryManagementPage from "../pages/ProductPages/CategoryManagementPage";
-import OrderManagementPanell from "./OrdersPages/OrderManagementPanell";
+import { DashBoardView } from "../components/DashBoardComponents/DashBoardView";
+import CategoryManagement from "../components/Category/rootRoutes";
 import OrderDetails from "../components/OrderComponents/OrderDetails";
-import UserModerator from "../components/UserComponents/UserModerator";
-import UserSellers from "../components/UserComponents/UserSellers";
-import UserProfileView from "../components/UserComponents/UserProfileView";
+import UserManagement from "../components/UserComponents/rootRoutes";
+import OrderList from "../components/OrderComponents/OrderList";
 import DetailedProductView from "../components/Category/dashboard/view";
 import NotFound from "../components/NotFound";
-import Dashboard from "../components/Dashboard";
-import UserBuyer from "../components/UserComponents/UserBuyer";
-import EditUser from "../components/UserComponents/EditUser";
 
 const AdminRoutes = () => {
   return (
@@ -24,19 +18,14 @@ const AdminRoutes = () => {
 };
 
 export const adminChildrenRoutes = [
-  { index: true, element: <DashBoardViewPage /> }, // Default route
-  { path: "dashboard", element: <DashBoardViewPage /> },
-  { path: "orders", element: <OrderManagementPanell /> },
+  { index: true, element: <DashBoardView /> }, // Default route
+  { path: "dashboard", element: <DashBoardView /> },
+  { path: "orders", element: <OrderList /> },
    {path:"orders/order-details", element:<OrderDetails />},
-  { path: "users", element: <UserManagementPage /> },
-  { path: "users/mod", element: <UserModerator /> },
-  { path: "users/seller", element: <UserSellers /> },
-  { path: "users/buyer", element: <UserBuyer /> },
-  { path: "users/user/:id", element: <UserProfileView /> },
-  { path: "users/edit/:id", element: <EditUser /> },
-  { path: "categories", element: <CategoryManagementPage /> },
+   { path: "users/*", element: <UserManagement /> }, 
+   { path: "categories", element: <CategoryManagement/> },
   { path: "products/detailedProduct", element: <DetailedProductView /> },
-  { path: "*", element: <NotFound /> }, // Catch-all route
+  { path: "*", element: <NotFound /> }, 
 ];
 
 export default AdminRoutes;

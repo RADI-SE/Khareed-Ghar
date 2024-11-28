@@ -12,7 +12,7 @@ import AdminRoutes, { adminChildrenRoutes } from "./pages/AdminRoutes";
 import HomePage from "./pages/HomePage";
 import { useAuthService } from "./services/authService";
 import NotFound from "./components/NotFound";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthRoutes, { authRoutes } from "./pages/AuthRoutes";
 import VerifyEmail from "./components/Auth/VerifyEmail";
@@ -74,3 +74,36 @@ const App = () => {
 };
 
 export default App;
+
+
+/*
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import UserCards from "./UsersCards";
+import UserModerator from "./UserModerator";
+import UserSellers from "./UserSellers";
+import UserBuyer from "./UserBuyer";
+import UserProfileView from "./UserProfileView";
+
+function UserManagement() {
+  return (
+    <Router>
+      <div className="user-management">
+        <Routes>
+          <Route path="users" element={<Navigate to="/admin/users/all" replace />} />
+          <Route path="/admin/users/all" element={<UserCards />} />
+          <Route path="/admin/users/mod" element={<UserModerator />} />
+          <Route path="/admin/users/sellers" element={<UserSellers />} />
+          <Route path="/admin/users/buyers" element={<UserBuyer />} />
+          <Route path="/admin/users/profile" element={<UserProfileView />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default UserManagement;
+
+
+*/

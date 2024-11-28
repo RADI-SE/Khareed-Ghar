@@ -24,21 +24,17 @@ const EditUserModal = ({ userId, show, handleClose, onUserUpdated }) => {
       }
     }
   };
-
-  // Effect to load user data when `userId` changes
   useEffect(() => {
     if (userId && show) {
       fetchUserProfile();
     }
   }, [userId, show]);
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-
-  // Handle form submission
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");

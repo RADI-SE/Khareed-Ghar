@@ -1,12 +1,12 @@
-import AuthLayout from '../components/layouts/AuthLayout';
+import AuthLayout from "../components/layouts/AuthLayout";
 import SignIn from "../components/Auth/login/SignIn";
 import SignUp from "../components/Auth/register/SignUp";
 import ForgotPassword from "../components/Auth/ForgotPassword";
 import EmailSentSuccess from "../components/Auth/EmailSentSuccess";
-import { Outlet } from 'react-router-dom';
- 
+import NotFound from "../components/NotFound";
+import { Outlet } from "react-router-dom";
+
 const AuthRoutes = () => {
-  
   return (
     <AuthLayout>
       <Outlet />
@@ -20,6 +20,7 @@ export const authRoutes = [
   { path: "signup", element: <SignUp /> },
   { path: "forgot-password", element: <ForgotPassword /> },
   { path: "email-sent-success", element: <EmailSentSuccess /> },
+  { path: "*", element: <NotFound /> },
 ];
 
 export default AuthRoutes;

@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/";
+const API_URL = "http://localhost:5000/api";
 
 axios.defaults.withCredentials = true;
 
@@ -18,7 +18,7 @@ export const useAdminService = create((set) => ({
     try {
       set({ isLoading: true });
       const response = await axios.post(
-        `http://localhost:5000/api/sellers`,
+        `${API_URL}/sellers`,
         { role },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -41,7 +41,7 @@ export const useAdminService = create((set) => ({
   displayUserProfile: async (token, id) => {
     try {
       set({ isLoading: true }); // Start loading
-      const response = await axios.get(`http://localhost:5000/api/user/${id}`, {
+      const response = await axios.get( `${API_URL}/user/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -61,7 +61,7 @@ export const useAdminService = create((set) => ({
     try {
       set({ isLoading: true });
 
-      const response = await axios.put(`${API_URL}user/${id}`, user, {
+      const response = await axios.put(`${API_URL}/user/${id}`, user, {
         headers: { Authorization: `Bearer ${token}` },
       });
       set({
@@ -79,14 +79,11 @@ export const useAdminService = create((set) => ({
   banUsers: async (token, id,role) => {
     try {
       set({ isLoading: true });
-
-      console.log("User ID from Zustand:", id);
-
       const response = await axios.put(
-        `${API_URL}ban-user/${id}`,
-        {role}, // Empty request body
+        `${API_URL}/ban-user/${id}`,
+        {role}, 
         {
-          headers: { Authorization: `Bearer ${token}` }, // Correctly placed headers
+          headers: { Authorization: `Bearer ${token}` }, 
         }
       );
 
