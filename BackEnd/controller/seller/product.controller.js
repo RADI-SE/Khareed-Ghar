@@ -29,8 +29,7 @@ export const addProduct = async (req, res) => {
         message: "Category not found.",
       });
     }
-
-    const isSubcategoryValid = categoryDoc.subcategories.includes(subcategory);
+    const isSubcategoryValid = categoryDoc.subcategories.id(subcategory);
     if (!isSubcategoryValid) {
       return res.status(404).json({
         success: false,

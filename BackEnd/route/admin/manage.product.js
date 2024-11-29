@@ -14,12 +14,12 @@ const router = express.Router();
 const verifySeller = [verifyTokenForRole, AuthorizeRoles("seller")];
 const verifyAdminSeller = [verifyTokenForRole, AuthorizeRoles("admin", "seller")];
 
-router.post("/seller/products", verifySeller, addProduct);
+router.post("/products", verifySeller, addProduct);
 
-router.get("/seller/products", verifyAdminSeller, getProducts);
+router.get("/products", verifyAdminSeller, getProducts);
 
-router.get("/seller/products/:id", verifyAdminSeller, getProductById);
+router.get("/products/:id", verifyAdminSeller, getProductById);
 
-router.delete("/seller/products/:id", verifyAdminSeller, deleteProduct);
+router.delete("/products/:id", verifyAdminSeller, deleteProduct);
 
 export default router;
