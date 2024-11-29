@@ -218,9 +218,6 @@ export const deleteSubategory = async (req, res) => {
  
     const {categoryId, subcategoryId } = req.body;
 
-    
-    console.log("cate id",categoryId);
-    console.log("sub cate id",subcategoryId);
     const category = await Category.findById(categoryId);
     if (!category) {
       return res

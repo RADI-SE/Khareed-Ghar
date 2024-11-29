@@ -23,7 +23,8 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api", manageUsers);
 app.use("/api/", manageCategories);
-app.use("/api/", manageProducts);
+// http://localhost:5173/api/
+app.use("/api", manageProducts);
 app.listen(PORT, () => {
   connect();
   console.log(`Server is running at http://localhost:${PORT}`);
