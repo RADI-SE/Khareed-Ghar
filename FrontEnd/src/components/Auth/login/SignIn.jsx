@@ -28,6 +28,7 @@ function SignIn() {
         onSuccess: (data) => {
           setIsAuthenticated(true);
           sessionStorage.setItem("token", data?.token);
+          sessionStorage.setItem("id", data?._id);
           localStorage.setItem("userRole", data?.role);
           localStorage.setItem("isVerified", data?.isVerified);
         },
