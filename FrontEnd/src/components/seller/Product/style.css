@@ -563,3 +563,7 @@ label {
   background: #FFFFFF;
    
 }
+.form-btns{
+  display: flex;
+  gap: 20px;
+}

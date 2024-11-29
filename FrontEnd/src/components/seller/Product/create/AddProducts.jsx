@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style.css";
 import { useCreateProduct } from "../../../../hooks/seller/useCreateProduct";
 import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
- 
+import { useSellerService } from "../../../../services/seller/sellerServices";
+
 export const AddProductForm = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -18,20 +19,22 @@ export const AddProductForm = () => {
 
   const token = sessionStorage.getItem("token");
   const seller = sessionStorage.getItem("id");
-  const {
-    data: parentCategories = [],
-  } = useFetchCategories(token);
+  const { data: parentCategories = [] } = useFetchCategories(token);
 
-  const {
-    mutate: createProduct,
-    isLoading,
-    isError,
-    error,
-  } = useCreateProduct(token);
+  const { mutate: createProduct, isLoading } = useCreateProduct(token);
+
+  const { Error, setError, clearError, isError } = useSellerService();
+  useEffect(() => {
+    if (isError) {
+      setError(Error);
+      const timer = setTimeout(() => clearError(), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isError, Error, setError, clearError]);
 
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
-    setSubCategoryId(""); 
+    setSubCategoryId("");
   };
 
   const handleSubCategoryChange = (e) => {
@@ -48,6 +51,25 @@ export const AddProductForm = () => {
   const handleImageChange = (e) => {
     setImages([...e.target.files]);
   };
+
+const handleResetChange = (e) => {
+  if (e && e.preventDefault) {
+    e.preventDefault(); // Prevent default behavior if the function is triggered by a form
+  }
+
+  // Reset all fields to their default values
+  setName("");
+  setDescription("");
+  setSpecifications({
+    condition: "",
+    color: "",
+    capacity: "",
+  });
+  setPrice("");
+  setCategoryId("");
+  setSubCategoryId("");
+  setImages([]); // Reset images to an empty array
+};
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -105,7 +127,6 @@ export const AddProductForm = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter product name"
-                required
               />
             </div>
 
@@ -115,19 +136,17 @@ export const AddProductForm = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Enter product description"
-                required
               />
             </div>
- 
+
             <div className="form-group">
               <h4>Specifications</h4>
-
               <label>Condition</label>
               <select
                 name="condition"
                 value={specifications.condition}
                 onChange={handleSpecificationsChange}
-                required
+              
               >
                 <option value="" disabled>
                   Select condition
@@ -141,7 +160,6 @@ export const AddProductForm = () => {
                 name="color"
                 value={specifications.color}
                 onChange={handleSpecificationsChange}
-                required
               >
                 <option value="" disabled>
                   Select color
@@ -157,7 +175,6 @@ export const AddProductForm = () => {
                 name="capacity"
                 value={specifications.capacity}
                 onChange={handleSpecificationsChange}
-                required
               >
                 <option value="" disabled>
                   Select capacity
@@ -169,7 +186,6 @@ export const AddProductForm = () => {
               </select>
             </div>
 
-          
             <div className="form-group">
               <label>Price</label>
               <input
@@ -177,10 +193,8 @@ export const AddProductForm = () => {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Enter product price"
-                required
               />
             </div>
-            {/* Images */}
             <div className="form-group">
               <label>Product Images</label>
               <input
@@ -193,17 +207,20 @@ export const AddProductForm = () => {
           </>
         )}
 
-        {error && <p className="error">{error}</p>}
-        {isError && (
-          <p className="error">{error?.message || "An error occurred"}</p>
-        )}
+        {Error && <div className="alert alert-danger">{Error}</div>}
+        <div className="form-btns">
 
-      
         {SubCategoryId && (
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Adding..." : "Submit"}
           </button>
         )}
+          {SubCategoryId && (
+          <button  onClick={handleResetChange} type="btn" disabled={isLoading}>
+            {isLoading ? "Adding..." : "Reset"}
+          </button>
+        )}
+        </div>
       </form>
     </div>
   );

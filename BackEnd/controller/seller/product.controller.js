@@ -1,6 +1,5 @@
-import { Category, Subcategory } from "../../model/category.model.js";
-import { User } from "../../model/user.model.js";
-import {Product}  from "../../model/product.model.js";
+import { Category } from "../../model/category.model.js";
+import { Product } from "../../model/product.model.js";
 
 // Create Product
 export const addProduct = async (req, res) => {
@@ -8,50 +7,71 @@ export const addProduct = async (req, res) => {
     const {
       name,
       description,
-      specifications, 
+      specifications,
       price,
       category,
       subcategory,
       seller,
       images,
     } = req.body;
-    if (!name || !description || !price || !category || !seller || !subcategory || !specifications || !specifications.condition || !specifications.color || !specifications.capacity) {
+
+    if (!name) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields: 'name', 'description', 'price', 'category', 'seller', 'subcategory', or 'specifications.condition', 'specifications.color', 'specifications.capacity'.",
+        message: "Please provide a product name.",
       });
     }
-
-    const categoryDoc = await Category.findById(category);
+    
+    if (!description) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a product description.",
+      });
+    }
+    
+    if (!specifications.condition) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select a product condition.",
+      });
+    }
+    
+    if (!specifications.color) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select a color.",
+      });
+    }
+    
+    if (!specifications.capacity) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select a storage capacity.",
+      });
+    }
+    
+    if (!price) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a product price.",
+      });
+    }
+    
+    if (price < 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid price. Price cannot be negative.",
+      });
+    }
+  
+   const categoryDoc = await Category.findById(category);
     if (!categoryDoc) {
       return res.status(404).json({
         success: false,
         message: "Category not found.",
       });
     }
-    const isSubcategoryValid = categoryDoc.subcategories.id(subcategory);
-    if (!isSubcategoryValid) {
-      return res.status(404).json({
-        success: false,
-        message: "Selected subcategory does not exist under this category.",
-      });
-    }
 
-    const subcategoryDoc = await Subcategory.findById(subcategory);
-    if (!subcategoryDoc) {
-      return res.status(404).json({
-        success: false,
-        message: "Subcategory not found.",
-      });
-    }
-
-    const foundSeller = await User.findById(seller);
-    if (!foundSeller || foundSeller.role !== "seller") {
-      return res.status(404).json({
-        success: false,
-        message: "Seller not found or invalid seller role.",
-      });
-    }
     const product = new Product({
       name,
       description,
@@ -83,9 +103,9 @@ export const getProducts = async (req, res) => {
   try {
     // Fetch all products with populated category, subcategory, and seller data
     const products = await Product.find()
-      .populate('category',"name")  // Populate category details (by ID reference)
-      .populate('subcategory',"name")  // Populate subcategory details (by ID reference)
-      .populate('seller');  // Populate seller details (by ID reference)
+      .populate("category", "name") // Populate category details (by ID reference)
+      .populate("subcategory", "name") // Populate subcategory details (by ID reference)
+      .populate("seller"); // Populate seller details (by ID reference)
 
     // Check if there are products available
     if (!products || products.length === 0) {
@@ -113,7 +133,9 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Product.findById(id).populate("category").populate("seller");
+    const product = await Product.findById(id)
+      .populate("category")
+      .populate("seller");
 
     if (!product) {
       return res.status(404).json({

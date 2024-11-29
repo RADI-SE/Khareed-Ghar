@@ -9,9 +9,10 @@ export const useSellerService = create((set) => ({
   categories: null,
   isAuthenticated: false,
   isLoading: false,
-  errorMessage: null,
-  setError: (message) => set({ errorMessage: message }),
-  clearError: () => set({ errorMessage: null }),
+  isError: false,
+  Error: null,
+  setError: (message) => set({ Error: message }),
+  clearError: () => set({ Error: null , isError: false, isLoading: true }),
 
   addProduct: async (
     token,
@@ -25,7 +26,8 @@ export const useSellerService = create((set) => ({
     images
   ) => {
     try {
-      set({ isLoading: true, errorMessage: null });
+      set({ isLoading: true, Error: null, isError: false,});
+      console.log(`price: ${price}`)
       const response = await axios.post(
         `${API_URL}/products`,
         {
@@ -47,13 +49,16 @@ export const useSellerService = create((set) => ({
       if (response.status === 200) {
         set({
           isLoading: false,
-          errorMessage: null,
+          Error: null,
         });
-      } else {
-        set({ isLoading: false, errorMessage: response.data.message });
       }
     } catch (error) {
-
+      console.log(error.message);
+      set({
+        isLoading: false,isError:true , 
+        Error: error.response?.data?.message || error.message || "An error occurred while adding product.",
+      });
+   
     }
   },
 }));
