@@ -80,4 +80,24 @@ export const useSellerService = create((set) => ({
       });
     }
   },
+  // getProductById 
+  getProductById: async (id) => {
+    try {
+
+      set({ isLoading: true, Error: null, isError: false,});
+      const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+      if (response.status === 200) {
+        set({ isLoading: false, product: response.data.product });
+        return response.data.product;
+      }
+    } catch (error) {
+      console.log(error.message);
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.response?.data?.message || error.message || "An error occurred while fetching product.",
+      });
+    }
+  },
+
 }));
