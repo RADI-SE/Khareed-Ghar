@@ -16,9 +16,9 @@ const verifyAdminSeller = [verifyTokenForRole, AuthorizeRoles("admin", "seller")
 
 router.post("/products", verifySeller, addProduct);
 
-router.get("/products", verifyAdminSeller, getProducts);
+router.get("/products", getProducts);
 
-router.get("/products/:id", verifyAdminSeller, getProductById);
+router.get("/products/:id", getProductById);
 
 router.delete("/products/:id", verifyAdminSeller, deleteProduct);
 

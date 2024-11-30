@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
-import data from '../../../mockJsons/productData.json';
-import AddProduct from './create/view';
-import EditCategory from './edit/EditCategory';
-import DeleteCategory from './delete/DeleteCategory';
-import DetailedProductView from './dashboard/view';
-import './style.css';
+import React, { useState } from "react";
+import EditCategory from "./edit/EditCategory";
+import DeleteCategory from "./delete/DeleteCategory";
+import DetailedProductView from "./dashboard/view";
+import "./style.css";
+import { AddProductForm } from "./create/AddProducts";
 
 function ProductManagement() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentView, setCurrentView] = useState('category'); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentView, setCurrentView] = useState("category");
 
   const tabs = [
-    { id: 'category', label: 'Categories' },
-    { id: 'editCategory', label: 'Edit Category' },
-    { id: 'addProduct', label: 'Add Product' },
-    { id: 'deleteCategory', label: 'Delete Category' },
+    { id: "product", label: "Products" },
+    { id: "editCategory", label: "Edit Category" },
+    { id: "addProduct", label: " + Add Product" },
+    { id: "deleteCategory", label: "Delete Category" },
   ];
   const handleTabChange = (tabId) => {
     setCurrentView(tabId);
@@ -22,19 +21,18 @@ function ProductManagement() {
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case 'category':
-        return <DetailedProductView searchTerm={searchTerm} />;
-      case 'addProduct':
-        return <AddProduct />;
-      case 'editCategory':
+      case "product":
+        return <DetailedProductView />;
+      case "addProduct":
+        break;
+      case "editCategory":
         return <EditCategory />;
-      case 'deleteCategory':
-        return <DeleteCategory categories={data} />;
+      case "deleteCategory":
+        return <DeleteCategory />;
       default:
         return null;
     }
   };
-
   return (
     <div className="product-management">
       <nav className="navbar">
@@ -43,13 +41,12 @@ function ProductManagement() {
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={currentView === tab.id ? 'active-tab' : ''}
             >
               {tab.label}
             </button>
           ))}
         </div>
-        {currentView === 'category' && (
+        {currentView === "product" && (
           <input
             type="text"
             placeholder="Search by ID"
@@ -61,6 +58,14 @@ function ProductManagement() {
           />
         )}
       </nav>
+      {currentView === "addProduct" && (
+        <div className="add-category-form">
+          {<AddProductForm />}
+        </div>
+      )}
+      
+
+
 
       <div className="view-container">{renderCurrentView()}</div>
     </div>

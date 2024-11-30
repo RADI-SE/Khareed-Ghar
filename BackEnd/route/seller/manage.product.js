@@ -9,9 +9,9 @@ const verifySeller = [verifyTokenForRole, AuthorizeRoles('seller')];
 
 router.post("/seller/products", verifySeller, addProduct);
  
-router.get("/seller/products", verifySeller, getProducts);
+router.get("/seller/products", getProducts);
  
-router.get("/seller/products/:id", verifySeller, getProductById);
+router.get("/seller/products/:id", getProductById);
  
 router.delete("/seller/products/:id", verifySeller, deleteProduct);
 

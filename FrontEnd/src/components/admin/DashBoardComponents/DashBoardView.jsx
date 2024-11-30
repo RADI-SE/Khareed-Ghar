@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./DashBoard.css";
+
 import dollar from "./icons/dollor.png";
 import reviews from "./icons/reviews.png";
 import sales from "./icons/sales.png";

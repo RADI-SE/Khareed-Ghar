@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
+import Pagination from "../../pagination";
 
 const CategoryTable = ({ categories, onCategoryClick }) => {
-  return (
-    <div>
+  const [currentPage, setCurrentPage] = useState(0);
+  const rowsPerPage = 5;
+  const startIndex = currentPage * rowsPerPage;
+  const paginatedCategories = categories.slice(startIndex, startIndex + rowsPerPage);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  return (  
+    <>
       <h4>Parent Categories</h4>
       <table className="table table-striped table-bordered">
         <thead className="thead-dark">
@@ -13,7 +23,7 @@ const CategoryTable = ({ categories, onCategoryClick }) => {
           </tr>
         </thead>
         <tbody>
-          {categories.map((category) => (
+          {paginatedCategories.map((category) => (
             <tr key={category._id}>
               <td>
                 <button className="btn" onClick={() => onCategoryClick(category)}>
@@ -26,7 +36,13 @@ const CategoryTable = ({ categories, onCategoryClick }) => {
           ))}
         </tbody>
       </table>
-    </div>
+      <Pagination
+        totalItems={categories.length}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
+    </>
   );
 };
 

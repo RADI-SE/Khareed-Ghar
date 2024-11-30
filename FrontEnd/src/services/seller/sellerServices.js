@@ -6,7 +6,7 @@ const API_URL = "http://localhost:5000/api/";
 axios.defaults.withCredentials = true;
 
 export const useSellerService = create((set) => ({
-  categories: null,
+  products: null,
   isAuthenticated: false,
   isLoading: false,
   isError: false,
@@ -59,6 +59,25 @@ export const useSellerService = create((set) => ({
         Error: error.response?.data?.message || error.message || "An error occurred while adding product.",
       });
    
+    }
+  },
+  getProducts: async ()=>{
+    try {
+      set({ isLoading: true, Error: null, isError: false,});
+      const response = await axios.get(`http://localhost:5000/api/products`);
+      console.log(response.data.products)
+      
+      if (response.status === 200) {
+        set({ isLoading: false, products: response.data.products });
+        return response.data.products;
+      }
+    } catch (error) {
+      console.log(error.message);
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.response?.data?.message || error.message || "An error occurred while fetching products.",
+      });
     }
   },
 }));

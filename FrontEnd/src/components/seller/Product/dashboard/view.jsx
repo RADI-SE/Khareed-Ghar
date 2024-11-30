@@ -1,55 +1,56 @@
 import React, { useState } from "react";
-import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
+import { useFetchProducts } from "../../../../hooks/seller/useFetchProducts";
 import CategoryTable from "../../../Common/category/parent-category"; 
 import SubcategoryTable from "../../../Common/category/sub-category"; 
+import ProductTable from "../../../Common/products/products";
 
 const DetailedProductView = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const token = sessionStorage.getItem("token");
 
   const {
-    data: categories = [],  
-    isLoading: isLoadingCategories,
-    isError: categoriesError,
-  } = useFetchCategories(token);
+    data: products = [],  
+    isLoading: isLoadingProducts,
+    isError: productsError,
+  } = useFetchProducts();
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);   
+  const handleProductClick = (category) => {
+    setSelectedProduct(category);   
   };
 
   const handleBackClick = () => {
-    setSelectedCategory(null);  
+    setSelectedProduct(null);  
   };
 
-  if (isLoadingCategories) {
+  if (isLoadingProducts) {
     return <div>Loading...</div>;
   } 
   
-  if (categoriesError) {
-    return <div>Error fetching categories: {categoriesError.message}</div>;
+  if (productsError) {
+    return <div>Error fetching products: {productsError.message}</div>;
   }
 
   return (
     <div className="table-responsive">
-      {selectedCategory ? (
+      {selectedProduct ? (
         <div>
-          <h4>Subcategories of {selectedCategory.name}</h4>
-          {selectedCategory.subcategories && selectedCategory.subcategories.length > 0 ? (
+          <h4>Details of  {selectedProduct.name}</h4>
+          {selectedProduct.subcategories && selectedProduct.subcategories.length > 0 ? (
             <SubcategoryTable
-              subcategories={selectedCategory.subcategories} 
-              selectedCategory={selectedCategory}
+              subcategories={selectedProduct.subcategories} 
+              selectedCategory={selectedProduct}
               onBackClick={handleBackClick}
             />
           ) : (
-            <div>No subcategories available for {selectedCategory.name}</div>  
+            <div>No Details available for {selectedProduct.name}</div>  
           )}
         </div>
       ) : (
         <div>
-          <h4>Categories</h4>
-          <CategoryTable
-            categories={categories}
-            onCategoryClick={handleCategoryClick}
+          <h4>Products</h4>
+          <ProductTable
+            products={products}
+            onCategoryClick={handleProductClick}
           />
         </div>
       )}

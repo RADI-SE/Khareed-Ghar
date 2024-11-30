@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import data from '../../../mockJsons/productData.json';
 import AddCategory from './create/AddCategory';
 import EditCategory from './edit/EditCategory';
 import DeleteCategory from './delete/DeleteCategory';
@@ -23,13 +22,13 @@ function CategoryManagement() {
   const renderCurrentView = () => {
     switch (currentView) {
       case 'category':
-        return <DetailedProductView searchTerm={searchTerm} />;
+        return <DetailedProductView  />;
       case 'addCategory':
         return <AddCategory />;
       case 'editCategory':
         return <EditCategory />;
       case 'deleteCategory':
-        return <DeleteCategory categories={data} />;
+        return <DeleteCategory />;
       default:
         return null;
     }
