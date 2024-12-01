@@ -10,7 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AdminRoutes, { adminChildrenRoutes } from "./pages/AdminRoutes";
 import SellerRoutes, { sellerChildrenRoutes } from "./pages/SellerRoutes";
-import HomePage from "./pages/HomePage";
+import HomeRoutes,{homeRoutes} from "./pages/HomeRoutes";
 import { useAuthService } from "./services/authService";
 import NotFound from "./components/NotFound";
 import { ToastContainer } from "react-toastify";
@@ -32,8 +32,10 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <HomePage />,
+      element: <HomeRoutes />,
+      children: homeRoutes,
     },
+ 
     {
       path: "admin/*",
       element:
