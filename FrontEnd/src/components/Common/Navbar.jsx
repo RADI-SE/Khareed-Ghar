@@ -1,32 +1,41 @@
 import React, { useState } from "react";
 import { FaSearch, FaShoppingCart, FaUser, FaXbox } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";  // Import useNavigate from react-router-dom
 import categories from "../../../public/CategoryData.json";  
 import { useAuthService } from "../../services/authService";
 
 const Navbar = () => {
   const { signout } = useAuthService();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleLogin = () => {
-    window.location.href = '/auth/signin';
-  }
+    navigate('/auth/signin'); 
+  };
+
   const handleLogout = async () => {
     await signout();
-    window.location.href = '/';
-  }
+    navigate('/'); 
+  };
+
+  const handleCategoryClick = (categoryPath) => {
+    navigate(`/category/${categoryPath}`);  
+  };
+
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4 md:px-16 lg:px-24 py-4 flex justify-between items-center">
         <div className="text-lg font-bold">
-          <Link to="/">Khareed-Ghar</Link>
+          <button onClick={() => navigate('/')}>Khareed-Ghar</button>
         </div>
         <div className="relative flex-1 mx-4">
-          <form action="">
+          <form
+            onSubmit={(e) => e.preventDefault()} // Prevent page reload on form submit
+          >
             <input
               type="text"
               placeholder="Search"
@@ -36,30 +45,30 @@ const Navbar = () => {
           </form>
         </div>
         <div className="flex items-center space-x-4">
-          <Link to="/cart">
+          <button onClick={() => navigate('/cart')}>
             <FaShoppingCart className="text-lg" />
-          </Link>
+          </button>
           <button className="hidden md:block" onClick={handleLogin}>Login | Register</button>
           <button className="hidden md:block" onClick={handleLogout}>Logout</button>
           <button className="block md:hidden">
             <FaUser />
           </button>
           <button className="block md:hidden">
-            <FaXbox/>
+            <FaXbox />
           </button>
         </div>
       </div>
       <div className="bg-blue-900 text-white flex items-center justify-center space-x-10 py-4 text-sm font-bold">
-        <Link to="/" className="hover:underline">
+        <button onClick={() => navigate('/')} className="hover:underline">
           Home
-        </Link>
-        <Link to="/cart" className="hover:underline">
+        </button>
+        <button onClick={() => navigate('/cart')} className="hover:underline">
           Cart
-        </Link>
-        <Link to="/sell" className="hover:underline">
+        </button>
+        <button onClick={() => navigate('/sell')} className="hover:underline">
           Sell
-        </Link>
-        {/* Categories Link with Dropdown */}
+        </button>
+        {/* Categories Button with Dropdown */}
         <div className="relative">
           <button
             onClick={toggleDropdown}
@@ -73,6 +82,7 @@ const Navbar = () => {
                 {categories.map((category, index) => (
                   <li
                     key={index}
+                    onClick={() => handleCategoryClick(category.name)}  // Navigate to the category page
                     className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   >
                     <span className="text-lg">{category.icon}</span>
