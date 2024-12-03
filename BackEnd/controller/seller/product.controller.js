@@ -209,7 +209,8 @@ export const editProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedProduct = await Product.findByIdAndDelete(id);
+    const { name } = req.body;
+    const deletedProduct = await Product.findById(id);
 
     if (!deletedProduct) {
       return res.status(404).json({
@@ -217,6 +218,19 @@ export const deleteProduct = async (req, res) => {
         message: "Product not found.",
       });
     }
+    if(!name){
+      return res.status(400).json({
+        success: false,
+        message: "Confirm Product name is required."
+      });
+    }
+    if(name != deletedProduct.name) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product name provided."
+      });
+    }
+    await deletedProduct.deleteOne();
     res.status(200).json({
       success: true,
       message: "Product deleted successfully.",

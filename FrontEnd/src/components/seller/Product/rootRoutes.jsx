@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import DeleteCategory from "./delete/DeleteCategory";
 import DetailedProductView from "./dashboard/view";
 import "./style.css";
 import { AddProductForm } from "./create/AddProducts";
 
 function ProductManagement() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentView, setCurrentView] = useState("category");
+  const [currentView, setCurrentView] = useState("product");
 
   const tabs = [
     { id: "product", label: "Products" },
     { id: "addProduct", label: " + Add Product" },
-    { id: "deleteCategory", label: "Delete Category" },
   ];
   const handleTabChange = (tabId) => {
     setCurrentView(tabId);
@@ -23,8 +21,6 @@ function ProductManagement() {
         return <DetailedProductView />;
       case "addProduct":
         break;
-      case "deleteCategory":
-        return <DeleteCategory />;
       default:
         return null;
     }
@@ -59,10 +55,7 @@ function ProductManagement() {
           {<AddProductForm />}
         </div>
       )}
-      
-
-
-
+    
       <div className="view-container">{renderCurrentView()}</div>
     </div>
   );

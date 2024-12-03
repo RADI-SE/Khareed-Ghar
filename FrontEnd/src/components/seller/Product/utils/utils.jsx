@@ -1,8 +1,8 @@
-export const getSelectedCategoryName = (categories, selectedCategoryId) => {
-    return categories.find((cat) => cat._id === selectedCategoryId)?.name.trim();
+export const getSelectedItemName = (Items, selectedItemId) => {
+    return Items.find((item) => item._id === selectedItemId)?.name.trim();
   };
   
-  export const isValidConfirmationName = (confirmationName, selectedCategoryName) => {
-    return confirmationName.trim() === selectedCategoryName;
+  export const isValidConfirmationName = (confirmationName, selectedItemName) => {
+    return confirmationName.trim() === selectedItemName;
   };
   

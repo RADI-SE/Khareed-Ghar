@@ -155,7 +155,37 @@ export const useSellerService = create((set) => ({
           "An error occurred while updating product.",
       });
     }
+  },
 
+  // deleteProduct
+  deleteProduct: async (token, id, name) => {
+    try { 
+      set({ isLoading: true, Error: null, isError: false });
 
+      const response = await axios.delete(
+        `${API_URL}/seller/products/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: { name }, 
+        }
+      );
+ 
+      if (response.status === 200) {
+        set({ isLoading: false, Error: null });
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error.message);
+ 
+      set({
+        isLoading: false,
+        isError: true,
+        Error:
+          error.response?.data?.message ||
+          error.message ||
+          "An error occurred while deleting the product.",
+      });
+    }
   },
 }));

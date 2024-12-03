@@ -23,6 +23,6 @@ router.get("/seller/productsById/:id", getProductById);
 
 router.put("/seller/products/:id", verifySeller, editProduct);
 
-router.delete("/products/:id", verifyAdminSeller, deleteProduct);
+router.delete("/seller/products/:id", verifyAdminSeller, deleteProduct);
 
 export default router;

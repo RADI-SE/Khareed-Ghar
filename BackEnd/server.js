@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 app.use(cookieParser());
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:5173',  
