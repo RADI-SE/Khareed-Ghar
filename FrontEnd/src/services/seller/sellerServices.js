@@ -12,7 +12,7 @@ export const useSellerService = create((set) => ({
   isError: false,
   Error: null,
   setError: (message) => set({ Error: message }),
-  clearError: () => set({ Error: null , isError: false, isLoading: true }),
+  clearError: () => set({ Error: null, isError: false, isLoading: true }),
 
   addProduct: async (
     token,
@@ -26,8 +26,8 @@ export const useSellerService = create((set) => ({
     images
   ) => {
     try {
-      set({ isLoading: true, Error: null, isError: false,});
-      console.log(`price: ${price}`)
+      set({ isLoading: true, Error: null, isError: false });
+      console.log(`price: ${price}`);
       const response = await axios.post(
         `${API_URL}/products`,
         {
@@ -55,18 +55,21 @@ export const useSellerService = create((set) => ({
     } catch (error) {
       console.log(error.message);
       set({
-        isLoading: false,isError:true , 
-        Error: error.response?.data?.message || error.message || "An error occurred while adding product.",
+        isLoading: false,
+        isError: true,
+        Error:
+          error.response?.data?.message ||
+          error.message ||
+          "An error occurred while adding product.",
       });
-   
     }
   },
-  getProducts: async ()=>{
+  getProducts: async () => {
     try {
-      set({ isLoading: true, Error: null, isError: false,});
+      set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(`http://localhost:5000/api/products`);
-      console.log(response.data.products)
-      
+      console.log(response.data.products);
+
       if (response.status === 200) {
         set({ isLoading: false, products: response.data.products });
         return response.data.products;
@@ -76,28 +79,83 @@ export const useSellerService = create((set) => ({
       set({
         isLoading: false,
         isError: true,
-        Error: error.response?.data?.message || error.message || "An error occurred while fetching products.",
+        Error:
+          error.response?.data?.message ||
+          error.message ||
+          "An error occurred while fetching products.",
       });
     }
   },
-  // getProductById 
+  // getProductById
   getProductById: async (id) => {
     try {
-
-      set({ isLoading: true, Error: null, isError: false,});
-      const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+      console.log("id from the getProductById, ", id);
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.get(
+        `http://localhost:5000/api/seller/productsById/${id}`
+      );
       if (response.status === 200) {
         set({ isLoading: false, product: response.data.product });
-        return response.data.product;
+      }
+      return response.data.product;
+    } catch (error) {
+      console.log(error.message);
+      set({
+        isLoading: false,
+        isError: true,
+        Error:
+          error.response?.data?.message ||
+          error.message ||
+          "An error occurred while fetching product.",
+      });
+    }
+  },
+  // updateProduct
+  editProduct: async(
+    token,
+    id,
+    name,
+    description,
+    specifications,
+    price,
+    category,
+    seller,
+    images
+  ) =>{
+    try {
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.put(
+        `${API_URL}/seller/products/${id}`,
+        {
+          name,
+          description,
+          specifications,
+          price,
+          category,
+          seller,
+          images,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        set({ isLoading: false, Error: null });
       }
     } catch (error) {
       console.log(error.message);
       set({
         isLoading: false,
         isError: true,
-        Error: error.response?.data?.message || error.message || "An error occurred while fetching product.",
+        Error:
+          error.response?.data?.message ||
+          error.message ||
+          "An error occurred while updating product.",
       });
     }
-  },
 
+
+  },
 }));

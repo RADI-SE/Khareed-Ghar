@@ -1,7 +1,6 @@
 import React, {useEffect } from "react";
 import { Modal, Spinner } from "react-bootstrap";
 import UserForm from "./UserForm";
-import AlertMessage from "../../../common/AlertMessage";
 import { useEditUsers } from "../../../../hooks/Users/useEditUser";
 import { useProfileData } from "../../../../hooks/Users/useUserProfile";
 
@@ -56,14 +55,7 @@ const EditUserModal = ({ userId, show, handleClose, onUserUpdated }) => {
             </Spinner>
           </div>
         ) : (
-          <>
-            {error && <AlertMessage variant="danger" message={error} />}
-            {isError && (
-              <AlertMessage
-                variant="danger"
-                message={editError?.message || "Failed to edit user"}
-              />
-            )}
+          <> 
             {user && <UserForm user={user} onSubmit={handleSubmit} />}
           </>
         )}

@@ -2,9 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useSellerService } from "../../services/seller/sellerServices";
 
 export const useFetchProductById = (id) => {
-    const { getProductById } = useSellerService();
+  console.log("id from useFetchById:",id);
+  const { getProductById } = useSellerService();
   return useQuery({
-    queryKey: ['product'],
+    queryKey: ['products', id], 
     queryFn: () => getProductById(id),
+    enabled: !!id,
   });
 };

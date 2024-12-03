@@ -29,7 +29,7 @@ const User = ({ role }) => {
     setSelectedUserId(null);
   };
 
-  const handleUserUpdated = (updatedUser) => {
+  const handleUserUpdated = () => {
     refetch();
     handleModalClose();
   };

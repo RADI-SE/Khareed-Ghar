@@ -101,13 +101,11 @@ export const addProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    // Fetch all products with populated category, subcategory, and seller data
-    const products = await Product.find()
-      .populate("category", "name") // Populate category details (by ID reference)
-      .populate("subcategory", "name") // Populate subcategory details (by ID reference)
-      .populate("seller"); // Populate seller details (by ID reference)
+     const products = await Product.find()
+      .populate("category", "name") 
+      .populate("subcategory", "name") 
+    .populate({ path: 'seller', select: 'name' })
 
-    // Check if there are products available
     if (!products || products.length === 0) {
       return res.status(404).json({
         success: false,

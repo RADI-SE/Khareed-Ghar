@@ -1,6 +1,4 @@
 import React from "react";
-import { useFetchProductById } from "../../../../hooks/seller/useFetchProductsById";
-
 const ProductDetail = ({ selectedProduct}) => {
  
     console.log("Product", selectedProduct);
@@ -26,7 +24,7 @@ const ProductDetail = ({ selectedProduct}) => {
 
       <h3>Seller: {selectedProduct?.seller.name || "No seller information available"}</h3>
 
-      <h3>Reviews</h3>
+      {/* <h3>Reviews</h3> */}
       {/* {reviews.length > 0 ? (
         <ul>
           {reviews.map((review) => (

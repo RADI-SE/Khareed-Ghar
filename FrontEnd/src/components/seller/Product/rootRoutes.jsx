@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import EditCategory from "./edit/EditCategory";
 import DeleteCategory from "./delete/DeleteCategory";
 import DetailedProductView from "./dashboard/view";
 import "./style.css";
@@ -11,7 +10,6 @@ function ProductManagement() {
 
   const tabs = [
     { id: "product", label: "Products" },
-    { id: "editCategory", label: "Edit Category" },
     { id: "addProduct", label: " + Add Product" },
     { id: "deleteCategory", label: "Delete Category" },
   ];
@@ -25,8 +23,6 @@ function ProductManagement() {
         return <DetailedProductView />;
       case "addProduct":
         break;
-      case "editCategory":
-        return <EditCategory />;
       case "deleteCategory":
         return <DeleteCategory />;
       default:
