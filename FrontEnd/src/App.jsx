@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -20,6 +20,7 @@ import VerifyEmail from "./components/Auth/VerifyEmail";
 
 const App = () => {
   const { isCheckingAuth, checkAuth, user, isAuthenticated } = useAuthService();
+  const[order, setOrder] = useState(null)
 
   useEffect(() => {
     checkAuth();
@@ -32,7 +33,7 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <HomeRoutes />,
+      element: <HomeRoutes setOrder={setOrder} order={order} />,
       children: homeRoutes,
     },
  

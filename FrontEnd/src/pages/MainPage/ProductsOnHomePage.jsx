@@ -58,9 +58,7 @@ const ProductsOnHomePage = () => {
   useEffect(() => {
     const fetchProducts = () => {
       // Filter products for electronics and limit to 2
-      const mobileProducts = productsData
-        .filter((product) => product.category === "Mobile")
-        .slice(0, 5); // Limit to 2 electronics
+      const mobileProducts = productsData.filter((product) => product.category === "Mobile").slice(0, 5); // Limit to 2 electronics
 
       // Filter products for clothing and limit to 2
       const laptopProducts = productsData

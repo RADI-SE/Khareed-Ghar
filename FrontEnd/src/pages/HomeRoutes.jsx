@@ -1,20 +1,29 @@
 import React from "react";
-import CategoryBar from "../components/Common/CategoryBar";
 import Home from "./MainPage/Home";
 import HomeLayout from "../components/layouts/HomeLayout";
 import NotFound from "../components/NotFound";
 import { Outlet } from "react-router-dom";
-const HomeRoutes = () => {
+import Cart from "../pages/MainPage/Cart";
+import Checkout from "../components/Common/Checkout";
+import OrderConfirmation from "../components/Common/OrderConfirmation";
+import FilterData from "../components/Common/FilterData";
+import ProductDetail from "../components/Common/ProductDetail";
+
+const HomeRoutes = ({ setOrder, order }) => {
   return (
     <HomeLayout>
-      <Outlet />
+      <Outlet context={{ order, setOrder }} />
     </HomeLayout>
   );
 };
 
 export const homeRoutes = [
   { path: "/", element: <Home /> },
-  { path: "/", element: <CategoryBar /> },
+  { path: "/cart", element: <Cart /> },
+  { path: "/checkout", element: <Checkout /> },
+  { path: "/order-confirmation", element: <OrderConfirmation /> },
+  { path: "/filter-data", element: <FilterData /> },
+  { path: "/product/:id", element: <ProductDetail /> },
   { path: "*", element: <NotFound /> },
 ];
 
