@@ -8,6 +8,7 @@ import manageUsers from "./route/admin/manage.user.js"
 import manageCategories from "./route/admin/manage.category.js"
 import manageProducts from "./route/admin/manage.product.js"
 import cartRoutes from "./route/buyer/cart.routes.js"
+import auctionRoutes from "./route/seller/auction.route.js"
 dotenv.config();
 
 const app = express();
@@ -25,8 +26,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api", manageUsers);
 app.use("/api/", manageCategories);
 app.use("/api", cartRoutes);
-// http://localhost:5173/api/
+app.use("/api/auctions", auctionRoutes);
 app.use("/api", manageProducts);
+// http://localhost:5173/api/
 app.listen(PORT, () => {
   connect();
   console.log(`Server is running at http://localhost:${PORT}`);
