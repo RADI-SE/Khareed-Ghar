@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import mockData from "../../../public/products.json";
 const Home = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.product.products);
   useEffect(() => {
     dispatch(setProducts(mockData));
   }, [dispatch]);
@@ -34,12 +33,6 @@ const Home = () => {
       <ProductsOnHomePage />
 
       <div>
-        <h2>All Products</h2>
-        <div>
-          {products.map((product) => (
-            <div>{product.name}</div>
-          ))}
-        </div>
       </div>
     </div>
   );
