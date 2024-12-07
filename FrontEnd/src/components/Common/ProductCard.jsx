@@ -1,5 +1,6 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
+import defaultProduct from "../../assets/images/default.jpeg";
 const ProductCard = ({product}) => {
   return (
     <div
@@ -7,8 +8,8 @@ const ProductCard = ({product}) => {
       className="bg-white p-4 shadow rounded relative border transform transition-transform duration-300 hover:scale-105"
     >
       <img
-        src={product.image}
-        alt=""
+        src={`../../../public/images/${product.images}` ||  defaultProduct}
+        alt={product?.name || "Product"}
         className="w-full h-50 object-contain mb-4"
       />
       <h3 className="text-lg font-semibold">{product.name}</h3>

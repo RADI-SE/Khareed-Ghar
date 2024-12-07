@@ -5,7 +5,7 @@ import EditProductModal from "../../../seller/Product/edit/editProductModel";
 import { ConfirmationModal } from "../../category/confirmationModal/ConfirmationModel";
 import { useDeleteProduct } from "../../../../hooks/seller/useDeleteProduct";
 import "../../style.css";
-
+import defaultImage from "../../../../assets/images/default.jpeg";
 const ProductTable = ({ products, onProductClick }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 4;
@@ -90,7 +90,7 @@ const ProductTable = ({ products, onProductClick }) => {
                 <td>{subcategory?.name || "N/A"}</td>
                 <td>
                   <img
-                    src={images}
+                  src={`../../../../../public/images${images}` || defaultImage}
                     alt={name}
                     style={{
                       width: "60px",
