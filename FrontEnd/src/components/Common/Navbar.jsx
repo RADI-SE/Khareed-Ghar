@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { FaSearch, FaShoppingCart, FaUser, FaXbox } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";  // Import useNavigate from react-router-dom
-import categories from "../../../public/CategoryData.json";  
 import { useAuthService } from "../../services/authService";
+import { useFetchCategories } from "../../hooks/Categories/useFetchCategories";
 
 const Navbar = () => {
   const { signout } = useAuthService();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
+
+  const {
+    data: categories = [],
+  } = useFetchCategories();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -23,6 +27,7 @@ const Navbar = () => {
   };
 
   const handleCategoryClick = (categoryPath) => {
+
     navigate(`/category/${categoryPath}`);  
   };
 
@@ -34,7 +39,7 @@ const Navbar = () => {
         </div>
         <div className="relative flex-1 mx-4">
           <form
-            onSubmit={(e) => e.preventDefault()} // Prevent page reload on form submit
+            onSubmit={(e) => e.preventDefault()} 
           >
             <input
               type="text"
@@ -72,12 +77,12 @@ const Navbar = () => {
         <div className="relative">
           <button
             onClick={toggleDropdown}
-            className="hover:underline focus:outline-none"
+            className="icon-link icon-link-hover" 
           >
             Categories
           </button>
           {isDropdownOpen && (
-            <div className="absolute left-0 mt-2 w-40 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10">
+            <div className="absolute left-0 mt-2 w-40 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10 ">
               <ul className="py-1">
                 {categories.map((category, index) => (
                   <li

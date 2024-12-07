@@ -23,7 +23,7 @@ router.post("/add-category", verifyAdmin, addCategory);
 
 router.post("/add-subcategory", verifyAdmin, addSubCategory);
 
-router.get("/view-categories", verifyAdminSeller, getCategories);
+router.get("/view-categories", getCategories);
 
 router.get("/view-subcategories/:parentCategory", getSubCategories);
 

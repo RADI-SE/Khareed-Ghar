@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
-import productsData from "../../../public/products.json";
+import React from "react";
 import ProductCard from "../../components/Common/ProductCard";
 import { useFetchProducts } from "../../hooks/seller/useFetchProducts";
 
 const ProductsOnHomePage = () => {
-  const [items, setItem] = useState([]);
-
   const {
     data: products = [],
     isLoading: isLoadingProducts,
@@ -31,14 +28,6 @@ const ProductsOnHomePage = () => {
         </div>
       </div>
       <div className="container mx-auto py-12">
-        {/* <h2 className="mx-2xl font-bold mb-6 text-center ">
-          Best Laptop Deals!
-        </h2> */}
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {laptops.map((product) => (
-            <ProductCard product={product} />
-          ))}
-        </div> */}
       </div>
       <div className="container mx-auto py-12">
       </div>

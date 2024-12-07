@@ -137,13 +137,10 @@ export const useAdminService = create((set) => ({
     }
   },
 
-  displayCategories: async (token) => {
+  displayCategories: async () => {
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.get(`${API_URL}view-categories`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
       if (response.data && response.data.categories) {
         const categories = response.data.categories;
