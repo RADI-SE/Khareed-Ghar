@@ -3,6 +3,7 @@ import "../style.css";
 import { useCreateProduct } from "../../../../hooks/seller/useCreateProduct";
 import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
 import { useSellerService } from "../../../../services/seller/sellerServices";
+import axios from "axios";
 
 export const AddProductForm = () => {
   const [name, setName] = useState("");
@@ -15,7 +16,7 @@ export const AddProductForm = () => {
   const [price, setPrice] = useState("");
   const [CategoryId, setCategoryId] = useState("");
   const [SubCategoryId, setSubCategoryId] = useState("");
-  const [images, setImages] = useState([]);
+  const [images, setImage] = useState([]);
 
   const token = sessionStorage.getItem("token");
   const seller = sessionStorage.getItem("id");
@@ -49,15 +50,25 @@ export const AddProductForm = () => {
   };
 
   const handleImageChange = (e) => {
-    setImages([...e.target.files]);
+    const selectedFiles = [...e.target.files];
+    if (selectedFiles.length > 0) {
+      // const formdata = new FormData();
+      // formdata.append("file", selectedFiles[0])
+      
+      setImage(selectedFiles); // Update image state with the selected files
+
+      // axios.post('http://localhost:5000/api/upload', formdata)
+      //   .then(response => console.log(response.data))
+      //   .catch(error => console.error("Error uploading", error));
+    }
   };
+  
 
 const handleResetChange = (e) => {
   if (e && e.preventDefault) {
-    e.preventDefault(); // Prevent default behavior if the function is triggered by a form
+    e.preventDefault(); 
   }
-
-  // Reset all fields to their default values
+ 
   setName("");
   setDescription("");
   setSpecifications({
@@ -68,14 +79,12 @@ const handleResetChange = (e) => {
   setPrice("");
   setCategoryId("");
   setSubCategoryId("");
-  setImages([]); // Reset images to an empty array
+  setImage([]); // Reset images to an empty array
 };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     createProduct({
-      token,
       name,
       description,
       specifications,
@@ -83,6 +92,7 @@ const handleResetChange = (e) => {
       category: CategoryId,
       subcategory: SubCategoryId,
       seller,
+      images: images,
     });
   };
 
@@ -185,7 +195,6 @@ const handleResetChange = (e) => {
                 <option value="512GB">512GB</option>
               </select>
             </div>
-
             <div className="form-group">
               <label>Price</label>
               <input
@@ -197,12 +206,16 @@ const handleResetChange = (e) => {
             </div>
             <div className="form-group">
               <label>Product Images</label>
-              <input
+              <form
+              >
+                <input type="file" onChange={handleImageChange} />
+              </form>
+              {/* <input
                 type="file"
                 multiple
-                onChange={handleImageChange}
+                
                 accept="image/*"
-              />
+              /> */}
             </div>
           </>
         )}

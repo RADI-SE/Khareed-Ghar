@@ -22,7 +22,7 @@ const app = express();
 app.use(cookieParser());
 const PORT = process.env.PORT || 5003;
 app.use(express.json());
-app.use(express.static(path.join(__dirname,"public")));
+app.use(express.static(path.join(__dirname,"uploads")));
 app.use(cors({
   origin: 'http://localhost:5173',  
   methods: ['GET', 'POST', 'PUT', 'DELETE'],   
@@ -34,7 +34,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api", manageUsers);
 app.use("/api/", manageCategories);
 app.use("/api", cartRoutes);
-// http://localhost:5173/api/
 app.use("/api", manageProducts);
 app.listen(PORT, () => {
   connect();

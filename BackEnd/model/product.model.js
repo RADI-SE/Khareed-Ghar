@@ -37,16 +37,11 @@ const ProductSchema = new mongoose.Schema(
     seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
     images: {
-      type: String,
+      type: [String], 
       default: '/src/assets/images/default.jpeg'
     },
   },
   { timestamps: true }
-);
-
-// Helper function to limit the number of images
-function arrayLimit(val) {
-  return val.length <= 10;
-}
+);  
 export const Product = mongoose.model("Product", ProductSchema);
 

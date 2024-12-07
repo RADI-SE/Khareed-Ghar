@@ -14,6 +14,8 @@ export const useSellerService = create((set) => ({
   setError: (message) => set({ Error: message }),
   clearError: () => set({ Error: null, isError: false, isLoading: true }),
 
+  // Corrected addProduct function
+ 
   addProduct: async (
     token,
     name,
@@ -26,34 +28,50 @@ export const useSellerService = create((set) => ({
     images
   ) => {
     try {
+      // Set loading state while performing request
       set({ isLoading: true, Error: null, isError: false });
-      console.log(`price: ${price}`);
+  
+      console.log("specifications 1", specifications);
+      console.log("file 1", images);
+  
+      // Create FormData
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("specifications", JSON.stringify(specifications)); 
+      formData.append("price", price);
+      formData.append("category", category);
+      formData.append("subcategory", subcategory);
+      formData.append("seller", seller);
+  
+      // Loop through images array and append each file
+      images.forEach((file, index) => {
+        formData.append("file", file);
+        console.log(`Appending file ${index + 1}:`,"Image data", file);
+      });
+  
+      console.log("specifications 2:", formData.get("specifications"));
+      console.log("file count in FormData:", images);
+  
+      // Make POST request
       const response = await axios.post(
-        `${API_URL}/products`,
-        {
-          name,
-          description,
-          specifications,
-          price,
-          category,
-          subcategory,
-          seller,
-          images,
-        },
+        `${API_URL}products`,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
+  
       if (response.status === 200) {
-        set({
-          isLoading: false,
-          Error: null,
-        });
+        console.log("Product added successfully.");
+        set({ isLoading: false, Error: null });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error("Error while adding product:", error.message);
+  
       set({
         isLoading: false,
         isError: true,
@@ -64,6 +82,8 @@ export const useSellerService = create((set) => ({
       });
     }
   },
+  
+
   getProducts: async () => {
     try {
       set({ isLoading: true, Error: null, isError: false });

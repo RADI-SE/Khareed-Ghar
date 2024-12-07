@@ -4,16 +4,22 @@ import { Product } from "../../model/product.model.js";
 // Create Product
 export const addProduct = async (req, res) => {
   try {
-    const {
-      name,
-      description,
-      specifications,
-      price,
-      category,
-      subcategory,
-      seller,
-      images,
-    } = req.body;
+    const specifications = req.body.specifications
+      ? JSON.parse(req.body.specifications)
+      : {};
+
+    const { name, description, price, category, subcategory, seller } =
+      req.body;
+
+    const file = req.file; 
+    if (!file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded.",
+      });
+    }
+    const relativePath = file.path.replace(/\\/g, "/").split("uploads")[1];
+    const imagePath = `/uploads${relativePath}`;
 
     if (!name) {
       return res.status(400).json({
@@ -21,50 +27,50 @@ export const addProduct = async (req, res) => {
         message: "Please provide a product name.",
       });
     }
-    
+
     if (!description) {
       return res.status(400).json({
         success: false,
         message: "Please provide a product description.",
       });
     }
-    
+
     if (!specifications.condition) {
       return res.status(400).json({
         success: false,
         message: "Please select a product condition.",
       });
     }
-    
+
     if (!specifications.color) {
       return res.status(400).json({
         success: false,
         message: "Please select a color.",
       });
     }
-    
+
     if (!specifications.capacity) {
       return res.status(400).json({
         success: false,
         message: "Please select a storage capacity.",
       });
     }
-    
+
     if (!price) {
       return res.status(400).json({
         success: false,
         message: "Please provide a product price.",
       });
     }
-    
+
     if (price < 0) {
       return res.status(400).json({
         success: false,
         message: "Invalid price. Price cannot be negative.",
       });
     }
-  
-   const categoryDoc = await Category.findById(category);
+
+    const categoryDoc = await Category.findById(category);
     if (!categoryDoc) {
       return res.status(404).json({
         success: false,
@@ -80,7 +86,7 @@ export const addProduct = async (req, res) => {
       category,
       subcategory,
       seller,
-      images,
+      images: imagePath,
     });
     const savedProduct = await product.save();
 
@@ -98,13 +104,12 @@ export const addProduct = async (req, res) => {
     });
   }
 };
-
 export const getProducts = async (req, res) => {
   try {
-     const products = await Product.find()
-      .populate("category", "name") 
-      .populate("subcategory", "name") 
-    .populate({ path: 'seller', select: 'name' })
+    const products = await Product.find()
+      .populate("category", "name")
+      .populate("subcategory", "name")
+      .populate({ path: "seller", select: "name" });
 
     if (!products || products.length === 0) {
       return res.status(404).json({
@@ -113,7 +118,6 @@ export const getProducts = async (req, res) => {
       });
     }
 
-    // Send back the response with the products
     res.status(200).json({
       success: true,
       products,
@@ -218,16 +222,16 @@ export const deleteProduct = async (req, res) => {
         message: "Product not found.",
       });
     }
-    if(!name){
+    if (!name) {
       return res.status(400).json({
         success: false,
-        message: "Confirm Product name is required."
+        message: "Confirm Product name is required.",
       });
     }
-    if(name != deletedProduct.name) {
+    if (name != deletedProduct.name) {
       return res.status(400).json({
         success: false,
-        message: "Invalid product name provided."
+        message: "Invalid product name provided.",
       });
     }
     await deletedProduct.deleteOne();

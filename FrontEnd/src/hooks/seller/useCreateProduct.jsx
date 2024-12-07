@@ -3,7 +3,8 @@ import { useSellerService } from "../../services/seller/sellerServices";
 
 export const useCreateProduct = (token) => {
   const { addProduct } = useSellerService();
-   return useMutation({
+
+  return useMutation({
     mutationFn: ({
       name,
       description,
@@ -12,9 +13,10 @@ export const useCreateProduct = (token) => {
       category,
       subcategory,
       seller,
-
-    }) =>
-      addProduct(
+      images,
+    }) => {
+      console.log("Received specifications payload: ", specifications); // Log the images payload dynamically
+      return addProduct(
         token,
         name,
         description,
@@ -23,8 +25,9 @@ export const useCreateProduct = (token) => {
         category,
         subcategory,
         seller,
-    
-      ),
+        images
+      );
+    },
     onSuccess: () => {
       console.log("Product created successfully.");
     },
