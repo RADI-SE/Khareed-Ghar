@@ -6,7 +6,7 @@ import { ConfirmationModal } from "../../category/confirmationModal/Confirmation
 import { useDeleteProduct } from "../../../../hooks/seller/useDeleteProduct";
 import "../../style.css";
 
-const ProductTable = ({ products, refetch }) => {
+const ProductTable = ({ products, onProductClick }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 4;
   const startIndex = currentPage * rowsPerPage;
@@ -21,9 +21,7 @@ const ProductTable = ({ products, refetch }) => {
     startIndex,
     startIndex + rowsPerPage
   );
-
-  const { mutate: deleteProduct, isLoading: deleteProductLoading } =
-    useDeleteProduct(token);
+  const { mutate: deleteProduct } = useDeleteProduct(token);
 
   const handleEditClick = (product) => {
     setSelectedProduct(product);
@@ -83,7 +81,7 @@ const ProductTable = ({ products, refetch }) => {
         </thead>
         <tbody>
           {paginatedProducts?.map((product, index) => {
-            const { _id, name, subcategory, image, createdAt } = product;
+            const { _id, name, subcategory, images, createdAt } = product;
             return (
               <tr key={_id}>
                 <td>{startIndex + index + 1}</td>
@@ -92,20 +90,24 @@ const ProductTable = ({ products, refetch }) => {
                 <td>{subcategory?.name || "N/A"}</td>
                 <td>
                   <img
-                    src={image}
+                    src={images}
                     alt={name}
                     style={{
                       width: "60px",
                       height: "60px",
                       objectFit: "cover",
                     }}
+                    // onClick={() =>
+                    //   console.log("Clicked Image URL:", images || defaultImage)
+                    // }
                   />
                 </td>
+
                 <td>{new Date(createdAt).toLocaleDateString()}</td>
                 <td>
                   <button
                     className="btn btn-info"
-                    onClick={() => handleEditClick(product)}
+                    onClick={() => onProductClick(product)}
                   >
                     <FaEye />
                     View Details
@@ -135,7 +137,6 @@ const ProductTable = ({ products, refetch }) => {
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-
       {selectedProduct && (
         <>
           <EditProductModal

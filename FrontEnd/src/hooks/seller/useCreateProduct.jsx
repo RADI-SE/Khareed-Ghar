@@ -3,8 +3,7 @@ import { useSellerService } from "../../services/seller/sellerServices";
 
 export const useCreateProduct = (token) => {
   const { addProduct } = useSellerService();
-  const images = "https://example.com/images/smartphone-x1-front.jpg"
-  return useMutation({
+   return useMutation({
     mutationFn: ({
       name,
       description,
@@ -24,7 +23,7 @@ export const useCreateProduct = (token) => {
         category,
         subcategory,
         seller,
-        images
+    
       ),
     onSuccess: () => {
       console.log("Product created successfully.");

@@ -154,7 +154,7 @@ const ProductTable = ({ products, refetch }) => {
             show={showDeleteModal}
             onClose={handleDeleteModalClose}
             onConfirm={handleDelete}
-            isLoading={false} // Pass actual loading state
+            isLoading={false} 
             modalMessage={modalMessage}
             confirmationName={confirmationName}
             setConfirmationName={setConfirmationName}

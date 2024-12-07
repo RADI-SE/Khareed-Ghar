@@ -1,4 +1,5 @@
 import React from "react";
+import defaultImage from "../../../../assets/images/default.jpeg";
 const ProductDetail = ({ selectedProduct}) => {
  
     console.log("Product", selectedProduct);
@@ -6,8 +7,8 @@ const ProductDetail = ({ selectedProduct}) => {
     <div>
       <h1>{selectedProduct?.name || "No Name Available"}</h1>
       <img
-        src={selectedProduct?.images[0] || "https://via.placeholder.com/200"}  
-        alt={name || "Product"}
+        src={selectedProduct?.images || defaultImage}  
+        alt={selectedProduct?.name || "Product"}
         style={{ width: "200px", height: "200px", objectFit: "cover" }}
       />
       <h3>Description</h3>

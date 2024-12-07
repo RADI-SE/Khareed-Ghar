@@ -2,18 +2,27 @@ import express from "express";
 import cookieParser from 'cookie-parser';
 import cors from "cors";
 import dotenv from "dotenv";
+// import multerconfig from "./Utils/multerconfig.js"
 import { connect } from "./database/db.connection.js";
 import authRoutes from "./route/auth.user.route.js";
 import manageUsers from "./route/admin/manage.user.js"
 import manageCategories from "./route/admin/manage.category.js"
 import manageProducts from "./route/admin/manage.product.js"
 import cartRoutes from "./route/buyer/cart.routes.js"
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 dotenv.config();
+
+// Simulate __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cookieParser());
 const PORT = process.env.PORT || 5003;
 app.use(express.json());
+app.use(express.static(path.join(__dirname,"public")));
 app.use(cors({
   origin: 'http://localhost:5173',  
   methods: ['GET', 'POST', 'PUT', 'DELETE'],   

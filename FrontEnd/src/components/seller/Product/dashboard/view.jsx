@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFetchProducts } from "../../../../hooks/seller/useFetchProducts";
-import ProductTable from "../../../Common/products/products/handleDelete";
+import ProductTable from "../../../Common/products/products/ProductTable";
 import ProductDetail from "./ProductDetail";
 
 const DetailedProductView = () => {

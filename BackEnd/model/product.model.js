@@ -37,8 +37,8 @@ const ProductSchema = new mongoose.Schema(
     seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
     images: {
-      type: [String],
-      validate: [arrayLimit, "{PATH} exceeds the limit of 10"],
+      type: String,
+      default: '/src/assets/images/default.jpeg'
     },
   },
   { timestamps: true }
