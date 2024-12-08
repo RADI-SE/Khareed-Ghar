@@ -4,6 +4,7 @@ import Modal from '../../components/Common/Modal';
 import ChangeAddress from '../../components/Common/ChangeAddress';
 import { useNavigate } from 'react-router-dom';
 import { useFetchCartItems } from '../../hooks/buyer/cart/useFetchCartItems';
+import { useRemoveFromCart } from '../../hooks/buyer/cart/useRemoveFromCart';
 
 const Cart = () => { 
   const [address, setAddress] = useState('House 14, Street 40, I14-3, Islamabad');
@@ -15,6 +16,10 @@ const Cart = () => {
   const {
     data: cart = {},
   } = useFetchCartItems(id);
+
+  const {
+    mutate: removeFromCart,
+  } = useRemoveFromCart();
 
   const items = cart.items || [];
   const totalAmount = cart.totalAmount || 0;
@@ -59,9 +64,10 @@ const Cart = () => {
                     <div className='flex bg-white items-center justify-center'>
                       <p>${total.toFixed(2)}</p>
                     </div>
-                    <button className='text-red-500 hover:text-red-700'>
-                      <FaTrashAlt />
-                    </button>
+                    <button className=' text-red-500 hover:text-red-700'
+                  onClick={()=>removeFromCart({id, productId: product._id})}>
+                    <FaTrashAlt />
+                  </button> 
                   </div>
                 ))}
               </div>

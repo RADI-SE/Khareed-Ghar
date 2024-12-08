@@ -47,4 +47,20 @@ export const useAdminService = create((set) => ({
       return []; // Return an empty array as a fallback for cart items.
     }
   },
+  
+  // reomveFromCart
+  removeFromCart: async (id, productId) => {
+    console.log("removing from cart", id , productId);
+    try {
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.delete(`http://localhost:5000/api/remove-from-cart/${id}`, {
+        data: { productId },
+      });
+      console.log("responsefrom removeS 2" , response.data);
+      set({ cart: response.data, isLoading: false });
+      return response.data;
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  },
 }));
