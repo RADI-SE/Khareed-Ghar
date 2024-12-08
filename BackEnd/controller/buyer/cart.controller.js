@@ -2,15 +2,13 @@ import {Cart} from "../../model/cart.model.js";
 import {Product} from "../../model/product.model.js";
 
 export const addToCart = async (req, res) => {
-  const { productId, quantity } = req.body;
-  const userId = req.user.id;
-
+  const { id, productId, quantity } = req.body; 
   try {
-    let cart = await Cart.findOne({ user: userId });
+    let cart = await Cart.findOne({ user: id });
 
     if (!cart) {
       cart = new Cart({
-        user: userId,
+        user: id,
         items: [],
         totalAmount: 0,
       });
@@ -74,17 +72,15 @@ export const removeFromCart = async (req, res) => {
   }
 };
 export const getCart = async (req, res) => {
-  const userId = req.user.id;
-
+  const {id} = req.params;
   try {
-    const cart = await Cart.findOne({ user: userId }).populate(
+    const cart = await Cart.findOne({ user: id }).populate(
       "items.product",
       "name price"
     );
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
-
     res.status(200).json(cart);
   } catch (err) {
     console.error(err);

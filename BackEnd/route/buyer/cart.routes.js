@@ -6,12 +6,13 @@ import { AuthorizeRoles } from "../../middleware/AuthorizeRoles.js";
 const router = express.Router();
 const verifyBuyer = [verifyTokenForRole, AuthorizeRoles('buyer')];
 
-router.post('/add-to-cart', verifyBuyer, addToCart);
+router.post('/add-to-cart', addToCart);
+
+router.get('/cart-items/:id', getCart);
+
+router.post('/remove', removeFromCart);
  
-router.post('/remove', verifyBuyer, removeFromCart);
- 
-router.get('/', verifyBuyer, getCart);
- 
-router.delete('/clear', verifyBuyer, clearCart);
+
+router.delete('/clear', clearCart);
 
 export default router;

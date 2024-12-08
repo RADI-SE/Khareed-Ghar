@@ -2,9 +2,21 @@ import React from "react";
 import { FaSearch, FaShoppingCart, FaUser, FaXbox } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
+import { useFetchCartItems } from "../../hooks/buyer/cart/useFetchCartItems";
 
 const Navbar = () => {
   const { signout } = useAuthService();
+
+  const id = sessionStorage.getItem("id");
+
+  const {
+    data: cart = {},
+  } = useFetchCartItems(id);
+
+  const items = cart.items || [];
+  const totalAmount = cart.totalAmount || 0;
+
+
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -33,8 +45,13 @@ const Navbar = () => {
             </form>
           </div>
           <div className="flex items-center space-x-4">
-            <button onClick={() => navigate("/cart")}>
-              <FaShoppingCart className="text-lg" />
+          <button onClick={() => navigate("/cart")} className="relative">
+              <FaShoppingCart className="text-lg text-blue-900 hover:text-blue-500" />
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 text-xs w-4 h-4 bg-red-600 rounded-full flex justify-center items-center text-white">
+                  {items.length}
+                </span>
+              )}
             </button>
             <button className="hidden md:block" onClick={handleLogin}>
               Login | Register

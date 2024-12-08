@@ -262,8 +262,6 @@ export const deleteSubategory = async (req, res) => {
   }
 };
 
-
-
 // get all category product
 export const getAllCategoryProducts = async (req, res) => {
   try {
