@@ -9,7 +9,7 @@ const ProductsOnHomePage = () => {
     isError: productsError,
   } = useFetchProducts();
 
-  if (isLoadingProducts){
+  if (isLoadingProducts) {
     return <p>Loading...</p>;
   }
   if (productsError) {
@@ -27,10 +27,8 @@ const ProductsOnHomePage = () => {
           ))}
         </div>
       </div>
-      <div className="container mx-auto py-12">
-      </div>
-      <div className="container mx-auto py-12">
-      </div>
+      <div className="container mx-auto py-12"></div>
+      <div className="container mx-auto py-12"></div>
     </>
   );
 };

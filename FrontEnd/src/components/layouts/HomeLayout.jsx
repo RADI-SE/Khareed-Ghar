@@ -11,9 +11,9 @@ const HomeLayout = () => {
   return (
     <div className="home-layout">
       <Navbar />
-      {isHomePage && <CategoryBar />}
+      <CategoryBar />    
       <Outlet />
-      {isHomePage && <Footer />}
+      <Footer />
     </div>
   );
 };

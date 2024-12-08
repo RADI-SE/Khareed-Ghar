@@ -8,6 +8,7 @@ import Checkout from "../components/Common/Checkout";
 import OrderConfirmation from "../components/Common/OrderConfirmation";
 import FilterData from "../components/Common/FilterData";
 import ProductDetail from "../components/Common/ProductDetail";
+import AllCategoryProducts from "../components/Common/products";
 
 const HomeRoutes = ({ setOrder, order }) => {
   return (
@@ -23,7 +24,8 @@ export const homeRoutes = [
   { path: "/checkout", element: <Checkout /> },
   { path: "/order-confirmation", element: <OrderConfirmation /> },
   { path: "/filter-data", element: <FilterData /> },
-  { path: "/product/:id", element: <ProductDetail /> },
+  { path: "/products/:id", element: <ProductDetail /> },
+  { path: "/collection/:id", element: <AllCategoryProducts /> },
   { path: "*", element: <NotFound /> },
 ];
 

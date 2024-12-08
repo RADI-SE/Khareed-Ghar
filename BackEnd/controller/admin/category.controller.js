@@ -261,3 +261,23 @@ export const deleteSubategory = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+
+
+// get all category product
+export const getAllCategoryProducts = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const category = await Category.findById(id);
+    if (!category) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
+    }
+    const products = await Product.find({ category: id });
+    res.json({ success: true, message: "Products fetched successfully", products });
+  } catch (error) {
+    console.error("Error in getAllCategoryProducts:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

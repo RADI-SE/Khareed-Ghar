@@ -97,9 +97,6 @@ const ProductTable = ({ products, onProductClick }) => {
                       height: "60px",
                       objectFit: "cover",
                     }}
-                    // onClick={() =>
-                    //   console.log("Clicked Image URL:", images || defaultImage)
-                    // }
                   />
                 </td>
 

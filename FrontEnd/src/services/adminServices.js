@@ -248,11 +248,9 @@ export const useAdminService = create((set) => ({
           subcategoryId,
         },
       });
-
-      // Check if the response is successful
       if (response.data.success) {
         set({
-          categories: null, // Or update the categories state as needed
+          categories: null, 
           isAuthenticated: true,
           isLoading: false,
         });
@@ -261,10 +259,9 @@ export const useAdminService = create((set) => ({
         console.log("Failed to delete subcategory");
       }
     } catch (error) {
-      // Log the error for debugging
+      
       console.error("Error deleting subcategory", error);
-
-      // Handle any specific error messages from the response
+ 
       if (error.response) {
         console.log("Error Response Data: ", error.response.data);
         set({ isLoading: false, errorMessage: error.response.data.message });
@@ -278,4 +275,17 @@ export const useAdminService = create((set) => ({
       throw error;
     }
   },
-}));
+
+  getAllCategoryProducts: async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/get-products-by-category/${id.selectedCategory}`,
+      );
+      return response.data.products;
+    } catch (error) {
+      console.error("Error fetching products for category:", error);
+      return { products: [], message: "Failed to fetch products." }; 
+    }
+  },  
+  
+})); 
