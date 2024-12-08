@@ -9,6 +9,7 @@ import {
   deleteCategory,
   deleteSubategory,
   getAllCategoryProducts,
+  searchCategoryById,
 } from "../../controller/admin/category.controller.js";
 import { AuthorizeRoles } from "../../middleware/AuthorizeRoles.js";
 import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
@@ -25,6 +26,8 @@ router.post("/add-category", verifyAdmin, addCategory);
 router.post("/add-subcategory", verifyAdmin, addSubCategory);
 
 router.get("/view-categories", getCategories);
+
+router.get("/get-category-byId/:id", searchCategoryById);
 
 router.get("/get-products-by-category/:id", getAllCategoryProducts);
 

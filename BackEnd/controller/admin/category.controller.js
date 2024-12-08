@@ -281,3 +281,21 @@ export const getAllCategoryProducts = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+// search categoryById
+
+export const searchCategoryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const category = await Category.findById(id);
+    if (!category) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
+    }
+    res.json({ success: true, message: "Category fetched successfully", category });
+  } catch (error) {
+    console.error("Error in searchCategoryById:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

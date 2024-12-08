@@ -287,5 +287,17 @@ export const useAdminService = create((set) => ({
       return { products: [], message: "Failed to fetch products." }; 
     }
   },  
+
+  getCategoryById: async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/get-category-byId/${id.selectedCategory}`,
+      );
+      return response.data.category;
+    } catch (error) {
+      console.error("Error fetching category:", error);
+      return { category: null, message: "Failed to fetch category." }; 
+    }
+  },
   
 })); 
