@@ -8,6 +8,7 @@ import UserManagement from "../components/admin/User/rootRoutes";
 import OrderList from "../components/admin/OrderComponents/OrderList";
 import DetailedProductView from "../components/admin/Category/dashboard/view";
 import NotFound from "../components/NotFound";
+import ZoneManagement from "../components/admin/Zone/rootRoutes";
 
 const AdminRoutes = () => {
   return (
@@ -24,6 +25,7 @@ export const adminChildrenRoutes = [
    {path:"orders/order-details", element:<OrderDetails />},
    { path: "users/*", element: <UserManagement /> }, 
    { path: "categories", element: <CategoryManagement/> },
+   { path: "zoneManager", element: <ZoneManagement /> },
   { path: "products/detailedProduct", element: <DetailedProductView /> },
   { path: "*", element: <NotFound /> }, 
 ];

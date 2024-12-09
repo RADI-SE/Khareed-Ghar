@@ -9,34 +9,27 @@ export const validateMenuInput = [
 
 export const addLocationToMenu = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .json({ message: "Validation error", errors: errors.array() });
-    }
+    const {id, district, city } = req.body;
 
-    const { userId, district, city } = req.body;
-    if (!userId) {
-      return res.status(400).json({ message: "User ID is required" });
-    }
-    const user = await User.findOne(userId.user);
+
+    console.log("id, district, city", id, district, city);
+
+    
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     const location = new Location({
       district,
       city,
-      createdBy: userId,
+      createdBy: user,
     });
 
     const savedLocation = await location.save();
-    res
-      .status(201)
-      .json({
-        message: "Location added to menu successfully",
-        location: savedLocation,
-      });
+    res.status(201).json({
+      message: "Location added to menu successfully",
+      location: savedLocation,
+    });
   } catch (error) {
     res
       .status(500)
@@ -46,7 +39,7 @@ export const addLocationToMenu = async (req, res) => {
 
 export const getAllMenuItems = async (req, res) => {
   try {
-    const locations = await Location.find({ createdBy: req.user.id });
+    const locations = await Location.find();
     res
       .status(200)
       .json({ message: "Menu items fetched successfully", locations });
@@ -56,7 +49,26 @@ export const getAllMenuItems = async (req, res) => {
       .json({ message: "Failed to fetch menu items", error: error.message });
   }
 };
- 
+
+// searrch byId
+export const getMenuItemById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const location = await Location.findById(id);
+
+    if (!location) {
+      return res.status(404).json({ message: "Menu item not found" });
+    }
+
+    res.status(200).json({ message: true, location });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch menu item", error: error.message });
+  }
+};
+
 export const updateMenuItem = async (req, res) => {
   try {
     const { id } = req.params;
@@ -72,35 +84,33 @@ export const updateMenuItem = async (req, res) => {
       return res.status(404).json({ message: "Menu item not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "Menu item updated successfully",
-        location: updatedLocation,
-      });
+    res.status(200).json({
+      message: "Menu item updated successfully",
+      location: updatedLocation,
+    });
   } catch (error) {
     res
       .status(500)
       .json({ message: "Failed to update menu item", error: error.message });
   }
 };
- 
+
 export const deleteMenuItem = async (req, res) => {
   try {
     const { id } = req.params;
+    const { district } = req.body;
 
     const deletedLocation = await Location.findByIdAndDelete(id);
-
     if (!deletedLocation) {
       return res.status(404).json({ message: "Menu item not found" });
     }
 
-    res
-      .status(200)
-      .json({
+    if (district === deletedLocation.district) {
+      res.status(200).json({
         message: "Menu item deleted successfully",
         location: deletedLocation,
       });
+    }
   } catch (error) {
     res
       .status(500)

@@ -37,7 +37,7 @@ export const ConfirmationModal = ({
         <Button
           variant="danger"
           onClick={onConfirm}
-          disabled={isLoading || !confirmationName.trim()}
+          disabled={isLoading || !confirmationName}
         >
           {isLoading ? "Deleting..." : "Delete"}
         </Button>

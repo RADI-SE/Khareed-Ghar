@@ -1,37 +1,40 @@
 import React, { useState } from "react";
-import Pagination from "../../pagination";
-import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
-import EditProductModal from "../../../seller/Product/edit/editProductModel";
-import { ConfirmationModal } from "../../confirmationModal/ConfirmationModel";
-import { useDeleteProduct } from "../../../../hooks/seller/useDeleteProduct";
-import "../../style.css";
-import defaultImage from "../../../../assets/images/default.jpeg";
-const ProductTable = ({ products, onProductClick }) => {
+import Pagination from "../../../Common/pagination";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import EditZoonModal from "../edit/editZoonModel"
+import { ConfirmationModal } from "../../../Common/confirmationModal/ConfirmationModel";
+import { useDeleteZoon } from "../../../../hooks/admin/zoon/useDeleteZoon";
+import "../style.css";
+
+export const ZoonTable = ({ zoon }) => {
   const [currentPage, setCurrentPage] = useState(0);
+
   const rowsPerPage = 4;
   const startIndex = currentPage * rowsPerPage;
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedZoon, setSelectedZoon] = useState(null);
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const [confirmationName, setConfirmationName] = useState("");
   const [modalMessage, setModalMessage] = useState("");
   const token = sessionStorage.getItem("token");
 
-  const paginatedProducts = products.slice(
+  const paginatedZoon = zoon.slice(
     startIndex,
     startIndex + rowsPerPage
   );
-  const { mutate: deleteProduct } = useDeleteProduct(token);
+  const { mutate: deleteZoon } = useDeleteZoon(token);
 
-  const handleEditClick = (product) => {
-    setSelectedProduct(product);
+  const handleEditClick = (zoon) => {
+    setSelectedZoon(zoon);
     setShowEditModal(true);
   };
 
-  const handleDeleteClick = (product) => {
-    setSelectedProduct(product);
+  const handleDeleteClick = (id) => {
+    setSelectedZoon(id);
     setShowDeleteModal(true);
-    setConfirmationName("");
+    setConfirmationName();
     setModalMessage("");
   };
 
@@ -41,25 +44,25 @@ const ProductTable = ({ products, onProductClick }) => {
 
   const handleModalClose = () => {
     setShowEditModal(false);
-    setSelectedProduct(null);
+    setSelectedZoon(null);
   };
 
   const handleDeleteModalClose = () => {
     setShowDeleteModal(false);
-    setSelectedProduct(null);
+    setSelectedZoon(null);
   };
 
   const handleDelete = () => {
-    deleteProduct(
-      { id: selectedProduct._id, name: selectedProduct.name },
+    deleteZoon(
+      { id: selectedZoon._id, district: selectedZoon.district },
       {
         onSuccess: () => {
-          setModalMessage("Category deleted successfully!");
+          setModalMessage("Zoon deleted successfully!");
           setShowDeleteModal(false);
           refetch();
         },
         onError: () => {
-          setModalMessage("Failed to delete category. Please try again.");
+          setModalMessage("Failed to delete zoon. Please try again.");
         },
       }
     );
@@ -71,53 +74,34 @@ const ProductTable = ({ products, onProductClick }) => {
         <thead className="thead-dark">
           <tr>
             <th>S.N</th>
-            <th>Product ID</th>
-            <th>Product Name</th>
-            <th>Brand</th>
-            <th>Image</th>
-            <th>Created Date</th>
-            <th>Actions</th>
+            <th>Zoon ID</th>
+            <th>District Name</th>
+            <th>City Name </th>
+            <th>Created Date </th>
+            <th>Action </th>
+            
           </tr>
         </thead>
         <tbody>
-          {paginatedProducts?.map((product, index) => {
-            const { _id, name, subcategory, images, createdAt } = product;
+          {paginatedZoon?.map((zoon, index) => {
+            const { _id,district,city, createdAt } = zoon;
             return (
               <tr key={_id}>
                 <td>{startIndex + index + 1}</td>
                 <td>{_id}</td>
-                <td>{name}</td>
-                <td>{subcategory?.name || "N/A"}</td>
+                <td>{district || "N/A"}</td>
+                <td>{city || "N/A"}</td>
+                <td>{new Date(createdAt).toLocaleDateString() || "N/A"}</td>
                 <td>
-                  <img
-                  src={`../../../../../public/images${images}` || defaultImage}
-                    alt={name}
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "cover",
-                    }}
-                  />
-                </td>
-
-                <td>{new Date(createdAt).toLocaleDateString()}</td>
-                <td>
-                  <button
-                    className="btn btn-info"
-                    onClick={() => onProductClick(product)}
-                  >
-                    <FaEye />
-                    View Details
-                  </button>
                   <button
                     className="btn btn-warning"
-                    onClick={() => handleEditClick(product)}
+                    onClick={() => handleEditClick(zoon)}
                   >
                     <FaEdit className="me-2" /> Edit
                   </button>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDeleteClick(product)}
+                    onClick={() => handleDeleteClick(zoon)}
                   >
                     <FaTrashAlt className="me-2" /> Remove
                   </button>
@@ -129,15 +113,15 @@ const ProductTable = ({ products, onProductClick }) => {
       </table>
 
       <Pagination
-        totalItems={products.length}
+        totalItems={zoon.length}
         rowsPerPage={rowsPerPage}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-      {selectedProduct && (
+      {selectedZoon && (
         <>
-          <EditProductModal
-            id={selectedProduct._id}
+          <EditZoonModal
+            id={selectedZoon}
             show={showEditModal}
             handleClose={handleModalClose}
             onUserUpdated={() => {
@@ -153,7 +137,7 @@ const ProductTable = ({ products, onProductClick }) => {
             modalMessage={modalMessage}
             confirmationName={confirmationName}
             setConfirmationName={setConfirmationName}
-            selectedCategoryName={selectedProduct.name}
+            selectedCategoryName={selectedZoon.district}
           />
         </>
       )}
@@ -161,4 +145,4 @@ const ProductTable = ({ products, onProductClick }) => {
   );
 };
 
-export default ProductTable;
+export default ZoonTable;

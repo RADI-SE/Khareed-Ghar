@@ -44,6 +44,12 @@ const Sidebar = () => {
                 Product Management
               </NavLink>
             </li>
+
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/admin/zoneManager">
+                Zoon Management
+              </NavLink>
+            </li>
           </ul>
         </div>
       </nav>
