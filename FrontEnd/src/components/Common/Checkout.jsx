@@ -26,8 +26,7 @@ const Checkout = ({ setOrder }) => {
         });
         setTotalPrice(newTotal);
     };
-
-    // Recalculate total price whenever the cart updates
+ 
     useEffect(() => {
         setPriceHandler();
     }, [cart.products]);
@@ -96,7 +95,6 @@ const Checkout = ({ setOrder }) => {
                         </div>
                     </div>
 
-                    {/* Payment Information */}
                     <div className='border p-2 mb-6'>
                         <div className='flex items-center justify-between'
                             onClick={() => setPaymentToggle(!paymentToggle)}>

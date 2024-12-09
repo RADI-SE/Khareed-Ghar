@@ -6,15 +6,21 @@ import { connect } from "./database/db.connection.js";
 import authRoutes from "./route/auth.user.route.js";
 import manageUsers from "./route/admin/manage.user.js"
 import manageCategories from "./route/admin/manage.category.js"
+import manageAddresses from "./route/admin/manage.address.js"
 import manageProducts from "./route/admin/manage.product.js"
 import cartRoutes from "./route/buyer/cart.routes.js"
+import addLocation from "./route/buyer/location.routes.js"
 
 dotenv.config();
 
 const app = express();
+
 app.use(cookieParser());
+
 const PORT = process.env.PORT || 5003;
+
 app.use(express.json());
+
 app.use(cors({
   origin: 'http://localhost:5173',  
   methods: ['GET', 'POST', 'PUT', 'DELETE'],   
@@ -23,12 +29,23 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRoutes);
+
 app.use("/api", manageUsers);
+
 app.use("/api/", manageCategories);
+
+app.use("/api", manageAddresses);
+
 app.use("/api", cartRoutes);
+
+app.use("/api", addLocation);
+
 app.use("/api", manageProducts);
+
 app.listen(PORT, () => {
+
   connect();
+
   console.log(`Server is running at http://localhost:${PORT}`);
 });
 //radiapple15
