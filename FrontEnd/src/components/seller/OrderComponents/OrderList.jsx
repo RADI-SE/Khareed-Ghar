@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const OrderList = () => {
   const navigate = useNavigate();
 
+
   // Fake data
   const addresses = [
     {
@@ -35,21 +36,21 @@ const OrderList = () => {
   };
 
   return (
-    <div className="container">
-      <div className="row w-100">
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
+      <div className="">
         <h4>Recent Orders</h4>
       </div>
-      <div className="row w-100">
+      <div className="">
         <div className="table-responsive w-100">
-          <table className="table table-hover">
-            <thead>
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th style={{ width: 130 }}>#</th>
-                <th>Image</th>
-                <th>Item</th>
-                <th style={{ width: 150 }} className="text-center">Price</th>
-                <th style={{ width: 150 }} className="text-center">Qty</th>
-                <th style={{ width: 100 }} className="text-center">Total</th>
+                <th className="px-6 py-3" style={{ width: 130 }}>#</th>
+                <th className="px-6 py-3">Image</th>
+                <th className="px-6 py-3">Item</th>
+                <th className="px-6 py-3" style={{ width: 150 }} >Price</th>
+                <th className="px-6 py-3" style={{ width: 150 }} >Qty</th>
+                <th className="px-6 py-3" style={{ width: 100 }} >Total</th>
               </tr>
             </thead>
             <tbody>
@@ -59,19 +60,20 @@ const OrderList = () => {
                     key={index}
                     onClick={() => handleRowClick(cart)}
                     style={{ cursor: "pointer" }}
+                    className="bg-white-500 border-b hover:bg-gray-300"
                   >
-                    <td>{cart.id}</td>
-                    <td>
+                    <td className="px-6 py-2">{cart.id}</td>
+                    <td className="px-6 py-2">
                       <img
                         src={cart.photo}
                         alt="cartimage"
                         style={{ height: "50px" }}
                       />
                     </td>
-                    <td>{cart.name}</td>
-                    <td className="text-center">{cart.price}</td>
-                    <td className="text-center">{cart.qty}</td>
-                    <td className="text-center">{cart.total}</td>
+                    <td className="px-6 py-2">{cart.name}</td>
+                    <td className="px-6 py-2">{cart.price}</td>
+                    <td className="px-6 py-2">{cart.qty}</td>
+                    <td className="px-6 py-2">{cart.total}</td>
                   </tr>
                 ))
               )}
