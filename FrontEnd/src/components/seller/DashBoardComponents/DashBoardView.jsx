@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./DashBoard.css";
 import dollar from "./icons/dollor.png";
 import reviews from "./icons/reviews.png";
 import sales from "./icons/sales.png";
@@ -26,42 +25,58 @@ export const DashBoardView = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="p-4">
       {/* Dashboard Stats */}
-      <div className="stats-container">
-        <div className="stat-item">
-          <img src={reviews} alt="Reviews" className="stat-icon" />
-          <h3>Reviews</h3>
+
+        <div className="grid md:grid-cols-3 justify-stretch">
+          <div className="col-span-1 bg-orange-500 rounded-lg shadow-2xl p-3 m-3">
+            <div className="image-fluid">
+              <img src={reviews} alt="Reviews" />
+            </div>
+            <div>
+              <h3>Reviews</h3>
+            </div>
+          </div>
+
+          <div className="col-span-1 bg-green-500 rounded-lg shadow-2xl p-3 m-3">
+            <div className="image-fluid">
+              <img src={dollar} alt="Reviews" />
+            </div>
+            <div>
+              <h3>Revenue</h3>
+            </div>
+          </div>
+
+          <div className="col-span-1 bg-rose-500 rounded-lg shadow-2xl p-3 m-3">
+            <div className="image-fluid">
+              <img src={sales} alt="Reviews" />
+            </div>
+            <div>
+              <h3 className="">Sales</h3>
+            </div>
+          </div>
+
         </div>
 
-        <div className="stat-item">
-          <img src={dollar} alt="Revenue" className="stat-icon" />
-          <h3>Revenue</h3>
-        </div>
+      {/* ========================================= */}
 
-        <div className="stat-item">
-          <img src={sales} alt="Sales" className="stat-icon" />
-          <h3>Sales</h3>
-        </div>
-      </div>
-
-      {/* Orders Table */}
-      <div className="order-table">
-        <table>
-          <thead>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
+        <h3>Recent Orders</h3>
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th>ID</th>
-              <th>Item</th>
-              <th>Customer</th>
-              <th>Payment Method</th>
-              <th>Price</th>
+              <th className="px-6 py-3">ID</th>
+              <th className="px-6 py-3">Item</th>
+              <th className="px-6 py-3">Customer</th>
+              <th className="px-6 py-3">Payment Method</th>
+              <th className="px-6 py-3">Price</th>
             </tr>
           </thead>
           <tbody>
             {currentData.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>
+              <tr key={item.id} className="bg-white-500 border-b hover:bg-gray-300">
+                <td className="px-6 py-2">{item.id}</td>
+                <td className="px-6 py-2">
                   <img
                     className="order-item-img"
                     src={item.item}
@@ -70,17 +85,17 @@ export const DashBoardView = () => {
                     height="50"
                   />
                 </td>
-                <td>{item.first_name}</td>
-                <td>{item.payment}</td>
-                <td>{item.price}</td>
+                <td className="px-6 py-2">{item.first_name}</td>
+                <td className="px-6 py-2">{item.payment}</td>
+                <td className="px-6 py-2">{item.price}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
         {/* Pagination Buttons */}
-        <div className="pagination">
-          <button onClick={handlePrevious} disabled={currentPage === 0}>
+        <div className="justify-evenly h-10">
+          <button onClick={handlePrevious} disabled={currentPage === 0} className="w-25 h-100 bg-blue-950 text-white rounded-lg justify-left">
             Previous
           </button>
           <span>
@@ -88,7 +103,7 @@ export const DashBoardView = () => {
           </span>
           <button
             onClick={handleNext}
-            disabled={(currentPage + 1) * rowsPerPage >= data.length}
+            disabled={(currentPage + 1) * rowsPerPage >= data.length}  className="w-25 h-100 bg-blue-950 text-white rounded-lg justify-left"
           >
             Next
           </button>

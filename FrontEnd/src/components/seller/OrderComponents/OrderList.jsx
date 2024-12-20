@@ -35,13 +35,13 @@ const OrderList = () => {
   };
 
   return (
-    <div className="card card-static-2 mb-30 mt-30">
-      <div className="card-title-2">
+    <div className="container">
+      <div className="row w-100">
         <h4>Recent Orders</h4>
       </div>
-      <div className="card-body-table">
-        <div className="table-responsive">
-          <table className="table ucp-table table-hover">
+      <div className="row w-100">
+        <div className="table-responsive w-100">
+          <table className="table table-hover">
             <thead>
               <tr>
                 <th style={{ width: 130 }}>#</th>

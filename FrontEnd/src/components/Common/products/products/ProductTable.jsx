@@ -4,7 +4,6 @@ import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import EditProductModal from "../../../seller/Product/edit/editProductModel";
 import { ConfirmationModal } from "../../confirmationModal/ConfirmationModel";
 import { useDeleteProduct } from "../../../../hooks/seller/useDeleteProduct";
-import "../../style.css";
 import defaultImage from "../../../../assets/images/default.jpeg";
 const ProductTable = ({ products, onProductClick }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -67,96 +66,104 @@ const ProductTable = ({ products, onProductClick }) => {
 
   return (
     <>
-      <table className="table-striped table-bordered">
-        <thead className="thead-dark">
-          <tr>
-            <th>S.N</th>
-            <th>Product ID</th>
-            <th>Product Name</th>
-            <th>Brand</th>
-            <th>Image</th>
-            <th>Created Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedProducts?.map((product, index) => {
-            const { _id, name, subcategory, images, createdAt } = product;
-            return (
-              <tr key={_id}>
-                <td>{startIndex + index + 1}</td>
-                <td>{_id}</td>
-                <td>{name}</td>
-                <td>{subcategory?.name || "N/A"}</td>
-                <td>
-                  <img
-                  src={`../../../../../public/images${images}` || defaultImage}
-                    alt={name}
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "cover",
-                    }}
-                  />
-                </td>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th className="px-6 py-3">S.N</th>
+              <th className="px-6 py-3">Product ID</th>
+              <th className="px-6 py-3">Product Name</th>
+              <th className="px-6 py-3">Brand</th>
+              <th className="px-6 py-3">Image</th>
+              <th className="px-6 py-3">Created Date</th>
+              <th className="px-6 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedProducts?.map((product, index) => {
+              const { _id, name, subcategory, images, createdAt } = product;
+              return (
+                <tr
+                  key={_id}
+                  className="bg-white-500 border-b hover:bg-gray-300"
+                >
+                  <td className="px-6 py-2">{startIndex + index + 1}</td>
+                  <td className="px-6 py-2">{_id}</td>
+                  <td className="px-6 py-2">{name}</td>
+                  <td className="px-6 py-2">{subcategory?.name || "N/A"}</td>
+                  <td className="px-6 py-2">
+                    <img
+                      src={
+                        `../../../../../public/images${images}` || defaultImage
+                      }
+                      alt={name}
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </td>
 
-                <td>{new Date(createdAt).toLocaleDateString()}</td>
-                <td>
-                  <button
-                    className="btn btn-info"
-                    onClick={() => onProductClick(product)}
-                  >
-                    <FaEye />
-                    View Details
-                  </button>
-                  <button
-                    className="btn btn-warning"
-                    onClick={() => handleEditClick(product)}
-                  >
-                    <FaEdit className="me-2" /> Edit
-                  </button>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleDeleteClick(product)}
-                  >
-                    <FaTrashAlt className="me-2" /> Remove
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  <td className="px-6 py-2">
+                    {new Date(createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-2">
+                    <button
+                      className="w-5 h-5 mr-5 text-yellow-500"
+                      onClick={() => onProductClick(product)}
+                    >
+                      <FaEye />
+                    </button>
+                    <button
+                      className="w-5 h-5 text-green-6 mr-5"
+                      onClick={() => handleEditClick(product)}
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="w-5 h-5 text-red-500"
+                      onClick={() => handleDeleteClick(product)}
+                    >
+                      <FaTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-      <Pagination
-        totalItems={products.length}
-        rowsPerPage={rowsPerPage}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
-      {selectedProduct && (
-        <>
-          <EditProductModal
-            id={selectedProduct._id}
-            show={showEditModal}
-            handleClose={handleModalClose}
-            onUserUpdated={() => {
-              refetch();
-              handleModalClose();
-            }}
-          />
-          <ConfirmationModal
-            show={showDeleteModal}
-            onClose={handleDeleteModalClose}
-            onConfirm={handleDelete}
-            isLoading={false}
-            modalMessage={modalMessage}
-            confirmationName={confirmationName}
-            setConfirmationName={setConfirmationName}
-            selectedCategoryName={selectedProduct.name}
-          />
-        </>
-      )}
+        <Pagination
+          totalItems={products.length}
+          rowsPerPage={rowsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+        {selectedProduct && (
+          <>
+            <EditProductModal
+              id={selectedProduct._id}
+              show={showEditModal}
+              handleClose={handleModalClose}
+              onUserUpdated={() => {
+                refetch();
+                handleModalClose();
+              }}
+            />
+            <ConfirmationModal
+              show={showDeleteModal}
+              onClose={handleDeleteModalClose}
+              onConfirm={handleDelete}
+              isLoading={false}
+              modalMessage={modalMessage}
+              confirmationName={confirmationName}
+              setConfirmationName={setConfirmationName}
+              selectedCategoryName={selectedProduct.name}
+            />
+          </>
+        )}
+      </div>
     </>
   );
 };

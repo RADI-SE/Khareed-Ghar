@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import DetailedProductView from "./dashboard/view";
-import "./style.css";
 import { AddProductForm } from "./create/AddProducts";
 
 function ProductManagement() {
@@ -26,9 +25,9 @@ function ProductManagement() {
     }
   };
   return (
-    <div className="product-management">
-      <nav className="navbar">
-        <div className="tabs">
+    <div className="">
+      <nav className="fixed top-0 border-solid p-3 bg-white z-50 flex justify-around w-75">
+        <div className="py-2 px-5 bg-blue-950 text-white font-semibold rounded-lg  hover:bg-blue-900 lg:col-span-2 lg:col-start-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -46,17 +45,17 @@ function ProductManagement() {
             onChange={(e) => {
               setSearchTerm(e.target.value);
             }}
-            className="search-bar"
+            className="py-2 px-5 bg-gray-300 text-white font-semibold rounded-lg  hover:bg-gray-200"
           />
         )}
       </nav>
       {currentView === "addProduct" && (
-        <div className="add-category-form">
+        <div className="">
           {<AddProductForm />}
         </div>
       )}
     
-      <div className="view-container">{renderCurrentView()}</div>
+      <div className="mt-5">{renderCurrentView()}</div>
     </div>
   );
 }

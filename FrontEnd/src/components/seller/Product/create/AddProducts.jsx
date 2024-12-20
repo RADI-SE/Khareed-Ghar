@@ -97,13 +97,13 @@ const handleResetChange = (e) => {
   };
 
   return (
-    <div className="add-product-form">
-      <form onSubmit={handleSubmit}>
+    <div className="">
+      <form onSubmit={handleSubmit} className=" place-items-center mt-10 pt-3 max-w-md mx-auto">
         <h3>Add Product</h3>
 
-        <div className="form-group">
-          <label>Select Category</label>
-          <select value={CategoryId} onChange={handleCategoryChange}>
+        <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly mb-2 rounded">
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Category</label>
+          <select value={CategoryId} onChange={handleCategoryChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="">Select parent category</option>
             {parentCategories.map((category) => (
               <option key={category._id} value={category._id}>
@@ -114,9 +114,9 @@ const handleResetChange = (e) => {
         </div>
 
         {CategoryId && (
-          <div className="form-group">
-            <label>Select Subcategory</label>
-            <select value={SubCategoryId} onChange={handleSubCategoryChange}>
+          <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly mb-2 rounded">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Subcategory</label>
+            <select value={SubCategoryId} onChange={handleSubCategoryChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option value="">Select subcategory</option>
               {parentCategories
                 .find((category) => category._id === CategoryId)
@@ -130,33 +130,35 @@ const handleResetChange = (e) => {
         )}
         {SubCategoryId && (
           <>
-            <div className="form-group">
-              <label>Product Name</label>
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter product name"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
 
-            <div className="form-group">
-              <label>Description</label>
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Enter product description"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
 
-            <div className="form-group">
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
               <h4>Specifications</h4>
-              <label>Condition</label>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Condition</label>
               <select
                 name="condition"
                 value={specifications.condition}
                 onChange={handleSpecificationsChange}
-              
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="" disabled>
                   Select condition
@@ -165,11 +167,12 @@ const handleResetChange = (e) => {
                 <option value="Used">Used</option>
               </select>
 
-              <label>Color</label>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
               <select
                 name="color"
                 value={specifications.color}
                 onChange={handleSpecificationsChange}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="" disabled>
                   Select color
@@ -180,11 +183,12 @@ const handleResetChange = (e) => {
                 <option value="White">White</option>
               </select>
 
-              <label>Capacity</label>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Capacity</label>
               <select
                 name="capacity"
                 value={specifications.capacity}
                 onChange={handleSpecificationsChange}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="" disabled>
                   Select capacity
@@ -195,20 +199,21 @@ const handleResetChange = (e) => {
                 <option value="512GB">512GB</option>
               </select>
             </div>
-            <div className="form-group">
-              <label>Price</label>
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
               <input
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Enter product price"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
-            <div className="form-group">
-              <label>Product Images</label>
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images</label>
               <form
               >
-                <input type="file" onChange={handleImageChange} />
+                <input type="file" onChange={handleImageChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
               </form>
               {/* <input
                 type="file"
