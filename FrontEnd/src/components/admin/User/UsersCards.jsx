@@ -1,39 +1,43 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './style.css'; // Ensure styles are correct
+import React from "react";
+import { Link } from "react-router-dom";
 
 const UserCards = () => {
   return (
-    <div className="container">
-      <div className="card-grid">
-         
-        <Link className="card-link" to="/admin/users/mod">
-          <div className="card shadow-sm">
-            <div className="card-body text-center">
-              <h3 className="card-title">Moderators</h3>
-              <p className="card-description">Manage moderators and their roles.</p>
-            </div>
+    <div className="grid grid-rows-1">
+      <div className="">
+        <Link
+          className="no-underline text-white row-span-1"
+          to="/admin/users/mod"
+        >
+          <div className=" h-40 text-center bg-blue-300 rounded-lg p-5 mb-3">
+            <h3 className="card-title">Moderators</h3>
+              <p>
+                Manage moderators and their roles.
+              </p>
           </div>
         </Link>
 
-        <Link className="card-link" to="/admin/users/seller">
-          <div className="card shadow-sm">
-            <div className="card-body text-center">
-              <h3 className="card-title">Sellers</h3>
-              <p className="card-description">Manage sellers and their roles.</p>
-            </div>
+        <Link
+          className="no-underline text-white row-span-1 "
+          to="/admin/users/seller"
+        >
+          <div className="item-center h-40 text-center bg-green-300 rounded-lg p-5 mb-3">
+            <h3 className="card-title">Sellers</h3>
+            <p>Manage sellers and their roles.</p>
           </div>
         </Link>
-        
-        <Link className="card-link" to="/admin/users/buyer">
-          <div className="card shadow-sm">
-            <div className="card-body text-center">
-              <h3 className="card-title">Buyers</h3>
-              <p className="card-description">Manage buyers and their profiles.</p>
-            </div>
+
+        <Link
+          className="no-underline text-white row-span-1"
+          to="/admin/users/buyer"
+        >
+          <div className="item-center h-40 text-center bg-yellow-300 rounded-lg p-5 mb-3">
+            <h3 className="card-title">Buyers</h3>
+            <p>
+              Manage buyers and their profiles.
+            </p>
           </div>
         </Link>
-        
       </div>
     </div>
   );
