@@ -1,26 +1,23 @@
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import { Location } from "../../model/location.model.js";
 import { User } from "../../model/user.model.js";
 
 export const validateMenuInput = [
-  body("district").trim().notEmpty().withMessage("District is required"),
+  body("state").trim().notEmpty().withMessage("State is required"),
   body("city").trim().notEmpty().withMessage("City is required"),
 ];
 
 export const addLocationToMenu = async (req, res) => {
   try {
-    const {id, district, city } = req.body;
+    const {id, state, city } = req.body;
+    console.log("id, state, city", id, state, city);
 
-
-    console.log("id, district, city", id, district, city);
-
-    
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     const location = new Location({
-      district,
+      state: state,
       city,
       createdBy: user,
     });
@@ -72,11 +69,11 @@ export const getMenuItemById = async (req, res) => {
 export const updateMenuItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { district, city } = req.body;
+    const { state, city } = req.body;
 
     const updatedLocation = await Location.findByIdAndUpdate(
       id,
-      { district, city },
+      {  state, city },
       { new: true, runValidators: true }
     );
 
@@ -98,14 +95,14 @@ export const updateMenuItem = async (req, res) => {
 export const deleteMenuItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { district } = req.body;
+    const { state } = req.body;
 
     const deletedLocation = await Location.findByIdAndDelete(id);
     if (!deletedLocation) {
       return res.status(404).json({ message: "Menu item not found" });
     }
 
-    if (district === deletedLocation.district) {
+    if (state === deletedLocation.state) {
       res.status(200).json({
         message: "Menu item deleted successfully",
         location: deletedLocation,

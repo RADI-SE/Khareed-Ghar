@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { useFetchZoon } from "../../../../hooks/admin/zoon/useFetchZoon";
-import {ZoonTable} from "./ZoonTable";
+import { useFetchRegion } from "../../../../hooks/admin/Region/useFetchRegion";
+import { RegionTable} from "./RegionTable";
 
-export const DetailedZoonView = () => {
-  const [selectedZoon, setSelectedZoon] = useState(null);
+export const DetailedRegionView = () => {
+  const [selectedRegion, setSelectedRegion] = useState(null);
 
   const {
-    data: zoon = [],
-    isLoading: isLoadingZoon,
-    isError: zoonError,
-  } = useFetchZoon();
+    data: region = [],
+    isLoading: isLoadingRegion,
+    isError: regionError,
+  } = useFetchRegion();
 
-  const handleZoonClick = (zoon) => {
-    setSelectedZoon(zoon);
+  const handleRegionClick = (region) => {
+    setSelectedRegion(region);
   };
 
-  if (isLoadingZoon) {
+  if (isLoadingRegion) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
         <div className="spinner-border text-primary" role="status">
@@ -25,23 +25,23 @@ export const DetailedZoonView = () => {
     );
   }
 
-  if (zoonError) {
+  if (regionError) {
     return (
       <div className="alert alert-danger text-center" role="alert">
-        Error fetching zoon: {zoonError.message}
+        Error fetching region: {regionError.message}
       </div>
     );
   }
 
-  console.log("Zoons:",zoon.locations);
+  console.log("region:",region.locations);
   return (
     <div className="container mt-4">
         <div className="card shadow-lg p-4">
-          <h4 className="mb-4">Zoon 2 </h4>
-          <ZoonTable zoon={zoon.locations} onProductClick={handleZoonClick} />
+          <h4 className="mb-4"> Region  </h4>
+          <RegionTable region={region.locations}/>
         </div>
     </div>
   );
 };
 
-export default DetailedZoonView;
+export default DetailedRegionView;

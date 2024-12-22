@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 
-export const ZoonForm = ({ zoon = {}, onSubmit }) => {
+export const RegionForm = ({ region: region = {}, onSubmit }) => {
   const [formData, setFormData] = useState({
-    district: zoon.district || "",
-    city: zoon.city || "",
+    state: region.state || "",
+    city: region.city || "",
   });
 
   // Handle field changes dynamically
@@ -21,15 +21,15 @@ export const ZoonForm = ({ zoon = {}, onSubmit }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      {/* District Input */}
+      {/* State Input */}
       <Form.Group className="mb-3">
-        <Form.Label>District Name</Form.Label>
+        <Form.Label>State Name</Form.Label>
         <Form.Control
           type="text"
-          name="district"
-          value={formData.district}  
+          name="state"
+          value={formData.state}  
           onChange={handleChange}
-          placeholder="Enter District Name"
+          placeholder="Enter State Name"
           required
         />
       </Form.Group>
@@ -46,7 +46,7 @@ export const ZoonForm = ({ zoon = {}, onSubmit }) => {
         />
       </Form.Group>
 
-      {/* Submit Button */}
+      {/* Save Button */}
       <Button variant="primary" type="submit">
         Save Changes
       </Button>

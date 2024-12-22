@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const Pagination = ({ totalItems, rowsPerPage, currentPage, onPageChange }) => {
   const totalPages = Math.ceil(totalItems / rowsPerPage);

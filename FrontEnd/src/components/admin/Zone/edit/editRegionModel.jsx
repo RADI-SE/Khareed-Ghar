@@ -1,15 +1,15 @@
 import React from "react";
 import { Modal, Spinner } from "react-bootstrap";
-import { ZoonForm } from "./zoonForm";
-import { useFetchZoonById } from "../../../../hooks/admin/zoon/useFetchZoonById";
-import { useEditZoon } from "../../../../hooks/admin/zoon/useEditZoon";
+import { RegionForm } from "./regionForm";
+import {useFetchRegionById} from "../../../../hooks/admin/Region/useFetchRegionById";
+import { useEditRegion } from "../../../../hooks/admin/Region/useEditRegion";
 
 export const EditZoonModal = ({ id: zoonId, show, handleClose }) => {
   const token = sessionStorage.getItem("token");
 
-  const { mutate: editZoon, isLoading: isEditing } = useEditZoon(token);
+  const { mutate: editZoon, isLoading: isEditing } = useEditRegion(token);
    
-  const { data: zoon, isLoading, isError, error } = useFetchZoonById(zoonId._id);
+  const { data: zoon, isLoading, isError, error } = useFetchRegionById(zoonId._id);
 
 
   const handleSubmit = (updatedZoon) => {
@@ -18,7 +18,7 @@ export const EditZoonModal = ({ id: zoonId, show, handleClose }) => {
     editZoon(
       {
         id:zoonId._id,
-        district: updatedZoon.district,
+        state: updatedZoon.state,
         city: updatedZoon.city,
       },
     );
@@ -42,7 +42,7 @@ export const EditZoonModal = ({ id: zoonId, show, handleClose }) => {
         ) : (
           <>
             {zoon ? (
-              <ZoonForm zoon={zoon} onSubmit={handleSubmit} />
+              <RegionForm zoon={zoon} onSubmit={handleSubmit} />
             ) : (
               <div className="alert alert-warning">
                 No product data available.

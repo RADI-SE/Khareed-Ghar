@@ -2,7 +2,7 @@ import mongoose from "mongoose";
  
 
 const LocationSchema = new mongoose.Schema({
-  district: {
+  state: {
     type: String,
     required: true,
     trim: true,

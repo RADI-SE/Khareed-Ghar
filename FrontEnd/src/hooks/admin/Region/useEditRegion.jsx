@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAdminService } from "../../../services/admin/useZoonServices/useZoonServices";
+import { useAdminService } from "../../../services/admin/useRegionServices/useRegionServices";
 
-export const useEditZoon = (token) => {
-  const { editZoon } = useAdminService();
+export const useEditRegion = (token) => {
+  const { editRegion } = useAdminService();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, district, city }) => {
-      return await editZoon(id, district, city);
+    mutationFn: async ({ id, state, city }) => {
+      return await editRegion(id, state, city);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["zoon"]);

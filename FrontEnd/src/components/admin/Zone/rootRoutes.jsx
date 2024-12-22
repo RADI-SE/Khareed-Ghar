@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import DetailedProductView from "./dashboard/view";
 import "./style.css";
-import { AddForm } from "./create/AddZone";
+import { AddForm } from "./create/AddRegion";
 
-function ZoneManagement() {
+function RegionManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentView, setCurrentView] = useState("main");
 
   const tabs = [
     { id: "main", label: "Main" },
-    { id: "addZone", label: " Add a New Zone" },
+    { id: "addRegion", label: " Add a New Region" },
   ];
   const handleTabChange = (tabId) => {
     setCurrentView(tabId);
@@ -19,7 +19,7 @@ function ZoneManagement() {
     switch (currentView) {
       case "main":
         return <DetailedProductView />;
-      case "addZone":
+      case "addRegion":
         break;
       default:
         return null;
@@ -50,7 +50,7 @@ function ZoneManagement() {
           />
         )}
       </nav>
-      {currentView === "addZone" && (
+      {currentView === "addRegion" && (
         <div className="add-category-form">
           {<AddForm />}
         </div>
@@ -61,4 +61,4 @@ function ZoneManagement() {
   );
 }
 
-export default ZoneManagement;
+export default RegionManagement;

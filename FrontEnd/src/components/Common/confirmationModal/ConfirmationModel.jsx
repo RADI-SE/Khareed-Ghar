@@ -9,7 +9,7 @@ export const ConfirmationModal = ({
   modalMessage,
   confirmationName,
   setConfirmationName,
-  selectedCategoryName,
+   selectedName,
 }) => {
   return (
     <Modal show={show} onHide={onClose}>
@@ -19,7 +19,7 @@ export const ConfirmationModal = ({
       <Modal.Body>
         <p>
           Are you sure you want to delete the category "
-          <strong>{selectedCategoryName}</strong>"?
+          <strong>{selectedName}</strong>"?
         </p>
         <p>
           <strong>Note:</strong> Enter the category name exactly as confirmation.

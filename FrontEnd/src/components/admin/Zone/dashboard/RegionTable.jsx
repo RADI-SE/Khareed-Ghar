@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import Pagination from "../../../Common/pagination";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import EditZoonModal from "../edit/editZoonModel"
+import EditRegionModal from "../edit/editRegionModel"
 import { ConfirmationModal } from "../../../Common/confirmationModal/ConfirmationModel";
-import { useDeleteZoon } from "../../../../hooks/admin/zoon/useDeleteZoon";
+import { useDeleteRegion } from "../../../../hooks/admin/Region/useDeleteRegion";
 import "../style.css";
 
-export const ZoonTable = ({ zoon }) => {
+export const RegionTable = ({ region }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const rowsPerPage = 4;
   const startIndex = currentPage * rowsPerPage;
-  const [selectedZoon, setSelectedZoon] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState(null);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -20,19 +20,19 @@ export const ZoonTable = ({ zoon }) => {
   const [modalMessage, setModalMessage] = useState("");
   const token = sessionStorage.getItem("token");
 
-  const paginatedZoon = zoon.slice(
+  const paginatedRegion = region.slice(
     startIndex,
     startIndex + rowsPerPage
   );
-  const { mutate: deleteZoon } = useDeleteZoon(token);
+  const { mutate: deleteRegion } = useDeleteRegion(token);
 
-  const handleEditClick = (zoon) => {
-    setSelectedZoon(zoon);
+  const handleEditClick = (region) => {
+    setSelectedRegion(region);
     setShowEditModal(true);
   };
 
   const handleDeleteClick = (id) => {
-    setSelectedZoon(id);
+    setSelectedRegion(id);
     setShowDeleteModal(true);
     setConfirmationName();
     setModalMessage("");
@@ -44,25 +44,25 @@ export const ZoonTable = ({ zoon }) => {
 
   const handleModalClose = () => {
     setShowEditModal(false);
-    setSelectedZoon(null);
+    setSelectedRegion(null);
   };
 
   const handleDeleteModalClose = () => {
     setShowDeleteModal(false);
-    setSelectedZoon(null);
+    setSelectedRegion(null);
   };
 
   const handleDelete = () => {
-    deleteZoon(
-      { id: selectedZoon._id, district: selectedZoon.district },
+    deleteRegion(
+      { id: selectedRegion._id, state: selectedRegion.state },
       {
         onSuccess: () => {
-          setModalMessage("Zoon deleted successfully!");
+          setModalMessage("Region deleted successfully!");
           setShowDeleteModal(false);
           refetch();
         },
         onError: () => {
-          setModalMessage("Failed to delete zoon. Please try again.");
+          setModalMessage("Failed to delete Region. Please try again.");
         },
       }
     );
@@ -74,8 +74,7 @@ export const ZoonTable = ({ zoon }) => {
         <thead className="thead-dark">
           <tr>
             <th>S.N</th>
-            <th>Zoon ID</th>
-            <th>District Name</th>
+            <th>State Name</th>
             <th>City Name </th>
             <th>Created Date </th>
             <th>Action </th>
@@ -83,25 +82,24 @@ export const ZoonTable = ({ zoon }) => {
           </tr>
         </thead>
         <tbody>
-          {paginatedZoon?.map((zoon, index) => {
-            const { _id,district,city, createdAt } = zoon;
+          {paginatedRegion?.map((region, index) => {
+            const { _id,state, city, createdAt } = region;
             return (
               <tr key={_id}>
                 <td>{startIndex + index + 1}</td>
-                <td>{_id}</td>
-                <td>{district || "N/A"}</td>
+                <td>{state || "N/A"}</td>
                 <td>{city || "N/A"}</td>
                 <td>{new Date(createdAt).toLocaleDateString() || "N/A"}</td>
                 <td>
                   <button
                     className="btn btn-warning"
-                    onClick={() => handleEditClick(zoon)}
+                    onClick={() => handleEditClick(region)}
                   >
                     <FaEdit className="me-2" /> Edit
                   </button>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDeleteClick(zoon)}
+                    onClick={() => handleDeleteClick(region)}
                   >
                     <FaTrashAlt className="me-2" /> Remove
                   </button>
@@ -113,15 +111,15 @@ export const ZoonTable = ({ zoon }) => {
       </table>
 
       <Pagination
-        totalItems={zoon.length}
+        totalItems={region.length}
         rowsPerPage={rowsPerPage}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-      {selectedZoon && (
+      {selectedRegion && (
         <>
-          <EditZoonModal
-            id={selectedZoon}
+          <EditRegionModal
+            id={selectedRegion}
             show={showEditModal}
             handleClose={handleModalClose}
             onUserUpdated={() => {
@@ -137,7 +135,7 @@ export const ZoonTable = ({ zoon }) => {
             modalMessage={modalMessage}
             confirmationName={confirmationName}
             setConfirmationName={setConfirmationName}
-            selectedCategoryName={selectedZoon.district}
+            selectedName={selectedRegion.state}
           />
         </>
       )}
@@ -145,4 +143,4 @@ export const ZoonTable = ({ zoon }) => {
   );
 };
 
-export default ZoonTable;
+export default RegionTable;

@@ -1,45 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../style.css";
-import {  useCreateZoon } from "../../../../hooks/admin/zoon/useCreateZoon"
-import { useAdminService } from "../../../../services/admin/useZoonServices/useZoonServices";
+import {  useCreateRegion as useCreateRegion } from "../../../../hooks/admin/Region/useCreateRegion"
 
 export const AddForm = () => {
-  const [district, setDistrict] = useState("");
+  const [state, setState] = useState("");
   const [city, setCity] = useState("");
 
   const token = sessionStorage.getItem("token");
 
-  const { mutate: createZoon, isLoading } = useCreateZoon(token);
-
-  const { Error, setError, clearError, isError } = useAdminService();
+  const { mutate: createRegion, isLoading } = useCreateRegion(token);
 
   const userId = sessionStorage.getItem("id");
-
-  useEffect(() => {
-    if (isError) {
-      setError(Error);
-      const timer = setTimeout(() => clearError(), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isError, Error, setError, clearError]);
+  
 
   const handleReset = (e) => {
     if (e && e.preventDefault) {
       e.preventDefault();
     }
-    setDistrict("");
+    setState("");
     setCity("");
   };
 
-  console.log("District",district);
+  console.log("State",state);
   console.log("City", city);
   console.log("User ID", userId);
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    createZoon({
+    createRegion({
       id: userId,
-      district: district,
+      state: state,
       city: city,
     });
   };
@@ -47,14 +37,14 @@ export const AddForm = () => {
   return (
     <div className="add-product-form">
       <form onSubmit={handleSubmit}>
-        <h3>Add Zone</h3>
+        <h3>Add new Region</h3>
         <div className="form-group">
-          <label>District Name</label>
+          <label>State Name</label>
           <input
             type="text"
-            value={district}
-            onChange={(e) => setDistrict(e.target.value)}
-            placeholder="Enter District Name"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+            placeholder="Enter State Name"
           />
         </div>
 
@@ -67,11 +57,11 @@ export const AddForm = () => {
           />
         </div>
 
-        {Error && <div className="alert alert-danger">{Error}</div>}
+        {/* {Error && <div className="alert alert-danger">{Error}</div>} */}
 
         <div className="form-btns">
           <button type="submit" disabled={isLoading}>
-            {isLoading ? "Adding..." : "Submit"}
+            {isLoading ? "Adding..." : "Save"}
           </button>
           <button type="button" onClick={handleReset} disabled={isLoading}>
             {isLoading ? "Adding..." : "Reset"}
