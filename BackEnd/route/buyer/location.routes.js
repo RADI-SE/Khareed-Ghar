@@ -10,7 +10,7 @@ import {
 import { validateCreateLocation } from "../../controller/buyer/location.controller.js"
 const router = express.Router();
 
-router.post("/locations",validateCreateLocation, createLocation);
+router.post("/create-location",validateCreateLocation, createLocation);
 
 router.get("/locations", getAllLocations);
 

@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { useAdminService } from "../../../services/buyer/adminServices";
+import { useCartService } from "../../../services/buyer/buyerServices";
 
 export const useAddToCart = () => {
-  const { addToCart } = useAdminService();
+  const { addToCart } = useCartService();
   return useMutation({
     mutationFn: async ({ id, productId, quantity }) => {
       try {

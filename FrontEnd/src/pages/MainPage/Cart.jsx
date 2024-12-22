@@ -83,12 +83,26 @@ const Cart = () => {
                 <p>Shipping:</p>
                 <p className='ml-2'>Shipping to:</p>
                 <span className='text-xs font-bold'>{address}</span>
-                <button 
-                  onClick={() => setIsModelOpen(true)} 
-                  className='text-blue-900 no-underline text-bold mt-1 w-full bg-gray-300 hover:bg-blue-900 hover:text-white rounded-md'
-                >
-                  Change Address
-                </button>
+                <div className="flex items-center space-x-12 justify-between  ">
+                  <button
+                    onClick={() => setIsModelOpen(true)}
+                    className="text-blue-900 no-underline text-bold mt-1 w-full bg-gray-300 hover:bg-blue-900 hover:text-white rounded-md"
+                  >
+                    add
+                  </button>
+                  <button
+                    onClick={() => setIsModelOpen(true)}
+                    className="text-blue-900 no-underline text-bold mt-1 w-full bg-gray-300 hover:bg-blue-900 hover:text-white rounded-md"
+                  >
+                    update
+                  </button>
+                  <button
+                    onClick={() => setIsModelOpen(true)}
+                    className="text-blue-900 no-underline text-bold mt-1 w-full bg-gray-300 hover:bg-blue-900 hover:text-white rounded-md"
+                  >
+                    remove
+                  </button>
+                </div>
               </div>
               <div className='flex justify-between mb-4'>
                 <span>Total Price:</span> 

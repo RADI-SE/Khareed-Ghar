@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAdminService } from '../../../services/buyer/adminServices';
- 
+import { useCartService } from "../../../services/buyer/buyerServices";
+
 export const useFetchCartItems = (id) => {
-    const { displayCart } = useAdminService();
+    const { displayCart } = useCartService();
   return useQuery({
     queryKey: ['cart'],
     queryFn: () => displayCart(id),

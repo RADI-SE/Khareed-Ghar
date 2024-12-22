@@ -1,12 +1,9 @@
-// src/services/authService.js
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api";
-
 axios.defaults.withCredentials = true;
 
-export const useAdminService = create((set) => ({
+export const useCartService = create((set) => ({
   cart: null,
   isAuthenticated: false,
   isLoading: false,
@@ -23,9 +20,7 @@ export const useAdminService = create((set) => ({
       {  id,
         productId,
         quantity,}
-        // {
-        //   headers: { Authorization: `Bearer ${token}` },
-        // }
+   
       );
       set({ cart: response.data, isLoading: false });
     } catch (error) {
@@ -48,7 +43,7 @@ export const useAdminService = create((set) => ({
     }
   },
   
-  // reomveFromCart
+  // removeFromCart
   removeFromCart: async (id, productId) => {
     console.log("removing from cart", id , productId);
     try {
@@ -59,6 +54,22 @@ export const useAdminService = create((set) => ({
       console.log("responsefrom removeS 2" , response.data);
       set({ cart: response.data, isLoading: false });
       return response.data;
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  },
+}));
+
+export const useAddressService = create((set)=>({
+  address: null,
+
+
+  createLocation: async (userId , userName, phone,  LOCATION,  state, area, postalCode, addressDetails)=>{
+
+    try {
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.post(`http://localhost:5000/api/create-location`, { userId, userName, phone,  LOCATION,  state, area, postalCode, addressDetails });
+      set({ address: response.data, isLoading: false });
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }

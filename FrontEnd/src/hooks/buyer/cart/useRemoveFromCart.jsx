@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { useAdminService } from "../../../services/buyer/adminServices";
+import { useCartService } from "../../../services/buyer/buyerServices";
 
 // useRemoveFromCart Hook
 export const useRemoveFromCart = () => {
-  const { removeFromCart } = useAdminService();
+  const { removeFromCart } = useCartService();
 
   return useMutation({
     mutationFn: ({ id, productId }) => removeFromCart(id, productId),
