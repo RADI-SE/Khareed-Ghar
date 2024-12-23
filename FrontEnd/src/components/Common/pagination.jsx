@@ -16,9 +16,9 @@ const Pagination = ({ totalItems, rowsPerPage, currentPage, onPageChange }) => {
   };
 
   return (
-    <div className="pagination-page">
+    <div className="h-20 p-3 flex flex-wrap items-center justify-between">
       <button
-        className="btn-page btn-secondary"
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
         onClick={handlePrevious}
         disabled={currentPage === 0}
       >
@@ -28,7 +28,7 @@ const Pagination = ({ totalItems, rowsPerPage, currentPage, onPageChange }) => {
         Page {currentPage + 1} of {totalPages}
       </span>
       <button
-        className="btn-page btn-secondary"
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
         onClick={handleNext}
         disabled={currentPage >= totalPages - 1}
       >

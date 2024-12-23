@@ -12,26 +12,26 @@ const CategoryTable = ({ categories, onCategoryClick }) => {
   };
 
   return (  
-    <>
-      <h4>Parent Categories</h4>
-      <table className="table table-striped table-bordered">
-        <thead className="thead-dark">
+    <div className="p-3 mt-2 table-responsive w-100">
+      <h3>Parent Categories</h3>
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead className="text-xs text-white uppercase bg-blue-950">
           <tr>
-            <th>Parent Category</th>
-            <th>Subcategories Count</th>
-            <th>Created Date</th>
+            <th className="px-6 py-3">Parent Category</th>
+            <th className="px-6 py-3">Subcategories Count</th>
+            <th className="px-6 py-3">Created Date</th>
           </tr>
         </thead>
         <tbody>
           {paginatedCategories.map((category) => (
-            <tr key={category._id}>
-              <td>
+            <tr className="px-6 py-2" key={category._id}>
+              <td className="px-6 py-2">
                 <button className="btn" onClick={() => onCategoryClick(category)}>
                   {category.name}
                 </button>
               </td>
-              <td>{category.subcategories?.length || 0}</td>
-              <td>{new Date(category.createdAt).toLocaleDateString()}</td>
+              <td className="px-6 py-2">{category.subcategories?.length || 0}</td>
+              <td className="px-6 py-2">{new Date(category.createdAt).toLocaleDateString()}</td>
             </tr>
           ))}
         </tbody>
@@ -42,7 +42,7 @@ const CategoryTable = ({ categories, onCategoryClick }) => {
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-    </>
+    </div>
   );
 };
 

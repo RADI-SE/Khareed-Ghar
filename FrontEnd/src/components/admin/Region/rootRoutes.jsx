@@ -24,30 +24,22 @@ function RegionManagement() {
         return null;
     }
   };
+
   return (
-    <div className="product-management">
-      <nav className="navbar">
-        <div className="tabs">
+    <div className="">
+      <nav className="">
+        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-blue-950 rounded-lg">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
+              className="bg-blue-900 text-white w-40 h-10 rounded-lg text-white rounded-lg"
             >
               {tab.label}
             </button>
           ))}
         </div>
-        {currentView === "product" && (
-          <input
-            type="text"
-            placeholder="Search by ID"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-            className="search-bar"
-          />
-        )}
+        
       </nav>
       {currentView === "addRegion" && (
         <div className="add-category-form">

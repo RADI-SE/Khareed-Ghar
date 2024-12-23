@@ -35,28 +35,28 @@ function CategoryManagement() {
   };
 
   return (
-    <div className="product-management">
-      <nav className="navbar">
-        <div className="tabs">
+    <div>
+      <nav className="">
+        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-blue-950 rounded-lg">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={currentView === tab.id ? 'active-tab' : ''}
+              className={currentView === tab.id ? 'bg-blue-900 text-white w-40 h-10 rounded-lg' : 'text-white rounded-lg'}
             >
               {tab.label}
             </button>
           ))}
         </div>
         {currentView === 'category' && (
-          <input
+          <input 
             type="text"
             placeholder="Search by ID"
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
             }}
-            className="search-bar"
+            className="block w-full p-4 ps-10 text-sm h-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
           />
         )}
       </nav>

@@ -45,14 +45,14 @@ const User = ({ role }) => {
   }
   return (
     <>
-      <div className="grid grid-cols-3">
+      <div className="lg:grid lg:grid-cols-3">
         {filteredData?.length === 0 ? (
           <p>No {role.charAt(0).toUpperCase() + role.slice(1)} available</p>
         ) : (
-          <div className="col-span-3">
+          <div className="lg:col-span-3">
             <div className="">
             <div className="">
-            <h2 className="mb-3">
+            <h2 className="">
               {role.charAt(0).toUpperCase() + role.slice(1)} Data
             </h2>
             </div>
@@ -69,8 +69,8 @@ const User = ({ role }) => {
             </div>
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
-              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead className="text-xs text-white uppercase bg-blue-950">
                   <tr>
                     <th className="px-6 py-3">ID</th>
                     <th className="px-6 py-3">First-Name</th>
@@ -82,10 +82,10 @@ const User = ({ role }) => {
                 </thead>
                 <tbody>
                   {filteredData?.map((user) => {
-                    const { _id, name, email, role, lastLogin } = user;
+                    const { _id,id, name, email, role, lastLogin } = user;
                     return (
                       <tr key={_id} className="bg-white-500 border-b hover:bg-gray-300">
-                        <td className="px-6 py-2">{_id}</td>
+                        <td className="px-6 py-2">{id || _id}</td>
                         <td>
                           <Link
                             to={`/admin/users/user/${_id}`}

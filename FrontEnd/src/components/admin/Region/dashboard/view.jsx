@@ -13,9 +13,9 @@ export const DetailedRegionView = () => {
 
   if (isLoadingRegion) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div className="">
+        <div className="" role="status">
+          <span className="">Loading...</span>
         </div>
       </div>
     );
@@ -29,9 +29,9 @@ export const DetailedRegionView = () => {
     );
   }
   return (
-    <div className="container mt-4">
-        <div className="card shadow-lg p-4">
-          <h4 className="mb-4"> Region  </h4>
+    <div className="">
+        <div className="">
+          <h4 className=""> Region  </h4>
           <RegionTable region={region.locations}/>
         </div>
     </div>
