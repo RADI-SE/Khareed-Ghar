@@ -4,13 +4,11 @@ import { useAddressService } from "../../../services/buyer/buyerServices";
 export const useAddAddress = () => {
   const { createLocation } = useAddressService();
   return useMutation({
-    mutationFn: async ({ userId , userName, phone,  LOCATION,  state, area, postalCode, addressDetails }) => {
+    mutationFn: async ({ userId, street, LOCATION, phoneNumber}) => {
       try {
-        console.log("LOCATION from react-query :::::::::::::::::::::" , LOCATION);
-        const response = await createLocation(userId , userName, phone,  LOCATION,  state, area, postalCode, addressDetails);
+        const response = await createLocation(userId, street, LOCATION, phoneNumber);
         return response;
       } catch (error) {
-        console.error("Error during createLocation API call:", error);
         throw error;
       }
     },

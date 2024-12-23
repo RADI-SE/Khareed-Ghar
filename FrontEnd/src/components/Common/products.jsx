@@ -12,13 +12,13 @@ const AllCategoryProducts = (id) => {
 
   const { data: getCategoryById } = useGetCategoryById(id);
 
-  const [count, setCount] = useState("");
+  // const [count, setCount] = useState("");
   const [categoryName, setCategoryName] = useState("");
 
   useEffect(() => {
    
     if (getCategoryById) {
-      setCount(`Found ${getAllCategoryProducts?.length} products`);
+      // setCount(`Found ${getAllCategoryProducts?.length} products`);
       setCategoryName(getCategoryById.name);
     }
   }, [getAllCategoryProducts]);

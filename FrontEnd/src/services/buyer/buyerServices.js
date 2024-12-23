@@ -62,12 +62,12 @@ export const useCartService = create((set) => ({
 
 export const useAddressService = create((set)=>({
   address: null,
-  createLocation: async (userId , userName, phone,  LOCATION,  state, area, postalCode, addressDetails)=>{
-    console.log("creating location function name :useAddressService  ", userId, userName, phone,  LOCATION.state, LOCATION.city,  state, area, postalCode, addressDetails);
+  createLocation: async (userId, street, LOCATION, phoneNumber)=>{
     try {
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.post(`http://localhost:5000/api/create-location`, { userId, userName, phone,  LOCATION,  state, area, postalCode, addressDetails });
+      const response = await axios.post(`http://localhost:5000/api/create-location`, {userId, street, LOCATION, phoneNumber });
       set({ address: response.data, isLoading: false });
+      console.log("return from useAddressService ", address);
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }

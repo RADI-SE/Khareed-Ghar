@@ -37,7 +37,6 @@ const LocationSchemaForUser = new mongoose.Schema({
   phoneNumber: {
     type: String,
     required: true,
-    match: /^[0-9]{5}$/,
   },
 
   createdBy: {

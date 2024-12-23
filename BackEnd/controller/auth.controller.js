@@ -9,6 +9,20 @@ import {
   sendResetSuccessEmail,
 } from "../mailtrap/emails.js";
 
+import { nanoid } from'nanoid';
+
+// script
+// export const del = async (req, res)=>{
+//   try {
+//     const user = await User.deleteMany({role: 'buyer'});
+
+//     res.json({ success: true, message: "User deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, message: "Server Error" });
+//   }
+// }
+
 export const signup = async (req, res) => {
   const { name, email, password, confirmPassword, role , isAgreeToTerms } = req.body;
 
@@ -65,12 +79,14 @@ export const signup = async (req, res) => {
         .json({ success: false, message: "User already exists" });
     }
 
+    const customId = nanoid(8);
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
     const verificationToken = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
     const user = new User({
+
       name,
       email,
       password: hashedPassword,

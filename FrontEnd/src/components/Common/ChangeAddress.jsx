@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAddAddress } from "../../hooks/buyer/address/useAddAddress";
+import { useFetchRegion } from "../../hooks/admin/Region/useFetchRegion";
 
 const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
   const [addressDetails, setAddressDetails] = useState({
@@ -8,7 +9,11 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
     city: "",
     phoneNumber: "",
   });
-  const id = sessionStorage.getItem("id");
+
+  const { data: region = [] } = useFetchRegion();
+
+  console.log("region:::::::::::from change address", region.locations);
+  const userId = sessionStorage.getItem("id");
 
   const { mutate: createLocation } = useAddAddress();
 
@@ -38,22 +43,16 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
 
     return true;
   };
+
   const onClose = () => {
-    const userName = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-    const phone = `${addressDetails.street}`;
-    const LOCATION = `${addressDetails.state}, ${addressDetails.city}`;
-    const phoneNumber = `${addressDetails.phoneNumber}`;
-    // createLocation({
-    //   userId: id,
-    //   userName,
-    //   phone,
-    //   LOCATION,
-    //   state,
-    //   area,
-    //   postalCode,
-    //   addressDetails,
-    // });
+    const LOCATION = "67685d540f7d7569f0972772";
     if (!validateFields()) return;
+    createLocation({
+      userId,
+      street: addressDetails.street,
+      LOCATION,
+      phoneNumber: addressDetails.phoneNumber,
+    });
     setAddress(
       `${addressDetails.street}, ${addressDetails.state}, ${addressDetails.city}, ${addressDetails.phoneNumber}`
     );
@@ -66,7 +65,6 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
       [field]: value,
     }));
   };
-  
 
   return (
     <>
@@ -75,19 +73,19 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
           type="text"
           placeholder="Street address"
           className="border p-2 w-full mb-4"
-          onChange={(e) => handleChange("street",e.target.value)}
+          onChange={(e) => handleChange("street", e.target.value)}
         />
-
         <select
           className="border p-2 w-full mb-4"
           value={addressDetails.state}
-          onChange={(e) => handleChange("state",e.target.value)}
+          onChange={(e) => handleChange("state", e.target.value)}
         >
-          <option value="" disabled>
-            Select State
-          </option>
-          <option value="Pakistan">Punjab</option>
-          <option value="Saudi Arabia">Islamabad</option>
+          <option value="">Select State</option>
+          {region.locations.map((region) => (
+            <option key={region._id} value={region.state}>
+              {region.state}
+            </option>
+          ))}
         </select>
 
         <select
@@ -95,17 +93,21 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
           value={addressDetails.city}
           onChange={(e) => handleChange("city", e.target.value)}
         >
-          <option value="" disabled>
-            Select City
-          </option>
-          <option value="Islamabad">Islamabad</option>
+          <option value="">Select City</option>
+          {region.locations.filter((region) => region.state === addressDetails.state).map(
+            (region) => (
+              <option key={region._id} value={region.city}>
+                {region.city}
+              </option>
+            )
+          )}
         </select>
 
         <input
           type="text"
           placeholder=" Phone number"
           className="border p-2 w-full mb-4"
-          onChange={(e) => handleChange("phoneNumber",e.target.value)}
+          onChange={(e) => handleChange("phoneNumber", e.target.value)}
         />
 
         <div className="flex justify-end">

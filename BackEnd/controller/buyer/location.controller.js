@@ -1,16 +1,19 @@
-import {UserLocation , Location} from "../../model/location.model.js" ; 
+import {UserLocation, Location} from "../../model/location.model.js" ; 
 import { User } from "../../model/user.model.js";
+
+
 export const createLocation = async (req, res) => {
   try {
-    const { userId , userName, phone,  LOCATION, phoneNumber } = req.body;
+    const { userId, street, LOCATION, phoneNumber } = req.body;
    
-    const user = await User.findOne(userId.user);
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     } 
-    const existingLocation = await Location.findById(LOCATION._id);
+    console.log("LOCATION", LOCATION);
+    const existingLocation = await Location.findById(LOCATION);
     if(!existingLocation){
-      return res.status(400).json({ message: "Location not exists for this district and city" });
+      return res.status(400).json({ message: "Location not exists for this state and city" });
     }
     const state = {
       _id: existingLocation._id,
@@ -21,14 +24,18 @@ export const createLocation = async (req, res) => {
       _id: existingLocation._id,
       city: existingLocation.city
     };
+    const createdBy = {
+      _id: user._id,
+      name: user.name
+    };
    
     const location = new UserLocation({
-      userName,
+      userName: user.name,
       street,
       state: state,
       city: city,
       phoneNumber,
-      createdBy: user,
+      createdBy: createdBy,
     });
 
     const savedLocation = await location.save();

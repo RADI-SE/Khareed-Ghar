@@ -28,8 +28,6 @@ export const DetailedRegionView = () => {
       </div>
     );
   }
-
-  console.log("region:",region.locations);
   return (
     <div className="container mt-4">
         <div className="card shadow-lg p-4">
