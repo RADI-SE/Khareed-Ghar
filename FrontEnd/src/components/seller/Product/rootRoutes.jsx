@@ -26,12 +26,13 @@ function ProductManagement() {
   };
   return (
     <div className="">
-      <nav className="fixed top-0 border-solid p-3 bg-white z-50 flex justify-around w-75">
-        <div className="py-2 px-5 bg-blue-950 text-white font-semibold rounded-lg  hover:bg-blue-900 lg:col-span-2 lg:col-start-1">
+      <nav className="fixed top-0 border-solid p-3 z-50 flex justify-around w-75 bg-blue-950">
+        <div className="py-2 px-5 text-white font-semibold rounded-lg bg-blue-800 hover:bg-blue-700 lg:col-span-2 lg:col-start-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
+              className=""
             >
               {tab.label}
             </button>
@@ -45,7 +46,7 @@ function ProductManagement() {
             onChange={(e) => {
               setSearchTerm(e.target.value);
             }}
-            className="py-2 px-5 bg-gray-300 text-white font-semibold rounded-lg  hover:bg-gray-200"
+            className="py-2 px-5 bg-white text-white font-semibold rounded-lg  hover:bg-gray-200"
           />
         )}
       </nav>

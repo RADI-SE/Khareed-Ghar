@@ -46,6 +46,7 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
   };
 
   const onClose = () => {
+    const LOCATION = "6769a9498092d5e4fa06d40e";
     if (!validateFields()) return;
     createLocation({
       userId,
@@ -53,7 +54,6 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
       LOCATION: cityId,
       phoneNumber: addressDetails.phoneNumber,
     });
-    
     setAddress(
       `${addressDetails.street}, ${addressDetails.state}, ${addressDetails.city}, ${addressDetails.phoneNumber}`
     );

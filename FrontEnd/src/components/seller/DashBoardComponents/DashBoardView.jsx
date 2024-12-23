@@ -25,58 +25,25 @@ export const DashBoardView = () => {
   };
 
   return (
-    <div className="p-4">
-      {/* Dashboard Stats */}
+    <div className="">
 
-        <div className="grid md:grid-cols-3 justify-stretch">
-          <div className="col-span-1 bg-orange-500 rounded-lg shadow-2xl p-3 m-3">
-            <div className="image-fluid">
-              <img src={reviews} alt="Reviews" />
-            </div>
-            <div>
-              <h3>Reviews</h3>
-            </div>
-          </div>
-
-          <div className="col-span-1 bg-green-500 rounded-lg shadow-2xl p-3 m-3">
-            <div className="image-fluid">
-              <img src={dollar} alt="Reviews" />
-            </div>
-            <div>
-              <h3>Revenue</h3>
-            </div>
-          </div>
-
-          <div className="col-span-1 bg-rose-500 rounded-lg shadow-2xl p-3 m-3">
-            <div className="image-fluid">
-              <img src={sales} alt="Reviews" />
-            </div>
-            <div>
-              <h3 className="">Sales</h3>
-            </div>
-          </div>
-
-        </div>
-
-      {/* ========================================= */}
-
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
-        <h3>Recent Orders</h3>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div className="relative overflow-x-auto shadow-md">
+        <h3>Recent Sales</h3>
+        <table className="w-full mt-2 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
+          <thead className="text-xs text-white uppercase bg-blue-950 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th className="px-6 py-3">ID</th>
-              <th className="px-6 py-3">Item</th>
-              <th className="px-6 py-3">Customer</th>
-              <th className="px-6 py-3">Payment Method</th>
-              <th className="px-6 py-3">Price</th>
+              <th className="px-6 py-4">ID</th>
+              <th className="px-6 py-4">Item</th>
+              <th className="px-6 py-4">Customer</th>
+              <th className="px-6 py-4">Payment Method</th>
+              <th className="px-6 py-4">Price</th>
             </tr>
           </thead>
           <tbody>
             {currentData.map((item) => (
               <tr key={item.id} className="bg-white-500 border-b hover:bg-gray-300">
-                <td className="px-6 py-2">{item.id}</td>
-                <td className="px-6 py-2">
+                <td className="px-6 py-4">{item.id}</td>
+                <td className="px-6 py-4">
                   <img
                     className="order-item-img"
                     src={item.item}
@@ -85,17 +52,17 @@ export const DashBoardView = () => {
                     height="50"
                   />
                 </td>
-                <td className="px-6 py-2">{item.first_name}</td>
-                <td className="px-6 py-2">{item.payment}</td>
-                <td className="px-6 py-2">{item.price}</td>
+                <td className="px-6 py-4">{item.first_name}</td>
+                <td className="px-6 py-4">{item.payment}</td>
+                <td className="px-6 py-4">{item.price}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
         {/* Pagination Buttons */}
-        <div className="justify-evenly h-10">
-          <button onClick={handlePrevious} disabled={currentPage === 0} className="w-25 h-100 bg-blue-950 text-white rounded-lg justify-left">
+        <div className="h-20 p-3 flex flex-wrap items-center justify-between">
+          <button onClick={handlePrevious} disabled={currentPage === 0} className="text-white bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
             Previous
           </button>
           <span>
@@ -103,7 +70,7 @@ export const DashBoardView = () => {
           </span>
           <button
             onClick={handleNext}
-            disabled={(currentPage + 1) * rowsPerPage >= data.length}  className="w-25 h-100 bg-blue-950 text-white rounded-lg justify-left"
+            disabled={(currentPage + 1) * rowsPerPage >= data.length}  className="text-white bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
           >
             Next
           </button>

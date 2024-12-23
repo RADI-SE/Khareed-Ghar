@@ -29,7 +29,7 @@ export const DetailedRegionView = () => {
     );
   }
   return (
-    <div className="">
+    <div className="mt-4">
         <div className="">
           <h4 className=""> Region  </h4>
           <RegionTable region={region.locations}/>
