@@ -30,7 +30,7 @@ const DetailedProductView = () => {
   }
 
   return (
-    <div className="table-responsive">
+    <div>
       {selectedCategory ? (
         <div>
           <h4>Subcategories of {selectedCategory.name}</h4>
@@ -46,7 +46,7 @@ const DetailedProductView = () => {
         </div>
       ) : (
         <div>
-          <h4>Categories</h4>
+          {/* Categories */}
           <CategoryTable
             categories={categories}
             onCategoryClick={handleCategoryClick}

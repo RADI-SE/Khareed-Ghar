@@ -68,15 +68,15 @@ export const RegionTable = ({ region }) => {
   };
 
   return (
-    <>
-      <table className="table-striped table-bordered">
-        <thead className="thead-dark">
+    <div className="rounded-lg">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead className="text-xs text-white uppercase bg-blue-950">
           <tr>
-            <th>S.N</th>
-            <th>State Name</th>
-            <th>City Name </th>
-            <th>Created Date </th>
-            <th>Action </th>
+            <th className="px-6 py-3">S.N</th>
+            <th className="px-6 py-3">State Name</th>
+            <th className="px-6 py-3">City Name </th>
+            <th className="px-6 py-3">Created Date </th>
+            <th className="px-6 py-3">Action </th>
             
           </tr>
         </thead>
@@ -85,19 +85,19 @@ export const RegionTable = ({ region }) => {
             const { _id,state, city, createdAt } = region;
             return (
               <tr key={_id}>
-                <td>{startIndex + index + 1}</td>
-                <td>{state || "N/A"}</td>
-                <td>{city || "N/A"}</td>
-                <td>{new Date(createdAt).toLocaleDateString() || "N/A"}</td>
-                <td>
+                <td className="px-6 py-2">{startIndex + index + 1}</td>
+                <td className="px-6 py-2">{state || "N/A"}</td>
+                <td className="px-6 py-2">{city || "N/A"}</td>
+                <td className="px-6 py-2">{new Date(createdAt).toLocaleDateString() || "N/A"}</td>
+                <td className="px-6 py-2">
                   <button
-                    className="btn btn-warning"
+                    className="ml-3 p-2 w-20 bg-yellow-400 text-white rounded-lg"
                     onClick={() => handleEditClick(region)}
                   >
                     <FaEdit className="me-2" /> Edit
                   </button>
                   <button
-                    className="btn btn-danger"
+                    className="ml-3 p-2 w-20 bg-red-500 text-white rounded-lg"
                     onClick={() => handleDeleteClick(region)}
                   >
                     <FaTrashAlt className="me-2" /> Remove
@@ -138,7 +138,7 @@ export const RegionTable = ({ region }) => {
           />
         </>
       )}
-    </>
+    </div>
   );
 };
 

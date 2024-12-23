@@ -35,35 +35,37 @@ export const AddForm = () => {
   };
 
   return (
-    <div className="add-product-form">
+    <div className="">
       <form onSubmit={handleSubmit}>
         <h3>Add new Region</h3>
-        <div className="form-group">
+        <div className="">
           <label>State Name</label>
           <input
             type="text"
             value={state}
             onChange={(e) => setState(e.target.value)}
             placeholder="Enter State Name"
+            className="bg-white border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
         </div>
 
-        <div className="form-group">
+        <div className="pt-4">
           <label>City Name</label>
-          <textarea
+          <input
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder="Enter City Name" 
+            className="bg-white border border-gray-500 text-gray-900 text-sm rounded-lg block w-full p-2.5"
           />
         </div>
 
         {/* {Error && <div className="alert alert-danger">{Error}</div>} */}
 
-        <div className="form-btns">
-          <button type="submit" disabled={isLoading}>
+        <div className="pt-4">
+          <button type="submit" disabled={isLoading} className="text-white bg-blue-950 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
             {isLoading ? "Adding..." : "Save"}
           </button>
-          <button type="button" onClick={handleReset} disabled={isLoading}>
+          <button type="button" onClick={handleReset} disabled={isLoading} className="text-white bg-blue-950 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
             {isLoading ? "Adding..." : "Reset"}
           </button>
         </div>
