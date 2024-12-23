@@ -11,10 +11,6 @@ export const DetailedRegionView = () => {
     isError: regionError,
   } = useFetchRegion();
 
-  const handleRegionClick = (region) => {
-    setSelectedRegion(region);
-  };
-
   if (isLoadingRegion) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">

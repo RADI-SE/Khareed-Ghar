@@ -1,53 +1,9 @@
-import { body, validationResult } from "express-validator";
 import {UserLocation , Location} from "../../model/location.model.js" ; 
 import { User } from "../../model/user.model.js";
-export const validateCreateLocation = [
-  body("userName")
-    .trim()
-    .notEmpty()
-    .withMessage("Fullname is required"),
-  body("phone")
-    .trim()
-    .isMobilePhone()
-    .withMessage("Valid phone number is required"),
-  // body("district")
-  //   .trim()
-  //   .notEmpty()
-  //   .withMessage("District is required"),
-  // body("city")
-  //   .trim()
-  //   .notEmpty()
-  //   .withMessage("City is required"),
-  body("state")
-    .trim()
-    .notEmpty()
-    .withMessage("State is required"),
-  body("area")
-    .trim()
-    .notEmpty()
-    .withMessage("Area is required"),
-  body("postalCode")
-    .trim()
-    .isPostalCode("any")
-    .withMessage("Valid postal code is required"),
-  body("addressDetails")
-    .trim()
-    .notEmpty()
-    .withMessage("Address details are required"),
-];
-
 export const createLocation = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ message: "Validation error", errors: errors.array() });
-    }
-
-    const { userId , userName, phone,  LOCATION,  state, area, postalCode, addressDetails } = req.body;
-
-    if (!userId) {
-      return res.status(400).json({ message: "User ID is required" });
-    }
+    const { userId , userName, phone,  LOCATION, phoneNumber } = req.body;
+   
     const user = await User.findOne(userId.user);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -56,9 +12,9 @@ export const createLocation = async (req, res) => {
     if(!existingLocation){
       return res.status(400).json({ message: "Location not exists for this district and city" });
     }
-    const district = {
+    const state = {
       _id: existingLocation._id,
-      district: existingLocation.district
+      state: existingLocation.state
     };
     
     const city = {
@@ -68,13 +24,10 @@ export const createLocation = async (req, res) => {
    
     const location = new UserLocation({
       userName,
-      phone,
-      district: district,
+      street,
+      state: state,
       city: city,
-      state,
-      area,
-      postalCode,
-      addressDetails,
+      phoneNumber,
       createdBy: user,
     });
 

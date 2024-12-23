@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import DetailedProductView from "./dashboard/view";
-import "./style.css";
+import DetailedRegionView from "./dashboard/view";
 import { AddForm } from "./create/AddRegion";
 
 function RegionManagement() {
@@ -18,7 +17,7 @@ function RegionManagement() {
   const renderCurrentView = () => {
     switch (currentView) {
       case "main":
-        return <DetailedProductView />;
+        return <DetailedRegionView />;
       case "addRegion":
         break;
       default:

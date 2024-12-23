@@ -1,16 +1,13 @@
 import mongoose from "mongoose";
- 
 
 const LocationSchema = new mongoose.Schema({
   state: {
     type: String,
     required: true,
-    trim: true,
   },
   city: {
     type: String,
     required: true,
-    trim: true,
   },
   createdAt: {
     type: Date,
@@ -22,15 +19,12 @@ const LocationSchemaForUser = new mongoose.Schema({
   userName: {
     type: String,
     required: true,
-    trim: true,
   },
-  phone: {
+  street: {
     type: String,
     required: true,
-    trim: true,
-    match: /^[+]?[0-9]{10,15}$/,
   },
-  district: {
+  state: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: "Location",
     required: true,
@@ -40,32 +34,16 @@ const LocationSchemaForUser = new mongoose.Schema({
     ref: "Location",
     required: true,
   },
-  state: {
+  phoneNumber: {
     type: String,
     required: true,
-    trim: true,
-  },
-  area: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  postalCode: {
-    type: String,
-    required: true,
-    trim: true,
     match: /^[0-9]{5}$/,
   },
-  addressDetails: {
-    type: String,
-    trim: true,
-    default: "",
-  },
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: "User",
-   
-  },
+    },
   createdAt: {
     type: Date,
     default: Date.now,

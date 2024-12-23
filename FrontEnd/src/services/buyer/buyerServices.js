@@ -62,10 +62,8 @@ export const useCartService = create((set) => ({
 
 export const useAddressService = create((set)=>({
   address: null,
-
-
   createLocation: async (userId , userName, phone,  LOCATION,  state, area, postalCode, addressDetails)=>{
-
+    console.log("creating location function name :useAddressService  ", userId, userName, phone,  LOCATION.state, LOCATION.city,  state, area, postalCode, addressDetails);
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.post(`http://localhost:5000/api/create-location`, { userId, userName, phone,  LOCATION,  state, area, postalCode, addressDetails });

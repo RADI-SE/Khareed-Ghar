@@ -6,6 +6,7 @@ export const useAddAddress = () => {
   return useMutation({
     mutationFn: async ({ userId , userName, phone,  LOCATION,  state, area, postalCode, addressDetails }) => {
       try {
+        console.log("LOCATION from react-query :::::::::::::::::::::" , LOCATION);
         const response = await createLocation(userId , userName, phone,  LOCATION,  state, area, postalCode, addressDetails);
         return response;
       } catch (error) {

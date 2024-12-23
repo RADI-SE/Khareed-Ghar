@@ -5,7 +5,7 @@ import { useAdminService } from "../../../services/admin/useRegionServices/useRe
 export const useFetchRegionById = (id) => {
   const {getRegionById } = useAdminService();
   return useQuery({
-    queryKey: ['zoon', id], 
+    queryKey: ['region', id], 
     queryFn: () => getRegionById(id),
     enabled: !!id,
   });

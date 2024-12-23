@@ -4,22 +4,22 @@ import { RegionForm } from "./regionForm";
 import {useFetchRegionById} from "../../../../hooks/admin/Region/useFetchRegionById";
 import { useEditRegion } from "../../../../hooks/admin/Region/useEditRegion";
 
-export const EditZoonModal = ({ id: zoonId, show, handleClose }) => {
+export const EditRegionModal = ({  regionId, show, handleClose }) => {
   const token = sessionStorage.getItem("token");
 
-  const { mutate: editZoon, isLoading: isEditing } = useEditRegion(token);
+  const { mutate: editRegion, isLoading: isEditing } = useEditRegion(token);
    
-  const { data: zoon, isLoading, isError, error } = useFetchRegionById(zoonId._id);
+  const { data: region, isLoading, isError, error } = useFetchRegionById(regionId._id);
 
 
-  const handleSubmit = (updatedZoon) => {
-    if (!zoonId || !updatedZoon) return;
+  const handleSubmit = (updatedRegion) => {
+    if (!regionId || !updatedRegion) return;
 
-    editZoon(
+    editRegion(
       {
-        id:zoonId._id,
-        state: updatedZoon.state,
-        city: updatedZoon.city,
+        id:regionId._id,
+        state: updatedRegion.state,
+        city: updatedRegion.city,
       },
     );
     handleClose();
@@ -28,7 +28,7 @@ export const EditZoonModal = ({ id: zoonId, show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit Zoon</Modal.Title>
+        <Modal.Title>Edit Region</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {isLoading || isEditing ? (
@@ -41,11 +41,11 @@ export const EditZoonModal = ({ id: zoonId, show, handleClose }) => {
           <div className="alert alert-danger">Error: {error.message}</div>
         ) : (
           <>
-            {zoon ? (
-              <RegionForm zoon={zoon} onSubmit={handleSubmit} />
+            {region ? (
+              <RegionForm region={region} onSubmit={handleSubmit} />
             ) : (
               <div className="alert alert-warning">
-                No product data available.
+                No region data available.
               </div>
             )}
           </>
@@ -55,4 +55,4 @@ export const EditZoonModal = ({ id: zoonId, show, handleClose }) => {
   );
 };
 
-export default EditZoonModal;
+export default EditRegionModal;

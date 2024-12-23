@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../style.css";
-import {  useCreateRegion as useCreateRegion } from "../../../../hooks/admin/Region/useCreateRegion"
+
+import {  useCreateRegion } from "../../../../hooks/admin/Region/useCreateRegion"
 
 export const AddForm = () => {
   const [state, setState] = useState("");

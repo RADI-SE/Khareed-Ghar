@@ -3,37 +3,60 @@ import { useAddAddress } from "../../hooks/buyer/address/useAddAddress";
 
 const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
   const [addressDetails, setAddressDetails] = useState({
-    country: "",
+    street: "",
+    state: "",
     city: "",
-    sector: "",
-    streetNumber: "",
-    houseNumber: "",
+    phoneNumber: "",
   });
+  const id = sessionStorage.getItem("id");
 
-  const { mutate: AddToCart } = useAddAddress();
+  const { mutate: createLocation } = useAddAddress();
 
-  const onClose = () => { 
+  const validateFields = () => {
+    const { street, state, city, phoneNumber } = addressDetails;
 
-    const userId = "123"; 
-    const userName = "John Doe";
-    const phone = "1234567890"; 
-    const LOCATION = `${addressDetails.country}, ${addressDetails.city}`; 
-    const state = "StateName";
-    const area = addressDetails.sector;
-    const postalCode = "12345"; 
+    if (!street.trim()) {
+      alert("Street address is required.");
+      return false;
+    }
+    if (!state.trim()) {
+      alert("State is required.");
+      return false;
+    }
+    if (!city.trim()) {
+      alert("City is required.");
+      return false;
+    }
+    if (!phoneNumber.trim()) {
+      alert("Phone number is required.");
+      return false;
+    }
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      alert("Phone number must be 10 digits.");
+      return false;
+    }
 
-    AddToCart({
-      userId,
-      userName,
-      phone,
-      LOCATION,
-      state,
-      area,
-      postalCode,
-      addressDetails,
-    });
-
-    setAddress(`${addressDetails.houseNumber}, ${addressDetails.streetNumber}, ${addressDetails.sector}, ${addressDetails.city}, ${addressDetails.country}`);
+    return true;
+  };
+  const onClose = () => {
+    const userName = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+    const phone = `${addressDetails.street}`;
+    const LOCATION = `${addressDetails.state}, ${addressDetails.city}`;
+    const phoneNumber = `${addressDetails.phoneNumber}`;
+    // createLocation({
+    //   userId: id,
+    //   userName,
+    //   phone,
+    //   LOCATION,
+    //   state,
+    //   area,
+    //   postalCode,
+    //   addressDetails,
+    // });
+    if (!validateFields()) return;
+    setAddress(
+      `${addressDetails.street}, ${addressDetails.state}, ${addressDetails.city}, ${addressDetails.phoneNumber}`
+    );
     setIsModelOpen(false);
   };
 
@@ -43,20 +66,28 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
       [field]: value,
     }));
   };
+  
 
   return (
     <>
       <div>
+        <input
+          type="text"
+          placeholder="Street address"
+          className="border p-2 w-full mb-4"
+          onChange={(e) => handleChange("street",e.target.value)}
+        />
+
         <select
           className="border p-2 w-full mb-4"
-          value={addressDetails.country}
-          onChange={(e) => handleChange("country", e.target.value)}
+          value={addressDetails.state}
+          onChange={(e) => handleChange("state",e.target.value)}
         >
           <option value="" disabled>
-            Select Country
+            Select State
           </option>
-          <option value="Pakistan">Pakistan</option>
-          <option value="Saudi Arabia">Saudi Arabia</option>
+          <option value="Pakistan">Punjab</option>
+          <option value="Saudi Arabia">Islamabad</option>
         </select>
 
         <select
@@ -67,28 +98,14 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
           <option value="" disabled>
             Select City
           </option>
-          <option value="Karachi">Karachi</option>
-          <option value="Lahore">Lahore</option>
           <option value="Islamabad">Islamabad</option>
         </select>
-        <input
-          type="text"
-          placeholder="Type phone number"
-          className="border p-2 w-full mb-4"
-          onChange={(e) => setNewAddress(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Type address"
-          className="border p-2 w-full mb-4"
-          onChange={(e) => setNewAddress(e.target.value)}
-        />
 
         <input
           type="text"
-          placeholder="Type city name"
+          placeholder=" Phone number"
           className="border p-2 w-full mb-4"
-          onChange={(e) => setNewAddress(e.target.value)}
+          onChange={(e) => handleChange("phoneNumber",e.target.value)}
         />
 
         <div className="flex justify-end">

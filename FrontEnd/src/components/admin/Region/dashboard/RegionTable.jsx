@@ -4,7 +4,6 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import EditRegionModal from "../edit/editRegionModel"
 import { ConfirmationModal } from "../../../Common/confirmationModal/ConfirmationModel";
 import { useDeleteRegion } from "../../../../hooks/admin/Region/useDeleteRegion";
-import "../style.css";
 
 export const RegionTable = ({ region }) => {
   const [currentPage, setCurrentPage] = useState(0);

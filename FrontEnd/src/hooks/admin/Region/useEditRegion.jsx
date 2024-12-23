@@ -10,7 +10,7 @@ export const useEditRegion = (token) => {
       return await editRegion(id, state, city);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["zoon"]);
+      queryClient.invalidateQueries(["region"]);
     },
     onError: (error) => {
       console.error("Mutation failed:", error.message);
