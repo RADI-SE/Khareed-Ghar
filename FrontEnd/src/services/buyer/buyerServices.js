@@ -60,12 +60,28 @@ export const useCartService = create((set) => ({
   },
 }));
 
+
+// for user location 
 export const useAddressService = create((set)=>({
   address: null,
+  // createLocation
   createLocation: async (userId, street, LOCATION, phoneNumber)=>{
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.post(`http://localhost:5000/api/create-location`, {userId, street, LOCATION, phoneNumber });
+      set({ address: response.data, isLoading: false });
+      console.log("return from useAddressService ", address);
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  },
+
+  // 
+  // update location
+  updateAddress: async (userId, street, LOCATION, phoneNumber, id)=>{
+    try {
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.put(`http://localhost:5000/api/update-location/${id}`, {userId, street, LOCATION, phoneNumber });
       set({ address: response.data, isLoading: false });
       console.log("return from useAddressService ", address);
     } catch (error) {

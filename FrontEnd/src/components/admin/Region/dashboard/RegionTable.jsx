@@ -67,6 +67,8 @@ export const RegionTable = ({ region }) => {
     );
   };
 
+
+  console.log("Region selected successfully:::::::", selectedRegion)
   return (
     <div className="rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -118,13 +120,9 @@ export const RegionTable = ({ region }) => {
       {selectedRegion && (
         <>
           <EditRegionModal
-            id={selectedRegion}
+            regionId={selectedRegion}
             show={showEditModal}
             handleClose={handleModalClose}
-            onUserUpdated={() => {
-              refetch();
-              handleModalClose();
-            }}
           />
           <ConfirmationModal
             show={showDeleteModal}

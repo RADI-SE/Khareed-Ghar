@@ -10,6 +10,7 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
     phoneNumber: "",
   });
 
+  const [cityId, setCityId] = useState();
   const { data: region = [] } = useFetchRegion();
 
   console.log("region:::::::::::from change address", region.locations);
@@ -45,14 +46,14 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
   };
 
   const onClose = () => {
-    const LOCATION = "67685d540f7d7569f0972772";
     if (!validateFields()) return;
     createLocation({
       userId,
       street: addressDetails.street,
-      LOCATION,
+      LOCATION: cityId,
       phoneNumber: addressDetails.phoneNumber,
     });
+    
     setAddress(
       `${addressDetails.street}, ${addressDetails.state}, ${addressDetails.city}, ${addressDetails.phoneNumber}`
     );
@@ -81,7 +82,7 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
           onChange={(e) => handleChange("state", e.target.value)}
         >
           <option value="">Select State</option>
-          {region.locations.map((region) => (
+          {region.locations?.map((region) => (
             <option key={region._id} value={region.state}>
               {region.state}
             </option>
@@ -91,16 +92,24 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
         <select
           className="border p-2 w-full mb-4"
           value={addressDetails.city}
-          onChange={(e) => handleChange("city", e.target.value)}
+          onChange={(e) => {
+            const selectedRegion = region.locations.find(
+              (region) =>
+                region.city === e.target.value &&
+                region.state === addressDetails.state
+            );
+            handleChange("city", e.target.value); 
+            setCityId(selectedRegion?._id); 
+          }}
         >
           <option value="">Select City</option>
-          {region.locations.filter((region) => region.state === addressDetails.state).map(
-            (region) => (
+          {region.locations
+            ?.filter((region) => region.state === addressDetails.state)
+            .map((region) => (
               <option key={region._id} value={region.city}>
                 {region.city}
               </option>
-            )
-          )}
+            ))}
         </select>
 
         <input

@@ -15,7 +15,7 @@ router.get("/locations", getAllLocations);
 
 router.get("/locations/:id", getLocationById);
  
-router.put("/locations/:id", updateLocation);
+router.put("/update-location/:id", updateLocation);
  
 router.delete("/locations/:id", deleteLocation);
 
