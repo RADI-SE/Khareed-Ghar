@@ -45,53 +45,57 @@ const User = ({ role }) => {
   }
   return (
     <>
-      <div>
+      <div className="grid grid-cols-3">
         {filteredData?.length === 0 ? (
           <p>No {role.charAt(0).toUpperCase() + role.slice(1)} available</p>
         ) : (
-          <div className="container mt-4">
+          <div className="col-span-3">
+            <div className="">
+            <div className="">
             <h2 className="mb-3">
               {role.charAt(0).toUpperCase() + role.slice(1)} Data
             </h2>
+            </div>
 
-            <div className="search-container mb-3">
+            <div className="">
               <input
                 type="text"
-                className="form-control"
+                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                 placeholder="Search by name or email"
                 value={searchTerm}
                 onChange={(e) => handleSearch(e, setSearchTerm)}
               />
             </div>
+            </div>
 
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead className="table-light">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
-                    <th>ID</th>
-                    <th>First-Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Date of Joining</th>
-                    <th>Actions</th>
+                    <th className="px-6 py-3">ID</th>
+                    <th className="px-6 py-3">First-Name</th>
+                    <th className="px-6 py-3">Email</th>
+                    <th className="px-6 py-3">Role</th>
+                    <th className="px-6 py-3">Last Login</th>
+                    <th className="px-6 py-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredData?.map((user) => {
                     const { _id, name, email, role, lastLogin } = user;
                     return (
-                      <tr key={_id}>
-                        <td>{_id}</td>
+                      <tr key={_id} className="bg-white-500 border-b hover:bg-gray-300">
+                        <td className="px-6 py-2">{_id}</td>
                         <td>
                           <Link
                             to={`/admin/users/user/${_id}`}
-                            className="text-dark"
+                            className="px-6 py-2"
                           >
                             {name}
                           </Link>
                         </td>
-                        <td>{email}</td>
-                        <td>
+                        <td className="px-6 py-2">{email}</td>
+                        <td className="px-6 py-2">
                           <span
                             className={`badge ${getStatusBadgeClass(role)}`}
                             style={
@@ -103,17 +107,17 @@ const User = ({ role }) => {
                             {role}
                           </span>
                         </td>
-                        <td>{lastLogin}</td>
-                        <td>
+                        <td className="px-6 py-2">{lastLogin}</td>
+                        <td className="px-6 py-2">
                           <button
-                            className="btn btn-warning me-2"
+                            className="w-10 bg-yellow-500 rounded mr-1 p-2 text-white"
                             onClick={() => handleEditClick(_id)}
                           >
                             <FaEdit className="me-2" /> Edit
                           </button>
                           <button
-                            className={`btn ${
-                              role === "banned" ? "btn-success" : "btn-danger"
+                            className={` ${
+                              role === "banned" ? "bg-green-600 rounded p-2 text-white" : "bg-red-600 rounded p-2 text-white"
                             } me-2`}
                             onClick={() =>
                               handleBanToggle(
