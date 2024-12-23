@@ -66,9 +66,10 @@ const ProductTable = ({ products, onProductClick }) => {
 
   return (
     <>
+
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left text-gray-500">
+          <thead className="text-xs text-white uppercase bg-blue-950">
             <tr>
               <th className="px-6 py-3">S.N</th>
               <th className="px-6 py-3">Product ID</th>
@@ -108,21 +109,21 @@ const ProductTable = ({ products, onProductClick }) => {
                   <td className="px-6 py-2">
                     {new Date(createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-2">
+                  <td className="px-2 py-2">
                     <button
-                      className="w-5 h-5 mr-5 text-yellow-500"
+                      className="w-4 h-5 mr-2 text-yellow-500"
                       onClick={() => onProductClick(product)}
                     >
                       <FaEye />
                     </button>
                     <button
-                      className="w-5 h-5 text-green-6 mr-5"
+                      className="w-4 h-5 mr-2 text-green-6"
                       onClick={() => handleEditClick(product)}
                     >
                       <FaEdit />
                     </button>
                     <button
-                      className="w-5 h-5 text-red-500"
+                      className="w-4 h-5 text-red-500"
                       onClick={() => handleDeleteClick(product)}
                     >
                       <FaTrashAlt />

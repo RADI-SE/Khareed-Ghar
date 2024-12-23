@@ -38,14 +38,12 @@ const DetailedProductView = () => {
     );
   }
 
-  return (
-
-    
-    <div className="container mt-4">
+  return (  
+    <div>
       {selectedProduct ? (
-        <div className="card shadow-lg p-4">
+        <div className="">
           <button
-            className="btn btn-secondary mb-3"
+            className=""
             onClick={handleBackClick}
           >
             &larr; Back to Products
@@ -60,7 +58,7 @@ const DetailedProductView = () => {
           )}
         </div>
       ) : (
-        <div className="card shadow-lg p-4">
+        <div className="shadow-lg p-4">
           <h4 className="mb-4">Products</h4>
           <ProductTable products={products} onProductClick={handleProductClick} />
         </div>

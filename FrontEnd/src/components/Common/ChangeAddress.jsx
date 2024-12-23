@@ -81,7 +81,7 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
           onChange={(e) => handleChange("state", e.target.value)}
         >
           <option value="">Select State</option>
-          {region.locations.map((region) => (
+          {region.locations?.map((region) => (
             <option key={region._id} value={region.state}>
               {region.state}
             </option>
@@ -94,7 +94,7 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
           onChange={(e) => handleChange("city", e.target.value)}
         >
           <option value="">Select City</option>
-          {region.locations.filter((region) => region.state === addressDetails.state).map(
+          {region.locations?.filter((region) => region.state === addressDetails.state).map(
             (region) => (
               <option key={region._id} value={region.city}>
                 {region.city}
