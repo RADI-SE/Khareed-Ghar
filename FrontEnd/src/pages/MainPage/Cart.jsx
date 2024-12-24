@@ -45,18 +45,18 @@ const Cart = () => {
                 {items.map(({ product, quantity, total, _id }) => (
                   <div key={_id} className='flex items-center space-x-12 justify-between  border-b'>
                     <div className='md:flex items-center'>
-                      {/* Replace with actual image if available */}
+                     
                       <img
                         src="https://via.placeholder.com/100" 
-                        alt={product.name}
+                        alt={product?.name}
                         className='w-20 h-20 object-contain rounded'
                       />
                       <div className='bg-white flex-1 ml-2'>
-                        <h3 className='text-sm font-semibold'>{product.name}</h3>
+                        <h3 className='text-sm font-semibold'>{product?.name}</h3>
                       </div>
                     </div>
                     <div className='flex bg-white items-center'>
-                      <p>${product.price}</p>
+                      <p>${product?.price}</p>
                     </div>
                     <div className='flex bg-white items-center justify-center'>
                       <p className='text-xl px-2'>{quantity}</p>
@@ -90,7 +90,7 @@ const Cart = () => {
                   >
                     add
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => setIsModelOpen(true)}
                     className="text-blue-900 no-underline text-bold mt-1 w-full bg-gray-300 hover:bg-blue-900 hover:text-white rounded-md"
                   >
@@ -101,7 +101,7 @@ const Cart = () => {
                     className="text-blue-900 no-underline text-bold mt-1 w-full bg-gray-300 hover:bg-blue-900 hover:text-white rounded-md"
                   >
                     remove
-                  </button>
+                  </button> */}
                 </div>
               </div>
               <div className='flex justify-between mb-4'>

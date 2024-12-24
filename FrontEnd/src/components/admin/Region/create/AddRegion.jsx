@@ -27,6 +27,17 @@ export const AddForm = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(!state){
+      alert("State Name is required");
+      return false;
+    }
+    if(!city){
+      alert("City Name is required");
+      return false;
+    }
+    if( state != null && city != null){
+      alert("New Region created successfully");
+    }
     createRegion({
       id: userId,
       state: state,

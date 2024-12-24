@@ -11,7 +11,15 @@ export const ConfirmationModal = ({
   setConfirmationName,
    selectedName,
 }) => {
-  return (
+  const handleConfirm = () => {
+     if (confirmationName === selectedName) {
+      onConfirm();
+    } else { 
+      setConfirmationName('');
+      alert('The category name does not match. Please try again.');
+    }
+  };
+    return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Delete Category</Modal.Title>
@@ -36,7 +44,7 @@ export const ConfirmationModal = ({
       <Modal.Footer>
         <Button
           variant="danger"
-          onClick={onConfirm}
+          onClick={handleConfirm}
           disabled={isLoading || !confirmationName}
         >
           {isLoading ? "Deleting..." : "Delete"}

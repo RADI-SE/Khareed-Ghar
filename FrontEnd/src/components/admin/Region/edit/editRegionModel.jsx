@@ -13,8 +13,8 @@ export const EditRegionModal = ({  regionId, show, handleClose }) => {
 
 
   const handleSubmit = (updatedRegion) => {
-    if (!regionId || !updatedRegion) return;
 
+    
     editRegion(
       {
         id:regionId._id,

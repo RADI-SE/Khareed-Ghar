@@ -18,10 +18,14 @@ export const AddCategoryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!name.trim()) {
-      setError("Category name is required");
-      return;
+    
+    if (!name || !description) {
+      alert("Name and description are required");
+      return false;
+    }
+    
+    if( name != null && description != null ){
+      alert("New category created successfully");
     }
     createCategory({
       token,
@@ -29,7 +33,6 @@ export const AddCategoryForm = () => {
       description,
     });
   };
-
   return (
     <div className="add-category-form">
       <form onSubmit={handleSubmit}>

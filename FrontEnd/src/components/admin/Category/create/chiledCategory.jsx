@@ -29,21 +29,27 @@ export const AddSubCategoriesForm = () => {
     e.preventDefault();
 
     if (!CategoryId) {
-      setError("Parent category is required");
-      return;
+      alert("Parent category is required");
+      return false;
     }
-    if (!name.trim()) {
-      setError("Subcategory name is required");
-      return;
+    if (!name || !description) {
+      alert("Name and description are required");
+      return false;
     }
 
+    if (!CategoryId) {
+      alert("Parent category not found");
+      return false;
+    }
+    if( name != null && description != null && CategoryId != null){
+      alert("New subcategory created successfully");
+    }
     try {
       createSubCategory({
         name,
         description,
         CategoryId,
       });
-      setMessage("Subcategory added successfully!");
       setSubCategoryName("");
       setDescription("");
       setParentCategoryId("");

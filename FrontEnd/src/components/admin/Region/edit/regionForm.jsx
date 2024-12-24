@@ -16,6 +16,20 @@ export const RegionForm = ({ region: region = {}, onSubmit }) => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if(!formData.state){
+      alert("State field is required.");
+      return false;
+    }
+    if(!formData.city){
+      alert("City field is required.");
+      return false;
+    }
+    if(formData.state != null && formData.city != null ){
+      alert("Region updated successfully.");
+      setFormData({ state: "", city: "" }); 
+    }
+    
     onSubmit(formData);
   };
 
@@ -30,7 +44,7 @@ export const RegionForm = ({ region: region = {}, onSubmit }) => {
           value={formData.state}  
           onChange={handleChange}
           placeholder="Enter State Name"
-          required
+ 
         />
       </Form.Group>
 
@@ -42,7 +56,7 @@ export const RegionForm = ({ region: region = {}, onSubmit }) => {
           value={formData.city} 
           onChange={handleChange}
           placeholder="Enter City Name"
-          required
+    
         />
       </Form.Group>
 

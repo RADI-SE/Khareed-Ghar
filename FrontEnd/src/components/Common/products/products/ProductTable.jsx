@@ -160,7 +160,7 @@ const ProductTable = ({ products, onProductClick }) => {
               modalMessage={modalMessage}
               confirmationName={confirmationName}
               setConfirmationName={setConfirmationName}
-              selectedCategoryName={selectedProduct.name}
+              selectedName={selectedProduct.name}
             />
           </>
         )}

@@ -27,19 +27,32 @@ export const EditSubCategoriesForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!CategoryId || !SubCategoryId || !CategoryName.trim()) {
-      setMessage("Please fill out all required fields.");
-      return;
+ 
+    if (!SubCategoryId || !CategoryName) {
+      alert("Name and description are required");
+      return false;
     }
 
+    if (!CategoryId) {
+      alert("Parent category not found");
+      return false;
+    }
+
+    if (!SubCategoryId) {
+      alert("Subcategory not found");
+      return false;
+    }
+
+    if( CategoryId != null && CategoryName != null){
+      alert("Subcategory updated successfully");
+      setCategoryId("");
+      setSubCategoryId("");
+      setCategoryName("");
+      setDescription("");
+    }
     editCategory(
       { SubCategoryId, CategoryId, CategoryName, description },
-      {
-        onSuccess: () => {
-          setMessage("Subcategory updated successfully.");
-          setTimeout(() => setMessage(""), 3000);
-        },
-      }
+    
     );
   };
 

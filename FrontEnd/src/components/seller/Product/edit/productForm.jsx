@@ -37,6 +37,17 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!formData.name || !formData.description || !formData.price  || formData.images.length === 0) {
+      alert("Please fill in all the required fields!"); 
+      return false; 
+    }
+
+    // if (name != description != price != CategoryId != SubCategoryId != images.length === 0) {
+    //   alert("Product added successfully!");
+      
+    // }
+    
     onSubmit(formData);
   };
 
@@ -50,7 +61,7 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
           value={formData.name}
           onChange={handleChange}
           placeholder="Enter product name"
-          required
+           
         />
       </Form.Group>
 
@@ -62,7 +73,7 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
           value={formData.description}
           onChange={handleChange}
           placeholder="Enter product description"
-          required
+           
         />
       </Form.Group>
 
@@ -72,7 +83,7 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
           name="condition"
           value={formData.specifications.condition}
           onChange={handleSpecificationsChange}
-          required
+           
         >
           <option value="" disabled>Select condition</option>
           <option value="New">New</option>
@@ -86,7 +97,7 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
           name="color"
           value={formData.specifications.color}
           onChange={handleSpecificationsChange}
-          required
+           
         >
           <option value="" disabled>Select color</option>
           <option value="Red">Red</option>
@@ -102,7 +113,7 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
           name="capacity"
           value={formData.specifications.capacity}
           onChange={handleSpecificationsChange}
-          required
+           
         >
           <option value="" disabled>Select capacity</option>
           <option value="64GB">64GB</option>
@@ -120,7 +131,7 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
           value={formData.price}
           onChange={handleChange}
           placeholder="Enter product price"
-          required
+           
         />
       </Form.Group>
 

@@ -37,24 +37,11 @@ const Sidebar = () => {
               </li>
 
               <li className="">
-                <NavLink className="border-blue-900 border-y no-underline text-white flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-800 group" to="/seller/users">
-                  User Management
-                </NavLink>
-              </li>
-              <li className="">
                 <NavLink
                   className="border-blue-900 border-y no-underline text-white flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-800 group"
                   to="/seller/orders"
                 >
                   Order Management
-                </NavLink>
-              </li>
-              <li className="">
-                <NavLink
-                  className="border-blue-900 border-y no-underline text-white flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-800 group"
-                  to="/seller/categories"
-                >
-                  Category Management
                 </NavLink>
               </li>
               <li className="">

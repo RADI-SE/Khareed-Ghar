@@ -1,3 +1,6 @@
+
+
+
 import React, { useState } from "react";
 import DetailedProductView from "./dashboard/view";
 import { AddProductForm } from "./create/AddProducts";
@@ -7,8 +10,8 @@ function ProductManagement() {
   const [currentView, setCurrentView] = useState("product");
 
   const tabs = [
-    { id: "product", label: "Products" },
-    { id: "addProduct", label: " + Add Product" },
+    { id: "DetailedProductView", label: "Product View" },
+    { id: "addProduct", label: " Add a New Product" },
   ];
   const handleTabChange = (tabId) => {
     setCurrentView(tabId);
@@ -16,49 +19,37 @@ function ProductManagement() {
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case "product":
+      case "DetailedProductView":
         return <DetailedProductView />;
       case "addProduct":
-        break;
+        return <AddProductForm />;
       default:
         return null;
     }
   };
+
   return (
     <div className="">
-      <nav className="fixed top-0 border-solid p-3 z-50 flex justify-around w-75 bg-blue-950">
-        <div className="py-2 px-5 text-white font-semibold rounded-lg bg-blue-800 hover:bg-blue-700 lg:col-span-2 lg:col-start-1">
+      <nav className="">
+        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-blue-950 rounded-lg">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className=""
+              className="bg-blue-900 text-white w-40 h-10 rounded-lg text-white rounded-lg"
             >
               {tab.label}
             </button>
           ))}
         </div>
-        {currentView === "product" && (
-          <input
-            type="text"
-            placeholder="Search by ID"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-            className="py-2 px-5 bg-white text-white font-semibold rounded-lg  hover:bg-gray-200"
-          />
-        )}
+
       </nav>
-      {currentView === "addProduct" && (
-        <div className="">
-          {<AddProductForm />}
-        </div>
-      )}
-    
-      <div className="mt-5">{renderCurrentView()}</div>
+ 
+
+      <div className="view-container">{renderCurrentView()}</div>
     </div>
   );
 }
+
 
 export default ProductManagement;

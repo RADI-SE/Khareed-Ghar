@@ -27,17 +27,23 @@ export const Del_C = () => {
   } = useDeleteSubCategory(token);
 
   const handleDelete = () => {
-    if (!subcategoryId) {
-      setMessage("Please select a subcategory to delete.");
-      return;
-    }
-
+ 
     if (!isValidConfirmationName(confirmationName, subCategoryName)) {
       setMessage("Subcategory name does not match.");
       return;
     }
+    if (!categoryId) {
+      alert("Category not found");
+      return false;
+    }
 
-    setMessage("Deleting subcategory...");
+    if (!subcategoryId) {
+      alert("Subcategory not found within the parent category");
+      return false;
+    }
+    if( categoryId != null && subcategoryId != null){
+      alert("Subcategory and associated products deleted successfully");
+    }
 
     deleteCategory(
       { categoryId, subcategoryId },
@@ -124,7 +130,7 @@ export const Del_C = () => {
           modalMessage={message}
           confirmationName={confirmationName}
           setConfirmationName={setConfirmationName}
-          selectedCategoryName={subCategoryName}
+          selectedName={subCategoryName}
         />
       )}
 

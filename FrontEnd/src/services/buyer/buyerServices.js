@@ -88,4 +88,18 @@ export const useAddressService = create((set)=>({
       set({ errorMessage: error.message, isLoading: false });
     }
   },
+
+  //getLocationById
+  getLocationById: async (userId)=>{
+    try {
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.post(`http://localhost:5000/api/locations/`,{userId});
+    console.log('getLocationById::::::::',  response.data);
+      set({ address: response.data, isLoading: false });
+      console.log("return from useAddressService ", address);
+      return address;
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  },
 }));

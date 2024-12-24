@@ -10,7 +10,25 @@ const UserForm = ({ user, onSubmit }) => {
   };
   
   const handleSubmit = (e) => {
+    
     e.preventDefault();
+    if(!formData.name){
+      alert("Name field is required.");
+      return false;
+    }
+    if(!formData.email){
+      alert("Email field is required.");
+      return false;
+    }
+    
+    if(!formData.role){
+      alert("Role is required.");
+      return false;
+    }
+    if(formData.name != null && formData.email != null && formData.role != null ){
+      alert("User updated successfully.");
+      setFormData({ name: "", email: "", role: "",}); 
+    }
     onSubmit(formData);
   };
 
@@ -23,7 +41,7 @@ const UserForm = ({ user, onSubmit }) => {
           name="name"
           value={formData.name}
           onChange={handleChange}
-          required
+ 
         />
       </Form.Group>
 
@@ -34,13 +52,13 @@ const UserForm = ({ user, onSubmit }) => {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          required
+          
         />
       </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label>Role</Form.Label>
-        <Form.Select name="role" value={formData.role} onChange={handleChange} required>
+        <Form.Select name="role" value={formData.role} onChange={handleChange}>
           <option value="" disabled>Select Role</option>
           <option value="admin">Admin</option>
           <option value="seller">Seller</option>

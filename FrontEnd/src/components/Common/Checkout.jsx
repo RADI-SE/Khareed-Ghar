@@ -41,62 +41,6 @@ const Checkout = ({ setOrder }) => {
       <h3 className="text-2xl font-semibold mb-4">CHECKOUT</h3>
       <div className="flex flex-col w-[1000px] md:flex-row justify-between space-x-10 mt-8">
         <div className="md:w-2/3">
-          {/* Billing Information */}
-          <div className="border p-2 mb-6">
-            <div
-              className="flex items-center justify-between"
-              onClick={() => setBillingToggle(!billingToggle)}
-            >
-              <h3 className="text-lg font-semibold mb-2">
-                Billing Information
-              </h3>
-              {billingToggle ? <FaAngleUp /> : <FaAngleDown />}
-            </div>
-            <div className={`space-y-4 ${billingToggle ? "" : "hidden"}`}>
-              <div>
-                <label className="block text-gray-700" htmlFor="">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter your name"
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700" htmlFor="">
-                  Phone
-                </label>
-                <input
-                  type="text"
-                  name="phone"
-                  placeholder="Enter your Phone Number"
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700" htmlFor="">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Shipping Information */}
-          <div className="border p-2 mb-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold mb-2">
-                Shipping Information
-              </h3>
-            </div>
-           </div>
           <div className="border p-2 mb-6">
             <div
               className="flex items-center justify-between"

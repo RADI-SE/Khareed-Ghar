@@ -12,8 +12,7 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
 
   const [cityId, setCityId] = useState();
   const { data: region = [] } = useFetchRegion();
-
-  console.log("region:::::::::::from change address", region.locations);
+ 
   const userId = sessionStorage.getItem("id");
 
   const { mutate: createLocation } = useAddAddress();
@@ -46,7 +45,6 @@ const ChangeAddress = ({ setAddress, setIsModelOpen }) => {
   };
 
   const onClose = () => {
-    const LOCATION = "6769a9498092d5e4fa06d40e";
     if (!validateFields()) return;
     createLocation({
       userId,

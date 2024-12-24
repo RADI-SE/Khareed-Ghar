@@ -26,10 +26,18 @@ export const Del_P = () => {
   } = useDeleteCategory(token);
 
   const handleDelete = () => {
-    const selectedCategoryName = getSelectedCategoryName(categories, selectedCategory);
-    if (!isValidConfirmationName(name, selectedCategoryName)) {
-      setModalMessage("Category name does not match. Please try again.");
-      return;
+    
+    if (!selectedCategory) {
+      alert("Category not found");
+      return false;
+    }
+    
+    if (!name) {
+      alert("Name mismatch");
+      return false;
+    }
+    if( selectedCategory != null && name != null){
+      alert("Category and associated products deleted successfully");
     }
     
     deleteCategory(
@@ -90,7 +98,7 @@ export const Del_P = () => {
           modalMessage={modalMessage}
           confirmationName={name}
           setConfirmationName={setConfirmationName}
-          selectedCategoryName={selectedCategoryName}
+          selectedName={selectedCategoryName}
         />
       )}
 

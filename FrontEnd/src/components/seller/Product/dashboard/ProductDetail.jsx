@@ -2,7 +2,6 @@ import React from "react";
 import defaultImage from "../../../../assets/images/default.jpeg";
 const ProductDetail = ({ selectedProduct}) => {
  
-    console.log("Product", selectedProduct);
   return (
     <div>
       <h1>{selectedProduct?.name || "No Name Available"}</h1>
@@ -25,19 +24,6 @@ const ProductDetail = ({ selectedProduct}) => {
 
       <h3>Seller: {selectedProduct?.seller.name || "No seller information available"}</h3>
 
-      {/* <h3>Reviews</h3> */}
-      {/* {reviews.length > 0 ? (
-        <ul>
-          {reviews.map((review) => (
-            <li key={review._id}>
-              <strong>{review.user?.name || "Anonymous"}</strong> (
-              {review.rating || "No rating"} stars): {review.comment || "No comment"}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No reviews yet</p>
-      )} */}
     </div>
   );
 };

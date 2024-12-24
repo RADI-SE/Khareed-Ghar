@@ -25,22 +25,27 @@ export const EditCategoriesForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!CategoryName || !description) {
+      alert("Name and description are required");
+      return false;
+    }
+
     if (!CategoryId) {
-      setMessage("Parent category is required");
-      return;
+      alert("Category not found");
+      return false;
     }
-    if (!CategoryName.trim()) {
-      setMessage("Subcategory name is required");
-      return;
+
+    if( CategoryId != null && CategoryName != null){
+      alert("Category updated successfully");
+      setCategoryId("");
+      setCategoryName("");
+      setDescription("");
+  
     }
+    
     editCategory(
       { CategoryId, CategoryName, description },
-      {
-        onSuccess: () => {
-          setMessage("Subcategory updated successfully.");
-          setTimeout(() => setMessage(""), 3000);
-        },
-      }
     );
   };
 
@@ -74,14 +79,14 @@ export const EditCategoriesForm = () => {
       </div>
       {CategoryId && (
         <form onSubmit={handleSubmit}>
-          <h3>Add SubCategory</h3>
+          <h3>Edit Category</h3>
           <div className="form-group">
-            <label>Subcategory Name</label>
+            <label>Category Name</label>
             <input
               type="text"
               value={CategoryName}
               onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Enter subcategory name"
+              placeholder="Enter category name"
             />
           </div>
           <div className="form-group">
@@ -89,7 +94,7 @@ export const EditCategoriesForm = () => {
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter subcategory description"
+              placeholder="Enter category description"
             />
           </div>
           {message && <p className="message">{message}</p>}

@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { FaEdit, FaBan } from "react-icons/fa";
-import EditUserModal  from "../edit/edit";
+import EditUserModal from "../edit/edit";
 import { useFetchUsers } from "../../../../hooks/Users/useFetchUsers";
 import { useBanUsers } from "../../../../hooks/Users/useActionUsers";
-import { getStatusBadgeClass, handleBanToggle, handleSearch } from "../utils/utils";
+import { getStatusBadgeClass, handleBanToggle } from "../utils/utils";
 import AlertMessage from "../../../common/AlertMessage";
 import LoadingSpinner from "../../../Common/LoadingSpinner";
 
@@ -34,7 +34,14 @@ const User = ({ role }) => {
     handleModalClose();
   };
 
-  const filteredData = data;
+  // Filter the data based on the search term
+  const filteredData = data?.filter((user) => {
+    const searchTermLower = searchTerm.toLowerCase();
+    return (
+      user.name.toLowerCase().includes(searchTermLower) ||
+      user.email.toLowerCase().includes(searchTermLower)
+    );
+  });
 
   if (error) {
     return error && <AlertMessage variant="danger" message={error} />;
@@ -43,6 +50,7 @@ const User = ({ role }) => {
   if (isLoading) {
     return <LoadingSpinner isLoading={isLoading} />;
   }
+
   return (
     <>
       <div className="lg:grid lg:grid-cols-3">
@@ -50,22 +58,20 @@ const User = ({ role }) => {
           <p>No {role.charAt(0).toUpperCase() + role.slice(1)} available</p>
         ) : (
           <div className="lg:col-span-3">
-            <div className="">
-            <div className="">
-            <h2 className="">
-              {role.charAt(0).toUpperCase() + role.slice(1)} Data
-            </h2>
-            </div>
+            <div>
+              <h2>
+                {role.charAt(0).toUpperCase() + role.slice(1)} Data
+              </h2>
 
-            <div className="">
-              <input
-                type="text"
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                placeholder="Search by name or email"
-                value={searchTerm}
-                onChange={(e) => handleSearch(e, setSearchTerm)}
-              />
-            </div>
+              <div>
+                <input
+                  type="text"
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                  placeholder="Search by name or email"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}  // Handle search term change
+                />
+              </div>
             </div>
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
@@ -82,15 +88,12 @@ const User = ({ role }) => {
                 </thead>
                 <tbody>
                   {filteredData?.map((user) => {
-                    const { _id,id, name, email, role, lastLogin } = user;
+                    const { _id, id, name, email, role, lastLogin } = user;
                     return (
                       <tr key={_id} className="bg-white-500 border-b hover:bg-gray-300">
                         <td className="px-6 py-2">{id || _id}</td>
                         <td>
-                          <Link
-                            to={`/admin/users/user/${_id}`}
-                            className="px-6 py-2"
-                          >
+                          <Link to={`/admin/users/user/${_id}`} className="px-6 py-2">
                             {name}
                           </Link>
                         </td>
@@ -116,17 +119,11 @@ const User = ({ role }) => {
                             <FaEdit className="me-2" /> Edit
                           </button>
                           <button
-                            className={` ${
+                            className={`${
                               role === "banned" ? "bg-green-600 rounded p-2 text-white" : "bg-red-600 rounded p-2 text-white"
                             } me-2`}
                             onClick={() =>
-                              handleBanToggle(
-                                banUser,
-                                queryClient,
-                                refetch,
-                                _id,
-                                role
-                              )
+                              handleBanToggle(banUser, queryClient, refetch, _id, role)
                             }
                           >
                             <FaBan className="me-2" />

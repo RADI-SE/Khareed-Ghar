@@ -13,7 +13,7 @@ router.post("/create-location", createLocation);
 
 router.get("/locations", getAllLocations);
 
-router.get("/locations/:id", getLocationById);
+router.post("/locations", getLocationById);
  
 router.put("/update-location/:id", updateLocation);
  

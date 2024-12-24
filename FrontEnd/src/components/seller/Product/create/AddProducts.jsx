@@ -24,15 +24,6 @@ export const AddProductForm = () => {
 
   const { mutate: createProduct, isLoading } = useCreateProduct(token);
 
-  const { Error, setError, clearError, isError } = useSellerService();
-  useEffect(() => {
-    if (isError) {
-      setError(Error);
-      const timer = setTimeout(() => clearError(), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isError, Error, setError, clearError]);
-
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
     setSubCategoryId("");
@@ -51,15 +42,8 @@ export const AddProductForm = () => {
 
   const handleImageChange = (e) => {
     const selectedFiles = [...e.target.files];
-    if (selectedFiles.length > 0) {
-      // const formdata = new FormData();
-      // formdata.append("file", selectedFiles[0])
-      
-      setImage(selectedFiles); // Update image state with the selected files
-
-      // axios.post('http://localhost:5000/api/upload', formdata)
-      //   .then(response => console.log(response.data))
-      //   .catch(error => console.error("Error uploading", error));
+    if (selectedFiles.length > 0) { 
+     setImage(selectedFiles); // Update image state with the selected files
     }
   };
   
@@ -84,6 +68,15 @@ const handleResetChange = (e) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!name || !description || !price || !CategoryId || !SubCategoryId || images.length === 0) {
+      alert("Please fill in all the required fields!"); 
+      return false; 
+    }else{
+
+      alert("Product added successfully!");
+    }
+
+    
     createProduct({
       name,
       description,
@@ -130,7 +123,7 @@ const handleResetChange = (e) => {
         )}
         {SubCategoryId && (
           <>
-            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
               <input
                 type="text"
@@ -141,7 +134,7 @@ const handleResetChange = (e) => {
               />
             </div>
 
-            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
               <textarea
                 value={description}
@@ -151,7 +144,7 @@ const handleResetChange = (e) => {
               />
             </div>
 
-            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly">
               <h4>Specifications</h4>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Condition</label>
               <select
@@ -199,7 +192,7 @@ const handleResetChange = (e) => {
                 <option value="512GB">512GB</option>
               </select>
             </div>
-            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
               <input
                 type="number"
@@ -209,7 +202,7 @@ const handleResetChange = (e) => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
-            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly rounded mb-2">
+            <div className="w-100 h-100 bg-gray-200 p-3 justify-evenly">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images</label>
               <form
               >
@@ -225,7 +218,7 @@ const handleResetChange = (e) => {
           </>
         )}
 
-        {Error && <div className="alert alert-danger">{Error}</div>}
+ 
         <div className="form-btns">
 
         {SubCategoryId && (
