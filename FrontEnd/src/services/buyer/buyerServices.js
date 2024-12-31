@@ -20,7 +20,6 @@ export const useCartService = create((set) => ({
       {  id,
         productId,
         quantity,}
-   
       );
       set({ cart: response.data, isLoading: false });
     } catch (error) {
@@ -35,11 +34,11 @@ export const useCartService = create((set) => ({
       const response = await axios.get(`http://localhost:5000/api/cart-items/${id}`);
       console.log("response   2", response.data);
       set({ cart: response.data, isLoading: false });
-      return response.data; // Ensure data is always returned.
+      return response.data; 
     } catch (error) {
       console.error("Error fetching cart:", error);
       set({ errorMessage: error.response?.data?.message || error.message, isLoading: false });
-      return []; // Return an empty array as a fallback for cart items.
+      return []; 
     }
   },
   
@@ -50,14 +49,27 @@ export const useCartService = create((set) => ({
       set({ isLoading: true, errorMessage: null });
       const response = await axios.delete(`http://localhost:5000/api/remove-from-cart/${id}`, {
         data: { productId },
-      });
-      console.log("responsefrom removeS 2" , response.data);
+      }); 
       set({ cart: response.data, isLoading: false });
       return response.data;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
   },
+
+  //clearCart 
+  clearCart: async (id) => {
+    try {
+       
+      const response = await axios.delete(`http://localhost:5000/api/clear-cart/${id}`);
+      set({ cart: response.data, isLoading: false });
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  },
+
+
+   
 }));
 
 

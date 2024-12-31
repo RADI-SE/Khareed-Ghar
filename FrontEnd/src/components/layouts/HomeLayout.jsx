@@ -6,13 +6,23 @@ import CategoryBar from "../Common/CategoryBar";
 
 const HomeLayout = () => {
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const isCartPage = location.pathname === "/cart";
 
   return (
     <div className="home-layout">
       <Navbar />
-      <CategoryBar />    
-      <Outlet />
+      {isCartPage ? (
+        <div className="cart-layout">
+          <div className="cart-content">
+            <Outlet />
+          </div>
+        </div>
+      ) : (
+        <>
+          <CategoryBar />
+          <Outlet />
+        </>
+      )}
       <Footer />
     </div>
   );

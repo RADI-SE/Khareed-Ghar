@@ -51,7 +51,6 @@ export const removeFromCart = async (req, res) => {
   const {id} = req.params;
   const { productId } = req.body; 
 
-  console.log("Removing: ", id, productId);
   try {
     const cart = await Cart.findOne({ user: id });
     if (!cart) {
@@ -90,10 +89,9 @@ export const getCart = async (req, res) => {
 };
 
 export const clearCart = async (req, res) => {
-  const userId = req.user.id;
-
+  const id = req.body; 
   try {
-    const cart = await Cart.findOne({ user: userId });
+    const cart = await Cart.findOne({ user:id.id});
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
@@ -106,6 +104,6 @@ export const clearCart = async (req, res) => {
     res.status(200).json(cart);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error " });
   }
 };

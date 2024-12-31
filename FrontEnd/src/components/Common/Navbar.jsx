@@ -3,11 +3,14 @@ import { FaSearch, FaShoppingCart, FaUser, FaXbox } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 import { useFetchCartItems } from "../../hooks/buyer/cart/useFetchCartItems";
+import { useClearCart } from "../../hooks/buyer/cart/useClearCart";
 
 const Navbar = () => {
   const { signout } = useAuthService();
 
   const id = sessionStorage.getItem("id");
+ 
+const {mutate: clearCartMutation} = useClearCart(id);
 
   const {
     data: cart = {},
@@ -25,6 +28,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await signout();
+    clearCartMutation();
     navigate("/");
   };
   return (

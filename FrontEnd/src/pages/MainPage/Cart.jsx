@@ -5,7 +5,7 @@ import ChangeAddress from '../../components/Common/ChangeAddress';
 import { useNavigate } from 'react-router-dom';
 import { useFetchCartItems } from '../../hooks/buyer/cart/useFetchCartItems';
 import { useRemoveFromCart } from '../../hooks/buyer/cart/useRemoveFromCart';
-
+ 
 const Cart = () => { 
   const [address, setAddress] = useState('House 14, Street 40, I14-3, Islamabad');
   const [isModelOpen, setIsModelOpen] = useState(false);
