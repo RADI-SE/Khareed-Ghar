@@ -9,6 +9,7 @@ import OrderList from "../components/admin/OrderComponents/OrderList";
 import DetailedProductView from "../components/admin/Category/dashboard/view";
 import NotFound from "../components/NotFound";
 import RegionManagement from "../components/admin/Region/rootRoutes";
+import ProductManagement from "../components/admin/Product/rootRoutes";
 
 const AdminRoutes = () => {
   return (
@@ -26,7 +27,7 @@ export const adminChildrenRoutes = [
    { path: "users/*", element: <UserManagement /> }, 
    { path: "categories", element: <CategoryManagement/> },
    { path: "zoneManager", element: <RegionManagement /> },
-  { path: "products/detailedProduct", element: <DetailedProductView /> },
+  { path: "products", element: <ProductManagement /> },
   { path: "*", element: <NotFound /> }, 
 ];
 
