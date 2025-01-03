@@ -5,6 +5,7 @@ import {
   getProductById,
   deleteProduct,
   editProduct,
+  getUserProducts
 } from "../../controller/seller/product.controller.js";
 import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
 import { AuthorizeRoles } from "../../middleware/AuthorizeRoles.js";
@@ -14,6 +15,8 @@ const router = express.Router();
 const verifySeller = [verifyTokenForRole, AuthorizeRoles("seller")];
 
 router.post("/seller/products", verifySeller, addProduct);
+
+router.get("/seller/getProductsByUserId/:id", getUserProducts);
 
 router.get("/seller/products", getProducts);
 

@@ -5,6 +5,7 @@ import {
   getProductById, 
   deleteProduct,
   editProduct,
+  getUserProducts
 } from "../../controller/seller/product.controller.js";
 import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
 import { AuthorizeRoles } from "../../middleware/AuthorizeRoles.js";
@@ -20,6 +21,7 @@ router.post("/products", upload.single("file"), addProduct);
 
  
 router.get("/products", getProducts);
+router.get("/getProductsByUserId", getUserProducts);
 
 router.get("/seller/productsById/:id", getProductById);
 

@@ -106,6 +106,7 @@ export const addProduct = async (req, res) => {
 };
 export const getProducts = async (req, res) => {
   try {
+    
     const products = await Product.find()
       .populate("category", "name")
       .populate("subcategory", "name")
@@ -152,6 +153,36 @@ export const getProductById = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting product:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
+  }
+};
+
+// get user products
+export const getUserProducts = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const products = await Product.find({ seller: id })
+     .populate("category")
+     .populate("subcategory");
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No products found.",
+      });
+    }
+
+
+    console.log("products:: found",products.length,);
+    res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.error("Error getting user products:", error);
     res.status(500).json({
       success: false,
       message: "Server error. Please try again later.",
