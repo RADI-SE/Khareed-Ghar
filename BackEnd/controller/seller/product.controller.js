@@ -163,7 +163,7 @@ export const getProductById = async (req, res) => {
 // get user products
 export const getUserProducts = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const products = await Product.find({ seller: id })
      .populate("category")
      .populate("subcategory");

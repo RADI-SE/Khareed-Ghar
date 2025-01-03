@@ -7,7 +7,7 @@ import { AddProductForm } from "./create/AddProducts";
 
 function ProductManagement() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentView, setCurrentView] = useState("product");
+  const [currentView, setCurrentView] = useState("DetailedProductView");
 
   const tabs = [
     { id: "DetailedProductView", label: "Product View" },

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { useFetchProducts } from "../../../../hooks/seller/useFetchProducts";
+import { useFetchProductsByUserId } from "../../../../hooks/seller/useFetchProductsByUserId";
 import ProductTable from "../../../Common/products/products/ProductTable";
 import ProductDetail from "./ProductDetail";
 
 const DetailedProductView = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const id = sessionStorage.getItem("id");
 
   const {
     data: products = [],
     isLoading: isLoadingProducts,
     isError: productsError,
-  } = useFetchProducts();
+  } = useFetchProductsByUserId(id);
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);

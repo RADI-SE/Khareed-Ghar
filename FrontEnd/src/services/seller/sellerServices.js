@@ -208,4 +208,14 @@ export const useSellerService = create((set) => ({
       });
     }
   },
+
+  // getUserProducts
+  getUserProducts: async (id) => {
+    try {
+       const response = await axios.get(`http://localhost:5000/api/getProductsByUserId/${id}`);       
+      return response.data.products;
+     } catch (error) {
+      console.error("Error fetching user products:", error.message);
+    }
+  },
 }));

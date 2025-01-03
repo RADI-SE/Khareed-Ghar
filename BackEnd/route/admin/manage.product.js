@@ -21,7 +21,7 @@ router.post("/products", upload.single("file"), addProduct);
 
  
 router.get("/products", getProducts);
-router.get("/getProductsByUserId", getUserProducts);
+router.get("/getProductsByUserId/:id", getUserProducts);
 
 router.get("/seller/productsById/:id", getProductById);
 
