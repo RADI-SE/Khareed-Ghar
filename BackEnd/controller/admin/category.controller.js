@@ -7,16 +7,10 @@ export const addCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
     console.log(name, description);
-    if (!name || !description) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required" });
-    }
     const newCategory = new Category(req.body);
     await newCategory.save();
     res.json({ message: "New category created successfully", newCategory });
-  } catch (error) {
-    console.error("Error in cresteCagory:", error);
+  } catch (error) { 
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

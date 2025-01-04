@@ -1,7 +1,7 @@
 // src/services/authService.js
 import { create } from "zustand";
 import axios from "axios";
-
+ 
 const API_URL = "http://localhost:5000/api/";
 
 axios.defaults.withCredentials = true;

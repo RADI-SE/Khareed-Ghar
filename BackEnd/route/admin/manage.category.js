@@ -23,7 +23,7 @@ const verifyAdminSeller = [verifyTokenForRole, AuthorizeRoles("admin", "seller")
 // Routes for category and subcategory management
 router.post("/add-category", verifyAdmin, addCategory);
 
-router.post("/add-subcategory", verifyAdmin, addSubCategory);
+router.post("/add-subcategory",  verifyAdmin, addSubCategory);
 
 router.get("/view-categories", getCategories);
 

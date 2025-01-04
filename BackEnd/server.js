@@ -32,7 +32,7 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api", manageUsers);
 
-app.use("/api/", manageCategories);
+app.use("/api", manageCategories);
 
 app.use("/api", manageAddresses);
 
