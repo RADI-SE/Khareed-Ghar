@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../style.css";
 import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
 import { useEditCategory } from "../../../../hooks/Categories/useEditCategory";
+import { useAdminService } from "../../../../services/adminServices";
 export const EditCategoriesForm = () => {
   const [CategoryId, setCategoryId] = useState("");
   const [CategoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
-  const [message, setMessage] = useState("");
+  const { errorMessage, setError, clearError, isError } = useAdminService();
+ 
   const token = sessionStorage.getItem("token");
 
   const {
@@ -18,31 +20,20 @@ export const EditCategoriesForm = () => {
 
   const {
     mutate: editCategory,
-    isError: updateCategoryError,
-    error: updateError,
     isLoading: isUpdating,
   } = useEditCategory(token);
 
+  useEffect(() => {
+    if (isError) {
+      setError(errorMessage);
+      const timer = setTimeout(() => clearError(), 1000);
+      return () => clearTimeout(timer);  
+    }
+  }, [isError, errorMessage, setError, clearError]);
+  
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (!CategoryName || !description) {
-      alert("Name and description are required");
-      return false;
-    }
-
-    if (!CategoryId) {
-      alert("Category not found");
-      return false;
-    }
-
-    if( CategoryId != null && CategoryName != null){
-      alert("Category updated successfully");
-      setCategoryId("");
-      setCategoryName("");
-      setDescription("");
-  
-    }
     
     editCategory(
       { CategoryId, CategoryName, description },
@@ -53,7 +44,6 @@ export const EditCategoriesForm = () => {
     setCategoryId(e.target.value);
     setCategoryName("");
     setDescription("");
-    setMessage("");
   };
 
   if (isLoadingCategories) {
@@ -63,6 +53,7 @@ export const EditCategoriesForm = () => {
   if (categoriesError) {
     return <p>Error loading categories: {fetchError.message}</p>;
   }
+
 
   return (
     <div className="add-category-form">
@@ -97,15 +88,12 @@ export const EditCategoriesForm = () => {
               placeholder="Enter category description"
             />
           </div>
-          {message && <p className="message">{message}</p>}
+          {errorMessage && (
+            <p className="alert alert-danger">{errorMessage}</p>
+          )}
           <button type="submit" disabled={isUpdating}>
             {isUpdating ? "Updating..." : "Submit"}
           </button>
-          {updateCategoryError && (
-            <p className="error-message">
-              {updateError?.response?.data?.message || "An error occurred."}
-            </p>
-          )}
         </form>
       )}
     </div>

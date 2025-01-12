@@ -25,12 +25,13 @@ const SubcategorySchema = new mongoose.Schema({
 const CategorySchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    unique: true,
+    required: [true],
+
   },
   description: {
     type: String,
-   
+    required: [true],
+    
   },
   subcategories: [
     {

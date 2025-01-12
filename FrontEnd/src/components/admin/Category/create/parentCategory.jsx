@@ -1,38 +1,49 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../style.css";
 import { useCreateCategory } from "../../../../hooks/Categories/useCreateCategory";
+import { useAdminService } from "../../../../services/adminServices";
 
 export const AddCategoryForm = () => {
   const [name, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
   const token = sessionStorage.getItem("token");
+  const { errorMessage, setError, clearError, isError } = useAdminService();
+  const { successMessage, setSuccess, clearSuccess, isSuccess } = useAdminService();
 
+  useEffect(() => {
+    if (isSuccess) {
+      setSuccess(successMessage);
+      const timer = setTimeout(() => clearSuccess(), 2000);
+      return () => clearTimeout(timer);  
+    }
+  }, [isSuccess, successMessage, setSuccess, clearSuccess]);
+
+  
+  useEffect(() => {
+    if (isError) {
+      setError(errorMessage);
+      const timer = setTimeout(() => clearError(), 2000);
+      return () => clearTimeout(timer);  
+    }
+  }, [isError, errorMessage, setError, clearError]);
+  
+  
+  
   const {
     mutate: createCategory,
     isLoading: isCreating,
-    isError: creationError,
-    error: creationErrorMessage,
+ 
   } = useCreateCategory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!name || !description) {
-      alert("Name and description are required");
-      return false;
-    }
-    
-    if( name != null && description != null ){
-      alert("New category created successfully");
-    }
     createCategory({
       token,
       name,
       description,
     });
   };
+  
   return (
     <div className="add-category-form">
       <form onSubmit={handleSubmit}>
@@ -55,14 +66,15 @@ export const AddCategoryForm = () => {
           />
         </div>
 
-        {error && <p className="error">{error}</p>}
-        {message && <p className="success">{message}</p>}
-        {creationError && (
-          <p className="error">
-            {creationErrorMessage?.message || "An error occurred"}
-          </p>
-        )}
 
+        {errorMessage && (
+            <p className="alert alert-danger">{errorMessage}</p>
+          )}
+
+          
+        {successMessage && (
+            <p className="alert alert-success">{successMessage  }</p>
+          )}
         <button type="submit" disabled={isCreating}>
           {isCreating ? "Adding..." : "Submit"}
         </button>

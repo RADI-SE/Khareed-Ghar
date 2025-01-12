@@ -11,8 +11,16 @@ export const useAdminService = create((set) => ({
   isAuthenticated: false,
   isLoading: false,
   errorMessage: null,
+  isError: false,
   setError: (message) => set({ errorMessage: message }),
   clearError: () => set({ errorMessage: null }),
+
+
+  successMessage: null,
+  isSuccess: false,
+  setSuccess: (message) => set({ successMessage: message }),
+  clearSuccess: () => set({ successMessage: null }),
+
 
   AddCategoriesForm: async (token, name, description) => {
     try {
@@ -31,20 +39,19 @@ export const useAdminService = create((set) => ({
       if (response.status === 200) {
         set({
           isLoading: false,
-          errorMessage: null,
+          isSuccess: true,
+          successMessage: "New category created successfully",
         });
-      } else {
-        set({
-          isLoading: false,
-          errorMessage: response.data.message || "Failed to add category",
-        });
-      }
+        return response.data;
+      } 
+ 
     } catch (error) {
+    
       set({
-        isLoading: false,
-        errorMessage: error.message || "An unexpected error occurred",
+        isLoading: false,isError:true , 
+        errorMessage: error.response.data.message,
       });
-      console.error("Error adding category:", error);
+      console.log("Hi Razi ", error.response.data.message);
     }
   },
 
@@ -114,6 +121,7 @@ export const useAdminService = create((set) => ({
 
   EditCategoriesForm: async (token, parentCategoryId, name, description) => {
     try {
+      
       set({ isLoading: true, errorMessage: null });
       const response = await axios.put(
         `${API_URL}edit-category/${parentCategoryId}`,
@@ -124,6 +132,7 @@ export const useAdminService = create((set) => ({
           },
         }
       );
+      console.log("console data for category edit ", response.data.message);
       if (response.status === 200) {
         set({
           isLoading: false,
@@ -131,9 +140,12 @@ export const useAdminService = create((set) => ({
         });
         return response.data.data;
       }
+      
+      set({ isLoading: false, errorMessage: response.data.message });
+      
     } catch (error) {
-      set({ isLoading: false, errorMessage: error.message });
-      return null;
+      set({ isLoading: false, isError:true , errorMessage: response.data.message });
+      throw error;
     }
   },
 

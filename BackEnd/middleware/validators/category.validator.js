@@ -36,21 +36,20 @@ export const deleteSubCategoryValidation = [
 ];
  
 export const getSubCategoriesValidation = [
-  param('parentCategory').notEmpty().withMessage('Parent category ID is required'),
-];
- 
-export const getAllCategoryProductsValidation = [
-  param('id').notEmpty().withMessage('Category ID is required'),
+  param('parentCategory')
+    .notEmpty().withMessage('Parent category ID is required')
+    .custom((value) => mongoose.Types.ObjectId.isValid(value)).withMessage('Invalid parent category ID'),
 ];
  
 export const searchCategoryByIdValidation = [
   param('id').notEmpty().withMessage('Category ID is required'),
 ];
  
-export const validate = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ success: false, errors: errors.array() });
-  }
-  next();
-};
+
+  export const validate = (req, res, next) => {
+    const errors = validationResult(req);  
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: errors.errors[0].msg });
+    } 
+    next();
+  };

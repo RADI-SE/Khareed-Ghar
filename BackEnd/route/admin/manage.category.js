@@ -19,7 +19,6 @@ import  {
   deleteCategoryValidation,
   deleteSubCategoryValidation,
   getSubCategoriesValidation,
-  getAllCategoryProductsValidation,
   searchCategoryByIdValidation,
   validate,
 } from "../../middleware/validators/category.validator.js"
@@ -30,14 +29,13 @@ const router = express.Router();
 
 // Middleware for role-based access
 const verifyAdmin = [verifyTokenForRole, AuthorizeRoles("admin")];
-const verifyAdminSeller = [verifyTokenForRole, AuthorizeRoles("admin", "seller")];
-
+ 
 // Routes for category and subcategory management
-router.post("/add-category",addCategoryValidation,validate, verifyAdmin, addCategory);
+router.post("/add-category",addCategoryValidation ,validate, verifyAdmin, addCategory);
 
 router.post("/add-subcategory",addSubCategoryValidation,validate,  verifyAdmin, addSubCategory);
 
-router.get("/view-categories",getAllCategoryProductsValidation,validate, getCategories);
+router.get("/view-categories", getCategories);
 
 router.get("/get-category-byId/:id",searchCategoryByIdValidation,validate, searchCategoryById);
 

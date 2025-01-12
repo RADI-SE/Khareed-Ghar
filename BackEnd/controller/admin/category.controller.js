@@ -1,17 +1,22 @@
 import { Category, Subcategory } from "../../model/category.model.js";
 import {Product} from "../../model/product.model.js";
-
+import { validationResult } from 'express-validator';
 
 // add category
 export const addCategory = async (req, res) => {
   try {
+ 
     const { name, description } = req.body;
-    console.log(name, description);
-    const newCategory = new Category(req.body);
+    const check = await  Category.findOne({ name: name});
+    if (check) {
+      return res.status(400).json({success: false ,  message: "Category already exists" });
+    }
+    const newCategory = new Category({ name, description });
+
     await newCategory.save();
-    res.json({ message: "New category created successfully", newCategory });
+    res.json({success: true ,  message: "New category created successfully" });
   } catch (error) { 
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ success: false, message: "Server error 2 " });
   }
 };
 
@@ -19,26 +24,9 @@ export const addCategory = async (req, res) => {
 export const addSubCategory = async (req, res) => {
   try {
     const { name, description, parentCategory } = req.body;
-    if (!parentCategory) {
-      return res.status(400).json({
-        success: false,
-        message: "Parent category is required.",
-      });
-    }
-    if (!name || !description) {
-      return res.status(400).json({
-        success: false,
-        message: "Name and description are required.",
-      });
-    }
-
+ 
+ 
     const parentCategoryObj = await Category.findById(parentCategory);
-    if (!parentCategoryObj) {
-      return res.status(404).json({
-        success: false,
-        message: "Parent category not found.",
-      });
-    }
     const newSubCategory = new Subcategory({
       name,
       description,
@@ -77,19 +65,9 @@ export const getCategories = async (req, res) => {
 export const getSubCategories = async (req, res) => {
   try {
     const { parentCategory } = req.params;
-
-    if (!parentCategory) {
-      return res
-        .status(400)
-        .json({ success: false, message: "parentCategory is required" });
-    }
-
+  
     const parentCategoryObj = await Category.findById(parentCategory);
-    if (!parentCategoryObj) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Parent category not found" });
-    }
+
 
     const childs  = parentCategoryObj.subcategories ; 
     console.log("conslone parent object childs  ...","   :",childs)
@@ -109,11 +87,12 @@ export const editCategories = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description } = req.body;
-    if (!name || !description) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required" });
-    }
+
+    // if (!name || !description) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "All fields are required" });
+    // }
     const updatedCategory = await Category.findByIdAndUpdate(id, req.body, {
       new: true,
     });

@@ -7,11 +7,5 @@ export const useCreateCategory = () => {
   return useMutation({
     mutationFn: ({ token, name, description }) =>
       AddCategoriesForm(token, name, description),
-    onSuccess: () => {
-      console.log("Category created successfully.");
-    },
-    onError: (error) => {
-      console.error("Error creating category:", error);
-    },
   });
 };

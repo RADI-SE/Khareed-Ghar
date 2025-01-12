@@ -12,8 +12,5 @@ export const useEditCategory = (token) => {
         CategoryName,
         description
       ),
-    onSuccess: () => {
-      console.log("Category updated successfully.");
-    },
   });
 };
