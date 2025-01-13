@@ -24,8 +24,10 @@ export const addCategory = async (req, res) => {
 export const addSubCategory = async (req, res) => {
   try {
     const { name, description, parentCategory } = req.body;
- 
- 
+    const check = await Subcategory.findOne({ name: name, parentCategory: parentCategory });
+    if (check) {
+      return res.status(400).json({ success: false, message: "Subcategory already exists" });
+    }
     const parentCategoryObj = await Category.findById(parentCategory);
     const newSubCategory = new Subcategory({
       name,

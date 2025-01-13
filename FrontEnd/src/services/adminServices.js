@@ -24,7 +24,7 @@ export const useAdminService = create((set) => ({
 
   AddCategoriesForm: async (token, name, description) => {
     try {
-      set({ isLoading: true, errorMessage: null });
+      set({ isLoading: true, errorMessage: null, successMessage:null });
 
       const response = await axios.post(
         `${API_URL}add-category`,
@@ -35,7 +35,7 @@ export const useAdminService = create((set) => ({
           },
         }
       );
-
+      
       if (response.status === 200) {
         set({
           isLoading: false,
@@ -51,7 +51,6 @@ export const useAdminService = create((set) => ({
         isLoading: false,isError:true , 
         errorMessage: error.response.data.message,
       });
-      console.log("Hi Razi ", error.response.data.message);
     }
   },
 
@@ -71,16 +70,21 @@ export const useAdminService = create((set) => ({
           },
         }
       );
-      if (response.status === 200) {
+      if (response.status === 201) {
         set({
           isLoading: false,
-          errorMessage: null,
+          isSuccess: true,
+          successMessage: "New Subcategory created successfully",
         });
-      } else {
-        set({ isLoading: false, errorMessage: response.data.message });
-      }
-      set({ isLoading: false, errorMessage: null });
-    } catch (error) {}
+        return response.data;
+      } 
+ 
+    } catch (error) {
+      set({
+        isLoading: false,isError:true , 
+        errorMessage: error.response.data.message,
+      });
+    }
   },
 
   EditSubCategoriesForm: async (

@@ -1,15 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style.css";
 import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
 import { useCreateSubCategory } from "../../../../hooks/Categories/useCreateSubCategory";
+import { useAdminService } from "../../../../services/adminServices";
 
 export const AddSubCategoriesForm = () => {
   const [CategoryId, setParentCategoryId] = useState("");
   const [name, setSubCategoryName] = useState("");
   const [description, setDescription] = useState("");
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
   const token = sessionStorage.getItem("token");
+
+    const { errorMessage, setError, clearError, isError } = useAdminService();
+    const { successMessage, setSuccess, clearSuccess, isSuccess } = useAdminService();
+  
+     useEffect(() => {
+        if (isSuccess) {
+          setSuccess(successMessage);
+          const timer = setTimeout(() => clearSuccess(), 2000);
+          return () => clearTimeout(timer);  
+        }
+      }, [isSuccess, successMessage, setSuccess, clearSuccess]);
+    
+      
+      useEffect(() => {
+        if (isError) {
+          setError(errorMessage);
+          const timer = setTimeout(() => clearError(), 2000);
+          return () => clearTimeout(timer);  
+        }
+      }, [isError, errorMessage, setError, clearError]);
+      
 
   const {
     data: categories = [],
@@ -21,29 +41,10 @@ export const AddSubCategoriesForm = () => {
   const {
     mutate: createSubCategory,
     isLoading: isCreating,
-    isError: creationError,
-    error: creationErrorMessage,
   } = useCreateSubCategory(token);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!CategoryId) {
-      alert("Parent category is required");
-      return false;
-    }
-    if (!name || !description) {
-      alert("Name and description are required");
-      return false;
-    }
-
-    if (!CategoryId) {
-      alert("Parent category not found");
-      return false;
-    }
-    if( name != null && description != null && CategoryId != null){
-      alert("New subcategory created successfully");
-    }
     try {
       createSubCategory({
         name,
@@ -53,7 +54,6 @@ export const AddSubCategoriesForm = () => {
       setSubCategoryName("");
       setDescription("");
       setParentCategoryId("");
-      setError("");
     } catch (error) {
       setError("Failed to add subcategory");
       console.error("Error adding subcategory:", error);
@@ -103,13 +103,14 @@ export const AddSubCategoriesForm = () => {
             placeholder="Enter subcategory description"
           />
         </div>
-        {error && <p className="error">{error}</p>}
-        {message && <p className="success">{message}</p>}
-        {creationError && (
-          <p className="error">
-            {creationErrorMessage?.message || "An error occurred"}
-          </p>
-        )}
+
+        {errorMessage && (
+            <p className="alert alert-danger">{errorMessage}</p>
+          )}
+        {successMessage && (
+            <p className="alert alert-success">{successMessage  }</p>
+          )}
+          
         <button type="submit" disabled={isCreating}>
           {isCreating ? "Adding..." : "Submit"}
         </button>
