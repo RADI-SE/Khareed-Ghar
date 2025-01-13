@@ -161,14 +161,20 @@ export const useAdminService = create((set) => ({
       if (response.data && response.data.categories) {
         const categories = response.data.categories;
         set({
-          categories: categories,
-          isAuthenticated: true,
           isLoading: false,
-          isCheckingAuth: false,
+          isSuccess: true,
+          successMessage: "Categories fetched successfully",
         });
         return categories;
       }
-    } catch (error) {}
+      // Unable to connect to the database server. Please try again later
+    } catch (error) {  
+      set({
+        isLoading: false,isError:true , 
+        errorMessage: "Unable to connect to the database server. Please try again later",
+      });
+
+    }
   },
 
   getSubCategories: async (token, parentCategoryId) => {
