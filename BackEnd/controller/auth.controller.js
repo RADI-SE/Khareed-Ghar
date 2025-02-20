@@ -10,6 +10,7 @@ import {
 } from "../mailtrap/emails.js";
 
 import { nanoid } from'nanoid';
+import { sendEmail } from "../Mailtrap/send.Email.js";
 
 // script
 // export const del = async (req, res)=>{
@@ -24,69 +25,49 @@ import { nanoid } from'nanoid';
 // }
 
 export const signup = async (req, res) => {
-  const { name, email, password, confirmPassword, role , isAgreeToTerms } = req.body;
+  const { name, email, password, confirmPassword, role, isAgreeToTerms } = req.body;
 
   try {
-    if (name === "") {
-      return res
-       .status(404)
-       .json({ success: false, message: "User Name is required" });
+    // Validation checks
+    if (!name) {
+      return res.status(400).json({ success: false, message: "User Name is required" });
     }
 
-    if (email === "") {
-      return res
-      .status(404)
-      .json({ success: false, message: "User Email is required" });
+    if (!email) {
+      return res.status(400).json({ success: false, message: "User Email is required" });
     }
 
-    if (password === "") {
-      return res
-      .status(404)
-      .json({ success: false, message: "User Password is required" });
-    
+    if (!password) {
+      return res.status(400).json({ success: false, message: "User Password is required" });
     }
 
     if (password.length < 8) {
-      return res
-      .status(404)
-      .json({ success: false, message: "Password should be at least 8 characters long" });
-     
+      return res.status(400).json({ success: false, message: "Password should be at least 8 characters long" });
     }
 
-    if (confirmPassword === "") {
-      return res
-      .status(404)
-      .json({ success: false, message: "Confirm Password is required" });
+    if (!confirmPassword) {
+      return res.status(400).json({ success: false, message: "Confirm Password is required" });
     }
 
     if (password !== confirmPassword) {
-      return res
-      .status(404)
-      .json({ success: false, message: "Passwords do not match" });
+      return res.status(400).json({ success: false, message: "Passwords do not match" });
     }
-    if (isAgreeToTerms === false) {
-      return res
-       .status(404)
-       .json({ success: false, message: "Please agree to the terms and conditions" });
+
+    if (!isAgreeToTerms) {
+      return res.status(400).json({ success: false, message: "Please agree to the terms and conditions" });
     }
+
     const userAlreadyExists = await User.findOne({ email });
-    if (userAlreadyExists === null) {
-      console.log("User created successfully");
-    }
     if (userAlreadyExists) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User already exists" });
+      return res.status(400).json({ success: false, message: "User already exists" });
     }
 
     const customId = nanoid(8);
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
-    const verificationToken = Math.floor(
-      100000 + Math.random() * 900000
-    ).toString();
-    const user = new User({
+    const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
+    const user = new User({
       name,
       email,
       password: hashedPassword,
@@ -98,19 +79,40 @@ export const signup = async (req, res) => {
     });
 
     await user.save();
-    generatTokenAndSetCookies(res, user._id, user.role);
-    // await sendVerificationEmail(user.email, verificationToken);
-    res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      user: {
-        ...user._doc,
-        password: undefined,
-        confirmPassword: undefined,
-      },
-    });
+
+    const resetPasswordUrl = `${process.env.CLIENT_URL}/verify-email/${generatTokenAndSetCookies(res, user._id, user.role)}`;
+    const message = `Click on the following link to verify your email: ${resetPasswordUrl}`;
+    
+    try {
+      await sendEmail({
+        email: email,
+        subject: "Verify your email",
+        message: message,
+      });
+
+      res.status(201).json({
+        success: true,
+        message: "User created successfully",
+        user: {
+          ...user._doc,
+          password: undefined,
+          confirmPassword: undefined,
+        },
+      });
+    } catch (emailError) {
+      // If email fails, still create user but return a warning
+      res.status(201).json({
+        success: true,
+        message: "User created successfully but verification email could not be sent",
+        user: {
+          ...user._doc,
+          password: undefined,
+          confirmPassword: undefined,
+        },
+      });
+    }
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
