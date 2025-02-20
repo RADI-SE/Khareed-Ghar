@@ -67,9 +67,10 @@ export const useAuthService = create((set) => ({
   },
 
   verifyEmail: async (verificationToken) => {
+    console.log("verifyEmail", verificationToken);
     set({ isLoading: false, errorMessage: null });
     try {
-      const response = await axios.post(`${API_URL}/verify-email/${verificationToken}`, {
+      const response = await axios.post(`${API_URL}/verify-email`, {
         code: verificationToken,
       });
 
@@ -151,6 +152,22 @@ export const useAuthService = create((set) => ({
         isCheckingAuth: false,
         isAuthenticated: false,
       });
+      throw error;
+    }
+  },
+
+  rPassword: async (token, password, confirmPassword) => {
+    console.log("resetPassword 2", token, password, confirmPassword);
+    set({ isLoading: true, errorMessage: null });
+    try {
+    const response = await axios.post(`${API_URL}/reset-password/${token}`, {
+        password: password,
+        confirmPassword: confirmPassword,
+      });
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      set({ errorMessage: null, isCheckingAuth: false, isAuthenticated: false });
       throw error;
     }
   },

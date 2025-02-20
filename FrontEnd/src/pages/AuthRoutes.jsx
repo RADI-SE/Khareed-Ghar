@@ -3,6 +3,7 @@ import SignIn from "../components/Auth/login/SignIn";
 import SignUp from "../components/Auth/register/SignUp";
 import ForgotPassword from "../components/Auth/ForgotPassword";
 import EmailSentSuccess from "../components/Auth/EmailSentSuccess";
+import ResetPassword from "../components/Auth/ResetPassword";
 import NotFound from "../components/NotFound";
 import { Outlet } from "react-router-dom";
 
@@ -19,6 +20,7 @@ export const authRoutes = [
   { path: "signin", element: <SignIn /> },
   { path: "signup", element: <SignUp /> },
   { path: "forgot-password", element: <ForgotPassword /> },
+  { path: "reset-password/:token", element: <ResetPassword /> },
   { path: "email-sent-success", element: <EmailSentSuccess /> },
   { path: "*", element: <NotFound /> },
 ];

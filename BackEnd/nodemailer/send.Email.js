@@ -24,3 +24,9 @@ export const sendEmail = async ({ email, subject, message }) => {
 };
 
 
+
+/*
+- Integrated Nodemailer for sending password reset emails  
+- Created Reset Password page in the frontend  
+- Implemented API call to handle password reset requests  
+*/
