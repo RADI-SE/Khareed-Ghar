@@ -66,7 +66,7 @@ function SignUp() {
   if (isRegistered) {
     const isVerified = localStorage.getItem("isVerified") === "true";
     if (!isVerified) {
-      return <Navigate to="/auth/verify-email" />;
+      return <Navigate to="/auth/verify-email/" />;
     }
   }
 

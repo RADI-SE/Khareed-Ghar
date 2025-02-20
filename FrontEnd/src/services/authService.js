@@ -14,6 +14,7 @@ export const useAuthService = create((set) => ({
   isCheckingAuth: true,
   errorMessage: null,
   isError: false,
+  successMessage: null,
   setError: (message) => set({ errorMessage: message }),
   clearError: () => set({ errorMessage: null }),
 
@@ -49,15 +50,17 @@ export const useAuthService = create((set) => ({
 
   resendVerificationCode: async (email) => {
     set({ isLoading: true, errorMessage: null });
+    console.log("resend verification code ... to ", email);
     try {
       const response = await axios.post(`${API_URL}/Resend-code`, {
         email: email,
       });
-      set({
-        isLoading: false,
-        errorMessage: "Verification code has been sent successfully",
-      });
-    } catch (error) {
+      if(response.status === 200){
+        set({ isLoading: false, isError:false , errorMessage: null ,
+          successMessage: "Verification code sent successfully"
+        });
+      }
+     } catch (error) {
       set({ isLoading: false, isError:true , errorMessage: error.response.data.message });
       throw error;
     }
@@ -66,7 +69,7 @@ export const useAuthService = create((set) => ({
   verifyEmail: async (verificationToken) => {
     set({ isLoading: false, errorMessage: null });
     try {
-      const response = await axios.post(`${API_URL}/verify-Email`, {
+      const response = await axios.post(`${API_URL}/verify-email/${verificationToken}`, {
         code: verificationToken,
       });
 

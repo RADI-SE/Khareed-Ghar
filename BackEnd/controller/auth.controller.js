@@ -79,10 +79,9 @@ export const signup = async (req, res) => {
     });
 
     await user.save();
+    generatTokenAndSetCookies(res, user._id, user.role)
 
-    const resetPasswordUrl = `${process.env.CLIENT_URL}/verify-email/${generatTokenAndSetCookies(res, user._id, user.role)}`;
-    const message = `Click on the following link to verify your email: ${resetPasswordUrl}`;
-    
+    const message = `verification code is ${verificationToken}`;   
     try {
       await sendEmail({
         email: email,
@@ -92,7 +91,7 @@ export const signup = async (req, res) => {
 
       res.status(201).json({
         success: true,
-        message: "User created successfully",
+        message: "User created successfully. Please check your email for verification code.",
         user: {
           ...user._doc,
           password: undefined,
@@ -100,6 +99,7 @@ export const signup = async (req, res) => {
         },
       });
     } catch (emailError) {
+      console.error("Email sending error:", emailError);
       // If email fails, still create user but return a warning
       res.status(201).json({
         success: true,
@@ -137,8 +137,20 @@ export const resendVerificationCode = async (req, res) => {
     user.verificationToken = verificationToken;
     user.verificationTokenExpiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
     await user.save();
+
+    const message = `verification code is ${verificationToken}`;   
+    try {
+      await sendEmail({
+        email: email,
+        subject: "Verify your email",
+        message: message,
+      });
+
+      res.status(200).json({ success: true, message: "Verification code sent successfully" });
+    } catch (error) {
+      console.error("Email sending error:", error);
+    }
     // await sendVerificationEmail(user.email, verificationToken);
-    res.status(200).json({ success: true, message: "Verification code sent successfully" });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -155,7 +167,6 @@ export const verifyEmail = async (req, res) => {
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
     await user.save();
-    // await sendWelcomeEmail(user.email, user.name);
     res.status(200).json({
       success: true,
       message: "Email verified successfully",
