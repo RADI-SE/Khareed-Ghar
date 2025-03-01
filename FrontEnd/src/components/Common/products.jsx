@@ -10,7 +10,7 @@ const AllCategoryProducts = (id) => {
     error,
   } = useGetAllCategoryProducts(id);
 
-  const { data: getCategoryById } = useGetCategoryById(id);
+  const { data: getCategoryById } = useGetCategoryById();
 
   // const [count, setCount] = useState("");
   const [categoryName, setCategoryName] = useState("");
