@@ -2,6 +2,7 @@ import React from "react";
 import BannerImg from "../../assets/images/cart.jpg";
 import InfoSection from "../../components/Common/InfoSection";
 import ProductsOnHomePage from "./ProductsOnHomePage";
+import AuctionBanner from "../../components/Common/AuctionBanner";
 const Home = () => {
   return (
     <div className="w-100 mt-2 px-3 md:px-16 lg:px-24">
@@ -13,6 +14,7 @@ const Home = () => {
         </div>
       </div>
       <InfoSection />
+      <AuctionBanner />
       <ProductsOnHomePage />
 
       <div>

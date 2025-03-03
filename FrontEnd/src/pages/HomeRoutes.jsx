@@ -8,6 +8,7 @@ import OrderConfirmation from "../components/Common/OrderConfirmation";
 import FilterData from "../components/Common/FilterData";
 import ProductDetail from "../components/Common/ProductDetail";
 import AllCategoryProducts from "../components/Common/products";
+import AuctionListPage from "./AuctionListPage";
 
 const HomeRoutes = ({ setOrder, order }) => { 
 
@@ -20,6 +21,7 @@ const HomeRoutes = ({ setOrder, order }) => {
 
 export const homeRoutes = [
   { path: "/", element: <Home /> },
+  { path: "/auctions", element: <AuctionListPage /> },
   { path: "/cart", element: <Cart /> },
   { path: "/checkout", element: <Checkout /> },
   { path: "/order-confirmation", element: <OrderConfirmation /> },
