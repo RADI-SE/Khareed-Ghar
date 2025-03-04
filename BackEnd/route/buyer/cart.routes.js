@@ -8,7 +8,7 @@ const verifyBuyer = [verifyTokenForRole, AuthorizeRoles('buyer')];
 
 router.post('/add-to-cart', addToCart);
 
-router.get('/cart-items/:id', getCart);
+router.post('/cart-items', getCart);
 
 router.delete('/remove-from-cart/:id', removeFromCart);
 

@@ -16,11 +16,7 @@ const ProductCard = ({product}) => {
   const handleAddToCart = (e, productId) => {
 
     e.preventDefault();
-    
-    if (!id) {
-      alert("You must be logged in to add items to the cart.");
-      return;
-    }
+  
     setQuantity((prev) => prev + 1); 
   
     AddToCart({ id, productId, quantity: quantity + 1 });

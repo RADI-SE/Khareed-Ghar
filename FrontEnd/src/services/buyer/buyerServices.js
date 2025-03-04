@@ -17,9 +17,7 @@ export const useCartService = create((set) => ({
       set({ isLoading: true, errorMessage: null });
       const response = await axios.post(
         `http://localhost:5000/api/add-to-cart`,
-      {  id,
-        productId,
-        quantity,}
+        { id, productId, quantity }
       );
       set({ cart: response.data, isLoading: false });
     } catch (error) {
@@ -30,26 +28,33 @@ export const useCartService = create((set) => ({
   displayCart: async (id) => {
     try {
       set({ isLoading: true, errorMessage: null });
-      console.log("response", id);
-      const response = await axios.get(`http://localhost:5000/api/cart-items/${id}`);
-      console.log("response   2", response.data);
+
+      const response = await axios.post("http://localhost:5000/api/cart-items", {
+        id,
+      });
       set({ cart: response.data, isLoading: false });
-      return response.data; 
+      return response.data;
     } catch (error) {
       console.error("Error fetching cart:", error);
-      set({ errorMessage: error.response?.data?.message || error.message, isLoading: false });
-      return []; 
+      set({
+        errorMessage: error.response?.data?.message || error.message,
+        isLoading: false,
+      });
+      return [];
     }
   },
-  
+
   // removeFromCart
   removeFromCart: async (id, productId) => {
-    console.log("removing from cart", id , productId);
+    console.log("removing from cart", id, productId);
     try {
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.delete(`http://localhost:5000/api/remove-from-cart/${id}`, {
-        data: { productId },
-      }); 
+      const response = await axios.delete(
+        `http://localhost:5000/api/remove-from-cart/${id}`,
+        {
+          data: { productId },
+        }
+      );
       set({ cart: response.data, isLoading: false });
       return response.data;
     } catch (error) {
@@ -57,30 +62,30 @@ export const useCartService = create((set) => ({
     }
   },
 
-  //clearCart 
+  //clearCart
   clearCart: async (id) => {
     try {
-       
-      const response = await axios.delete(`http://localhost:5000/api/clear-cart/${id}`);
+      const response = await axios.delete(
+        `http://localhost:5000/api/clear-cart/${id}`
+      );
       set({ cart: response.data, isLoading: false });
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
   },
-
-
-   
 }));
 
-
-// for user location 
-export const useAddressService = create((set)=>({
+// for user location
+export const useAddressService = create((set) => ({
   address: null,
   // createLocation
-  createLocation: async (userId, street, LOCATION, phoneNumber)=>{
+  createLocation: async (userId, street, LOCATION, phoneNumber) => {
     try {
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.post(`http://localhost:5000/api/create-location`, {userId, street, LOCATION, phoneNumber });
+      const response = await axios.post(
+        `http://localhost:5000/api/create-location`,
+        { userId, street, LOCATION, phoneNumber }
+      );
       set({ address: response.data, isLoading: false });
       console.log("return from useAddressService ", address);
     } catch (error) {
@@ -88,12 +93,15 @@ export const useAddressService = create((set)=>({
     }
   },
 
-  // 
+  //
   // update location
-  updateAddress: async (userId, street, LOCATION, phoneNumber, id)=>{
+  updateAddress: async (userId, street, LOCATION, phoneNumber, id) => {
     try {
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.put(`http://localhost:5000/api/update-location/${id}`, {userId, street, LOCATION, phoneNumber });
+      const response = await axios.put(
+        `http://localhost:5000/api/update-location/${id}`,
+        { userId, street, LOCATION, phoneNumber }
+      );
       set({ address: response.data, isLoading: false });
       console.log("return from useAddressService ", address);
     } catch (error) {
@@ -102,11 +110,14 @@ export const useAddressService = create((set)=>({
   },
 
   //getLocationById
-  getLocationById: async (userId)=>{
+  getLocationById: async (userId) => {
     try {
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.post(`http://localhost:5000/api/locations/`,{userId});
-    console.log('getLocationById::::::::',  response.data);
+      const response = await axios.post(
+        `http://localhost:5000/api/locations/`,
+        { userId }
+      );
+      console.log("getLocationById::::::::", response.data);
       set({ address: response.data, isLoading: false });
       console.log("return from useAddressService ", address);
       return address;
