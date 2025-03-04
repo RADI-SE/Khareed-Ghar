@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import DetailedProductView from "./dashboard/view";
-import { AddProductForm } from "./create/AddProducts";
+import AuctionListPage from "../../../pages/AuctionListPage"
+import { AddAuctions } from "./create/AddAuctions";
 
-function ProductManagement() {
+function AuctionManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentView, setCurrentView] = useState("DetailedProductView");
 
   const tabs = [
-    { id: "DetailedProductView", label: "Product View" },
-    { id: "addProduct", label: " Add a New Product" },
+    { id: "AuctionListPage", label: "Your Auctions" },
+    { id: "addAuction", label: " Add New Auction" },
   ];
   const handleTabChange = (tabId) => {
     setCurrentView(tabId);
@@ -16,10 +16,10 @@ function ProductManagement() {
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case "DetailedProductView":
-        return <DetailedProductView />;
-      case "addProduct":
-        return <AddProductForm />;
+      case "AuctionListPage":
+        return <AuctionListPage />;
+      case "addAuction":
+        return <AddAuctions />;
       default:
         return null;
     }
@@ -38,7 +38,7 @@ function ProductManagement() {
               {tab.label}
             </button>
           ))}
-        </div>
+        </div>  
 
       </nav>
  
@@ -49,4 +49,4 @@ function ProductManagement() {
 }
 
 
-export default ProductManagement;
+export default AuctionManagement;

@@ -6,6 +6,7 @@ import ProductManagement from "../components/seller/Product/rootRoutes";
 import OrderDetails from "../components/seller/OrderComponents/OrderDetails";
 import OrderList from "../components/seller/OrderComponents/OrderList";
 import NotFound from "../components/NotFound";
+import AuctionManagement from "../components/seller/Auction/AuctionManagement";
 
 const SellerRoutes = () => {
   return (
@@ -21,6 +22,7 @@ export const sellerChildrenRoutes = [
   { path: "orders", element: <OrderList /> },
   { path: "orders/order-details", element: <OrderDetails /> },
   { path: "products", element: <ProductManagement /> },
+  { path: "auctions", element: <AuctionManagement /> },
   { path: "*", element: <NotFound /> },
 ];
 
