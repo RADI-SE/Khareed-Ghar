@@ -3,6 +3,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useFetchCartItems } from "../../hooks/buyer/cart/useFetchCartItems";
 import { useRemoveFromCart } from "../../hooks/buyer/cart/useRemoveFromCart";
+import { useAuthService } from "../../services/authService";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -11,9 +12,15 @@ const Cart = () => {
 
   const { mutate: removeFromCart } = useRemoveFromCart();
 
+  const {isAuthenticated } = useAuthService();
+ 
   const items = cart.items || [];
   const totalAmount = cart.totalAmount || 0;
 
+  const handleCheckOut = (e) => {
+    e.preventDefault();
+    navigate("/checkout")
+  }
   return (
     <div className="container mx-auto py-8 min-h-96 px-4 md:px-16 lg:px-24">
       {items?.length > 0 ? (
@@ -84,9 +91,7 @@ const Cart = () => {
               </div>
               <button
                 className="w-full bg-blue-900 text-white py-2 hover:bg-blue-700 rounded-md"
-                onClick={() => {
-                  navigate("/checkout");
-                }}
+                onClick={(e) => handleCheckOut(e)}
               >
                 Checkout
               </button>

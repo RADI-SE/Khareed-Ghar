@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
+  Outlet,
 } from "react-router-dom";
+import { useAuthService } from "./services/authService";
+import HomeRoutes from "./pages/HomeRoutes";
+import AdminRoutes from "./pages/AdminRoutes";
+import SellerRoutes from "./pages/SellerRoutes";
+import AuthRoutes from "./pages/AuthRoutes";
+import NotFound from "./components/NotFound";
+import VerifyEmail from "./components/Auth/VerifyEmail";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import AdminRoutes, { adminChildrenRoutes } from "./pages/AdminRoutes";
-import SellerRoutes, { sellerChildrenRoutes } from "./pages/SellerRoutes";
-import HomeRoutes,{homeRoutes} from "./pages/HomeRoutes";
-import { useAuthService } from "./services/authService";
-import NotFound from "./components/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AuthRoutes, { authRoutes } from "./pages/AuthRoutes";
-import VerifyEmail from "./components/Auth/VerifyEmail";
 
 const App = () => {
   const { isCheckingAuth, checkAuth, user, isAuthenticated } = useAuthService();
-  const[order, setOrder] = useState(null)
+  const [order, setOrder] = useState(null);
 
   useEffect(() => {
     checkAuth();
@@ -33,11 +33,44 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <HomeRoutes setOrder={setOrder} order={order} />,
-      children: homeRoutes,
+      element: <HomeRoutes order={order} setOrder={setOrder} />,
+      children: [
+        {
+          path: "cart",
+          element: <Outlet />,
+        },   {
+          path: "checkout",
+          element: <Outlet />,
+        },
+
+        {
+          path: "auctions",
+          element: <Outlet />,
+        },   {
+          path: "order-confirmation",
+          element: <Outlet />,
+        },
+
+        {
+          path: "filter-data",
+          element: <Outlet />,
+        },   {
+          path: "products/:id",
+          element: <Outlet />,
+        },
+
+        {
+          path: "collection/:id",
+          element: <Outlet />,
+        },   {
+          path: "*",
+          element: <Outlet />,
+        },
+      ],
     },
- 
     {
+
+      
       path: "admin/*",
       element:
         isAuthenticated && user?.role === "admin" ? (
@@ -45,7 +78,17 @@ const App = () => {
         ) : (
           <Navigate to="/" />
         ),
-      children: adminChildrenRoutes,
+        children: [
+          { path: "", element: <Outlet /> }, 
+          { path: "dashboard", element: <Outlet /> },
+          { path: "orders", element: <Outlet /> },
+          { path: "orders/order-details", element: <Outlet /> },
+          { path: "users/*", element: <Outlet /> },
+          { path: "categories", element: <Outlet /> },
+          { path: "zoneManager", element: <Outlet /> },
+          { path: "products", element: <Outlet /> },
+          { path: "*", element: <Outlet /> },
+        ],
     },
     {
       path: "seller/*",
@@ -55,12 +98,45 @@ const App = () => {
         ) : (
           <Navigate to="/" />
         ),
-      children: sellerChildrenRoutes,
+        children: [
+          { path: "", element: <Outlet /> }, 
+          { path: "dashboard", element: <Outlet /> },
+          { path: "orders", element: <Outlet /> },
+          { path: "orders/order-details", element: <Outlet /> },
+          { path: "products", element: <Outlet /> },
+          { path: "auctions", element: <Outlet /> }, 
+          { path: "*", element: <Outlet /> },
+        ],
     },
     {
       path: "auth/*",
       element: <AuthRoutes />,
-      children: authRoutes,
+      children: [
+        {
+          path: "signin",
+          element: <Outlet />,
+        },   {
+          path: "signup",
+          element: <Outlet />,
+        },
+
+        {
+          path: "forgot-password",
+          element: <Outlet />,
+        },   {
+          path: "reset-password/:token",
+          element: <Outlet />,
+        },
+
+        {
+          path: "email-sent-success",
+          element: <Outlet />,
+        },  
+         {
+          path: "*",
+          element: <Outlet />,
+        },
+      ],
     },
     {
       path: "auth/verify-email",

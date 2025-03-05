@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import SellerLayout from "../components/layouts/SellerLayout";
 import { DashBoardView } from "../components/seller/DashBoardComponents/DashBoardView";
 import ProductManagement from "../components/seller/Product/rootRoutes";
@@ -16,14 +16,19 @@ const SellerRoutes = () => {
   );
 };
 
-export const sellerChildrenRoutes = [
-  { index: true, element: <DashBoardView /> },
-  { path: "dashboard", element: <DashBoardView /> },
-  { path: "orders", element: <OrderList /> },
-  { path: "orders/order-details", element: <OrderDetails /> },
-  { path: "products", element: <ProductManagement /> },
-  { path: "auctions", element: <AuctionManagement /> },
-  { path: "*", element: <NotFound /> },
-];
+const SellerRoutesWrapper = () => {
+  return (
+    <Routes>
+     <Route path="/" element={<SellerRoutes />}></Route>
+      <Route index element={<DashBoardView />} />
+      <Route path="dashboard" element={<DashBoardView />} />
+      <Route path="orders" element={<OrderList />} />
+      <Route path="orders/order-details" element={<OrderDetails />} />
+      <Route path="products" element={<ProductManagement />} />
+      <Route path="auctions" element={<AuctionManagement />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 
-export default SellerRoutes;
+export default SellerRoutesWrapper;

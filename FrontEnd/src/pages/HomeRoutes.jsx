@@ -1,7 +1,7 @@
+import { Routes, Route, Outlet } from "react-router-dom";
 import Home from "./MainPage/Home";
 import HomeLayout from "../components/layouts/HomeLayout";
 import NotFound from "../components/NotFound";
-import { Outlet } from "react-router-dom";
 import Cart from "../pages/MainPage/Cart";
 import Checkout from "../components/Common/Checkout";
 import OrderConfirmation from "../components/Common/OrderConfirmation";
@@ -10,25 +10,30 @@ import ProductDetail from "../components/Common/ProductDetail";
 import AllCategoryProducts from "../components/Common/products";
 import AuctionListPage from "./AuctionListPage";
 
-const HomeRoutes = ({ setOrder, order }) => { 
-
+export const HomeRoutes = ({ setOrder, order }) => {
   return (
     <HomeLayout>
+      {/* Outlet provides access to child routes */}
       <Outlet context={{ order, setOrder }} />
     </HomeLayout>
   );
 };
+const HomeRoutesWrapper = ({ setOrder, order }) => {
+  return (
+    <Routes>
+      <Route path="/" element={<HomeRoutes setOrder={setOrder} order={order} />}>
+        <Route index element={<Home />} />
+        <Route path="auctions" element={<AuctionListPage />} />
+        <Route path="cart" element={<Cart />} />
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="order-confirmation" element={<OrderConfirmation />} />
+        <Route path="filter-data" element={<FilterData />} />
+        <Route path="products/:id" element={<ProductDetail />} />
+        <Route path="collection/:id" element={<AllCategoryProducts />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  );
+};
 
-export const homeRoutes = [
-  { path: "/", element: <Home /> },
-  { path: "/auctions", element: <AuctionListPage /> },
-  { path: "/cart", element: <Cart /> },
-  { path: "/checkout", element: <Checkout /> },
-  { path: "/order-confirmation", element: <OrderConfirmation /> },
-  { path: "/filter-data", element: <FilterData /> },
-  { path: "/products/:id", element: <ProductDetail /> },
-  { path: "/collection/:id", element: <AllCategoryProducts /> },
-  { path: "*", element: <NotFound /> },
-];
-
-export default HomeRoutes;
+export default HomeRoutesWrapper;

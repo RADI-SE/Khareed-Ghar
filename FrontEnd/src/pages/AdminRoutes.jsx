@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import AdminLayout from "../components/layouts/AdminLayout";
 import { DashBoardView } from "../components/admin/DashBoardComponents/DashBoardView";
 import CategoryManagement from "../components/admin/Category/rootRoutes";
@@ -19,16 +19,23 @@ const AdminRoutes = () => {
   );
 };
 
-export const adminChildrenRoutes = [
-  { index: true, element: <DashBoardView /> }, // Default route
-  { path: "dashboard", element: <DashBoardView /> },
-  { path: "orders", element: <OrderList /> },
-   {path:"orders/order-details", element:<OrderDetails />},
-   { path: "users/*", element: <UserManagement /> }, 
-   { path: "categories", element: <CategoryManagement/> },
-   { path: "zoneManager", element: <RegionManagement /> },
-  { path: "products", element: <ProductManagement /> },
-  { path: "*", element: <NotFound /> }, 
-];
+const AdminRoutesWrapper = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<AdminRoutes />}>
+        <Route index element={<DashBoardView />} />
+        <Route path="dashboard" element={<DashBoardView />} />
+        <Route path="orders" element={<OrderList />} />
+        <Route path="orders/order-details" element={<OrderDetails />} />
+        <Route path="users/*" element={<UserManagement />} />
+        <Route path="categories" element={<CategoryManagement />} />
+        <Route path="zoneManager" element={<RegionManagement />} />
+        <Route path="products" element={<ProductManagement />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  );
+};
 
-export default AdminRoutes;
+export default AdminRoutesWrapper;
+
