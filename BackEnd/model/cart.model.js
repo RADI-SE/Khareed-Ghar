@@ -9,7 +9,6 @@ const cartSchema = new mongoose.Schema(
     },
     guest: {
       type: String, 
-  
     },
     items: [
       {

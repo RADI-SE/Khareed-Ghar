@@ -70,8 +70,6 @@ export const signup = async (req, res) => {
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
     });
 
-    await user.save();
-    generatTokenAndSetCookies(res, user._id, user.role)
 
     const message = `verification code is ${verificationToken}`;   
     try {
@@ -80,7 +78,9 @@ export const signup = async (req, res) => {
         subject: "Verify your email",
         message: message,
       });
-
+      generatTokenAndSetCookies(res, user._id)
+      await user.save();
+    
       res.status(201).json({
         success: true,
         message: "User created successfully. Please check your email for verification code.",
@@ -89,6 +89,7 @@ export const signup = async (req, res) => {
           password: undefined,
           confirmPassword: undefined,
         },
+        
       });
     } catch (emailError) {
       console.error("Email sending error:", emailError);
@@ -142,8 +143,7 @@ export const resendVerificationCode = async (req, res) => {
     } catch (error) {
       console.error("Email sending error:", error);
     }
-    // await sendVerificationEmail(user.email, verificationToken);
-  } catch (error) {
+   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -170,12 +170,9 @@ export const verifyEmail = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log("error in verify Email ", error);
-    res.status(500).json({ success: false, message: "Server error" });
+     res.status(500).json({ success: false, message: "Server error" });
   }
 };
-
-
 
 export const signin = async (req, res) => {
   const { email, password } = req.body;
@@ -204,19 +201,18 @@ export const signin = async (req, res) => {
     }
 
     user.lastLogin = new Date();
-    const token = generatTokenAndSetCookies(res, user._id, user.role , user.isVerified );
+    const token = generatTokenAndSetCookies(res, user._id );
     await user.save();
     res.status(200).json({
       success: true,
       message: "User logged in successfully",
-      
       user: {
         _id: user._id,
         email: user.email,
         role: user.role,
         lastLogin: user.lastLogin,
         token,
-        isVerified: user.isVerified // Include isVerified in the token payload
+        isVerified: user.isVerified  
 
       },
     });
@@ -250,7 +246,7 @@ export const forgotPassword = async (req, res) => {
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpiresAt = resetTokenExpiresAt;
     await user.save();
-     generatTokenAndSetCookies(res, user._id, user.role);
+     generatTokenAndSetCookies(res, user._id);
 
  const resetPasswordUrl = `${process.env.CLIENT_URL}auth/reset-password/${resetToken}`;
   const message = `Click on the following link to reset your password: ${resetPasswordUrl}`;
@@ -294,7 +290,7 @@ export const resetPassword = async (req, res) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpiresAt = undefined;
     await user.save();
-   generatTokenAndSetCookies(res, user._id, user.role);
+   generatTokenAndSetCookies(res, user.id);
 
     const message = `Password reset successfully`;
     try {

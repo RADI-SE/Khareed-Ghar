@@ -5,7 +5,6 @@ import { useAddToCart } from "../../hooks/buyer/cart/useAddToCart";
 import { useNavigate } from "react-router-dom";
 const ProductCard = ({product}) => {
   const { mutate: AddToCart } = useAddToCart();
-  const id = sessionStorage.getItem("id");
   const [quantity, setQuantity] = useState(0); 
   const navigate = useNavigate();
 
@@ -19,7 +18,7 @@ const ProductCard = ({product}) => {
   
     setQuantity((prev) => prev + 1); 
   
-    AddToCart({ id, productId, quantity: quantity + 1 });
+    AddToCart({ productId, quantity: quantity + 1 });
     alert(`Product added to Cart. Quantity: ${quantity + 1}`);
   };
 

@@ -6,7 +6,7 @@ export const useRemoveFromCart = () => {
   const { removeFromCart } = useCartService();
 
   return useMutation({
-    mutationFn: ({ id, productId }) => removeFromCart(id, productId),
+    mutationFn: ({ productId }) => removeFromCart( productId),
     
     onSuccess: () => {
       console.log("Product removed from cart successfully.");

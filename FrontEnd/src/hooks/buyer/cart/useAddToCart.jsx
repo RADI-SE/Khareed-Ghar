@@ -4,9 +4,9 @@ import { useCartService } from "../../../services/buyer/buyerServices";
 export const useAddToCart = () => {
   const { addToCart } = useCartService();
   return useMutation({
-    mutationFn: async ({ id, productId, quantity }) => {
+    mutationFn: async ({  productId, quantity }) => {
       try {
-        const response = await addToCart(id, productId, quantity);
+        const response = await addToCart( productId, quantity);
         return response;
       } catch (error) {
         console.error("Error during addToCart API call:", error);

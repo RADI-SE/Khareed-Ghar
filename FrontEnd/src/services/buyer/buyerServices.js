@@ -12,12 +12,12 @@ export const useCartService = create((set) => ({
   clearError: () => set({ errorMessage: null }),
 
   // add to cart
-  addToCart: async (id, productId, quantity) => {
+  addToCart: async (productId, quantity) => {
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.post(
         `http://localhost:5000/api/add-to-cart`,
-        { id, productId, quantity }
+        { productId, quantity }
       );
       set({ cart: response.data, isLoading: false });
     } catch (error) {
@@ -25,13 +25,12 @@ export const useCartService = create((set) => ({
     }
   },
   // display cart
-  displayCart: async (id) => {
+  displayCart: async () => {
     try {
       set({ isLoading: true, errorMessage: null });
 
-      const response = await axios.post("http://localhost:5000/api/cart-items", {
-        id,
-      });
+      console.log("Hi from frontend");
+      const response = await axios.get("http://localhost:5000/api/cart-items");
       set({ cart: response.data, isLoading: false });
       return response.data;
     } catch (error) {
@@ -45,12 +44,11 @@ export const useCartService = create((set) => ({
   },
 
   // removeFromCart
-  removeFromCart: async (id, productId) => {
-    console.log("removing from cart", id, productId);
+  removeFromCart: async (productId) => {
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.delete(
-        `http://localhost:5000/api/remove-from-cart/${id}`,
+        `http://localhost:5000/api/remove-from-cart`,
         {
           data: { productId },
         }
@@ -63,11 +61,10 @@ export const useCartService = create((set) => ({
   },
 
   //clearCart
-  clearCart: async (id) => {
+  clearCart: async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/clear-cart/${id}`
-      );
+      const response = await axios.delete(`http://localhost:5000/api/clear`);
+      console.log("response", response);
       set({ cart: response.data, isLoading: false });
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });

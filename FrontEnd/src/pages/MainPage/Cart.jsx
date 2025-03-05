@@ -6,9 +6,8 @@ import { useRemoveFromCart } from "../../hooks/buyer/cart/useRemoveFromCart";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const id = sessionStorage.getItem("id");
-
-  const { data: cart = {} } = useFetchCartItems(id);
+ 
+  const { data: cart = {} } = useFetchCartItems();
 
   const { mutate: removeFromCart } = useRemoveFromCart();
 
@@ -17,7 +16,7 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto py-8 min-h-96 px-4 md:px-16 lg:px-24">
-      {items.length > 0 ? (
+      {items?.length > 0 ? (
         <div>
           <h3 className="text-2xl font-semibold mb-4">Shopping Cart</h3>
           <div className="flex flex-col md:flex-row justify-between space-x-10 mt-8">
@@ -33,7 +32,7 @@ const Cart = () => {
                 </div>
               </div>
               <div>
-                {items.map(({ product, quantity, total, _id }) => (
+                {items?.map(({ product, quantity, total, _id }) => (
                   <div
                     key={_id}
                     className="flex items-center space-x-12 justify-between  border-b"
@@ -62,7 +61,7 @@ const Cart = () => {
                     <button
                       className=" text-red-500 hover:text-red-700"
                       onClick={() =>
-                        removeFromCart({ id, productId: product._id })
+                        removeFromCart({ productId: product._id })
                       }
                     >
                       <FaTrashAlt />

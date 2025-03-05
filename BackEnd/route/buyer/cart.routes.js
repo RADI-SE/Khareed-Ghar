@@ -8,10 +8,10 @@ const verifyBuyer = [verifyTokenForRole, AuthorizeRoles('buyer')];
 
 router.post('/add-to-cart', addToCart);
 
-router.post('/cart-items', getCart);
+router.get('/cart-items', getCart);
 
-router.delete('/remove-from-cart/:id', removeFromCart);
+router.delete('/remove-from-cart', removeFromCart);
 
-router.delete('/clear/:id', clearCart);
+router.delete('/clear', clearCart);
 
 export default router;

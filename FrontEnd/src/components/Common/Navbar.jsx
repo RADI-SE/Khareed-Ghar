@@ -8,17 +8,13 @@ import { useClearCart } from "../../hooks/buyer/cart/useClearCart";
 const Navbar = () => {
   const { signout } = useAuthService();
 
-  const id = sessionStorage.getItem("id");
- 
-const {mutate: clearCartMutation} = useClearCart(id);
+const {mutate: clearCartMutation} = useClearCart();
 
   const {
     data: cart = {},
-  } = useFetchCartItems(id);
+  } = useFetchCartItems();
 
-  const items = cart.items || [];
-  const totalAmount = cart.totalAmount || 0;
-
+  const items = cart?.items || [];
 
   const navigate = useNavigate();
 
@@ -28,7 +24,8 @@ const {mutate: clearCartMutation} = useClearCart(id);
 
   const handleLogout = async () => {
     await signout();
-    clearCartMutation();
+   let done =  clearCartMutation();
+console.log("done")
     navigate("/");
   };
   return (
