@@ -17,6 +17,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cart from "./pages/MainPage/Cart";
+import Checkout from "./components/Common/Checkout";
+import CartRoutes from "./pages/CartRoutes";
 
 const App = () => {
   const { isCheckingAuth, checkAuth, user, isAuthenticated } = useAuthService();
@@ -35,26 +38,21 @@ const App = () => {
       path: "/",
       element: <HomeRoutes order={order} setOrder={setOrder} />,
       children: [
-        {
-          path: "cart",
-          element: <Outlet />,
-        },   {
-          path: "checkout",
-          element: <Outlet />,
-        },
-
+      
         {
           path: "auctions",
           element: <Outlet />,
-        },   {
-          path: "order-confirmation",
+        },
+         {
+          path: "cart",
           element: <Outlet />,
         },
 
         {
           path: "filter-data",
           element: <Outlet />,
-        },   {
+        },
+        {
           path: "products/:id",
           element: <Outlet />,
         },
@@ -62,15 +60,14 @@ const App = () => {
         {
           path: "collection/:id",
           element: <Outlet />,
-        },   {
+        },
+        {
           path: "*",
           element: <Outlet />,
         },
       ],
     },
     {
-
-      
       path: "admin/*",
       element:
         isAuthenticated && user?.role === "admin" ? (
@@ -78,17 +75,17 @@ const App = () => {
         ) : (
           <Navigate to="/" />
         ),
-        children: [
-          { path: "", element: <Outlet /> }, 
-          { path: "dashboard", element: <Outlet /> },
-          { path: "orders", element: <Outlet /> },
-          { path: "orders/order-details", element: <Outlet /> },
-          { path: "users/*", element: <Outlet /> },
-          { path: "categories", element: <Outlet /> },
-          { path: "zoneManager", element: <Outlet /> },
-          { path: "products", element: <Outlet /> },
-          { path: "*", element: <Outlet /> },
-        ],
+      children: [
+        { path: "", element: <Outlet /> },
+        { path: "dashboard", element: <Outlet /> },
+        { path: "orders", element: <Outlet /> },
+        { path: "orders/order-details", element: <Outlet /> },
+        { path: "users/*", element: <Outlet /> },
+        { path: "categories", element: <Outlet /> },
+        { path: "zoneManager", element: <Outlet /> },
+        { path: "products", element: <Outlet /> },
+        { path: "*", element: <Outlet /> },
+      ],
     },
     {
       path: "seller/*",
@@ -98,15 +95,15 @@ const App = () => {
         ) : (
           <Navigate to="/" />
         ),
-        children: [
-          { path: "", element: <Outlet /> }, 
-          { path: "dashboard", element: <Outlet /> },
-          { path: "orders", element: <Outlet /> },
-          { path: "orders/order-details", element: <Outlet /> },
-          { path: "products", element: <Outlet /> },
-          { path: "auctions", element: <Outlet /> }, 
-          { path: "*", element: <Outlet /> },
-        ],
+      children: [
+        { path: "", element: <Outlet /> },
+        { path: "dashboard", element: <Outlet /> },
+        { path: "orders", element: <Outlet /> },
+        { path: "orders/order-details", element: <Outlet /> },
+        { path: "products", element: <Outlet /> },
+        { path: "auctions", element: <Outlet /> },
+        { path: "*", element: <Outlet /> },
+      ],
     },
     {
       path: "auth/*",
@@ -115,7 +112,8 @@ const App = () => {
         {
           path: "signin",
           element: <Outlet />,
-        },   {
+        },
+        {
           path: "signup",
           element: <Outlet />,
         },
@@ -123,7 +121,8 @@ const App = () => {
         {
           path: "forgot-password",
           element: <Outlet />,
-        },   {
+        },
+        {
           path: "reset-password/:token",
           element: <Outlet />,
         },
@@ -131,13 +130,43 @@ const App = () => {
         {
           path: "email-sent-success",
           element: <Outlet />,
-        },  
-         {
+        },
+        {
           path: "*",
           element: <Outlet />,
         },
       ],
     },
+    {
+      path: "checkout",
+      element: <CartRoutes  order={order} setOrder={setOrder} />,
+      children: [
+        {
+          path: "checkout",
+          element: <Outlet />,
+        },
+        {
+          path: "shipping",
+          element: <Outlet />,
+        },
+        {
+          path: "*",
+          element: <NotFound />,
+        },
+      ],
+      
+    },
+    // {
+    //   path: "cart",
+    //   element: <CartRoutes order={order} setOrder={setOrder} />,
+    //   children: [
+    //     { path: "", element: <Outlet /> }, // `cart/`
+    //     { path: "checkout", element: <Outlet /> }, // `cart/checkout`
+    //     { path: "*", element: <NotFound /> },
+    //   ],
+    // },
+    
+    
     {
       path: "auth/verify-email",
       element:
@@ -147,6 +176,7 @@ const App = () => {
           <Navigate to="/" />
         ),
     },
+
     {
       path: "*",
       element: <NotFound />,

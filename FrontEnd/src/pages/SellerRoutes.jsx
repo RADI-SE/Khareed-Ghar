@@ -19,7 +19,7 @@ const SellerRoutes = () => {
 const SellerRoutesWrapper = () => {
   return (
     <Routes>
-     <Route path="/" element={<SellerRoutes />}></Route>
+     <Route path="/" element={<SellerRoutes />}>
       <Route index element={<DashBoardView />} />
       <Route path="dashboard" element={<DashBoardView />} />
       <Route path="orders" element={<OrderList />} />
@@ -27,6 +27,7 @@ const SellerRoutesWrapper = () => {
       <Route path="products" element={<ProductManagement />} />
       <Route path="auctions" element={<AuctionManagement />} />
       <Route path="*" element={<NotFound />} />
+     </Route>
     </Routes>
   );
 };

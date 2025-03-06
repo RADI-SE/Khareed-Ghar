@@ -25,8 +25,7 @@ const HomeRoutesWrapper = ({ setOrder, order }) => {
         <Route index element={<Home />} />
         <Route path="auctions" element={<AuctionListPage />} />
         <Route path="cart" element={<Cart />} />
-        <Route path="checkout" element={<Checkout />} />
-        <Route path="order-confirmation" element={<OrderConfirmation />} />
+        {/* <Route path="cart/checkout" element={<Checkout />} /> */}
         <Route path="filter-data" element={<FilterData />} />
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="collection/:id" element={<AllCategoryProducts />} />

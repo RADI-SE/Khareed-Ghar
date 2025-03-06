@@ -23,9 +23,9 @@ const {mutate: clearCartMutation} = useClearCart();
   };
 
   const handleLogout = async () => {
-    await signout();
-   let done =  clearCartMutation();
-console.log("done")
+    if( clearCartMutation()){
+      await signout();
+    }
     navigate("/");
   };
   return (

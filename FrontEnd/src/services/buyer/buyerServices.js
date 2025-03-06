@@ -66,6 +66,7 @@ export const useCartService = create((set) => ({
       const response = await axios.delete(`http://localhost:5000/api/clear`);
       console.log("response", response);
       set({ cart: response.data, isLoading: false });
+      return response.data.message
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }

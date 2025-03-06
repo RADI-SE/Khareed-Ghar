@@ -46,6 +46,8 @@ export const addToCart = async (req, res) => {
   const token = req.cookies.token;
   let userId ;
   let guestId = req.cookies.guestId || null;
+
+  console.log("token",token , "\nguestId",guestId)
   
   try {
     let cart;
