@@ -58,7 +58,6 @@ export const RegionTable = ({ region }) => {
         onSuccess: () => {
           setModalMessage("Region deleted successfully!");
           setShowDeleteModal(false);
-          refetch();
         },
         onError: () => {
           setModalMessage("Failed to delete Region. Please try again.");

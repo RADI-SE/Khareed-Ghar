@@ -1,6 +1,6 @@
 import {UserLocation, Location} from "../../model/location.model.js" ; 
 import { User } from "../../model/user.model.js";
-
+import jwt from "jsonwebtoken";
 
 export const createLocation = async (req, res) => {
   try {
@@ -55,8 +55,10 @@ export const getAllLocations = async (req, res) => {
 };
  
 export const getLocationById = async (req, res) => {
-
-  const {userId} = req.body;
+  const token = req.cookies.token;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userId = decoded.userId;
+  console.log("userId", userId);
   try {
     const locations = await UserLocation.find();  
     const user = await User.findById(userId);  
@@ -71,8 +73,19 @@ export const getLocationById = async (req, res) => {
     }
   
     const findById = await UserLocation.findById(location._id);
-  
-    res.status(200).json(findById);
+    console.log("findById", findById.state);
+    const state = await Location.findOne( findById.state);
+    console.log("state", state.state);
+    console.log("state", state.city);
+    const locationToSend = {
+        _id: findById._id,
+        street: findById.street,
+        state: state.state,
+        city: state.city,
+        phoneNumber: findById.phoneNumber
+    };
+    console.log("locationToSend", locationToSend);
+    res.status(200).json(locationToSend);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch location", error: error.message });
   }

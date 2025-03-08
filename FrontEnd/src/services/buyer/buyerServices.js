@@ -108,17 +108,16 @@ export const useAddressService = create((set) => ({
   },
 
   //getLocationById
-  getLocationById: async (userId) => {
+  getLocationById: async () => {
     try {
       set({ isLoading: true, errorMessage: null });
       const response = await axios.post(
         `http://localhost:5000/api/locations/`,
-        { userId }
       );
       console.log("getLocationById::::::::", response.data);
       set({ address: response.data, isLoading: false });
-      console.log("return from useAddressService ", address);
-      return address;
+      return response.data;
+    
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }

@@ -5,12 +5,10 @@ export const useAddAddress = () => {
   const { createLocation } = useAddressService();
   return useMutation({
     mutationFn: async ({ userId, street, LOCATION, phoneNumber}) => {
-      try {
+
         const response = await createLocation(userId, street, LOCATION, phoneNumber);
         return response;
-      } catch (error) {
-        throw error;
-      }
+     
     },
     onSuccess: (data) => {
       console.log("createLocation successfully:", data);
