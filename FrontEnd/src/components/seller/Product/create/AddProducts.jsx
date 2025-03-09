@@ -18,6 +18,13 @@ export const AddProductForm = () => {
   const [SubCategoryId, setSubCategoryId] = useState("");
   const [images, setImage] = useState([]);
 
+  const [isAuction, setIsAuction] = useState(false);
+  const [auctionDetails, setAuctionDetails] = useState({
+    startTime: "",
+    endTime: "",
+    startingBid: "",
+  });
+
   const token = sessionStorage.getItem("token");
   const seller = sessionStorage.getItem("id");
   const { data: parentCategories = [] } = useFetchCategories(token);
@@ -66,15 +73,27 @@ const handleResetChange = (e) => {
   setImage([]); // Reset images to an empty array
 };
 
+const handleAuctionToggle = (e) => {
+  setIsAuction(e.target.checked);
+};
+
+const handleAuctionDetailsChange = (e) => {
+  setAuctionDetails({
+    ...auctionDetails,
+    [e.target.name]: e.target.value,
+  });
+};
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !description || !price || !CategoryId || !SubCategoryId || images.length === 0) {
       alert("Please fill in all the required fields!"); 
-      return false; 
+      return false;
     }else{
 
       alert("Product added successfully!");
     }
+    
 
     
     createProduct({
@@ -87,6 +106,8 @@ const handleResetChange = (e) => {
       seller,
       images: images,
     });
+
+
   };
 
   return (
@@ -208,6 +229,46 @@ const handleResetChange = (e) => {
               >
                 <input type="file" onChange={handleImageChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
               </form>
+
+              <label className="block mb-2">Enable Auction?</label>
+        <input
+          type="checkbox"
+          checked={isAuction}
+          onChange={handleAuctionToggle}
+          className="mb-4"
+        />
+        
+        {isAuction && (
+          <div className="bg-gray-100 p-3 rounded mb-4">
+            <label className="block mb-2">Starting Time</label>
+            <input
+              type="datetime-local"
+              name="startTime"
+              value={auctionDetails.startTime}
+              onChange={handleAuctionDetailsChange}
+              className="border rounded p-2 w-full mb-2"
+            />
+
+            <label className="block mb-2">Ending Time</label>
+            <input
+              type="datetime-local"
+              name="endTime"
+              value={auctionDetails.endTime}
+              onChange={handleAuctionDetailsChange}
+              className="border rounded p-2 w-full mb-2"
+            />
+
+            <label className="block mb-2">Starting Bid</label>
+            <input
+              type="number"
+              name="startingBid"
+              value={auctionDetails.startingBid}
+              onChange={handleAuctionDetailsChange}
+              placeholder="Enter starting bid"
+              className="border rounded p-2 w-full"
+            />
+          </div>
+        )}
               {/* <input
                 type="file"
                 multiple
@@ -224,6 +285,7 @@ const handleResetChange = (e) => {
         {SubCategoryId && (
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Adding..." : "Submit"}
+            
           </button>
         )}
           {SubCategoryId && (
