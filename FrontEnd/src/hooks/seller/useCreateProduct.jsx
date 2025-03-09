@@ -28,8 +28,9 @@ export const useCreateProduct = (token) => {
         images
       );
     },
-    onSuccess: () => {
-      console.log("Product created successfully.");
+    onSuccess: (data) => {
+      console.log("Product created successfully.", data);
+      return data;
     },
     onError: (error) => {
       console.error("Error creating product:", error);

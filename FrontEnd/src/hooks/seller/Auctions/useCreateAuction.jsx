@@ -1,31 +1,22 @@
 import { useMutation } from "@tanstack/react-query";
 import { useSellerService } from "../../../services/seller/sellerServices";
 
-export const useCreateAuction = (token) => {
-  const { addAuction } = useSellerService();
+export const useCreateAuction = () => {
+  const { createAuction } = useSellerService();
 
   return useMutation({
     mutationFn: ({
-      name,
-      description,
-      specifications,
-      price,
-      category,
-      subcategory,
-      seller,
-      images,
+
+      productId,
+      startingBid,
+      startTime,
+      endTime,
     }) => {
-      console.log("Received specifications payload: ", specifications); // Log the images payload dynamically
-      return addAuction(
-        token,
-        name,
-        description,
-        specifications,
-        price,
-        category,
-        subcategory,
-        seller,
-        images
+      return createAuction(
+        productId,
+        startingBid,
+        startTime,
+        endTime,
       );
     },
     onSuccess: () => {

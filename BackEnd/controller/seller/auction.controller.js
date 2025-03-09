@@ -1,19 +1,27 @@
 import {Auction} from "../../model/auction.model.js"
 import {Product} from "../../model/product.model.js"
+import jwt from "jsonwebtoken"
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 export const createAuction = async (req, res) => {
-  try {
-    const { userId, productId, startingBid, startTime, endTime } = req.body;
-
+  try {  
+    const {productId, startingBid, startTime, endTime } = req.body;
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+    await sleep(2000);
     const product = await Product.findById(productId);
     if (!product || product.seller?.toString() !== userId) {
-        
       return res.status(400).json({ message: 'Invalid product or unauthorized access.' });
     }
  
     const auction = new Auction({
       productId,
-      sellerId: req.user.id,
+      sellerId: userId,
       startingBid,
       currentBid: startingBid,
       startTime,

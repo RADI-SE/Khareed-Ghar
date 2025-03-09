@@ -10,7 +10,7 @@ import manageAddresses from "./route/admin/manage.address.js"
 import manageProducts from "./route/admin/manage.product.js"
 import cartRoutes from "./route/buyer/cart.routes.js"
 import addLocation from "./route/buyer/location.routes.js"
-
+import manageAuctions from "./route/seller/auction.route.js"
 dotenv.config();
 
 const app = express();
@@ -42,6 +42,7 @@ app.use("/api", addLocation);
 
 app.use("/api", manageProducts);
 
+app.use("/api", manageAuctions);
 app.listen(PORT, () => {
 
   connect();

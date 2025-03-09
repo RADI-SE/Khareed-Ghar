@@ -14,7 +14,7 @@ const verifySeller = [verifyTokenForRole, AuthorizeRoles("seller")];
 
 const router = express.Router();
  
-router.post('/', verifySeller, createAuction);
+router.post('/auction',createAuction);
  
 router.get('/ongoing', getOngoingAuctions);
  

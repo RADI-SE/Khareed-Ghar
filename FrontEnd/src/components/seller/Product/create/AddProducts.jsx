@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../style.css";
 import { useCreateProduct } from "../../../../hooks/seller/useCreateProduct";
 import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
+import { useCreateAuction } from "../../../../hooks/seller/Auctions/useCreateAuction";
 import { useSellerService } from "../../../../services/seller/sellerServices";
-import axios from "axios";
+
 
 export const AddProductForm = () => {
   const [name, setName] = useState("");
+  const { mutate: createAuction } = useCreateAuction();
   const [description, setDescription] = useState("");
+  const { addProduct } = useSellerService();
   const [specifications, setSpecifications] = useState({
     condition: "",
     color: "",
@@ -30,6 +33,7 @@ export const AddProductForm = () => {
   const { data: parentCategories = [] } = useFetchCategories(token);
 
   const { mutate: createProduct, isLoading } = useCreateProduct(token);
+  const { addAuction } = useSellerService();
 
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
@@ -55,7 +59,7 @@ export const AddProductForm = () => {
   };
   
 
-const handleResetChange = (e) => {
+const handleResetChange  = (e) => {
   if (e && e.preventDefault) {
     e.preventDefault(); 
   }
@@ -84,7 +88,7 @@ const handleAuctionDetailsChange = (e) => {
   });
 };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !description || !price || !CategoryId || !SubCategoryId || images.length === 0) {
       alert("Please fill in all the required fields!"); 
@@ -93,20 +97,28 @@ const handleAuctionDetailsChange = (e) => {
 
       alert("Product added successfully!");
     }
-    
-
-    
-    createProduct({
+  
+    const productId = await addProduct(
+      token,
       name,
       description,
       specifications,
       price,
-      category: CategoryId,
-      subcategory: SubCategoryId,
+      CategoryId,
+      SubCategoryId,
       seller,
-      images: images,
-    });
-
+      images,
+    );
+    console.log("Created product ID:", productId);
+    if (isAuction && productId) {
+      createAuction({
+        productId: productId,
+        startingBid: auctionDetails.startingBid,
+        startTime: auctionDetails.startTime,
+        endTime: auctionDetails.endTime,
+      });
+    }
+    
 
   };
 

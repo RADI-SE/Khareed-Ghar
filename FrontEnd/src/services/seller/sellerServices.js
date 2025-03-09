@@ -30,10 +30,6 @@ export const useSellerService = create((set) => ({
     try {
       // Set loading state while performing request
       set({ isLoading: true, Error: null, isError: false });
-  
-      console.log("specifications 1", specifications);
-      console.log("file 1", images);
-  
       // Create FormData
       const formData = new FormData();
       formData.append("name", name);
@@ -45,15 +41,11 @@ export const useSellerService = create((set) => ({
       formData.append("seller", seller);
   
       // Loop through images array and append each file
-      images.forEach((file, index) => {
+      images.forEach((file) => {
         formData.append("file", file);
-        console.log(`Appending file ${index + 1}:`,"Image data", file);
-      });
+       });
   
-      console.log("specifications 2:", formData.get("specifications"));
-      console.log("file count in FormData:", images);
-  
-      // Make POST request
+         // Make POST request
       const response = await axios.post(
         `${API_URL}products`,
         formData,
@@ -63,12 +55,8 @@ export const useSellerService = create((set) => ({
             "Content-Type": "multipart/form-data",
           },
         }
-      );
-  
-      if (response.status === 200) {
-        console.log("Product added successfully.");
-        set({ isLoading: false, Error: null });
-      }
+      ); 
+      return  response.data.product._id;
     } catch (error) {
       console.error("Error while adding product:", error.message);
   
@@ -106,6 +94,7 @@ export const useSellerService = create((set) => ({
       });
     }
   },
+
   // getProductById
   getProductById: async (id) => {
     try {
@@ -217,5 +206,21 @@ export const useSellerService = create((set) => ({
      } catch (error) {
       console.error("Error fetching user products:", error.message);
     }
+  },
+
+  // createAuction
+  createAuction: async (productId, startingBid, startTime, endTime) => {
+    try {
+      set({ isLoading: true, Error: null, isError: false });
+       await axios.post(`${API_URL}auction`, {
+        productId,
+        startingBid,
+        startTime,
+        endTime,
+      });
+  } catch (error) {
+    console.log(error.message);
+    set({ isLoading: false, isError: true, Error: error.message });
+  }
   },
 }));
