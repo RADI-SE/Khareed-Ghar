@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useFetchCartItems } from "../../hooks/buyer/cart/useFetchCartItems";
 import { useRemoveFromCart } from "../../hooks/buyer/cart/useRemoveFromCart";
 import { useAuthService } from "../../services/authService";
+import { useEffect } from "react";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -12,14 +13,17 @@ const Cart = () => {
 
   const { mutate: removeFromCart } = useRemoveFromCart();
 
-  const {isAuthenticated } = useAuthService();
+  const {isAuthenticated , user , checkAuth , isCheckingAuth } = useAuthService();
  
   const items = cart.items || [];
   const totalAmount = cart.totalAmount || 0;
 
+  if (isCheckingAuth) {
+    return <div>Loading...</div>;
+  }
   const handleCheckOut = (e) => {
     e.preventDefault();
-    if(!isAuthenticated){
+    if(!isAuthenticated || !user){
       navigate("/auth/signin")
     }else{
       navigate("/checkout/shipping")

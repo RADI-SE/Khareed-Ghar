@@ -54,43 +54,47 @@ export const getAllLocations = async (req, res) => {
   }
 };
  
+
+ 
 export const getLocationById = async (req, res) => {
   const token = req.cookies.token;
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const userId = decoded.userId;
-  console.log("userId", userId);
+
   try {
-    const locations = await UserLocation.find();  
     const user = await User.findById(userId);  
-    
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     } 
-    const location = locations.find(loc => loc.createdBy.toString() === user._id.toString());
-    
-    if (!location) {
-      return res.status(404).json({ message: "Location not found for the user" });
+
+    const userLocations = await UserLocation.find({ createdBy: user._id })
+
+    if (!userLocations.length) {
+      return res.status(404).json({ message: "No locations found for the user" });
+    }  
+
+    const findState = [];
+    const findCity = [];
+    for(let i = 0; i < userLocations.length; i++){
+      const state = await Location.findById(userLocations[i].state._id);
+      const city = await Location.findById(userLocations[i].city._id);
+      findState.push(state);
+      findCity.push(city);
     }
-  
-    const findById = await UserLocation.findById(location._id);
-    console.log("findById", findById.state);
-    const state = await Location.findOne( findById.state);
-    console.log("state", state.state);
-    console.log("state", state.city);
-    const locationToSend = {
-        _id: findById._id,
-        street: findById.street,
-        state: state.state,
-        city: state.city,
-        phoneNumber: findById.phoneNumber
-    };
-    console.log("locationToSend", locationToSend);
-    res.status(200).json(locationToSend);
+   
+    const formattedLocations = userLocations.map((location, index) => ({
+      _id: location._id,
+      street: location.street,
+      state: findState[index].state,
+      city: findCity[index].city,
+      phoneNumber: location?.phoneNumber,
+    }));
+
+    res.status(200).json( formattedLocations);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch location", error: error.message });
+    res.status(500).json({ message: "Failed to fetch locations", error: error.message });
   }
 };
-
 export const updateLocation = async (req, res) => {
   try {
     const { id } = req.params;
@@ -121,5 +125,31 @@ export const deleteLocation = async (req, res) => {
     res.status(200).json({ message: "Location deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to delete location", error: error.message });
+  }
+};
+
+// Get all states
+export const getStates = async (req, res) => {
+  try {
+    const states = await Location.find({ type: 'state' })
+      .select('_id name');
+    res.status(200).json(states);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch states", error: error.message });
+  }
+};
+
+
+// Get cities by state ID
+export const getCitiesByState = async (req, res) => {
+  try {
+    const { stateId } = req.params;
+    const cities = await Location.find({ 
+      type: 'city',
+      parentState: stateId 
+    }).select('_id name');
+    res.status(200).json(cities);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch cities", error: error.message });
   }
 };
