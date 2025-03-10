@@ -1,84 +1,9 @@
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-
-
-// const AuctionTable = ({ userId }) => {
-//   const [auctions, setAuctions] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-  
-//   useEffect(() => {
-//     if (!userId) {
-//       setError("Invalid user ID.");
-//       setLoading(false);
-//       return;
-//     }
-  
-//     const fetchAuctions = async () => {
-//       try {
-//         console.log("Fetching auctions for user:", userId);
-//         const response = await axios.get(`http://localhost:5000/api/${userId}`);
-//         setAuctions(response.data.products);
-//       } catch (err) {
-//         console.error("Error fetching user auctions:", err.message);
-//         setError("Failed to load auctions.");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-  
-//     fetchAuctions();
-//   }, [userId]);
-  
-//   return (
-//     <div className="p-6">
-//       <h2 className="text-2xl font-bold mb-4">Your Auctions</h2>
-//       {loading ? (
-//         <p>Loading...</p>
-//       ) : error ? (
-//         <p className="text-red-500">{error}</p>
-//       ) : auctions.length === 0 ? (
-//         <p>No auctions available.</p>
-//       ) : (
-//         <div className="overflow-x-auto">
-//           <table className="min-w-full border-collapse border border-gray-300">
-//             <thead>
-//               <tr className="bg-gray-200">
-//                 <th className="border border-gray-300 px-4 py-2">Title</th>
-//                 <th className="border border-gray-300 px-4 py-2">Starting Bid</th>
-//                 <th className="border border-gray-300 px-4 py-2">End Date</th>
-//                 <th className="border border-gray-300 px-4 py-2">Actions</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {auctions.map((auction) => (
-//                 <tr key={auction.id} className="border border-gray-300">
-//                   <td className="border border-gray-300 px-4 py-2">{auction.title}</td>
-//                   <td className="border border-gray-300 px-4 py-2">${auction.startingBid}</td>
-//                   <td className="border border-gray-300 px-4 py-2">{new Date(auction.endDate).toLocaleDateString()}</td>
-//                   <td className="border border-gray-300 px-4 py-2">
-//                     <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-//                       View Details
-//                     </button>
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default AuctionTable;
-
 import {useFetchUserAuction} from "../../../../hooks/seller/Auctions/useFetchUserAuction"
+import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
+import { useState } from 'react';
+import Pagination from "../../pagination";
 
 const AuctionTable = () => {
-
-
   const {
     data = [],
     isLoading,
@@ -88,57 +13,117 @@ const AuctionTable = () => {
 
   const auctions = Array.isArray(data) ? data : data ? [data] : [];
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const rowsPerPage = 4;
+  const startIndex = currentPage * rowsPerPage;
+  
+  const paginatedAuctions = auctions.slice(
+    startIndex,
+    startIndex + rowsPerPage
+  );
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const defaultImage = "/placeholder-image.jpg"; // Add appropriate default image path
+
+  const onProductClick = (auction) => {
+    console.log("View auction:", auction);
+  };
+
+  const handleEditClick = (auction) => {
+    console.log("Edit auction:", auction);
+  };
+
+  const handleDeleteClick = (auction) => {
+    console.log("Delete auction:", auction);
+  };
+
   console.log("Auction", auctions)
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Your Auctions</h2>
+  <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
+  <table className="w-full text-sm text-left text-gray-500">
+    <thead className="text-xs text-white uppercase bg-blue-950">
+      <tr>
+        <th className="px-6 py-3">S.N</th>
+        <th className="px-6 py-3">Product ID</th>
+        <th className="px-6 py-3">Product Name</th>
+        <th className="px-6 py-3">Brand</th>
+        <th className="px-6 py-3">Image</th>
+        <th className="px-6 py-3">Created Date</th>
+        <th className="px-6 py-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
       {isLoading ? (
-        <p>Loading...</p>
+        <tr>
+          <td colSpan="7">Loading...</td>
+        </tr>
       ) : isError ? (
-        <p className="text-red-500">Error fetching auctions: {error.message}</p>
-      ) : auctions?.length === 0 ? (
-        <p>No auctions available.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-300 px-4 py-2">Title</th>
-                <th className="border border-gray-300 px-4 py-2">Product</th>
-                <th className="border border-gray-300 px-4 py-2">Starting Bid</th>
-                <th className="border border-gray-300 px-4 py-2">Start Date</th>
-                <th className="border border-gray-300 px-4 py-2">End Date</th>
-                <th className="border border-gray-300 px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {auctions?.map((auction) => (
-                <tr key={auction.id} className="border border-gray-300">
-                  <td className="border border-gray-300 px-4 py-2">{auction.productsName}</td>
+        <tr>
+          <td colSpan="7" className="text-red-500">{error?.message || 'An error occurred'}</td>
+        </tr>
+      ) : paginatedAuctions.map((auction, index) => {
+        const { _id, productsName, productsImg, startingBid, startTime, endTime } = auction;
+        return (
+          <tr
+            key={_id}
+            className="bg-white-500 border-b hover:bg-gray-300"
+          >
+            <td className="px-6 py-2">{startIndex + index + 1}</td>
+            <td className="px-6 py-2">{_id}</td>
+            <td className="px-6 py-2">{productsName}</td>
+            <td className="px-6 py-2">{productsImg}</td>
+            <td className="px-6 py-2">
+              <img
+                src={
+                  `../../../../../public/images${productsImg}` || defaultImage
+                }
+                alt={productsName}
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  objectFit: "cover",
+                }}
+              />
+            </td>
 
-                  <td className="border border-gray-300 px-4 py-2 flex items-center gap-2">
-                    <img src={auction.productsImg} alt={auction.productsName} className="w-12 h-16 object-cover rounded-lg"/>
-                  </td>
+            <td className="px-6 py-2">
+              {new Date(startTime).toLocaleDateString()}
+            </td>
 
-                  <td className="border border-gray-300 px-4 py-2">${auction.startingBid}</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {auction.startTime}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {auction.endTime}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+            <td className="px-2 py-2">
+              <button 
+                className="w-4 h-5 mr-2 text-yellow-500"
+                onClick={() => onProductClick(auction)}
+              >
+                <FaEye />
+              </button>
+              <button
+                className="w-4 h-5 mr-2 text-green-600"
+                onClick={() => handleEditClick(auction)}
+              >
+                <FaEdit />
+              </button>
+              <button
+                className="w-4 h-5 text-red-500"
+                onClick={() => handleDeleteClick(auction)}
+              >
+                <FaTrashAlt />
+              </button>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+      <Pagination
+        totalItems={auctions.length}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
+  </div>
   );
 };
 

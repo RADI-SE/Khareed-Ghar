@@ -5,8 +5,7 @@ import { DashBoardView } from "../components/seller/DashBoardComponents/DashBoar
 import ProductManagement from "../components/seller/Product/rootRoutes";
 import OrderDetails from "../components/seller/OrderComponents/OrderDetails";
 import OrderList from "../components/seller/OrderComponents/OrderList";
-import NotFound from "../components/NotFound";
-import AuctionManagement from "../components/seller/Auction/AuctionManagement";
+import NotFound from "../components/NotFound"; 
 
 const SellerRoutes = () => {
   return (
@@ -24,8 +23,7 @@ const SellerRoutesWrapper = () => {
       <Route path="dashboard" element={<DashBoardView />} />
       <Route path="orders" element={<OrderList />} />
       <Route path="orders/order-details" element={<OrderDetails />} />
-      <Route path="products" element={<ProductManagement />} />
-      <Route path="auctions" element={<AuctionManagement />} />
+      <Route path="products" element={<ProductManagement />} /> 
       <Route path="*" element={<NotFound />} />
      </Route>
     </Routes>

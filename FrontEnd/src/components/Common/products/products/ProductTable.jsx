@@ -34,6 +34,8 @@ const ProductTable = ({ products, onProductClick }) => {
     setModalMessage("");
   };
 
+  
+ 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
