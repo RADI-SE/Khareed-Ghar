@@ -1,6 +1,7 @@
 import {Auction} from "../../model/auction.model.js"
 import {Product} from "../../model/product.model.js"
 import jwt from "jsonwebtoken"
+import { User } from "../../model/user.model.js";
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -74,25 +75,95 @@ export const placeBid = async (req, res) => {
   }
 };
  
+// export const getAuctionDetails = async (req, res) => {
+//   try {
+
+//     console.log("Get auction By ID bk")
+
+//     const { auctionId } = req.params;
+
+
+//     const auction = await Auction.findById(auctionId)
+//       .populate('productId', 'name description price images')
+//       .populate('bidders.userId', 'name')
+//       .populate('currentBidder', 'name');
+
+//     if (!auction) {
+//       return res.status(404).json({ message: 'Auction not found' });
+//     }
+
+//     res.status(200).json(auction);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching auction details', error });
+//   }
+// };
+ 
+
 export const getAuctionDetails = async (req, res) => {
   try {
-    const { auctionId } = req.params;
 
-    const auction = await Auction.findById(auctionId)
-      .populate('productId', 'name description price images')
-      .populate('bidders.userId', 'name')
-      .populate('currentBidder', 'name');
+    
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+    
+    
+    
+    const userID = await User.findById(userId)
+    // .populate('productId', 'name description price images')
+    // .populate('bidders.userId', 'name')
+    // .populate('currentBidder', 'name');
+    console.log("Get auction By ID bk", userID)
 
-    if (!auction) {
-      return res.status(404).json({ message: 'Auction not found' });
+
+    if (!userID) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const UserAuctions = await Auction.find()
+     console.log("UserAuctions", UserAuctions)
+    const UserAuction = await Auction.findOne(
+      {
+
+        sellerId: userID._id
+      }
+    )
+    if(!UserAuction)
+    {
+      return res.status(404).json({ message: 'No Auction yet'})
     }
 
-    res.status(200).json(auction);
+    console.log(UserAuction)
+
+    const products = await Product.findById(UserAuction.productId)
+
+    if(!products){
+      return res.status(404).json({ message: 'No Auction yet'})
+    }
+    const auctionDetails = await Promise.all(UserAuctions.map(async (auctionItem) => {
+      const product = await Product.findById(auctionItem.productId);
+      return {
+        auctionId: auctionItem._id,
+        startingBid: auctionItem.startingBid,
+        currentBid: auctionItem.currentBid,
+        currentBidder: auctionItem.currentBidder,
+        startTime: auctionItem.startTime,
+        endTime: auctionItem.endTime,
+        status: auctionItem.status,
+        productsName: product ? product.name : 'N/A',
+        productsImg: product ? product.images : null,
+      };
+    }));
+
+    res.status(200).json({ sellerId: userID._id, auctions: auctionDetails });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching auction details', error });
   }
 };
- 
+
+
+
+
+
 export const completeAuction = async (req, res) => {
   try {
     const { auctionId } = req.params;

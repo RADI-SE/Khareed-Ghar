@@ -211,16 +211,28 @@ export const useSellerService = create((set) => ({
   // createAuction
   createAuction: async (productId, startingBid, startTime, endTime) => {
     try {
+
       set({ isLoading: true, Error: null, isError: false });
-       await axios.post(`${API_URL}auction`, {
+      await axios.post(`${API_URL}auction`, {
         productId,
         startingBid,
         startTime,
         endTime,
       });
-  } catch (error) {
-    console.log(error.message);
-    set({ isLoading: false, isError: true, Error: error.message });
-  }
+    } catch (error) {
+      console.log(error.message);
+      set({ isLoading: false, isError: true, Error: error.message });
+    }
+  },
+  
+  getUserAuction: async () => {
+    try {
+      console.log("Get Auction  ZS")
+      const response = await axios.get(`http://localhost:5000/api/userAuctions`); 
+      console.log(response);      
+      return response.data.auctions;
+     } catch (error) {
+      console.error("Error fetching user products:", error.message);
+    }
   },
 }));

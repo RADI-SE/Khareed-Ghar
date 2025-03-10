@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import DetailedProductView from "./dashboard/view";
 import { AddProductForm } from "./create/AddProducts";
+import AuctionTable from "../../Common/products/products/AuctionTable";
+
 
 function ProductManagement() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -9,6 +11,7 @@ function ProductManagement() {
   const tabs = [
     { id: "DetailedProductView", label: "Product View" },
     { id: "addProduct", label: " Add a New Product" },
+    { id: "AuctionView", label: " Auction View" },
   ];
   const handleTabChange = (tabId) => {
     setCurrentView(tabId);
@@ -20,6 +23,8 @@ function ProductManagement() {
         return <DetailedProductView />;
       case "addProduct":
         return <AddProductForm />;
+      case "AuctionView":
+        return <AuctionTable />;
       default:
         return null;
     }

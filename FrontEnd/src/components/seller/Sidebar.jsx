@@ -52,14 +52,6 @@ const Sidebar = () => {
                   Product Management
                 </NavLink>
               </li>
-              <li className="">
-                <NavLink
-                  className="border-blue-900 border-y no-underline text-white flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-800 group"
-                  to="/seller/auctions"
-                >
-                  Auction Management
-                </NavLink>
-              </li>
               <li>
                 <button className=" mt-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onClick={handleLogout}>
                   LOGOUT

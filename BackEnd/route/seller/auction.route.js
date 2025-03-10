@@ -20,7 +20,7 @@ router.get('/ongoing', getOngoingAuctions);
  
 router.post('/auction-bid', verifySeller, placeBid);
  
-router.get('/:auctionId', getAuctionDetails);
+router.get('/userAuctions', getAuctionDetails);
 
  router.patch('/:auctionId/complete', verifySeller, completeAuction);
 
