@@ -235,4 +235,91 @@ export const useSellerService = create((set) => ({
       console.error("Error fetching user products:", error.message);
     }
   },
+
+  // getAuctionsById
+  getAuctionsById: async (id) => {
+    try {
+      console.log("id from the getAuctionsById 2, ", id);
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.get(
+        `http://localhost:5000/api/getAuctionsById/${id}`
+      );
+      // if (response.status === 200) {
+      //   set({ isLoading: false, auctions: response.data.auction });
+      // }
+      console.log("respondd", response);
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+      set({
+        isLoading: false,
+        isError: true,
+        Error:
+          error.response?.data?.message ||
+          error.message ||
+          "An error occurred while fetching auctions.",
+      });
+    }
+  },
+
+
+  // Edit Auctions
+
+  editAuctions: async(
+    token,
+    id,
+    // name,
+    // description,
+    // specifications,
+    // price,
+    // category,
+    // seller,
+    // images
+
+    startTime,
+    endTime,
+
+  ) =>{
+    try {
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.put(
+        `http://localhost:5000/api/editAuctions/${id}`,
+        {
+          // name,
+          // description,
+          // specifications,
+          // price,
+          // category,
+          // seller,
+          // images,
+
+          startTime,
+          endTime,
+
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        set({ isLoading: false, Error: null });
+      }
+    } catch (error) {
+      console.log(error.message);
+      set({
+        isLoading: false,
+        isError: true,
+        Error:
+          error.response?.data?.message ||
+          error.message ||
+          "An error occurred while updating Auction.",
+      });
+    }
+  },
+
 }));
+
+
+

@@ -188,4 +188,88 @@ export const completeAuction = async (req, res) => {
   }
 };
 
- 
+export const getAuctionsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("ID", id);
+    const auction = await Auction.findById(id)
+      // .populate("category")
+      // .populate("seller");
+      console.log("Auction", auction);
+
+    if (!auction) {
+      return res.status(404).json({
+        success: false,
+        message: "auction not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      auction,
+    });
+  } catch (error) {
+    console.error("Error getting auction:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
+  }
+};
+
+export const editAuctions = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      // name,
+      // description,
+      // specifications,
+      // price,
+      // category,
+      // seller,
+      // images,
+
+      startTime,
+      endTime,
+
+    } = req.body;
+
+    // Update product by ID
+    const updatedAuctions = await Auction.findByIdAndUpdate(
+      id,
+      {
+        // name,
+        // description,
+        // specifications,
+        // price,
+        // category,
+        // seller,
+        // images,
+
+        startTime,
+        endTime,
+
+      },
+      { new: true }
+    );
+
+    if (!updatedAuctions) {
+      return res.status(404).json({
+        success: false,
+        message: "Auction not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Auction updated successfully.",
+      auction: updatedAuctions,
+    });
+  } catch (error) {
+    console.error("Error updating Auction:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
+  }
+};

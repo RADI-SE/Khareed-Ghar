@@ -2,6 +2,8 @@ import {useFetchUserAuction} from "../../../../hooks/seller/Auctions/useFetchUse
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { useState } from 'react';
 import Pagination from "../../pagination";
+import EditAuctionModal from "../../../seller/Product/edit/editAuctionModal";
+
 
 const AuctionTable = () => {
   const {
@@ -9,7 +11,25 @@ const AuctionTable = () => {
     isLoading,
     isError,
     error,
+    refetch,
   } = useFetchUserAuction(); // Fetch auctions using the hook
+  
+  
+    const [selectedAuction, setSelectedAuction] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+  
+
+    const handleEditClick = (auction) => {
+
+      console.log("auction from table",auction);
+      setSelectedAuction(auction);
+      setShowEditModal(true);
+    };
+    
+    const handleModalClose = () => {
+      setShowEditModal(false);
+      setSelectedAuction();
+    };
 
   const auctions = Array.isArray(data) ? data : data ? [data] : [];
 
@@ -31,9 +51,9 @@ const AuctionTable = () => {
     console.log("View auction:", auction);
   };
 
-  const handleEditClick = (auction) => {
-    console.log("Edit auction:", auction);
-  };
+  // const handleEditClick = (auction) => {
+  //   console.log("Edit auction:", auction);
+  // };
 
   const handleDeleteClick = (auction) => {
     console.log("Delete auction:", auction);
@@ -123,6 +143,31 @@ const AuctionTable = () => {
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
+
+      {selectedAuction && (
+          <>
+            <EditAuctionModal 
+              id={selectedAuction.auctionId}
+              show={showEditModal}
+              handleClose={handleModalClose}
+              onAuctionUpdated={() => {
+                refetch();
+                handleModalClose();
+              }}
+            />
+            {/* <ConfirmationModal
+              show={showDeleteModal}
+              onClose={handleDeleteModalClose}
+              onConfirm={handleDelete}
+              isLoading={false}
+              modalMessage={modalMessage}
+              confirmationName={confirmationName}
+              setConfirmationName={setConfirmationName}
+              selectedName={selectedProduct.name}
+            /> */}
+          </>
+        )}
+
   </div>
   );
 };

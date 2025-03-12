@@ -21,13 +21,7 @@ const Shipping = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="container mx-auto py-8 min-h-96 px-4 md:px-16 lg:px-24">
-        <p className="text-center text-red-500">Error loading addresses: {error.message}</p>
-      </div>
-    );
-  }
+ 
 
    console.log('Data structure:', data);
 
