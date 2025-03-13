@@ -2,25 +2,29 @@ import {UserLocation, Location} from "../../model/location.model.js" ;
 import { User } from "../../model/user.model.js";
 import jwt from "jsonwebtoken";
 
+
 export const createLocation = async (req, res) => {
   try {
-    const { userId, street, LOCATION, phoneNumber } = req.body;
-   
+    const { street, state, city, phoneNumber } = req.body;
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
-    } 
-    console.log("LOCATION", LOCATION);
-    const existingLocation = await Location.findById(LOCATION);
-    if(!existingLocation){
+    }
+
+    const existingLocation = await Location.findById(state);
+    if (!existingLocation) {
       return res.status(400).json({ message: "Location not exists for this state and city" });
     }
-    const state = {
+
+    const State = {
       _id: existingLocation._id,
       state: existingLocation.state
     };
-    
-    const city = {
+
+    const City = {
       _id: existingLocation._id,
       city: existingLocation.city
     };
@@ -28,22 +32,23 @@ export const createLocation = async (req, res) => {
       _id: user._id,
       name: user.name
     };
-   
+
+
     const location = new UserLocation({
       userName: user.name,
-      street,
-      state: state,
-      city: city,
-      phoneNumber,
+      street: street,
+      state: State,
+      city: City,
+      phoneNumber: phoneNumber,
       createdBy: createdBy,
     });
-
     const savedLocation = await location.save();
     res.status(201).json({ message: "Location created successfully", location: savedLocation });
   } catch (error) {
     res.status(500).json({ message: "Failed to create location", error: error.message });
   }
-};   
+};
+
 
 export const getAllLocations = async (req, res) => {
   try {
@@ -98,13 +103,32 @@ export const getLocationById = async (req, res) => {
 export const updateLocation = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const {  street, state, city, phoneNumber} = req.body;
 
-    const updatedLocation = await UserLocation.findByIdAndUpdate(id, updates, { new: true });
+
+
+    const findLocation = await UserLocation.findById(id);
+    
+    console.log("findLocation",findLocation)
+
+    const test = findLocation.street = street;
+    const test2 = findLocation.state = state;
+    const test3 = findLocation.city = city;
+    const test4 = findLocation.phoneNumber = phoneNumber;
+    console.log("test",test)
+    const updates = {
+      street: findLocation.street, 
+      state: findLocation.state, 
+      city: findLocation.city, 
+      phoneNumber: findLocation.phoneNumber
+    }
+    const updatedLocation = await UserLocation.findByIdAndUpdate({_id: id}, updates, { new: true }); 
+    console.log("updatedLocation",updatedLocation)
 
     if (!updatedLocation) {
       return res.status(404).json({ message: "Location not found" });
     }
+
 
     res.status(200).json({ message: "Location updated successfully", location: updatedLocation });
   } catch (error) {

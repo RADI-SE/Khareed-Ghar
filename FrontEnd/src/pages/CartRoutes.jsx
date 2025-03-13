@@ -6,6 +6,7 @@ import Cart from "./MainPage/Cart";
 import Checkout from "../components/Common/Checkout";
 import OrderConfirmation from "../components/Common/OrderConfirmation";
 import Shipping from "./MainPage/shipping";
+import Review from "./MainPage/Review";
 
 export const CartRoutes = ({ setOrder, order }) => {
   return (
@@ -24,6 +25,7 @@ const CartRoutesWrapper = ({ setOrder, order }) => {
       >
         <Route path="checkout" element={<Checkout />} />
         <Route path="shipping" element={<Shipping />} />
+        <Route path="review" element={<Review />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

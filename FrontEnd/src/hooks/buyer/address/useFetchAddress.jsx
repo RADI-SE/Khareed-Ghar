@@ -9,8 +9,8 @@ export const useFetchAddress = () => {
     queryFn: () => {
       return getLocationById();
     },
-    staleTime: 5000, // Data is considered stale after 5 seconds
-    refetchInterval: 30000, // Refetch every 30 seconds
-    refetchIntervalInBackground: true, // Refetch in the background
+    staleTime: 1, 
+    refetchInterval: 1, 
+    refetchIntervalInBackground: true, 
   });
 };

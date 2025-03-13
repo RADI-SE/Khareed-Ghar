@@ -38,9 +38,11 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   shippingAddress: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',
     required: true,
-  },
+},
+
   createdAt: {
     type: Date,
     default: Date.now,

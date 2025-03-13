@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { FaTrashAlt, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import Modal from "../../components/Common/Modal";
-import ChangeAddress from "../../components/Common/ChangeAddress";
 import { useNavigate } from "react-router-dom";
 import { useFetchAddress } from "../../hooks/buyer/address/useFetchAddress";
+import ChangeAddress from "../../components/Common/AddressModal.jsx";
 
 const Shipping = () => {
-  const { data, isLoading, error, refetch } = useFetchAddress();
-
+  const { data, isLoading } = useFetchAddress();
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
-
+  const [selectedAddress, setSelectedAddress] = useState(null); // Holds the selected address ID
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -21,23 +20,21 @@ const Shipping = () => {
     );
   }
 
-  console.log("Data structure:", data);
-
   const addresses = Array.isArray(data) ? data : data ? [data] : [];
-  console.log("Processed addresses:", addresses);
 
-  const handleAddressChange = async (newAddress) => {
-    if (editingAddress) {
-      console.log("editingAddress", editingAddress);
-    } else {
-      console.log("newAddress", newAddress);
-    }
+  const handleAddressChange = (newAddress) => {
     setIsModelOpen(false);
-    setEditingAddress(null);
+    console.log("newAddress", newAddress);
+    setEditingAddress(newAddress);
+    setSelectedAddress(newAddress._id);
   };
 
   const handleProceed = () => {
-    navigate("/cart/checkout");
+    if (!selectedAddress) {
+      alert("Please select an address before proceeding.");
+      return;
+    }
+    navigate("/cart/review");
   };
 
   return (
@@ -49,8 +46,9 @@ const Shipping = () => {
             onClick={() => {
               setEditingAddress(null);
               setIsModelOpen(true);
+              setSelectedAddress(null);
             }}
-            className="flex items-center gap-2 bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition-colors"
+            className="flex justify-center items-center gap-2 bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition-colors"
           >
             <FaPlus /> Add New Address
           </button>
@@ -59,50 +57,65 @@ const Shipping = () => {
         {addresses.length === 0 ? (
           <p className="text-center text-gray-500 mt-4">No addresses found</p>
         ) : (
-          addresses.map((addr) => (
-            <div
-              key={addr._id}
-              className={`p-4 border rounded-md mb-4 ${
-                addr.isDefault ? "border-blue-500" : "border-gray-200"
-              }`}
-            >
-              <div className="flex justify-between items-start">
-                <div className="space-y-2">
-                  <div>
-                    <span className="font-semibold text-gray-600">
-                      Street:{" "}
-                    </span>
-                    <span className="text-sm">{addr.street}</span>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-gray-600">State: </span>
-                    <span className="text-sm">{addr.state}</span>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-gray-600">City: </span>
-                    <span className="text-sm">{addr.city}</span>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-gray-600">Phone: </span>
-                    <span className="text-sm">{addr.phoneNumber}</span>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      setEditingAddress(addr);
-                      setIsModelOpen(true);
-                    }}
-                    className="text-gray-600 hover:text-blue-600"
+          <div className="max-h-64 overflow-y-auto border rounded-md">
+            <table className="w-full border-collapse">
+              <thead className="bg-gray-200 sticky top-0">
+                <tr>
+                  <th className="text-left px-4 py-2">Street</th>
+                  <th className="text-left px-4 py-2">State</th>
+                  <th className="text-left px-4 py-2">City</th>
+                  <th className="text-left px-4 py-2">Phone</th>
+                  <th className="text-left px-4 py-2">Actions</th>
+                  <th className="text-left px-4 py-2">Select</th>
+                </tr>
+              </thead>
+              <tbody>
+                {addresses.map((addr) => (
+                  <tr
+                    key={addr._id}
+                    className={`border-b ${addr._id === selectedAddress ? "bg-blue-100" : ""}`}
                   >
-                    Edit
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))
+                    <td className="px-4 py-2">{addr.street}</td>
+                    <td className="px-4 py-2">{addr.state}</td>
+                    <td className="px-4 py-2">{addr.city}</td>
+                    <td className="px-4 py-2">{addr.phoneNumber}</td>
+                    <td className="px-4 py-2">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            setIsModelOpen(true);
+                            setSelectedAddress(addr);
+                          }}
+                          className="text-blue-600 hover:underline"
+                        >
+                          Edit
+                        </button>
+                        <button className="text-red-600 hover:underline">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2">
+                      <input
+                        type="radio"
+                        name="selectedAddress"
+                        value={addr._id}
+                        checked={selectedAddress === addr._id}
+                        onChange={() => setSelectedAddress(addr._id)}
+                        className="w-4 h-4"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
-        <button onClick={handleProceed} className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition-colors">
+
+        <button
+          onClick={handleProceed}
+          className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition-colors mt-4"
+        >
           Proceed to Payment
         </button>
       </div>
@@ -112,6 +125,7 @@ const Shipping = () => {
           setAddress={handleAddressChange}
           setIsModelOpen={setIsModelOpen}
           initialAddress={editingAddress?.address || ""}
+          selectedAddress={selectedAddress}
         />
       </Modal>
     </div>
