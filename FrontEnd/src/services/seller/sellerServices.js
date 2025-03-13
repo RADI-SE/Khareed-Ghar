@@ -224,6 +224,28 @@ export const useSellerService = create((set) => ({
       set({ isLoading: false, isError: true, Error: error.message });
     }
   },
+
+  getAuctions: async () => {
+    try {
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.get(`http://localhost:5000/api/ongoing`);
+      
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Failed to fetch auctions');
+      }
+      
+      set({ isLoading: false, auctions: response.data.auctions });
+      return response.data.auctions || [];
+    } catch (error) {
+      console.log(error.message);
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching auctions."
+      });
+      throw error;
+    }
+  },
   
   getUserAuction: async () => {
     try {

@@ -18,6 +18,8 @@ const Cart = () => {
   const items = cart.items || [];
   const totalAmount = cart.totalAmount || 0;
 
+  console.log("autentication from cart", isAuthenticated)
+
   if (isCheckingAuth) {
     return <div>Loading...</div>;
   }

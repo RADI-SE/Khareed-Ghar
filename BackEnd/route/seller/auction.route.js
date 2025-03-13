@@ -23,8 +23,9 @@ router.get('/ongoing', getOngoingAuctions);
 router.get('/getAuctionsById/:id', getAuctionsById);
 
 router.post('/editAuctions/:id', editAuctions);
+
+router.post('/bidding/:id', placeBid);
  
-router.post('/auction-bid', verifySeller, placeBid);
  
 router.get('/userAuctions', getAuctionDetails);
 

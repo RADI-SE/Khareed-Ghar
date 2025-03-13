@@ -41,9 +41,13 @@ export const getOngoingAuctions = async (req, res) => {
     const auctions = await Auction.find({ status: 'ongoing', endTime: { $gt: Date.now() } })
       .populate('productId', 'name price images')  
       .populate('currentBidder', 'name'); 
-    res.status(200).json(auctions);
+    res.status(200).json({ success: true, auctions: auctions || [] });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching auctions', error });
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error fetching auctions', 
+      error: error.message 
+    });
   }
 };
  
