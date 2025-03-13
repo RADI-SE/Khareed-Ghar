@@ -120,7 +120,6 @@ export const useAddressService = create((set) => ({
       const response = await axios.post(
         `http://localhost:5000/api/locations/`,
       );
-      console.log("getLocationById::::::::", response.data);
       set({ address: response.data, isLoading: false });
       return response.data;
     
@@ -128,4 +127,16 @@ export const useAddressService = create((set) => ({
       set({ errorMessage: error.message, isLoading: false });
     }
   },
+  removeAddress: async (addressId) => {
+    try {
+      console.log("Hi from removeAddress");
+      console.log("addressId 2", addressId);
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.delete(`http://localhost:5000/api/locations/${addressId}`);
+      set({ address: response.data, isLoading: false });
+      return response.data;
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  }
 }));

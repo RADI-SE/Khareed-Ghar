@@ -4,14 +4,14 @@ import Modal from "../../components/Common/Modal";
 import { useNavigate } from "react-router-dom";
 import { useFetchAddress } from "../../hooks/buyer/address/useFetchAddress";
 import ChangeAddress from "../../components/Common/AddressModal.jsx";
-
+import { useRemoveAddress } from "../../hooks/buyer/address/useRemoveAddress.jsx";
 const Shipping = () => {
   const { data, isLoading } = useFetchAddress();
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
-  const [selectedAddress, setSelectedAddress] = useState(null); // Holds the selected address ID
+  const [selectedAddress, setSelectedAddress] = useState(null); 
   const navigate = useNavigate();
-
+  const { mutate: removeAddress } = useRemoveAddress();
   if (isLoading) {
     return (
       <div className="container mx-auto py-8 min-h-96 px-4 md:px-16 lg:px-24">
@@ -19,9 +19,7 @@ const Shipping = () => {
       </div>
     );
   }
-
   const addresses = Array.isArray(data) ? data : data ? [data] : [];
-
   const handleAddressChange = (newAddress) => {
     setIsModelOpen(false);
     console.log("newAddress", newAddress);
@@ -29,6 +27,9 @@ const Shipping = () => {
     setSelectedAddress(newAddress._id);
   };
 
+  const handleDelete = (addressId) => {
+    removeAddress({addressId});
+  };
   const handleProceed = () => {
     if (!selectedAddress) {
       alert("Please select an address before proceeding.");
@@ -36,7 +37,6 @@ const Shipping = () => {
     }
     navigate("/cart/review");
   };
-
   return (
     <div className="container mx-auto py-8 min-h-96 px-4 md:px-16 lg:px-24">
       <div className="mb-6">
@@ -90,7 +90,9 @@ const Shipping = () => {
                         >
                           Edit
                         </button>
-                        <button className="text-red-600 hover:underline">
+                        <button className="text-red-600 hover:underline" onClick={() => {
+                            handleDelete(addr._id);
+                        }}>
                           Delete
                         </button>
                       </div>

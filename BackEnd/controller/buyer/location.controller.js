@@ -104,23 +104,11 @@ export const updateLocation = async (req, res) => {
   try {
     const { id } = req.params;
     const {  street, state, city, phoneNumber} = req.body;
-
-
-
-    const findLocation = await UserLocation.findById(id);
-    
-    console.log("findLocation",findLocation)
-
-    const test = findLocation.street = street;
-    const test2 = findLocation.state = state;
-    const test3 = findLocation.city = city;
-    const test4 = findLocation.phoneNumber = phoneNumber;
-    console.log("test",test)
     const updates = {
-      street: findLocation.street, 
-      state: findLocation.state, 
-      city: findLocation.city, 
-      phoneNumber: findLocation.phoneNumber
+    street: street, 
+    state: state, 
+    city: city, 
+    phoneNumber: phoneNumber
     }
     const updatedLocation = await UserLocation.findByIdAndUpdate({_id: id}, updates, { new: true }); 
     console.log("updatedLocation",updatedLocation)
