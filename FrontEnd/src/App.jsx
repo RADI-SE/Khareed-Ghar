@@ -138,7 +138,7 @@ const App = () => {
       ],
     },
     {
-      path: "checkout",
+      path: "cart",
       element: <CartRoutes  order={order} setOrder={setOrder} />,
       children: [
         {

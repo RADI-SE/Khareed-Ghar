@@ -23,7 +23,7 @@ const CartRoutesWrapper = ({ setOrder, order }) => {
         element={<CartRoutes setOrder={setOrder} order={order} />}
       >
         <Route path="checkout" element={<Checkout />} />
-        <Route path="/shipping" element={<Shipping />} />
+        <Route path="shipping" element={<Shipping />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

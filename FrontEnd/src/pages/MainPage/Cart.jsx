@@ -26,7 +26,7 @@ const Cart = () => {
     if(!isAuthenticated || !user){
       navigate("/auth/signin")
     }else{
-      navigate("/checkout/shipping")
+      navigate("shipping")
     }
   }
   return (
