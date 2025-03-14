@@ -5,13 +5,11 @@ axios.defaults.withCredentials = true;
 
 export const useCartService = create((set) => ({
   cart: null,
-  isAuthenticated: false,
   isLoading: false,
   errorMessage: null,
   setError: (message) => set({ errorMessage: message }),
   clearError: () => set({ errorMessage: null }),
-
-  // add to cart
+ 
   addToCart: async (productId, quantity) => {
     try {
       set({ isLoading: true, errorMessage: null });
@@ -23,13 +21,11 @@ export const useCartService = create((set) => ({
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
-  },
-  // display cart
+  }, 
+
   displayCart: async () => {
     try {
       set({ isLoading: true, errorMessage: null });
-
-      console.log("Hi from frontend");
       const response = await axios.get("http://localhost:5000/api/cart-items");
       set({ cart: response.data, isLoading: false });
       return response.data;
@@ -42,8 +38,7 @@ export const useCartService = create((set) => ({
       return [];
     }
   },
-
-  // removeFromCart
+ 
   removeFromCart: async (productId) => {
     try {
       set({ isLoading: true, errorMessage: null });
@@ -59,8 +54,7 @@ export const useCartService = create((set) => ({
       set({ errorMessage: error.message, isLoading: false });
     }
   },
-
-  //clearCart
+ 
   clearCart: async () => {
     try {
       const response = await axios.delete(`http://localhost:5000/api/clear`);
@@ -73,17 +67,11 @@ export const useCartService = create((set) => ({
   },
 }));
 
-// for user location
+
 export const useAddressService = create((set) => ({
   address: null,
-  // createLocation
   createLocation: async (street, state, city, phoneNumber) => {
     try {
-      console.log("Hi from createLocation");
-      console.log("street", street);
-      console.log("state", state);
-      console.log("city", city);
-      console.log("phoneNumber", phoneNumber);
       set({ isLoading: true, errorMessage: null });
       const response = await axios.post(
         `http://localhost:5000/api/create-location`,
@@ -95,10 +83,8 @@ export const useAddressService = create((set) => ({
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
-  },
+  }, 
 
-  //
-  // update location
   updateAddress: async ( id, street, state, city, phoneNumber) => {
     try {
       set({ isLoading: true, errorMessage: null });
@@ -106,14 +92,12 @@ export const useAddressService = create((set) => ({
         `http://localhost:5000/api/update-location/${id}`,
         { street, state, city, phoneNumber}
       );
-      console.log("response::::::::::", response.data);
       return response.data;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
   },
 
-  //getLocationById
   getLocationById: async () => {
     try {
       set({ isLoading: true, errorMessage: null });
@@ -127,10 +111,9 @@ export const useAddressService = create((set) => ({
       set({ errorMessage: error.message, isLoading: false });
     }
   },
+
   removeAddress: async (addressId) => {
     try {
-      console.log("Hi from removeAddress");
-      console.log("addressId 2", addressId);
       set({ isLoading: true, errorMessage: null });
       const response = await axios.delete(`http://localhost:5000/api/locations/${addressId}`);
       set({ address: response.data, isLoading: false });

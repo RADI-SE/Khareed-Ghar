@@ -24,7 +24,6 @@ const Shipping = () => {
   const addresses = Array.isArray(data) ? data : data ? [data] : [];
   const handleAddressChange = (newAddress) => {
     setIsModelOpen(false);
-    console.log("newAddress", newAddress);
     setEditingAddress(newAddress);
     setSelectedAddress(newAddress._id);
   };
@@ -37,7 +36,7 @@ const Shipping = () => {
       alert("Please select an address before proceeding.");
       return;
     }
-    navigate("/cart/review");
+    navigate("/cart/checkout");
   };
 
   return (
