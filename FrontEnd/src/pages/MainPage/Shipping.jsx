@@ -10,7 +10,7 @@ const Shipping = () => {
   const { data, isLoading } = useFetchAddress();
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
-  const [selectedAddress, setSelectedAddress] = useState(null); 
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const navigate = useNavigate();
   const { mutate: removeAddress } = useRemoveAddress();
 
@@ -29,7 +29,7 @@ const Shipping = () => {
   };
 
   const handleDelete = (addressId) => {
-    removeAddress({addressId});
+    removeAddress({ addressId });
   };
   const handleProceed = () => {
     if (!selectedAddress) {
@@ -59,9 +59,9 @@ const Shipping = () => {
         {addresses.length === 0 ? (
           <p className="text-center text-gray-500 mt-4">No addresses found</p>
         ) : (
-          <div className="max-h-64 overflow-y-auto border rounded-md">
-            <table className="w-full border-collapse">
-              <thead className="bg-gray-200 sticky top-0">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-max border-collapse">
+              <thead className="bg-gray-200 sticky top-0 text-sm">
                 <tr>
                   <th className="text-left px-4 py-2">Street</th>
                   <th className="text-left px-4 py-2">State</th>
@@ -75,7 +75,9 @@ const Shipping = () => {
                 {addresses.map((addr) => (
                   <tr
                     key={addr._id}
-                    className={`border-b ${addr._id === selectedAddress ? "bg-blue-100" : ""}`}
+                    className={`border-b ${
+                      addr._id === selectedAddress ? "bg-blue-100" : ""
+                    }`}
                   >
                     <td className="px-4 py-2">{addr.street}</td>
                     <td className="px-4 py-2">{addr.state}</td>
@@ -92,9 +94,12 @@ const Shipping = () => {
                         >
                           Edit
                         </button>
-                        <button className="text-red-600 hover:underline" onClick={() => {
+                        <button
+                          className="text-red-600 hover:underline"
+                          onClick={() => {
                             handleDelete(addr._id);
-                        }}>
+                          }}
+                        >
                           Delete
                         </button>
                       </div>

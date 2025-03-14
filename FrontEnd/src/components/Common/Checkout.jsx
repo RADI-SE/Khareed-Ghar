@@ -65,10 +65,10 @@ const Checkout = () => {
         <div className="md:w-1/3 bg-white p-6 rounded-lg shadow-lg border mt-6 md:mt-0">
           <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
           <div className="space-y-4">
-          <div className="max-h-64 overflow-y-auto border rounded-md">
-          <table className="w-full border-collapse">
-          <thead className="bg-gray-200 sticky top-0">
-                <tr>
+          <div className="overflow-x-auto">
+                    <table className="w-full min-w-max border-collapse">
+                      <thead className="bg-gray-200 sticky top-0 text-sm">
+                          <tr>
                   <th className="text-left px-4 py-2 ">Product</th>
                   <th className="text-left px-4 py-2">Price</th>
                   <th className="text-left px-4 py-2">Quantity</th>
