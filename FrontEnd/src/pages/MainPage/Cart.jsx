@@ -8,7 +8,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const { data: cart = {} } = useFetchCartItems();
   const { mutate: removeFromCart } = useRemoveFromCart();
-  const { isAuthenticated, user, checkAuth, isCheckingAuth } = useAuthService();
+  const { isAuthenticated, user, isCheckingAuth } = useAuthService();
 
   const items = cart.items || [];
   const totalAmount = cart.totalAmount || 0;

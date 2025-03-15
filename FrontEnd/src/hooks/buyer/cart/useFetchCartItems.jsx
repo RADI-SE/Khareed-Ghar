@@ -6,8 +6,8 @@ export const useFetchCartItems = () => {
   return useQuery({
     queryKey: ['cart'],
     queryFn: () => displayCart(),
-    staleTime: 1000, // Data is always considered stale, so it fetches fresh data.
-    refetchInterval: 1000, // Refetch every 5 seconds.
-    refetchIntervalInBackground: true, // Keep refetching even if the browser tab is inactive.
+    staleTime: 1000,
+    refetchInterval: 1000,
+    refetchIntervalInBackground: true,
   });
 };

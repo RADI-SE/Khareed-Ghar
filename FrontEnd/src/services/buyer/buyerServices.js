@@ -78,7 +78,6 @@ export const useAddressService = create((set) => ({
         { street, state, city, phoneNumber }
       );
       set({ address: response.data, isLoading: false });
-      console.log("return from useAddressService ", response.data);
       return response.data;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
@@ -92,6 +91,7 @@ export const useAddressService = create((set) => ({
         `http://localhost:5000/api/update-location/${id}`,
         { street, state, city, phoneNumber}
       );
+      set({ address: response.data, isLoading: false });
       return response.data;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });

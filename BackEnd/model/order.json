@@ -1,0 +1,20 @@
+{
+  "user": "64f8e4b2c9b1a3d2e8f1a2b3",  
+  "products": [
+    {
+      "product": "64f8e4b2c9b1a3d2e8f1a2b4", 
+      "quantity": 2,
+      "price": 29.99
+    },
+    {
+      "product": "64f8e4b2c9b1a3d2e8f1a2b5", 
+      "quantity": 1,
+      "price": 49.99
+    }
+  ],
+  "totalAmount": 109.97,  
+  "status": "Processing", 
+  "paymentMethod": "Credit Card",  
+  "shippingAddress": "64f8e4b2c9b1a3d2e8f1a2b6", 
+  "updatedAt": "2023-10-05T12:00:00Z" 
+}
