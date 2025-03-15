@@ -3,7 +3,7 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useCartService } from "../../services/buyer/buyerServices";
 import { useAddressService } from "../../services/buyer/buyerServices";
-
+import { useOrderService } from "../../services/orderServices";
 
 const Checkout = () => {
   const [paymentToggle, setPaymentToggle] = useState(false);
@@ -11,9 +11,10 @@ const Checkout = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const { cart } = useCartService();
   const { address } = useAddressService();
+  const { createOrder } = useOrderService();
   const navigate = useNavigate();
-console.log("cart",cart);
-console.log("address",address);
+console.log("cart :::",cart);
+console.log("address :::",address);
   useEffect(() => {
     if (cart?.items) {
       const newTotal = cart.items.reduce(
@@ -24,8 +25,8 @@ console.log("address",address);
     }
   }, [cart?.items]);
 
-  const handleOrder = () => {
-    navigate("/order-confirmation");
+  const handleOrder = async () => {
+    await createOrder(cart._id, "67d05baeb338deadc91bc2d7");
   };
 
   return (
