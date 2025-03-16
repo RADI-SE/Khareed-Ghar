@@ -130,12 +130,13 @@ export const useAuthService = create((set) => ({
       console.error("Sign-in error:", error); // Debugging error
     }
   },
-  
+   
   signout: async () => {
     set({ user: null, isAuthenticated: false, isLoading: false });
     try {
       const response = await axios.post(`${API_URL}/logout`);
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
+      return response.data;
     } catch (error) {}
   },
 

@@ -23,9 +23,7 @@ const {mutate: clearCartMutation} = useClearCart();
   };
 
   const handleLogout = async () => {
-    if( clearCartMutation()){
-      await signout();
-    }
+    await signout();
     navigate("/");
   };
   return (

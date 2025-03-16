@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Cart from "./pages/MainPage/Cart";
 import Checkout from "./components/Common/Checkout";
 import CartRoutes from "./pages/CartRoutes";
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   const { isCheckingAuth, checkAuth, user, isAuthenticated } = useAuthService();
@@ -186,10 +187,13 @@ const App = () => {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+    <>
+      <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
       <ToastContainer />
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </>
   );
 };
 
