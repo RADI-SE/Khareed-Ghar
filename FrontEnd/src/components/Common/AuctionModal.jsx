@@ -1,59 +1,128 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { FaClock, FaDollarSign, FaGavel, FaUser } from 'react-icons/fa';
+import defaultProduct from "../../assets/images/default.jpeg";
+import useBidSubmission from "../../hooks/seller/Auctions/useBidSubmission";
 
-const ChangeAuction = ({ setAuction, setIsModelOpen, selectedAuction, initialAuction }) => {    
-
+const ChangeAuction = ({ setIsModelOpen, selectedAuction }) => {    
   const [bidAmount, setBidAmount] = useState('');
+  const { submitBid, isSubmitting, error, setError } = useBidSubmission();
 
-  const onClose = () => {
+  const handleBidSubmit = async (e) => {
+    e.preventDefault();
+    const newBid = parseFloat(bidAmount);
+
+    // Validate bid amount
+    if (newBid <= selectedAuction.currentBid) {
+      setError("Your bid must be higher than the current bid!");
+      return;
+    }
+
+    const result = await submitBid(selectedAuction._id, newBid);
+
+    if (result.success) {
+      setBidAmount('');
     setIsModelOpen(false);
+    }
   };
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
-    <div className='flex flex-row w-full'>
-      <img src={initialAuction.images} alt={initialAuction.name} className='w-1/2 h-1/2' />
-      <div className='flex flex-col gap-2'>
-        <h1>Auction Details</h1>
-        <p>Auction ID: {initialAuction._id}</p>
-        <p>Auction Name: {initialAuction.name}</p>
-        <p>Auction Starting Bid: {initialAuction.startingBid}</p>
-        <p>Auction End Date: {initialAuction.endDate}</p>
-      <p>Auction Status: {initialAuction.status}</p>
-      <p>Auction Current Bid: {initialAuction.currentBid}</p>
-      <p>Auction Highest Bidder: {initialAuction.highestBidder}</p>
-      <p>Auction Highest Bid: {initialAuction.highestBid}</p>
-      
-      
-      <input
-        type="text"
-        placeholder="Bid Amount"
-        className="border p-2 w-full mb-4"
-        value={bidAmount}
-        onChange={(e) => setBidAmount(e.target.value)}
+
+<div className="flex flex-col md:flex-row w-full max-w-4xl gap-6 p-6 bg-white shadow-lg rounded-lg">
+  {/* Image Section */}
+  <div className="w-full md:w-1/2">
+    <div className="relative rounded-lg overflow-hidden border border-gray-200">
+      <img
+        src={selectedAuction?.productId?.images?.[0] ? `/public/images/${selectedAuction.productId.images[0]}` : defaultProduct}
+        alt={selectedAuction?.productId?.name || "Auction Item"}
+        className="w-full h-[150px] object-contain"
+      />
+      <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center">
+        <FaGavel className="mr-1" /> Active Auction
+      </div>
+    </div>
+  </div>
+
+  {/* Details Section */}
+  <div className="w-full md:w-1/2 space-y-6">
+    <div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-2">{selectedAuction?.productId?.name || "Auction Item"}</h2>
+      <p className="text-gray-600">{selectedAuction?.productId?.description || "No description available."}</p>
+    </div>
+
+    <div className="">
+      {[
+        { icon: FaDollarSign, color: "text-green-600", label: "Current Bid", value: `$${selectedAuction?.currentBid?.toFixed(2)}` },
+        { icon: FaClock, color: "text-orange-500", label: "Ends In", value: selectedAuction?.endTime ? selectedAuction.endTime : "N/A" },
+        { icon: FaUser, color: "text-blue-600", label: "Highest Bidder", value: selectedAuction?.currentBidder || "No bids yet" },
+        { icon: FaDollarSign, color: "text-purple-600", label: "Starting Bid", value: `$${selectedAuction?.startingBid?.toFixed(2)}` }
+      ].map(({ icon: Icon, color, label, value }, index) => (
+        <div key={index} className="flex items-center space-x-2">
+          {/* <Icon className={`${color} text-xl`} /> */}
+          <div>
+            <p className="text-sm text-gray-600">{label}</p>
+            <p className="text-sm font-semibold">{value}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Bid Form */}
+    <form onSubmit={handleBidSubmit} className="space-y-4">
+      <div className="relative">
+        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+        <input
+          type="number"
+          value={bidAmount}
+          onChange={(e) => setBidAmount(e.target.value)}
+          className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Enter your bid amount"
+          min={selectedAuction?.currentBid + 0.01}
+          step="0.01"
+          required
+          disabled={isSubmitting}
         />
-      <div className="flex justify-end">
+      </div>
+
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <p className="text-sm text-gray-500">Minimum bid: ${(selectedAuction?.currentBid + 0.01).toFixed(2)}</p>
+
+      <div className="flex space-x-4">
         <button
-          className="bg-gray-500 text-white py-2 px-4 rounded mr-2"
+          type="button"
           onClick={() => setIsModelOpen(false)}
+          className="flex-1 px-4 h-12 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
         >
           Cancel
         </button>
-
         <button
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-          onClick={onClose}
-          >
-          Save Address
+          type="submit"
+          disabled={isSubmitting}
+          className="flex-1 px-4 h-12 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:bg-blue-400"
+        >
+          {isSubmitting ? 'Placing Bid...' : 'Place Bid'}
         </button>
       </div>
-    </div>
+    </form>
+  </div>
 </div>
+
   );
 };
+
   ChangeAuction.propTypes = { 
-  setAuction: PropTypes.func.isRequired,
   setIsModelOpen: PropTypes.func.isRequired,
   selectedAuction: PropTypes.object.isRequired, 
-  
 };
 
 export default ChangeAuction;
