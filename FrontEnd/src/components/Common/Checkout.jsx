@@ -10,23 +10,24 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [totalPrice, setTotalPrice] = useState(0);
   const { cart } = useCartService();
-  const { address } = useAddressService();
-  const { createOrder } = useOrderService();
+  const { address,getSelectedLocation } = useAddressService();
+  const { createOrder } = useOrderService(); 
+  const selectedLocation = getSelectedLocation();
   const navigate = useNavigate();
 console.log("cart :::",cart);
-console.log("address :::",address);
+console.log("address :::",address); 
+console.log("selectedLocation :::",selectedLocation);
   useEffect(() => {
     if (cart?.items) {
       const newTotal = cart.items.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
+        (acc, item) => acc + item.price * item.quantity,0
       );
       setTotalPrice(newTotal);
     }
   }, [cart?.items]);
 
   const handleOrder = async () => {
-    await createOrder(cart._id, "67d05baeb338deadc91bc2d7");
+    await createOrder(cart._id, selectedLocation._id);
   };
 
   return (

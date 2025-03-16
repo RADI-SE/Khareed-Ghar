@@ -2,7 +2,7 @@ import { Order } from "../../model/order.model.js";
 import { Product } from "../../model/product.model.js";
 import { UserLocation } from "../../model/location.model.js";
 import { Cart } from "../../model/cart.model.js";
-
+import jwt from "jsonwebtoken";
 /*
  "user": "64f8e4b2c9b1a3d2e8f1a2b3", // Sample ObjectId for a user
   "products": [
@@ -25,6 +25,7 @@ import { Cart } from "../../model/cart.model.js";
 */
 export const createOrder = async (req, res) => {
   try {
+    const token = req.cookies.token;
     const {CART_ID, SHIPPING_ADDRESS_ID } = req.body;
     let decoded;
     try {
@@ -32,12 +33,9 @@ export const createOrder = async (req, res) => {
     } catch (error) {
       return res.status(403).json({ message: "Invalid or expired token." });
     }
-    const userId = decoded.userId;
-    console.log("USER_ID",USER_ID, "CART_ID",CART_ID, "SHIPPING_ADDRESS_ID",SHIPPING_ADDRESS_ID);
+    const userId = decoded.userId; 
     const cart = await Cart.findById(CART_ID);
     const shippingAddress = await UserLocation.findById(SHIPPING_ADDRESS_ID);
-    console.log("cart",cart);
-    console.log("shippingAddress",shippingAddress);
     if (!cart || !shippingAddress) {
         return res.status(404).json({ error: "Cart or shipping address not found" });
     }
@@ -53,6 +51,7 @@ export const createOrder = async (req, res) => {
       paymentMethod: "COD",
       status: "Pending",
     })
+
     await Cart.findByIdAndDelete(CART_ID);
     res.status(201).json(order); 
   } catch (error) {

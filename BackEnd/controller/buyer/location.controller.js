@@ -100,6 +100,44 @@ export const getLocationById = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch locations", error: error.message });
   }
 };
+
+
+export const selectedLocation = async (req, res) => {
+  const token = req.cookies.token;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userId = decoded.userId;
+  const {id} = req.params;
+
+  try {
+    const user = await User.findById(userId);  
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    } 
+
+      const selectedLocation = await UserLocation.findById(id);
+    if (!selectedLocation) {
+      return res.status(404).json({ message: "Location not found" });
+    }  
+    
+    const state = await Location.findById(selectedLocation.state._id);
+    const city = await Location.findById(selectedLocation.city._id);
+   
+    const formattedLocations = {
+      _id: selectedLocation._id,
+      street: selectedLocation.street,
+      state: state.state,
+      city: city.city,
+      phoneNumber: selectedLocation?.phoneNumber,
+    };
+
+    res.status(200).json( formattedLocations);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch locations", error: error.message });
+  }
+};
+
+
+
 export const updateLocation = async (req, res) => {
   try {
     const { id } = req.params;
@@ -151,17 +189,4 @@ export const getStates = async (req, res) => {
   }
 };
 
-
-// Get cities by state ID
-export const getCitiesByState = async (req, res) => {
-  try {
-    const { stateId } = req.params;
-    const cities = await Location.find({ 
-      type: 'city',
-      parentState: stateId 
-    }).select('_id name');
-    res.status(200).json(cities);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch cities", error: error.message });
-  }
-};
+ 

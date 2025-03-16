@@ -68,8 +68,10 @@ export const useCartService = create((set) => ({
 }));
 
 
-export const useAddressService = create((set) => ({
+export const useAddressService = create((set, get) => ({
   address: null,
+  selectedLocation: null,
+  getSelectedLocation: () => get().selectedLocation,
   createLocation: async (street, state, city, phoneNumber) => {
     try {
       set({ isLoading: true, errorMessage: null });
@@ -121,5 +123,23 @@ export const useAddressService = create((set) => ({
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
+  },
+// 🔹 Fetch a selected location by ID
+fetchSelectedLocation: async (id) => {
+  try {
+    console.log("Fetching location ID:", id);
+    set({ isLoading: true, errorMessage: null });
+    const response = await axios.get(
+      `http://localhost:5000/api/selected-location/${id}`
+    );
+    set({ selectedLocation: response.data, isLoading: false });
+    console.log("Fetched location:", response.data);
+    return response.data;
+  } catch (error) {
+    set({ errorMessage: error.message, isLoading: false });
   }
+},
+
+// 🔹 Get selected location from state
+getSelectedLocation: () => get().selectedLocation,
 }));
