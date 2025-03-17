@@ -4,6 +4,7 @@ import { getSelectedCategoryName, isValidConfirmationName } from "../utils/utils
 import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
 import { useDeleteSubCategory } from "../../../../hooks/Categories/useDeleteSubCategory";
 import "../style.css";
+import toast from 'react-hot-toast';
 
 export const Del_C = () => {
   const [categoryId, setCategoryId] = useState("");
@@ -27,22 +28,18 @@ export const Del_C = () => {
   } = useDeleteSubCategory(token);
 
   const handleDelete = () => {
- 
     if (!isValidConfirmationName(confirmationName, subCategoryName)) {
       setMessage("Subcategory name does not match.");
       return;
     }
     if (!categoryId) {
-      alert("Category not found");
+      toast.error("Category not found");
       return false;
     }
 
     if (!subcategoryId) {
-      alert("Subcategory not found within the parent category");
+      toast.error("Subcategory not found within the parent category");
       return false;
-    }
-    if( categoryId != null && subcategoryId != null){
-      alert("Subcategory and associated products deleted successfully");
     }
 
     deleteCategory(
@@ -60,46 +57,57 @@ export const Del_C = () => {
     );
   };
 
-  const handleCategoryChange = (event) => {
-    const selectedCategoryId = event.target.value;
-    setCategoryId(selectedCategoryId);
+  const handleModalClose = () => {
+    setShowModal(false);
+    setConfirmationName("");
+    setMessage("");
+  };
+
+  const handleCategoryChange = (e) => {
+    setCategoryId(e.target.value);
     setSubCategoryId("");
     setSubCategoryName("");
+    setConfirmationName("");
+    setShowModal(false);
+    setMessage("");
   };
 
   const handleSubCategoryChange = (e) => {
-    const selectedSubCategoryId = e.target.value;
-    setSubCategoryId(selectedSubCategoryId);
-
-    const subCategory = categories
-      .find((category) => category._id === categoryId)
-      ?.subcategories.find((sub) => sub._id === selectedSubCategoryId);
-
-    if (subCategory) {
-      setSubCategoryName(subCategory.name);
+    setSubCategoryId(e.target.value);
+    const selectedSubCategory = categories
+      .find(cat => cat._id === categoryId)
+      ?.subcategories
+      .find(sub => sub._id === e.target.value);
+    if (selectedSubCategory) {
+      setSubCategoryName(selectedSubCategory.name);
+      setShowModal(true);
+      setConfirmationName("");
+      setMessage("");
     }
-
-    setShowModal(true);
-    setConfirmationName(""); 
   };
 
-  const handleModalClose = () => setShowModal(false);
+  if (categoriesLoading) return <p>Loading categories...</p>;
 
-  if (categoriesLoading) {
-    return <div>Loading categories...</div>;
-  }
-
-  const selectedCategoryName = getSelectedCategoryName(categories, categoryId);
+  const selectedCategory = categories.find(cat => cat._id === categoryId);
+  const subcategories = selectedCategory?.subcategories || [];
 
   return (
-    <div className="edit-category-form">
+    <div className="delete-category-container">
+      <h2 className="delete-category-title">Delete Subcategory</h2>
       <div className="form-group">
-        <label>Select Category</label>
-        <select value={categoryId} onChange={handleCategoryChange}>
-          <option value="">Select parent category</option>
-          {categories.map((category) => (
-            <option key={category._id} value={category._id}>
-              {category.name}
+        <label htmlFor="category-select" className="form-label">
+          Select Parent Category:
+        </label>
+        <select
+          id="category-select"
+          value={categoryId}
+          onChange={handleCategoryChange}
+          className="form-control"
+        >
+          <option value="">-- Select a Category --</option>
+          {categories.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.name}
             </option>
           ))}
         </select>
@@ -107,16 +115,21 @@ export const Del_C = () => {
 
       {categoryId && (
         <div className="form-group">
-          <label>Select Subcategory</label>
-          <select value={subcategoryId} onChange={handleSubCategoryChange}>
-            <option value="">Select subcategory</option>
-            {categories
-              .find((category) => category._id === categoryId)
-              ?.subcategories.map((subCategory) => (
-                <option key={subCategory._id} value={subCategory._id}>
-                  {subCategory.name}
-                </option>
-              ))}
+          <label htmlFor="subcategory-select" className="form-label">
+            Select Subcategory:
+          </label>
+          <select
+            id="subcategory-select"
+            value={subcategoryId}
+            onChange={handleSubCategoryChange}
+            className="form-control"
+          >
+            <option value="">-- Select a Subcategory --</option>
+            {subcategories.map((subcat) => (
+              <option key={subcat._id} value={subcat._id}>
+                {subcat.name}
+              </option>
+            ))}
           </select>
         </div>
       )}

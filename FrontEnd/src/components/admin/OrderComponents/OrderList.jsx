@@ -35,45 +35,43 @@ const OrderList = () => {
   };
 
   return (
-    <div className="">
-      <div className="">
-        <h4>Recent Orders</h4>
+    <div className="p-6 bg-white rounded-lg shadow-sm">
+      <div className="mb-6">
+        <h4 className="text-2xl font-semibold text-gray-800">Recent Orders</h4>
       </div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-white uppercase bg-blue-950">
+      <div className="overflow-hidden rounded-lg border border-gray-200">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-blue-950">
               <tr>
-                <th className="px-6 py-3">#</th>
-                <th className="px-6 py-3">Image</th>
-                <th className="px-6 py-3">Item</th>
-                <th className="px-6 py-3">Price</th>
-                <th className="px-6 py-3">Qty</th>
-                <th className="px-6 py-3">Total</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">#</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Image</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Item</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Price</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Qty</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Total</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {addresses.map((address) =>
                 address.Carts.map((cart, index) => (
                   <tr
                     key={index}
                     onClick={() => handleRowClick(cart)}
-                    style={{ cursor: "pointer" }}
-                    className="bg-white-500 border-b hover:bg-gray-300"
+                    className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
                   >
-                    <td className="px-6 py-2">{cart.id}</td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{cart.id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <img
                         src={cart.photo}
                         alt="cartimage"
-                        style={{ height: "50px" }}
-                        className="px-6 py-2"
+                        className="h-12 w-12 rounded-md object-cover"
                       />
                     </td>
-                    <td className="px-6 py-2">{cart.name}</td>
-                    <td className="px-6 py-2">{cart.price}</td>
-                    <td className="px-6 py-2">{cart.qty}</td>
-                    <td className="px-6 py-2">{cart.total}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{cart.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{cart.price}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{cart.qty}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{cart.total}</td>
                   </tr>
                 ))
               )}

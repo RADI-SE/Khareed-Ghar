@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../style.css";
 import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
 import { useEditSubCategory } from "../../../../hooks/Categories/useEditSubCategory";
+import toast from 'react-hot-toast';
 
 export const EditSubCategoriesForm = () => {
   const [CategoryId, setCategoryId] = useState("");
@@ -29,30 +30,22 @@ export const EditSubCategoriesForm = () => {
     e.preventDefault();
  
     if (!SubCategoryId || !CategoryName) {
-      alert("Name and description are required");
+      toast.error("Name and description are required");
       return false;
     }
 
     if (!CategoryId) {
-      alert("Parent category not found");
+      toast.error("Parent category not found");
       return false;
     }
 
     if (!SubCategoryId) {
-      alert("Subcategory not found");
+      toast.error("Subcategory not found");
       return false;
     }
 
-    if( CategoryId != null && CategoryName != null){
-      alert("Subcategory updated successfully");
-      setCategoryId("");
-      setSubCategoryId("");
-      setCategoryName("");
-      setDescription("");
-    }
     editCategory(
       { SubCategoryId, CategoryId, CategoryName, description },
-    
     );
   };
 
@@ -65,36 +58,27 @@ export const EditSubCategoriesForm = () => {
 
   const handleSubCategoryChange = (e) => {
     setSubCategoryId(e.target.value);
-    const selectedCategory = categories.find(
-      (category) => category._id === CategoryId
-    );
-    const subCategory = selectedCategory?.subcategories.find(
-      (sub) => sub._id === e.target.value
-    );
-
-    if (subCategory) {
-      setCategoryName(subCategory.name);
-      setDescription(subCategory.description);
+    const selectedSubCategory = categories
+      .find(cat => cat._id === CategoryId)
+      ?.subcategories
+      .find(sub => sub._id === e.target.value);
+    if (selectedSubCategory) {
+      setCategoryName(selectedSubCategory.name);
+      setDescription(selectedSubCategory.description || "");
     }
   };
 
-  if (isLoadingCategories) {
-    return <p>Loading categories...</p>;
-  }
+  if (isLoadingCategories) return <p>Loading categories...</p>;
+  if (categoriesError) return <p>Error loading categories</p>;
 
-  if (categoriesError) {
-    return (
-      <p>
-        Error loading categories: {fetchError?.message || "An error occurred."}
-      </p>
-    );
-  }
+  const selectedCategory = categories.find(cat => cat._id === CategoryId);
+  const subcategories = selectedCategory?.subcategories || [];
 
   return (
     <div className="edit-category-form">
-      <h2>Edit SubCategory</h2>
+      <h2>Edit Subcategory</h2>
       <div className="form-group">
-        <label>Select Category</label>
+        <label>Select Parent Category</label>
         <select value={CategoryId} onChange={handleCategoryChange}>
           <option value="">Select parent category</option>
           {categories.map((category) => (
@@ -110,13 +94,11 @@ export const EditSubCategoriesForm = () => {
           <label>Select Subcategory</label>
           <select value={SubCategoryId} onChange={handleSubCategoryChange}>
             <option value="">Select subcategory</option>
-            {categories
-              .find((category) => category._id === CategoryId)
-              ?.subcategories.map((subCategory) => (
-                <option key={subCategory._id} value={subCategory._id}>
-                  {subCategory.name}
-                </option>
-              ))}
+            {subcategories.map((subCategory) => (
+              <option key={subCategory._id} value={subCategory._id}>
+                {subCategory.name}
+              </option>
+            ))}
           </select>
         </div>
       )}
@@ -130,7 +112,6 @@ export const EditSubCategoriesForm = () => {
               value={CategoryName}
               onChange={(e) => setCategoryName(e.target.value)}
               placeholder="Enter subcategory name"
-              required
             />
           </div>
           <div className="form-group">
@@ -141,19 +122,10 @@ export const EditSubCategoriesForm = () => {
               placeholder="Enter subcategory description"
             />
           </div>
-          {message && <p className="message">{message}</p>}
           <button type="submit" disabled={isUpdating}>
-            {isUpdating ? "Updating..." : "Submit"}
+            {isUpdating ? "Updating..." : "Update Subcategory"}
           </button>
         </form>
-      )}
-
-      {updateCategoryError && (
-        <p className="error-message">
-          {updateError?.response?.data?.message ||
-            updateError?.message ||
-            "Failed to update subcategory."}
-        </p>
       )}
     </div>
   );

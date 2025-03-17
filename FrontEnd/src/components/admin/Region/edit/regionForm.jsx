@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import toast from 'react-hot-toast';
 
 export const RegionForm = ({ region: region = {}, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -18,15 +19,15 @@ export const RegionForm = ({ region: region = {}, onSubmit }) => {
     e.preventDefault();
 
     if(!formData.state){
-      alert("State field is required.");
+      toast.error("State field is required.");
       return false;
     }
     if(!formData.city){
-      alert("City field is required.");
+      toast.error("City field is required.");
       return false;
     }
     if(formData.state != null && formData.city != null ){
-      alert("Region updated successfully.");
+      toast.success("Region updated successfully.");
       setFormData({ state: "", city: "" }); 
     }
     

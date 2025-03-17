@@ -4,6 +4,7 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import EditRegionModal from "../edit/editRegionModel"
 import { ConfirmationModal } from "../../../Common/confirmationModal/ConfirmationModel";
 import { useDeleteRegion } from "../../../../hooks/admin/Region/useDeleteRegion";
+import toast from 'react-hot-toast';
 
 export const RegionTable = ({ region }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -33,7 +34,7 @@ export const RegionTable = ({ region }) => {
   const handleDeleteClick = (id) => {
     setSelectedRegion(id);
     setShowDeleteModal(true);
-    setConfirmationName();
+    setConfirmationName("");
     setModalMessage("");
   };
 
@@ -56,10 +57,12 @@ export const RegionTable = ({ region }) => {
       { id: selectedRegion._id, state: selectedRegion.state },
       {
         onSuccess: () => {
+          toast.success("Region deleted successfully!");
           setModalMessage("Region deleted successfully!");
           setShowDeleteModal(false);
         },
         onError: () => {
+          toast.error("Failed to delete Region. Please try again.");
           setModalMessage("Failed to delete Region. Please try again.");
         },
       }

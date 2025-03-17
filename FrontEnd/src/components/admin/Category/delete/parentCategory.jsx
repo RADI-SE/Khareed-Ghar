@@ -4,6 +4,7 @@ import { ConfirmationModal } from "../../../Common/confirmationModal/Confirmatio
 import { getSelectedCategoryName, isValidConfirmationName } from "../utils/utils";
 import { useFetchCategories } from "../../../../hooks/Categories/useFetchCategories";
 import { useDeleteCategory } from "../../../../hooks/Categories/useDeleteCategory";
+import toast from 'react-hot-toast';
 
 export const Del_P = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -26,18 +27,14 @@ export const Del_P = () => {
   } = useDeleteCategory(token);
 
   const handleDelete = () => {
-    
     if (!selectedCategory) {
-      alert("Category not found");
+      toast.error("Category not found");
       return false;
     }
     
     if (!name) {
-      alert("Name mismatch");
+      toast.error("Name mismatch");
       return false;
-    }
-    if( selectedCategory != null && name != null){
-      alert("Category and associated products deleted successfully");
     }
     
     deleteCategory(

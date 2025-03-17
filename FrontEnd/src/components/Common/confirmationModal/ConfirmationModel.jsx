@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
+import toast from 'react-hot-toast';
 
 export const ConfirmationModal = ({
   show,
@@ -9,17 +10,18 @@ export const ConfirmationModal = ({
   modalMessage,
   confirmationName,
   setConfirmationName,
-   selectedName,
+  selectedName,
 }) => {
   const handleConfirm = () => {
-     if (confirmationName === selectedName) {
+    if (confirmationName === selectedName) {
       onConfirm();
     } else { 
       setConfirmationName('');
-      alert('The category name does not match. Please try again.');
+      toast.error('The category name does not match. Please try again.');
     }
   };
-    return (
+
+  return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Delete Category</Modal.Title>

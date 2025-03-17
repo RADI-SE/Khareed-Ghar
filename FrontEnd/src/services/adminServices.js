@@ -1,6 +1,7 @@
 // src/services/authService.js
 import { create } from "zustand";
 import axios from "axios";
+import toast from 'react-hot-toast';
  
 const API_URL = "http://localhost:5000/api/";
 
@@ -42,6 +43,7 @@ export const useAdminService = create((set) => ({
           isSuccess: true,
           successMessage: "New category created successfully",
         });
+        toast.success("New category created successfully");
         return response.data;
       } 
  
@@ -51,6 +53,7 @@ export const useAdminService = create((set) => ({
         isLoading: false,isError:true , 
         errorMessage: error.response.data.message,
       });
+      toast.error(error.response.data.message || "Failed to create category");
     }
   },
 
@@ -76,6 +79,7 @@ export const useAdminService = create((set) => ({
           isSuccess: true,
           successMessage: "New Subcategory created successfully",
         });
+        toast.success("New subcategory created successfully");
         return response.data;
       } 
  
@@ -84,6 +88,7 @@ export const useAdminService = create((set) => ({
         isLoading: false,isError:true , 
         errorMessage: error.response.data.message,
       });
+      toast.error(error.response.data.message || "Failed to create subcategory");
     }
   },
 
@@ -114,11 +119,13 @@ export const useAdminService = create((set) => ({
           isLoading: false,
           errorMessage: null,
         });
+        toast.success("Subcategory updated successfully");
       }
       console.log("console data for sub edit ", response.data.subcategory);
       return response.data.subcategory;
     } catch (error) {
       set({ isLoading: false, errorMessage: error.message });
+      toast.error(error.response?.data?.message || "Failed to update subcategory");
       return null;
     }
   },
@@ -142,13 +149,16 @@ export const useAdminService = create((set) => ({
           isLoading: false,
           errorMessage: null,
         });
+        toast.success("Category updated successfully");
         return response.data.data;
       }
       
       set({ isLoading: false, errorMessage: response.data.message });
+      toast.error(response.data.message || "Failed to update category");
       
     } catch (error) {
       set({ isLoading: false, isError:true , errorMessage: response.data.message });
+      toast.error(error.response?.data?.message || "Failed to update category");
       throw error;
     }
   },
@@ -173,7 +183,7 @@ export const useAdminService = create((set) => ({
         isLoading: false,isError:true , 
         errorMessage: "Unable to connect to the database server. Please try again later",
       });
-
+      toast.error("Unable to connect to the database server. Please try again later");
     }
   },
 
@@ -204,6 +214,7 @@ export const useAdminService = create((set) => ({
         errorMessage:
           error?.response?.data?.message || "Failed to fetch subcategories.",
       });
+      toast.error(error?.response?.data?.message || "Failed to fetch subcategories");
     }
   },
 
@@ -230,12 +241,13 @@ export const useAdminService = create((set) => ({
           isAuthenticated: true,
           isLoading: false,
         });
-        console.log("Category deleted successfully.");
+        toast.success("Category deleted successfully");
       } else {
         set({
           isLoading: false,
           errorMessage: response.data.message || "Failed to delete category.",
         });
+        toast.error(response.data.message || "Failed to delete category");
       }
     } catch (error) {
       console.error("Error in deleteCategories: ", error);
@@ -243,6 +255,7 @@ export const useAdminService = create((set) => ({
         isLoading: false,
         errorMessage: error.response?.data?.message || "An error occurred.",
       });
+      toast.error(error.response?.data?.message || "Failed to delete category");
       throw error;
     }
   },
@@ -276,7 +289,7 @@ export const useAdminService = create((set) => ({
           isAuthenticated: true,
           isLoading: false,
         });
-        console.log("Subcategory deleted successfully");
+        toast.success("Subcategory deleted successfully");
       } else {
         console.log("Failed to delete subcategory");
       }
@@ -287,11 +300,13 @@ export const useAdminService = create((set) => ({
       if (error.response) {
         console.log("Error Response Data: ", error.response.data);
         set({ isLoading: false, errorMessage: error.response.data.message });
+        toast.error(error.response.data.message || "Failed to delete subcategory");
       } else {
         set({
           isLoading: false,
           errorMessage: "An error occurred while deleting.",
         });
+        toast.error("An error occurred while deleting subcategory");
       }
 
       throw error;
@@ -306,6 +321,7 @@ export const useAdminService = create((set) => ({
       return response.data.products;
     } catch (error) {
       console.error("Error fetching products for category:", error);
+      toast.error("Failed to fetch products for category");
       return { products: [], message: "Failed to fetch products." }; 
     }
   },  
@@ -318,6 +334,7 @@ export const useAdminService = create((set) => ({
       return response.data.category;
     } catch (error) {
       console.error("Error fetching category:", error);
+      toast.error("Failed to fetch category");
       return { category: null, message: "Failed to fetch category." }; 
     }
   },
