@@ -55,12 +55,12 @@ const ProductTable = ({ products, onProductClick }) => {
       { id: selectedProduct._id, name: selectedProduct.name },
       {
         onSuccess: () => {
-          setModalMessage("Category deleted successfully!");
+          setModalMessage("Product deleted successfully!");
           setShowDeleteModal(false);
           refetch();
         },
         onError: () => {
-          setModalMessage("Failed to delete category. Please try again.");
+          setModalMessage("Failed to delete Product. Please try again.");
         },
       }
     );
