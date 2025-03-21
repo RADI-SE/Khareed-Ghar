@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = "http://localhost:5000/api/";
 
@@ -56,9 +58,11 @@ export const useSellerService = create((set) => ({
           },
         }
       ); 
+      toast.success(response.data.message);
       return  response.data.product._id;
     } catch (error) {
       console.error("Error while adding product:", error.message);
+      toast.success(error.response.data.message);
   
       set({
         isLoading: false,
@@ -131,9 +135,10 @@ export const useSellerService = create((set) => ({
     seller,
     images
   ) =>{
+    let response;
     try {
       set({ isLoading: true, Error: null, isError: false });
-      const response = await axios.put(
+      response = await axios.put(
         `${API_URL}/seller/products/${id}`,
         {
           name,
@@ -153,8 +158,9 @@ export const useSellerService = create((set) => ({
       if (response.status === 200) {
         set({ isLoading: false, Error: null });
       }
+      toast.success(response.data.message);
     } catch (error) {
-      console.log(error.message);
+      
       set({
         isLoading: false,
         isError: true,
@@ -163,6 +169,8 @@ export const useSellerService = create((set) => ({
           error.message ||
           "An error occurred while updating product.",
       });
+      // toast.error(error.response?.data?.message || "error occured while editing product");
+      toast.error(error.response.data.message);
     }
   },
 
@@ -184,6 +192,7 @@ export const useSellerService = create((set) => ({
       if (response.status === 200) {
         set({ isLoading: false, Error: null });
       }
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error deleting product:", error.message);
  
@@ -195,6 +204,7 @@ export const useSellerService = create((set) => ({
           error.message ||
           "An error occurred while deleting the product.",
       });
+      toast.error(error.response.data.message);
     }
   },
 
@@ -219,9 +229,11 @@ export const useSellerService = create((set) => ({
         startTime,
         endTime,
       });
+      toast.success(response.data.message);
     } catch (error) {
       console.log(error.message);
       set({ isLoading: false, isError: true, Error: error.message });
+      toast.error(error.respone.data.message);
     }
   },
 
@@ -328,6 +340,7 @@ export const useSellerService = create((set) => ({
       if (response.status === 200) {
         set({ isLoading: false, Error: null });
       }
+      toast.success(response.data.message);
     } catch (error) {
       console.log(error.message);
       set({
@@ -338,6 +351,7 @@ export const useSellerService = create((set) => ({
           error.message ||
           "An error occurred while updating Auction.",
       });
+      toast.error(error.respone.data.message);
     }
   },
 

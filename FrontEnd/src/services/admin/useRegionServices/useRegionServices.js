@@ -16,11 +16,11 @@ export const useAdminService = create((set) => ({
         state,
         city,
       });
-      toast.success("New region added successfully");
+      toast.success(response.data.message);
       // console.log("response.data addRegion," , response.data);
 
     } catch (error) {
-      console.error("Error while adding Region:", error.message);
+      toast.error(error.response.data.message);
     }
   },
 
@@ -53,9 +53,9 @@ export const useAdminService = create((set) => ({
           city,
         }
       );
-      toast.success("Region edited successfully");
+      toast.success(response.data.message);
     } catch (error) {
-      console.log("editRegion error.message:", error.message);
+      console.log(error.response.data.message);
     }
   },
 
@@ -65,10 +65,10 @@ export const useAdminService = create((set) => ({
         data: { state },
       });
       console.log("deleteRegion response.data:", response.data);
-      toast.success("Region deleted successfully");
+      toast.success(response.data.message);
       return response.data;
     } catch (error) {
-      console.error("deleteRegion error.message:", error.message);
+      console.error(error.respone.data.message);
     }
   },
 }));

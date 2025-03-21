@@ -58,14 +58,13 @@ const ProductTable = ({ products, onProductClick }) => {
       { id: selectedProduct._id, name: selectedProduct.name },
       {
         onSuccess: () => {
-          toast.success("Product deleted successfully");
           setShowDeleteModal(false);
           refetch();
         },
       },
       {
         onError: () => {
-          toast.success("Failed to delete Product. Please try again.");
+          
         },
       }
     );

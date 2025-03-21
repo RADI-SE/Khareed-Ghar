@@ -94,7 +94,6 @@ export const AddProductForm = () => {
       !SubCategoryId ||
       images.length === 0
     ) {
-      toast.error("Please fill in all the required fields!");
       return false;
     }
 
@@ -120,10 +119,8 @@ export const AddProductForm = () => {
         });
       }
       
-      toast.success("Product added successfully!");
       handleResetChange();
     } catch (error) {
-      toast.error("Failed to add product. Please try again.");
     }
   };
 
