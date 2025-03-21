@@ -12,10 +12,10 @@ const UserForm = ({ user, onSubmit }) => {
   const handleSubmit = (e) => {
     
     e.preventDefault();
-    if(!formData.name){
-      alert("Name field is required.");
-      return false;
-    }
+    // if(!formData.name){
+    //   alert("Name field is required.");
+    //   return false;
+    // }
     if(!formData.email){
       alert("Email field is required.");
       return false;

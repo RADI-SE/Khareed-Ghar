@@ -6,5 +6,7 @@ export const useDeleteProduct = (token) => {
   return useMutation({
     mutationFn: ({ id , name}) => 
       deleteProduct(token, id, name),  
+    
   });
+  
 };

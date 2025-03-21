@@ -1,6 +1,8 @@
 // src/services/authService.js
 import { create } from "zustand";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = "http://localhost:5000/api";
 
@@ -70,6 +72,7 @@ export const useAdminService = create((set) => ({
         isAuthenticated: true,
         isLoading: false,
       });
+      toast.success(response.data.message);
       return response.data.user;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
@@ -93,6 +96,7 @@ export const useAdminService = create((set) => ({
         isLoading: false,
       });
 
+      toast.success(response.data.message);
       return response.data.user;
     } catch (error) {
       set({

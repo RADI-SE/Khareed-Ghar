@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useCreateRegion } from "../../../../hooks/admin/Region/useCreateRegion";
-import toast from 'react-hot-toast';
 
 export const AddForm = () => {
   const [state, setState] = useState("");
@@ -27,17 +26,6 @@ export const AddForm = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(!state){
-      toast.error("State Name is required");
-      return false;
-    }
-    if(!city){
-      toast.error("City Name is required");
-      return false;
-    }
-    if(state != null && city != null){
-      toast.success("New Region created successfully");
-    }
     createRegion({
       id: userId,
       state: state,

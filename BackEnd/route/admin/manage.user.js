@@ -5,7 +5,7 @@ import {
   editUserProfile,
   displayUserProfile,
   banUsers,
-  unbanUsers,
+  
 } from "../../controller/admin/user.controller.js";
 import { AuthorizeRoles } from "../../middleware/AuthorizeRoles.js";
 import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
@@ -25,6 +25,6 @@ router.get("/user/:id", verifyTokenForRole, displayUserProfile);
 router.put("/user/:id", verifyTokenForRole, editUserProfile); 
 
 router.put("/ban-user/:id", verifyAdmin, banUsers);  
-router.put("/unban-user/:id", verifyAdmin, unbanUsers);  
+ 
 
 export default router;

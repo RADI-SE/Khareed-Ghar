@@ -57,12 +57,10 @@ export const RegionTable = ({ region }) => {
       { id: selectedRegion._id, state: selectedRegion.state },
       {
         onSuccess: () => {
-          toast.success("Region deleted successfully!");
           setModalMessage("Region deleted successfully!");
           setShowDeleteModal(false);
         },
         onError: () => {
-          toast.error("Failed to delete Region. Please try again.");
           setModalMessage("Failed to delete Region. Please try again.");
         },
       }

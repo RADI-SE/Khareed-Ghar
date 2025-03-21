@@ -1,3 +1,6 @@
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const getStatusBadgeClass = (role) => {
     const badgeClasses = {
       admin: "bg-primary",
@@ -9,12 +12,12 @@ export const getStatusBadgeClass = (role) => {
   };
   
   export const handleBanToggle = (banUser, queryClient, refetch, id, currentStatus) => {
-    const confirmAction = window.confirm(
-      `Are you sure you want to ${
-        currentStatus === "banned" ? "unban" : "ban"
-      } this user?`
-    );
-    if (!confirmAction) return;
+    // const confirmAction = window.confirm(
+    //   `Are you sure you want to ${
+    //     currentStatus === "banned" ? "unban" : "ban"
+    //   } this user?`
+    // );
+    // if (!confirmAction) return;
   
     try {
       banUser(
@@ -22,23 +25,26 @@ export const getStatusBadgeClass = (role) => {
           id,
           role: currentStatus === "banned" ? "buyer" : "banned",
         },
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries(['users']);
-            refetch();
-          },
-          onError: (error) => {
-            console.error("Error banning/unbanning user:", error);
-          },
-        }
+        // {
+        //   onSuccess: () => {
+        //     queryClient.invalidateQueries(['users']);
+        //     refetch();
+        //     toast.success(`User ${currentStatus === "banned" ? "unbanned" : "banned"} successfully!`);
+        //   },
+        //   onError: (error) => {
+        //     console.error("Error banning/unbanning user:", error);
+        //     toast.error("Failed to update user status. Please try again.");
+        //   },
+        // }
       );
-      alert(
-        `${
-          currentStatus === "banned" ? "Unbanned" : "Banned"
-        } user successfully!`
-      );
+      // alert(
+      //   `${
+      //     currentStatus === "banned" ? "Unbanned" : "Banned"
+      //   } user successfully!`
+      // );
     } catch (err) {
       console.error("Error banning user:", err);
+      toast.error("An unexpected error occurred!");
     }
   };
   

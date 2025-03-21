@@ -7,15 +7,15 @@ export const AddCategoryForm = () => {
   const [description, setDescription] = useState("");
   const token = sessionStorage.getItem("token");
   const { errorMessage, setError, clearError, isError } = useAdminService();
-  const { successMessage, setSuccess, clearSuccess, isSuccess } = useAdminService();
+  const { setSuccess, clearSuccess, isSuccess } = useAdminService();
 
   useEffect(() => {
     if (isSuccess) {
-      setSuccess(successMessage);
+      setSuccess();
       const timer = setTimeout(() => clearSuccess(), 2000);
       return () => clearTimeout(timer);  
     }
-  }, [isSuccess, successMessage, setSuccess, clearSuccess]);
+  }, [isSuccess, setSuccess, clearSuccess]);
 
   useEffect(() => {
     if (isError) {
@@ -80,12 +80,6 @@ export const AddCategoryForm = () => {
           {errorMessage && (
             <div className="rounded-md bg-red-50 p-4">
               <div className="text-sm text-red-700">{errorMessage}</div>
-            </div>
-          )}
-
-          {successMessage && (
-            <div className="rounded-md bg-green-50 p-4">
-              <div className="text-sm text-green-700">{successMessage}</div>
             </div>
           )}
 

@@ -11,15 +11,15 @@ export const AddSubCategoriesForm = () => {
   const token = sessionStorage.getItem("token");
 
     const { errorMessage, setError, clearError, isError } = useAdminService();
-    const { successMessage, setSuccess, clearSuccess, isSuccess } = useAdminService();
+    const { setSuccess, clearSuccess, isSuccess } = useAdminService();
   
-     useEffect(() => {
-        if (isSuccess) {
-          setSuccess(successMessage);
-          const timer = setTimeout(() => clearSuccess(), 2000);
-          return () => clearTimeout(timer);  
-        }
-      }, [isSuccess, successMessage, setSuccess, clearSuccess]);
+    //  useEffect(() => {
+    //     if (isSuccess) {
+    //       setSuccess(successMessage);
+    //       const timer = setTimeout(() => clearSuccess(), 2000);
+    //       return () => clearTimeout(timer);  
+    //     }
+      // }, [isSuccess, setSuccess, clearSuccess]);
     
       
       useEffect(() => {
@@ -106,9 +106,6 @@ export const AddSubCategoriesForm = () => {
 
         {errorMessage && (
             <p className="alert alert-danger">{errorMessage}</p>
-          )}
-        {successMessage && (
-            <p className="alert alert-success">{successMessage  }</p>
           )}
           
         <button type="submit" disabled={isCreating}>

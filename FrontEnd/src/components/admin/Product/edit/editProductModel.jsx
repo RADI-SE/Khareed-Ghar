@@ -1,8 +1,10 @@
 import React from "react";
-import { Modal, Spinner } from "react-bootstrap";
+import { Modal, Spinner, Toast } from "react-bootstrap";
 import { ProductForm } from "./productForm"; 
 import { useFetchProductById } from "../../../../hooks/seller/useFetchProductsById";
 import { useEditProduct } from "../../../../hooks/seller/useEditProduct";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditProductModal = ({ id, show, handleClose, onProductUpdated }) => {
   const token = sessionStorage.getItem("token");
@@ -26,7 +28,8 @@ const EditProductModal = ({ id, show, handleClose, onProductUpdated }) => {
     }, {
       onSuccess: () => {
         handleClose(); 
-        onProductUpdated();  
+        onProductUpdated();
+        toast.success("Product edited succesfully");
       },
       onError: (err) => {
         console.error("Error updating product:", err);

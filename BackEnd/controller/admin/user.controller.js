@@ -39,6 +39,9 @@ export const editUserProfile = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
     const { name, email, role } = req.body;
+    if(!name){
+      return res.status(401).json({success:false, message:"user name not found"});
+    }
  
     if (name) user.name = name;
     if (email) user.email = email;
@@ -139,31 +142,4 @@ export const banUsers = async (req, res) => {
   }
 };
 
-// unban Users
-export const unbanUsers = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
 
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-
-    const originalRole = user.originalRole;
-    user.role = user.originalRole;
-    console.log("User unbanned successfully", originalRole);
-    user.isBanned = false;
-
-    await user.save();
-
-    res.json({
-      success: true,
-      message: "User unbanned successfully",
-      user,
-    });
-  } catch (error) {
-    console.error("Error in unbanUsers:", error);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-};

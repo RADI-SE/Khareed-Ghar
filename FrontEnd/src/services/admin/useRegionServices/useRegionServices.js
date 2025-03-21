@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = "http://localhost:5000/api/";
 
@@ -14,7 +16,8 @@ export const useAdminService = create((set) => ({
         state,
         city,
       });
-      console.log("response.data addRegion," , response.data);
+      toast.success("New region added successfully");
+      // console.log("response.data addRegion," , response.data);
 
     } catch (error) {
       console.error("Error while adding Region:", error.message);
@@ -50,6 +53,7 @@ export const useAdminService = create((set) => ({
           city,
         }
       );
+      toast.success("Region edited successfully");
     } catch (error) {
       console.log("editRegion error.message:", error.message);
     }
@@ -61,6 +65,7 @@ export const useAdminService = create((set) => ({
         data: { state },
       });
       console.log("deleteRegion response.data:", response.data);
+      toast.success("Region deleted successfully");
       return response.data;
     } catch (error) {
       console.error("deleteRegion error.message:", error.message);

@@ -5,6 +5,9 @@ import EditProductModal from "../../../seller/Product/edit/editProductModel";
 import { ConfirmationModal } from "../../confirmationModal/ConfirmationModel";
 import { useDeleteProduct } from "../../../../hooks/seller/useDeleteProduct";
 import defaultImage from "../../../../assets/images/default.jpeg";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const ProductTable = ({ products, onProductClick }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 4;
@@ -55,12 +58,14 @@ const ProductTable = ({ products, onProductClick }) => {
       { id: selectedProduct._id, name: selectedProduct.name },
       {
         onSuccess: () => {
-          setModalMessage("Product deleted successfully!");
+          toast.success("Product deleted successfully");
           setShowDeleteModal(false);
           refetch();
         },
+      },
+      {
         onError: () => {
-          setModalMessage("Failed to delete Product. Please try again.");
+          toast.success("Failed to delete Product. Please try again.");
         },
       }
     );
