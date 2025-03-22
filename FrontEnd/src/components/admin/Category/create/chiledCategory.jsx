@@ -9,10 +9,7 @@ export const AddSubCategoriesForm = () => {
   const [name, setSubCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const token = sessionStorage.getItem("token");
-
-    const { errorMessage, setError, clearError, isError } = useAdminService();
-    const { setSuccess, clearSuccess, isSuccess } = useAdminService();
-  
+ 
     //  useEffect(() => {
     //     if (isSuccess) {
     //       setSuccess(successMessage);
@@ -22,14 +19,7 @@ export const AddSubCategoriesForm = () => {
       // }, [isSuccess, setSuccess, clearSuccess]);
     
       
-      useEffect(() => {
-        if (isError) {
-          setError(errorMessage);
-          const timer = setTimeout(() => clearError(), 2000);
-          return () => clearTimeout(timer);  
-        }
-      }, [isError, errorMessage, setError, clearError]);
-      
+ 
 
   const {
     data: categories = [],
@@ -55,7 +45,7 @@ export const AddSubCategoriesForm = () => {
       setDescription("");
       setParentCategoryId("");
     } catch (error) {
-      setError("Failed to add subcategory");
+  
       console.error("Error adding subcategory:", error);
     }
   };
@@ -104,10 +94,7 @@ export const AddSubCategoriesForm = () => {
           />
         </div>
 
-        {errorMessage && (
-            <p className="alert alert-danger">{errorMessage}</p>
-          )}
-          
+        
         <button type="submit" disabled={isCreating}>
           {isCreating ? "Adding..." : "Submit"}
         </button>

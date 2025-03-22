@@ -32,15 +32,7 @@ export const Del_C = () => {
       setMessage("Subcategory name does not match.");
       return;
     }
-    if (!categoryId) {
-      toast.error("Category not found");
-      return false;
-    }
-
-    if (!subcategoryId) {
-      toast.error("Subcategory not found within the parent category");
-      return false;
-    }
+ 
 
     deleteCategory(
       { categoryId, subcategoryId },

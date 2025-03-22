@@ -133,6 +133,20 @@ export const useAdminService = create((set) => ({
 
   EditCategoriesForm: async (token, parentCategoryId, name, description) => {
     try {
+      if (!name || name.trim() === '') {
+        toast.error('Category name is required');
+        return null;
+      }
+
+      if (!description || description.trim() === '') {
+        toast.error('Category description is required');
+        return null;
+      }
+
+      if (!parentCategoryId) {
+        toast.error('Category ID is required');
+        return null;
+      }
       
       set({ isLoading: true, errorMessage: null });
       const response = await axios.put(
@@ -236,6 +250,7 @@ export const useAdminService = create((set) => ({
         },
       });
 
+      console.log(response.data)
       if (response.data.success) {
         set({
           categories: null,
@@ -248,7 +263,7 @@ export const useAdminService = create((set) => ({
           isLoading: false,
           errorMessage: response.data.message || "Failed to delete category.",
         });
-        toast.error(response.data.message);
+        toast.success(response.data.message);
       }
     } catch (error) {
       console.error("Error in deleteCategories: ", error);

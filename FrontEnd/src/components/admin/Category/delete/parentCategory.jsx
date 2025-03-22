@@ -27,15 +27,7 @@ export const Del_P = () => {
   } = useDeleteCategory(token);
 
   const handleDelete = () => {
-    if (!selectedCategory) {
-      toast.error("Category not found");
-      return false;
-    }
-    
-    if (!name) {
-      toast.error("Name mismatch");
-      return false;
-    }
+   
     
     deleteCategory(
       { name, categoryId: selectedCategory },
@@ -99,9 +91,7 @@ export const Del_P = () => {
         />
       )}
 
-      {deleteCategoryError && (
-        <p className="error-message">Failed to delete category. Please try again.</p>
-      )}
+    
     </div>
   );
 };

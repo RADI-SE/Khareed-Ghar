@@ -12,23 +12,7 @@ const UserForm = ({ user, onSubmit }) => {
   const handleSubmit = (e) => {
     
     e.preventDefault();
-    // if(!formData.name){
-    //   alert("Name field is required.");
-    //   return false;
-    // }
-    if(!formData.email){
-      alert("Email field is required.");
-      return false;
-    }
     
-    if(!formData.role){
-      alert("Role is required.");
-      return false;
-    }
-    if(formData.name != null && formData.email != null && formData.role != null ){
-      alert("User updated successfully.");
-      setFormData({ name: "", email: "", role: "",}); 
-    }
     onSubmit(formData);
   };
 

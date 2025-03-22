@@ -120,13 +120,15 @@ const DetailedProductView = () => {
       {selectedProduct ? (
         <div className="bg-white shadow-lg rounded-xl overflow-hidden transition-all duration-300">
           <div className="p-6">
-            <button
-              className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 mb-6 group"
-              onClick={handleBackClick}
-            >
-              <span className="mr-2 transform group-hover:-translate-x-1 transition-transform duration-200">&larr;</span>
-              <span className="font-medium">Back to Products</span>
-            </button>
+          <button
+            className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            onClick={handleBackClick}
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Products
+          </button>
             <h4 className="text-2xl font-bold text-gray-900 mb-6">
               Details of {selectedProduct.name}
             </h4>
@@ -142,7 +144,7 @@ const DetailedProductView = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white shadow-lg rounded-xl overflow-hidden transition-all duration-300">
+        <div className="bg-white shadow-lg rounded-xl overflow-hidden">
           <div className="p-6">
             <h4 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
               <span className="mr-3">Products</span>

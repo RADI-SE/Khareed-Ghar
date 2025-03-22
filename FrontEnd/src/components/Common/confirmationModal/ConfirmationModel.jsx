@@ -13,12 +13,9 @@ export const ConfirmationModal = ({
   selectedName,
 }) => {
   const handleConfirm = () => {
-    if (confirmationName === selectedName) {
+   
       onConfirm();
-    } else { 
-      setConfirmationName('');
-      toast.error('The category name does not match. Please try again.');
-    }
+   
   };
 
   return (
@@ -41,7 +38,7 @@ export const ConfirmationModal = ({
           placeholder="Enter category name"
           className="form-control"
         />
-        {modalMessage && <p className="modal-feedback">{modalMessage}</p>}
+        
       </Modal.Body>
       <Modal.Footer>
         <Button

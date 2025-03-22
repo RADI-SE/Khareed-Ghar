@@ -46,6 +46,15 @@ export const useAdminService = create((set) => ({
 
   editRegion: async (id, state, city) => {
     try {
+      if (!state || state.trim() === "") {
+        toast.error("State name is required");
+        return;
+      }
+      if (!city || city.trim() === "") {
+        toast.error("City name is required");
+        return;
+      }
+
       const response = await axios.put(
         `http://localhost:5000/api/update/${id}`,
         {
@@ -54,8 +63,9 @@ export const useAdminService = create((set) => ({
         }
       );
       toast.success(response.data.message);
+      return response.data.message;
     } catch (error) {
-      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   },
 

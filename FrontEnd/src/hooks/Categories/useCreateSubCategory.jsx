@@ -5,8 +5,6 @@ export const useCreateSubCategory = (token) => {
   return useMutation({
     mutationFn: ({ name, description, CategoryId }) =>
       AddSubCategoriesForm(token, name, description, CategoryId),
-    onSuccess: () => {
-      console.log("Category updated successfully.");
-    },
+   
   });
 };

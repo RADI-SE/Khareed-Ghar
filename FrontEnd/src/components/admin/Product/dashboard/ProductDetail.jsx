@@ -2,78 +2,94 @@ import React, { useState } from "react";
 import defaultImage from "../../../../assets/images/default.jpeg";
 
 const ProductDetail = ({ selectedProduct }) => {
-  const [mainImage, setMainImage] = useState(selectedProduct?.images || defaultImage);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  
+  // Convert single image to array if needed and handle empty cases
+  const productImages = selectedProduct?.images 
+    ? Array.isArray(selectedProduct.images) 
+      ? selectedProduct.images 
+      : [selectedProduct.images]
+    : [defaultImage];
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row gap-8">
+    <div className="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Column - Image Gallery */}
-        <div className="md:w-1/2">
-          <div className="sticky top-4">
-            {/* Main Image */}
-            <div className="mb-4">
-              <img
-                src={`../../../../../public/images/${mainImage}` || defaultImage}
-                alt={selectedProduct?.name || "Product"}
-                className="w-full h-[400px] object-cover rounded-lg shadow-lg"
-              />
-            </div>
-            
-            {/* Thumbnail Gallery */}
-            <div className="grid grid-cols-4 gap-2">
-              <img
-                src={`../../../../../public/images/${selectedProduct?.images}` || defaultImage}
-                alt={selectedProduct?.name || "Product"}
-                className="w-full h-24 object-cover rounded-lg cursor-pointer hover:opacity-75 transition-opacity"
-                onClick={() => setMainImage(selectedProduct?.images)}
-              />
-              {/* Add more thumbnails here if you have multiple images */}
-            </div>
+        <div className="space-y-4">
+          {/* Main Image */}
+          <div className="aspect-square w-full relative rounded-lg overflow-hidden bg-gray-100">
+            <img
+              src={`../../../../../public/images/${productImages[selectedImageIndex]}` || defaultImage}
+              alt={`${selectedProduct?.name || "Product"} - View ${selectedImageIndex + 1}`}
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+
+          {/* Thumbnail Gallery */}
+          <div className="grid grid-cols-4 gap-2">
+            {productImages.map((image, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedImageIndex(index)}
+                className={`aspect-square relative rounded-lg overflow-hidden ${
+                  selectedImageIndex === index
+                    ? "ring-2 ring-blue-500"
+                    : "ring-1 ring-gray-200"
+                }`}
+              >
+                <img
+                  src={`../../../../../public/images/${image}` || defaultImage}
+                  alt={`${selectedProduct?.name || "Product"} thumbnail ${index + 1}`}
+                  className="w-full h-full object-cover hover:opacity-80 transition-opacity duration-200"
+                />
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Right Column - Product Details */}
-        <div className="md:w-1/2">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold text-gray-800">
             {selectedProduct?.name || "No Name Available"}
           </h1>
 
-          <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-gray-800">
-              ${selectedProduct?.price || "N/A"}
-            </h3>
-          </div>
-
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Description</h3>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">Description</h3>
             <p className="text-gray-600">
               {selectedProduct?.description || "No description available."}
             </p>
           </div>
 
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-3">Specifications</h3>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="text-xl font-semibold text-gray-700 mb-3">Specifications</h3>
             <ul className="space-y-2">
-              <li className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Capacity:</span>
-                <span className="text-gray-600">{selectedProduct?.specifications.capacity || "N/A"}</span>
+              <li className="flex items-center text-gray-600">
+                <span className="font-medium mr-2">Capacity:</span>
+                {selectedProduct?.specifications.capacity || "N/A"}
               </li>
-              <li className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Color:</span>
-                <span className="text-gray-600">{selectedProduct?.specifications.color || "N/A"}</span>
+              <li className="flex items-center text-gray-600">
+                <span className="font-medium mr-2">Color:</span>
+                {selectedProduct?.specifications.color || "N/A"}
               </li>
-              <li className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Condition:</span>
-                <span className="text-gray-600">{selectedProduct?.specifications.condition || "N/A"}</span>
+              <li className="flex items-center text-gray-600">
+                <span className="font-medium mr-2">Condition:</span>
+                {selectedProduct?.specifications.condition || "N/A"}
               </li>
             </ul>
           </div>
 
-          <div className="border-t pt-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Seller Information</h3>
-            <p className="text-gray-600">
-              {selectedProduct?.seller.name || "No seller information available"}
-            </p>
+          <div className="flex flex-col space-y-4">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-2xl font-bold text-green-600">
+                ${selectedProduct?.price || "N/A"}
+              </h3>
+            </div>
+
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-xl font-semibold text-gray-700">
+                Seller: <span className="text-gray-600">{selectedProduct?.seller.name || "No seller information available"}</span>
+              </h3>
+            </div>
           </div>
         </div>
       </div>

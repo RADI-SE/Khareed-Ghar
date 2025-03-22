@@ -36,23 +36,56 @@ export const editUserProfile = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, message: "User not found" });
+        .json({ success: false, message: "User not found", showToast: true });
     }
     const { name, email, role } = req.body;
-    if(!name){
-      return res.status(401).json({success:false, message:"user name not found"});
-    }
- 
-    if (name) user.name = name;
-    if (email) user.email = email;
-    if (role) user.role = role;
 
-    await user.save(); 
+    // Validation for all required fields
+    if (!name || name.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: "Name is required",
+        showToast: true
+      });
+    }
+
+    if (!email || email.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+        showToast: true
+      });
+    }
+
+    if (!role || role.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: "Role is required",
+        showToast: true
+      });
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address",
+        showToast: true
+      });
+    }
+
+    user.name = name;
+    user.email = email;
+    user.role = role;
+
+    await user.save();
 
     res.json({
       success: true,
       message: "Profile updated successfully",
       user,
+      showToast: true
     });
   } catch (error) {
     console.error("Error in editUserProfile:", error);
