@@ -13,32 +13,34 @@ export const ConfirmationModal = ({
   selectedName,
 }) => {
   const handleConfirm = () => {
-   
-      onConfirm();
-   
+    if (confirmationName.trim() !== selectedName.trim()) {
+      toast.error("The name does not match. Please try again.");
+      return;
+    }
+    onConfirm();
   };
 
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Delete Category</Modal.Title>
+        <Modal.Title>Delete Item</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>
-          Are you sure you want to delete the category "
+          Are you sure you want to delete the item "
           <strong>{selectedName}</strong>"?
         </p>
         <p>
-          <strong>Note:</strong> Enter the category name exactly as confirmation.
+          <strong>Note:</strong> Enter the name exactly as shown above to confirm deletion.
         </p>
         <input
           type="text"
           value={confirmationName}
           onChange={(e) => setConfirmationName(e.target.value)}
-          placeholder="Enter category name"
+          placeholder="Enter name to confirm"
           className="form-control"
         />
-        
+        {modalMessage && <p className="mt-2 text-center">{modalMessage}</p>}
       </Modal.Body>
       <Modal.Footer>
         <Button

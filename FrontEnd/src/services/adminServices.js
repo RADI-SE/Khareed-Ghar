@@ -133,22 +133,7 @@ export const useAdminService = create((set) => ({
 
   EditCategoriesForm: async (token, parentCategoryId, name, description) => {
     try {
-      if (!name || name.trim() === '') {
-        toast.error('Category name is required');
-        return null;
-      }
-
-      if (!description || description.trim() === '') {
-        toast.error('Category description is required');
-        return null;
-      }
-
-      if (!parentCategoryId) {
-        toast.error('Category ID is required');
-        return null;
-      }
-      
-      set({ isLoading: true, errorMessage: null });
+      set({ isLoading: true, errorMessage: null, successMessage: null });
       const response = await axios.put(
         `${API_URL}edit-category/${parentCategoryId}`,
         { name: name, description: description },
@@ -158,22 +143,24 @@ export const useAdminService = create((set) => ({
           },
         }
       );
-      console.log("console data for category edit ", response.data.message);
+      
       if (response.status === 200) {
         set({
           isLoading: false,
-          errorMessage: null,
+          isSuccess: true,
+          successMessage: response.data.message,
         });
         toast.success(response.data.message);
-        return response.data.data;
+        return response.data;
       }
       
-      set({ isLoading: false, errorMessage: response.data.message });
-      toast.error(error.response.data.message);
-      
     } catch (error) {
-      set({ isLoading: false, isError:true , errorMessage: response.data.message });
-      toast.error(error.response?.data?.message);
+      set({ 
+        isLoading: false, 
+        isError: true, 
+        errorMessage: error.response?.data?.message || "Failed to edit category" 
+      });
+      toast.error(error.response?.data?.message || "Failed to edit category");
       throw error;
     }
   },
@@ -232,7 +219,7 @@ export const useAdminService = create((set) => ({
       toast.error(error?.response?.data?.message || "Failed to fetch subcategories");
     }
   },
-
+ 
   deleteCategories: async (token, name, categoryId) => {
     try {
       console.log("NAME is: ", name);

@@ -90,23 +90,84 @@ export const editCategories = async (req, res) => {
     const { id } = req.params;
     const { name, description } = req.body;
 
-    // if (!name || !description) {
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, message: "All fields are required" });
-    // }
-    const updatedCategory = await Category.findByIdAndUpdate(id, req.body, {
-      new: true,
+    // Validate category ID
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Category ID is required",
+        showToast: true
+      });
+    }
+
+    // Check if category exists
+    const existingCategory = await Category.findById(id);
+    if (!existingCategory) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+        showToast: true
+      });
+    }
+
+    // Validate name
+    if (!name || name.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: "Category name is required",
+        showToast: true
+      });
+    }
+
+    // Check for duplicate name
+    const duplicateCategory = await Category.findOne({ 
+      name: name,
+      _id: { $ne: id } // Exclude current category
     });
-    updatedCategory.save();
-    res.json({
+    if (duplicateCategory) {
+      return res.status(400).json({
+        success: false,
+        message: "A category with this name already exists",
+        showToast: true
+      });
+    }
+
+    // Validate description
+    if (!description || description.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: "Category description is required",
+        showToast: true
+      });
+    }
+
+    // Update category
+    const updatedCategory = await Category.findByIdAndUpdate(
+      id,
+      { name, description },
+      { new: true }
+    );
+
+    if (!updatedCategory) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to update category",
+        showToast: true
+      });
+    }
+
+    return res.json({
       success: true,
       message: "Category updated successfully",
-      updatedCategory,
+      showToast: true,
+      updatedCategory
     });
   } catch (error) {
     console.error("Error in editCategories:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error occurred while updating category",
+      showToast: true
+    });
   }
 };
 

@@ -59,32 +59,10 @@ export const useAdminService = create((set) => ({
       console.error("Error fetching user profile:", error);
     }
   },
-
+ 
   editUserProfile: async (token, id, user) => {
     try {
       set({ isLoading: true });
-
-      // Validate required fields
-      if (!user.name || !user.email) {
-        set({ isLoading: false });
-        toast.error('Name and email are required fields');
-        return null;
-      }
-
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(user.email)) {
-        set({ isLoading: false });
-        toast.error('Please enter a valid email address');
-        return null;
-      }
-
-      // Validate name length
-      if (user.name.length < 2) {
-        set({ isLoading: false });
-        toast.error('Name must be at least 2 characters long');
-        return null;
-      }
 
       const response = await axios.put(`${API_URL}/user/${id}`, user, {
         headers: { Authorization: `Bearer ${token}` },

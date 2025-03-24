@@ -54,17 +54,21 @@ const ProductTable = ({ products, onProductClick }) => {
   };
 
   const handleDelete = () => {
+    if (!confirmationName || confirmationName.trim() !== selectedProduct.name.trim()) {
+      setModalMessage("The product name does not match. Please try again.");
+      return;
+    }
+
     deleteProduct(
       { id: selectedProduct._id, name: selectedProduct.name },
       {
         onSuccess: () => {
           setShowDeleteModal(false);
+          setModalMessage("Product deleted successfully!");
           refetch();
         },
-      },
-      {
-        onError: () => {
-          
+        onError: (error) => {
+          setModalMessage(error.response?.data?.message || "Failed to delete product");
         },
       }
     );

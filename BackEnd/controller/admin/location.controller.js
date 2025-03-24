@@ -2,6 +2,7 @@ import { body } from "express-validator";
 import { Location } from "../../model/location.model.js";
 import { User } from "../../model/user.model.js";
 
+
 export const validateMenuInput = [
   body("state").trim().notEmpty().withMessage("State is required"),
   body("city").trim().notEmpty().withMessage("City is required"),
@@ -80,8 +81,17 @@ export const updateMenuItem = async (req, res) => {
     if (!updatedLocation) {
       return res.status(404).json({ message: "Menu item not found" });
     }
+    else if(!state && !city){
+      return res.status(404).json({ message: "State & city name required" });
+    }
+    else if (!state || state.trim()=='') {
+      return res.status(404).json({ message: "State name required" });
+    }
+    else if (!city || city.trim()=='') {
+      return res.status(404).json({ message: "City name required" });
+    }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Menu item updated successfully",
       location: updatedLocation,
     });
@@ -101,16 +111,18 @@ export const deleteMenuItem = async (req, res) => {
     if (!deletedLocation) {
       return res.status(404).json({ message: "Menu item not found" });
     }
-
+    
     if (state === deletedLocation.state) {
       res.status(200).json({
         message: "Menu item deleted successfully",
         location: deletedLocation,
       });
+      toast.success(response.data.message);
     }
   } catch (error) {
     res
       .status(500)
       .json({ message: "Failed to delete menu item", error: error.message });
+      toast.error(error.response.data.message);
   }
 };
