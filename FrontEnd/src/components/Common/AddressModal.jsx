@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAddAddress } from '../../hooks/buyer/address/useAddAddress';
 import { useFetchRegion } from '../../hooks/admin/Region/useFetchRegion';
 import { useEditAddress } from '../../hooks/buyer/address/useEditAddress';
+
 const ChangeAddress = ({ setAddress, setIsModelOpen, selectedAddress }) => {
   const [stateName, setStateName] = useState('');
   const [cityName, setCityName] = useState('');
@@ -46,29 +47,29 @@ const ChangeAddress = ({ setAddress, setIsModelOpen, selectedAddress }) => {
     }
     try {
       if(selectedAddress){
-        updateAddress({
+        await updateAddress({
           id: selectedAddress._id,
           street,
           state: stateId,
           city: cityId,
           phoneNumber,
         });
-      }else{
-        createLocation({
+      } else {
+        await createLocation({
           street,
           state: stateId,
           city: cityId,
           phoneNumber,
-      });
+        });
+      }
       setAddress(`${street}, ${stateName}, ${cityName}, ${phoneNumber}`);
       setIsModelOpen(false);
-
-    }
-   } catch (error) {
+    } catch (error) {
       console.error('Error saving address:', error);
       alert('Failed to save address.');
     }
   };
+
   return (
     <div>
       <input
@@ -136,8 +137,7 @@ const ChangeAddress = ({ setAddress, setIsModelOpen, selectedAddress }) => {
 ChangeAddress.propTypes = {
   setAddress: PropTypes.func.isRequired,
   setIsModelOpen: PropTypes.func.isRequired,
-  selectedAddress: PropTypes.object.isRequired, 
-
+  selectedAddress: PropTypes.object
 };
 
 export default ChangeAddress;

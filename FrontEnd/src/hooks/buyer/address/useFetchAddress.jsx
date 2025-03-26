@@ -4,13 +4,25 @@ import { useAddressService } from "../../../services/buyer/buyerServices";
 export const useFetchAddress = () => {
   const { getLocationById } = useAddressService();
 
-  return useQuery({
-    queryKey: ['data'], // Dynamic queryKey
+  const { data, refetch, isLoading, error } = useQuery({
+    queryKey: ['address'],
     queryFn: () => {
       return getLocationById();
     },
-    staleTime: 1, 
-    refetchInterval: 1, 
-    refetchIntervalInBackground: true, 
+    onSuccess: (data) => {
+      console.log("data", data);
+    },
+    onError: (error) => {
+      console.log("error", error);
+    },
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
   });
+
+  return {
+    data,
+    isLoading,
+    error,
+    refetch
+  };
 };

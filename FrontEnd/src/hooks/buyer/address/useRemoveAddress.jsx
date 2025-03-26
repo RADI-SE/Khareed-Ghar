@@ -4,8 +4,7 @@ import { useAddressService } from "../../../services/buyer/buyerServices";
 
 // useRemoveFromAddress Hook
 export const useRemoveAddress = () => {
-  const { removeAddress } = useAddressService();  
-  console.log("Hi from useRemoveAddress");  
+  const { removeAddress } = useAddressService();   
   return useMutation({
     mutationFn: ({ addressId }) => removeAddress( addressId),
     

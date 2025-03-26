@@ -107,7 +107,7 @@ export const useAddressService = create((set, get) => ({
         `http://localhost:5000/api/locations/`,
       );
       set({ address: response.data, isLoading: false });
-      return response.data;
+      return response?.data || [];
     
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
@@ -119,12 +119,13 @@ export const useAddressService = create((set, get) => ({
       set({ isLoading: true, errorMessage: null });
       const response = await axios.delete(`http://localhost:5000/api/locations/${addressId}`);
       set({ address: response.data, isLoading: false });
+      console.log("response", response);
       return response.data;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
   },
-// 🔹 Fetch a selected location by ID
+//  Fetch a selected location by ID
 fetchSelectedLocation: async (id) => {
   try {
     console.log("Fetching location ID:", id);
@@ -140,6 +141,6 @@ fetchSelectedLocation: async (id) => {
   }
 },
 
-// 🔹 Get selected location from state
+//  Get selected location from state
 getSelectedLocation: () => get().selectedLocation,
 }));

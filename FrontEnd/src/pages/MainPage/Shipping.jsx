@@ -7,20 +7,13 @@ import ChangeAddress from "../../components/Common/AddressModal.jsx";
 import { useRemoveAddress } from "../../hooks/buyer/address/useRemoveAddress.jsx";
 import { useAddressService } from "../../services/buyer/buyerServices";
 const Shipping = () => {
-  const { data, isLoading } = useFetchAddress();
+  const { data, refetch } = useFetchAddress();
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const navigate = useNavigate();
   const { mutate: removeAddress } = useRemoveAddress();
   const { fetchSelectedLocation } = useAddressService();
-  if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 min-h-96 px-4 md:px-16 lg:px-24">
-        <p className="text-center">Loading addresses...</p>
-      </div>
-    );
-  }
   const addresses = Array.isArray(data) ? data : data ? [data] : [];
   const handleAddressChange = (newAddress) => {
     setIsModelOpen(false);
@@ -30,6 +23,7 @@ const Shipping = () => {
 
   const handleDelete = (addressId) => {
     removeAddress({ addressId });
+    refetch();
   };
 
   const handleProceed = async () => {
