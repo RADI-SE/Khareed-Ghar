@@ -7,16 +7,14 @@ import { useOrderService } from "../../services/orderServices";
 
 const Checkout = () => {
   const [paymentToggle, setPaymentToggle] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [paymentMethod, setPaymentMethod] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const { cart } = useCartService();
-  const { address,getSelectedLocation } = useAddressService();
+  const {getSelectedLocation } = useAddressService();
   const { createOrder } = useOrderService(); 
   const selectedLocation = getSelectedLocation();
   const navigate = useNavigate();
-console.log("cart :::",cart);
-console.log("address :::",address); 
-console.log("selectedLocation :::",selectedLocation);
+
   useEffect(() => {
     if (cart?.items) {
       const newTotal = cart.items.reduce(
@@ -27,7 +25,19 @@ console.log("selectedLocation :::",selectedLocation);
   }, [cart?.items]);
 
   const handleOrder = async () => {
-    await createOrder(cart._id, selectedLocation._id);
+    if (!paymentMethod) {
+      alert("Please select a payment method before placing your order.");
+      return;
+    }
+    if(cart?.items?.length === 0){
+      alert("Please add some items to your cart before placing your order.");
+      return;
+    }
+    if(!selectedLocation){
+      alert("Please select a shipping location before placing your order.");
+      return;
+    }
+    await createOrder(cart._id, selectedLocation._id, paymentMethod.toUpperCase());
   };
 
   return (
@@ -49,8 +59,9 @@ console.log("selectedLocation :::",selectedLocation);
                 <input
                   type="radio"
                   name="payment"
-                  checked={paymentMethod === "cod"}
-                  onChange={() => setPaymentMethod("cod")}
+                  checked={paymentMethod === "COD"}
+                  onChange={() => setPaymentMethod("COD")}
+                  
                 />
                 <label className="text-gray-700">Cash on Delivery</label>
               </div>
@@ -58,16 +69,16 @@ console.log("selectedLocation :::",selectedLocation);
                 <input
                   type="radio"
                   name="payment"
-                  checked={paymentMethod === "dc"}
-                  onChange={() => setPaymentMethod("dc")}
+                  checked={paymentMethod === "CREDIT CARD"}
+                  onChange={() => setPaymentMethod("CREDIT CARD")}
                 />
-                <label className="text-gray-700">Debit Card</label>
+                <label className="text-gray-700">Credit Card</label>
               </div>
 
-              {paymentMethod === "dc" && (
+              {paymentMethod === "CREDIT CARD" && (
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold mb-4">
-                    Debit Card Information
+                    Credit Card Information
                   </h3>
                   <input
                     type="text"

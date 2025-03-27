@@ -29,7 +29,6 @@ const orderSchema = new mongoose.Schema({
 
     paymentMethod: {
         type: String,
-        enum: ['COD', 'Credit Card', 'Debit Card'],
         required: true,
       },
       shippingAddress: {

@@ -26,7 +26,7 @@ import jwt from "jsonwebtoken";
 export const createOrder = async (req, res) => {
   try {
     const token = req.cookies.token;
-    const {CART_ID, SHIPPING_ADDRESS_ID } = req.body;
+    const {CART_ID, SHIPPING_ADDRESS_ID, PAYMENT_METHOD } = req.body;
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -35,10 +35,14 @@ export const createOrder = async (req, res) => {
     }
     const userId = decoded.userId; 
     const cart = await Cart.findById(CART_ID);
-    const shippingAddress = await UserLocation.findById(SHIPPING_ADDRESS_ID);
-    if (!cart || !shippingAddress) {
-        return res.status(404).json({ error: "Cart or shipping address not found" });
+    if(!cart){
+      return res.status(404).json({ error: "Please add some items to your cart before placing your order." });
     }
+    const shippingAddress = await UserLocation.findById(SHIPPING_ADDRESS_ID);
+    if(!shippingAddress){
+      return res.status(404).json({ error: "Please select a shipping location before placing your order." });
+    }
+
     const order = await Order.create({
       user: userId,
       products: cart.items.map(item => ({
@@ -48,12 +52,12 @@ export const createOrder = async (req, res) => {
       })),
       totalAmount: cart.totalAmount,
       shippingAddress: shippingAddress._id,
-      paymentMethod: "COD",
+      paymentMethod: PAYMENT_METHOD,
       status: "Pending",
     })
 
     await Cart.findByIdAndDelete(CART_ID);
-    res.status(201).json(order); 
+    res.status(201).json({ message: "Order created successfully", order }); 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

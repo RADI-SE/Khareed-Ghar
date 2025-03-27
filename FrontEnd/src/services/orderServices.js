@@ -14,10 +14,10 @@ export const useOrderService = create((set) => ({
     setError: (message) => set({ Error: message }),
     clearError: () => set({ Error: null, isError: false, isLoading: true }),
  
-    createOrder: async (CART_ID, SHIPPING_ADDRESS_ID) => {
+    createOrder: async (CART_ID, SHIPPING_ADDRESS_ID, PAYMENT_METHOD) => {
         try {
-            console.log("CART_ID",CART_ID, "SHIPPING_ADDRESS_ID",SHIPPING_ADDRESS_ID);
-            const response = await axios.post(API_URL, {CART_ID, SHIPPING_ADDRESS_ID});
+            console.log("CART_ID",CART_ID, "SHIPPING_ADDRESS_ID",SHIPPING_ADDRESS_ID, "PAYMENT_METHOD",PAYMENT_METHOD);
+            const response = await axios.post(API_URL, {CART_ID, SHIPPING_ADDRESS_ID, PAYMENT_METHOD});
             set({ orders: response.data });
         } catch (error) {
             console.log("error", error.response.data.message);
