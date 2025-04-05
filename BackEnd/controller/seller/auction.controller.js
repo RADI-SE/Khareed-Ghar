@@ -252,3 +252,29 @@ export const editAuctions = async (req, res) => {
     });
   }
 };
+
+
+export const deleteAuction = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const auction = await Auction.findByIdAndDelete(id);
+
+    if (!auction) {
+      return res.status(404).json({
+        success: false,
+        message: "Auction not found.",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Auction deleted successfully.",
+      auction,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
+  }
+};
+

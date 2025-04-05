@@ -7,6 +7,7 @@ import {
     completeAuction,
     editAuctions,
     getAuctionsById,
+    deleteAuction,
 } from '../../controller/seller/auction.controller.js';
 
 import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
@@ -24,8 +25,9 @@ router.get('/getAuctionsById/:id', getAuctionsById);
 
 router.put('/editAuctions/:id', editAuctions);
 
+router.delete('/deleteAuction/:id', deleteAuction);
+
 router.post('/bidding/:id', placeBid);
- 
  
 router.get('/userAuctions', getAuctionDetails);
 
