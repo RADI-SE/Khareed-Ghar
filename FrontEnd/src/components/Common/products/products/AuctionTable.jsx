@@ -5,6 +5,7 @@ import Pagination from "../../pagination";
 import EditAuctionModal from "../../../seller/Product/edit/editAuctionModal";
 import {AuctionConfirmationModal} from "../../confirmationModal/AuctionConfirmationModel";
 import { useSellerService } from "../../../../services/seller/sellerServices";
+import { Modal } from "react-bootstrap";
 
 const AuctionTable = () => {
   const {
@@ -18,6 +19,7 @@ const AuctionTable = () => {
     const [selectedAuction, setSelectedAuction] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showViewModal, setShowViewModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const { deleteAuction } = useSellerService();
     const handleEditClick = (auction) => {
@@ -48,11 +50,13 @@ const AuctionTable = () => {
   const defaultImage = "/placeholder-image.jpg";  
 
   const onProductClick = (auction) => {
+    setSelectedAuction(auction);
+    setShowViewModal(true);
+  };
 
-   };
- 
-
- 
+  const handleViewModalClose = () => {
+    setShowViewModal(false);
+  };
 
   const handleDeleteModalClose = (auction) => {
     setSelectedAuction(auction);
@@ -99,7 +103,7 @@ const AuctionTable = () => {
             className="bg-white-500 border-b hover:bg-gray-300"
           >
             <td className="px-6 py-2">{startIndex + index + 1}</td>
-            <td className="px-6 py-2">{auctionId}</td>
+            {/* <td className="px-6 py-2">{auctionId}</td> */}
 
             <td className="px-6 py-2">{productsName}</td>
              <td className="px-6 py-2">
@@ -176,6 +180,66 @@ const AuctionTable = () => {
               isLoading={false}
               modalMessage={modalMessage}
             />
+            <Modal show={showViewModal} onHide={handleViewModalClose} centered size="lg" className="auction-view-modal">
+              <Modal.Header closeButton className="bg-gradient-to-r from-blue-900 to-blue-800 border-b border-blue-700">
+                <Modal.Title className="text-white text-xl font-bold flex items-center">
+                  <FaEye className="mr-2" />
+                  Auction Details
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="p-6 bg-gray-50">
+                <div className="auction-info space-y-6">
+                  {/* Image Section */}
+                  <div className="flex justify-center bg-white p-4 rounded-lg shadow-sm">
+                    <img
+                      src={`../../../../../public/images${selectedAuction.productsImg}` || defaultImage}
+                      alt={selectedAuction.productsName}
+                      className="h-auto max-w-full object-contain rounded-lg hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+
+                  {/* Product Details Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Product Information */}
+                    <div className="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                      <h3 className="text-lg font-semibold text-blue-900 border-b pb-2">Product Information</h3>
+                      <div className="space-y-3">
+                        <div>
+                          <h6 className="text-sm font-medium text-gray-500">Product Name</h6>
+                          <p className="text-lg font-semibold text-gray-800">{selectedAuction.productsName}</p>
+                        </div>
+                        {/* <div>
+                          <h6 className="text-sm font-medium text-gray-500">Product ID</h6>
+                          <p className="text-lg font-semibold text-gray-800">{selectedAuction.auctionId}</p>
+                        </div> */}
+                      </div>
+                    </div>
+
+                    {/* Auction Information */}
+                    <div className="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                      <h3 className="text-lg font-semibold text-blue-900 border-b pb-2">Auction Information</h3>
+                      <div className="space-y-3">
+                        <div>
+                          <h6 className="text-sm font-medium text-gray-500">Starting Bid</h6>
+                          <p className="text-lg font-semibold text-green-600">${selectedAuction.startingBid}</p>
+                        </div>
+                        <div>
+                          <h6 className="text-sm font-medium text-gray-500">Start Time</h6>
+                          <p className="text-lg font-semibold text-gray-800">{selectedAuction.startTime}</p>
+                        </div>
+                        <div>
+                          <h6 className="text-sm font-medium text-gray-500">End Time</h6>
+                          <p className="text-lg font-semibold text-gray-800">{selectedAuction.endTime}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Modal.Body>
+              <Modal.Footer className="bg-gray-50 border-t border-gray-200 px-6 py-4">
+                
+              </Modal.Footer>
+            </Modal>
           </>
         )}
 
