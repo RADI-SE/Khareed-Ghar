@@ -278,3 +278,51 @@ export const deleteAuction = async (req, res) => {
   }
 };
 
+export const getCurrentLeftTime = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const auction = await Auction.findById(id);
+
+    if (!auction) {
+      return res.status(404).json({
+        success: false,
+        message: "Auction not found.",
+      });
+    }
+
+    const currentTime = new Date();
+    const endTime = new Date(auction.endTime); // Ensure proper Date object
+    const timeLeftInMillis = endTime - currentTime;
+
+    if (timeLeftInMillis <= 0) {
+      return res.status(200).json({
+        success: true,
+        timeLeft: 0,
+        message: "Auction has ended.",
+      });
+    }
+
+    const seconds = Math.floor((timeLeftInMillis / 1000) % 60);
+    const minutes = Math.floor((timeLeftInMillis / (1000 * 60)) % 60);
+    const hours = Math.floor((timeLeftInMillis / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(timeLeftInMillis / (1000 * 60 * 60 * 24));
+
+    res.status(200).json({
+      success: true,
+      timeLeft: {
+        totalMilliseconds: timeLeftInMillis,
+        days,
+        hours,
+        minutes,
+        seconds,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
+  }
+};
+
+
