@@ -32,25 +32,21 @@ export const useAdminService = create((set) => ({
           user.role === role ||
         (user.role === "banned" && user.originalRole === role)
       );
-      console.log("form  displayUser :  sellers ",sellers);
       return sellers;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
-      console.error("Error fetching sellers:", error);
     }
   },
 
   displayUserProfile: async (token, id) => {
     try {
       set({ isLoading: true }); // Start loading
-      console.log("id", id);
       const response = await axios.get( `${API_URL}/user/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       // Update state with fetched user data
       set({ user: response.data, isAuthenticated: true, isLoading: false });
-      console.log("User Profile:  ..... ", response.data.user);
 
       return response.data.user;
     } catch (error) {

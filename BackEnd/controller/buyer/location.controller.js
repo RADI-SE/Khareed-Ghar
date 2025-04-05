@@ -149,8 +149,7 @@ export const updateLocation = async (req, res) => {
     phoneNumber: phoneNumber
     }
     const updatedLocation = await UserLocation.findByIdAndUpdate({_id: id}, updates, { new: true }); 
-    console.log("updatedLocation",updatedLocation)
-
+ 
     if (!updatedLocation) {
       return res.status(404).json({ message: "Location not found" });
     }

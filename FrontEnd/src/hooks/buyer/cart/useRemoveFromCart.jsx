@@ -7,16 +7,6 @@ export const useRemoveFromCart = () => {
 
   return useMutation({
     mutationFn: ({ productId }) => removeFromCart( productId),
-    
-    onSuccess: () => {
-      console.log("Product removed from cart successfully.");
-    },
-
-    onError: (error) => {
-      console.error(
-        "Failed to remove product from cart: ",
-        error?.response?.data?.message || "An unexpected error occurred."
-      );
-    },
+  
   });
 };

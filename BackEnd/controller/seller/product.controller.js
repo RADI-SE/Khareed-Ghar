@@ -176,8 +176,7 @@ export const getUserProducts = async (req, res) => {
     }
 
 
-    console.log("products:: found",products.length,);
-    res.status(200).json({
+     res.status(200).json({
       success: true,
       products,
     });

@@ -11,8 +11,7 @@ export const validateMenuInput = [
 export const addLocationToMenu = async (req, res) => {
   try {
     const {id, state, city } = req.body;
-    console.log("id, state, city", id, state, city);
-
+   
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });

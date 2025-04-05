@@ -19,11 +19,6 @@ export const useCreateAuction = () => {
         endTime,
       );
     },
-    onSuccess: () => {
-      console.log("Auction Initiated successfully.");
-    },
-    onError: (error) => {
-      console.error("Error Initiating Auction:", error);
-    },
+
   });
 };

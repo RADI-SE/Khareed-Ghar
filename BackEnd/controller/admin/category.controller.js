@@ -72,7 +72,6 @@ export const getSubCategories = async (req, res) => {
 
 
     const childs  = parentCategoryObj.subcategories ; 
-    console.log("conslone parent object childs  ...","   :",childs)
     res.json({
       success: true,
       message: "Subcategories fetched successfully",

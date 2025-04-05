@@ -82,8 +82,7 @@ export const placeBid = async (req, res) => {
 // export const getAuctionDetails = async (req, res) => {
 //   try {
 
-//     console.log("Get auction By ID bk")
-
+ 
 //     const { auctionId } = req.params;
 
 
@@ -117,15 +116,13 @@ export const getAuctionDetails = async (req, res) => {
     // .populate('productId', 'name description price images')
     // .populate('bidders.userId', 'name')
     // .populate('currentBidder', 'name');
-    console.log("Get auction By ID bk", userID)
-
+ 
 
     if (!userID) {
       return res.status(404).json({ message: 'User not found' });
     }
     const UserAuctions = await Auction.find()
-     console.log("UserAuctions", UserAuctions)
-    const UserAuction = await Auction.findOne(
+     const UserAuction = await Auction.findOne(
       {
 
         sellerId: userID._id
@@ -136,7 +133,6 @@ export const getAuctionDetails = async (req, res) => {
       return res.status(404).json({ message: 'No Auction yet'})
     }
 
-    console.log(UserAuction)
 
     const products = await Product.findById(UserAuction.productId)
 
@@ -195,11 +191,10 @@ export const completeAuction = async (req, res) => {
 export const getAuctionsById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("ID", id);
-    const auction = await Auction.findById(id)
+      const auction = await Auction.findById(id)
       // .populate("category")
       // .populate("seller");
-      console.log("Auction", auction);
+     
 
     if (!auction) {
       return res.status(404).json({
@@ -213,7 +208,6 @@ export const getAuctionsById = async (req, res) => {
       auction,
     });
   } catch (error) {
-    console.error("Error getting auction:", error);
     res.status(500).json({
       success: false,
       message: "Server error. Please try again later.",
@@ -225,31 +219,14 @@ export const editAuctions = async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      // name,
-      // description,
-      // specifications,
-      // price,
-      // category,
-      // seller,
-      // images,
-
       startTime,
       endTime,
-
     } = req.body;
 
     // Update product by ID
     const updatedAuctions = await Auction.findByIdAndUpdate(
       id,
       {
-        // name,
-        // description,
-        // specifications,
-        // price,
-        // category,
-        // seller,
-        // images,
-
         startTime,
         endTime,
 
@@ -270,7 +247,6 @@ export const editAuctions = async (req, res) => {
       auction: updatedAuctions,
     });
   } catch (error) {
-    console.error("Error updating Auction:", error);
     res.status(500).json({
       success: false,
       message: "Server error. Please try again later.",

@@ -7,11 +7,6 @@ export const useDeleteSubCategory = (token) => {
   return useMutation({
     mutationFn: ({ categoryId, subcategoryId }) => 
       deleteSubCategories(token, categoryId, subcategoryId),  
-    onSuccess: () => {
-      console.log("Subcategory deleted successfully");
-    },
-    onError: () => {
-      console.log("Failed to delete subcategory");
-    },
+  
   });
 };

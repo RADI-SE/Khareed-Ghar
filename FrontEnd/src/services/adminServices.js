@@ -122,7 +122,6 @@ export const useAdminService = create((set) => ({
         });
         toast.success(response.data.message);
       }
-      console.log("console data for sub edit ", response.data.subcategory);
       return response.data.subcategory;
     } catch (error) {
       set({ isLoading: false, errorMessage: error.message });
@@ -206,11 +205,9 @@ export const useAdminService = create((set) => ({
         isLoading: false,
         isCheckingAuth: false,
       });
-      console.log(response.data.childs);
 
       return response.data.childs;
     } catch (error) {
-      console.error("Error fetching subcategories:", error);
       set({
         isLoading: false,
         errorMessage:
@@ -222,8 +219,6 @@ export const useAdminService = create((set) => ({
  
   deleteCategories: async (token, name, categoryId) => {
     try {
-      console.log("NAME is: ", name);
-      console.log("ID is: ", categoryId);
 
       set({ isLoading: true, errorMessage: null });
 
@@ -237,7 +232,6 @@ export const useAdminService = create((set) => ({
         },
       });
 
-      console.log(response.data)
       if (response.data.success) {
         set({
           categories: null,
@@ -265,12 +259,9 @@ export const useAdminService = create((set) => ({
 
   deleteSubCategories: async (token, categoryId, subcategoryId) => {
     try {
-      console.log("Category ID is " + categoryId);
-      console.log("Subcategory ID is " + subcategoryId);
 
       // Make sure to check if categoryId and subcategoryId are valid
       if (!categoryId || !subcategoryId) {
-        console.log("Missing categoryId or subcategoryId");
         return;
       }
 
@@ -293,15 +284,10 @@ export const useAdminService = create((set) => ({
           isLoading: false,
         });
         toast.success(response.data.message);
-      } else {
-        console.log("Failed to delete subcategory");
       }
     } catch (error) {
       
-      console.error("Error deleting subcategory", error);
- 
       if (error.response) {
-        console.log("Error Response Data: ", error.response.data);
         set({ isLoading: false, errorMessage: error.response.data.message });
         toast.error(error.response.data.message || "Failed to delete subcategory");
       } else {
@@ -323,7 +309,6 @@ export const useAdminService = create((set) => ({
       );
       return response.data.products;
     } catch (error) {
-      console.error("Error fetching products for category:", error);
       toast.error("Failed to fetch products for category");
       return { products: [], message: "Failed to fetch products." }; 
     }
@@ -336,7 +321,6 @@ export const useAdminService = create((set) => ({
       );
       return response.data.category;
     } catch (error) {
-      console.error("Error fetching category:", error);
       toast.error("Failed to fetch category");
       return { category: null, message: "Failed to fetch category." }; 
     }

@@ -1,54 +1,81 @@
 import React, { useState } from "react";
+import PropTypes from 'prop-types';
+import { Form, Button } from "react-bootstrap";
 
 const AuctionForm = ({ auction, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    startTime: auction?.startTime || "",
-    endTime: auction?.endTime || "",
-  });
+  const [startTime, setStartTime] = useState(auction?.startTime || "");
+  const [endTime, setEndTime] = useState(auction?.endTime || "");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setStartTime(e.target.value);
+    setEndTime(e.target.value);
+
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => { 
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({ startTime, endTime });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* Start Time Input */}
-      <div className="mb-3">
-        <label className="form-label">Start Time</label>
-        <input
-          type="datetime-local"
-          name="startTime"
-          value={formData.startTime}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+    <Form onSubmit={handleSubmit} className="auction-form-container">
+      <div className="row">
+        <div className="col-md-6 mb-4">
+          <Form.Group>
+            <Form.Label className="fw-semibold">Start Time</Form.Label>
+            <Form.Control
+              type="datetime-local"
+              name="startTime"
+              value={startTime}
+              onChange={handleChange}
+              className="form-control-lg"
+              required
+            />
+            <Form.Text className="text-muted">
+              Set the new start time for the auction
+            </Form.Text>
+          </Form.Group>
+        </div>
+
+        <div className="col-md-6 mb-4">
+          <Form.Group>
+            <Form.Label className="fw-semibold">End Time</Form.Label>
+            <Form.Control
+              type="datetime-local"
+              name="endTime"
+              value={endTime}
+              onChange={handleChange}
+              className="form-control-lg"
+              required
+            />
+            <Form.Text className="text-muted">
+              Set the new end time for the auction
+            </Form.Text>
+          </Form.Group>
+        </div>
       </div>
 
-      {/* End Time Input */}
-      <div className="mb-3">
-        <label className="form-label">End Time</label>
-        <input
-          type="datetime-local"
-          name="endTime"
-          value={formData.endTime}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+      <div className="d-flex justify-content-end mt-4">
+        <Button 
+          type="submit" 
+          variant="primary" 
+          size="lg"
+          className="px-4"
+        >
+          <i className="bi bi-clock me-2"></i>
+          Update Auction Time
+        </Button>
       </div>
-
-      {/* Submit Button */}
-      <button type="submit" className="btn btn-primary">
-        Update Auction
-      </button>
-    </form>
+    </Form>
   );
+};
+
+AuctionForm.propTypes = {
+  auction: PropTypes.shape({
+    startTime: PropTypes.string,
+    endTime: PropTypes.string
+  }).isRequired,
+  onSubmit: PropTypes.func.isRequired
 };
 
 export default AuctionForm;

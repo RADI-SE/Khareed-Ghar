@@ -68,8 +68,7 @@ export const RegionTable = ({ region }) => {
   };
 
 
-  console.log("Region selected successfully:::::::", selectedRegion)
-  return (
+   return (
     <div className="rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-white uppercase bg-blue-950">

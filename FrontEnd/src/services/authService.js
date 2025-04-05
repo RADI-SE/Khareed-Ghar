@@ -50,7 +50,6 @@ export const useAuthService = create((set) => ({
 
   resendVerificationCode: async (email) => {
     set({ isLoading: true, errorMessage: null });
-    console.log("resend verification code ... to ", email);
     try {
       const response = await axios.post(`${API_URL}/Resend-code`, {
         email: email,
@@ -66,21 +65,19 @@ export const useAuthService = create((set) => ({
     }
   },
 
-  verifyEmail: async (verificationToken) => {
-    console.log("verifyEmail", verificationToken);
+    verifyEmail: async (verificationToken) => {
     set({ isLoading: false, errorMessage: null });
     try {
       const response = await axios.post(`${API_URL}/verify-email`, {
         code: verificationToken,
       });
-
+  
         const user = response.data.user;
         set({
           user: response.data.user,
           isAuthenticated: true,
           isLoading: false,
         });
-        console.log("verication token ... ", response);
         return user;
     
     } catch (error) {
@@ -122,12 +119,10 @@ export const useAuthService = create((set) => ({
         throw new Error("User data is missing in the response");
       }
     } catch (error) {
-      // Ensure the error is captured properly and display the error message
       set({
         isLoading: false,isError:true , 
         errorMessage: error.response?.data?.message || error.message || "An error occurred during sign-in.",
       });
-      console.error("Sign-in error:", error); // Debugging error
     }
   },
    
@@ -158,7 +153,6 @@ export const useAuthService = create((set) => ({
   },
 
   rPassword: async (token, password, confirmPassword) => {
-    console.log("resetPassword 2", token, password, confirmPassword);
     set({ isLoading: true, errorMessage: null });
     try {
     const response = await axios.post(`${API_URL}/reset-password/${token}`, {

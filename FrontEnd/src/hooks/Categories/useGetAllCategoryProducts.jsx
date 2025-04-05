@@ -8,16 +8,13 @@ export const useGetAllCategoryProducts = (id) => {
     queryKey: ['getAllCategoryProducts', id?.selectedCategory],
     queryFn: async () => {
       if (!id?.selectedCategory) {
-        console.log("No category selected.");
-        return [];
+         return [];
       }
       try {
         const response = await getAllCategoryProducts({ selectedCategory: id.selectedCategory });
-        console.log("Response from API:", response);
 
         return response || [];
       } catch (error) {
-        console.error("Error during fetching:", error);
         return [];
       }
     },

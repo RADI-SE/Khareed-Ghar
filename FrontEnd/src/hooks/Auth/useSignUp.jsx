@@ -21,11 +21,6 @@ export const useCreateUser= () => {
         role,
         isAgreeToTerms
       ),
-    onSuccess: () => {
-      console.log("User created successfully.");
-    },
-    onError: (error) => {
-      console.error("Error creating user:", error);
-    },
+ 
   });
 };

@@ -10,12 +10,9 @@ export const useAddAddress = () => {
       const response = await createLocation(street, state, city, phoneNumber);
       return response;
     },
-    onSuccess: (data) => {
-      console.log("createLocation successfully:", data);
-      queryClient.invalidateQueries(['address']);
+    onSuccess: () => {
+       queryClient.invalidateQueries(['address']);
     },
-    onError: (error) => {
-      console.error("Error encountered while createLocation:", error.message);
-    },
+    
   });
 };

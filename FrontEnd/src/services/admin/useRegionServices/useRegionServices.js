@@ -17,8 +17,7 @@ export const useAdminService = create((set) => ({
         city,
       });
       toast.success(response.data.message);
-      // console.log("response.data addRegion," , response.data);
-
+ 
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -27,10 +26,9 @@ export const useAdminService = create((set) => ({
   getRegion: async () => {
     try {
       const response = await axios.get(`http://localhost:5000/api/all`);
-      console.log("getRegion ",response.data);
-      return response.data;
+       return response.data;
     } catch (error) {
-      console.log("getRegion error.message",error.message);
+      console.error("getRegion error.message",error.message);
     }
   },
   getRegionById: async (id) => {
@@ -40,7 +38,7 @@ export const useAdminService = create((set) => ({
       );
       return response.data;
     } catch (error) {
-      console.log("getRegionById error.message ",error.message);
+      console.error("getRegionById error.message ",error.message);
     }
   }, 
 
@@ -66,7 +64,6 @@ export const useAdminService = create((set) => ({
       const response = await axios.delete(`${API_URL}/delete/${id}`, {
         data: { state },
       });
-      console.log("deleteRegion response.data:", response.data);
       toast.success(response.data.message);
       return response.data;
     } catch (error) {

@@ -9,12 +9,9 @@ export const useRPassword = () => {
   return useMutation({
     mutationFn: ({token, password, confirmPassword}) =>
       rPassword(token, password, confirmPassword),
-    onSuccess: (data) => {
-      console.log("Reset Password code sent successfully.", data);
-      navigate("/auth/signin");
+    onSuccess: () => {
+       navigate("/auth/signin");
     },
-    onError: (error) => {
-      console.error("Error sending Reset Password code:", error);
-    },
+   
   });
 };

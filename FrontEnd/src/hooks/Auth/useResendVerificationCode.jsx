@@ -6,11 +6,6 @@ export const useResendVerificationCode = () => {
 
   return useMutation({
     mutationFn: (email) => resendVerificationCode(email),
-    onSuccess: (data) => {
-      console.log("verification Token resent successfully.", data);
-    },
-    onError: (error) => {
-      console.error("Error resending verification Token:", error);
-    },
+ 
   });
 };

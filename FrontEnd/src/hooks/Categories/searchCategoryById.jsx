@@ -10,15 +10,13 @@ export const useGetCategoryById = (id) => {
     queryKey: ['getCategoryById', id?.selectedCategory],
     queryFn: async () => {
       if (!id?.selectedCategory) {
-        console.log("No category selected.");
         return [];
       }
       try {
         const response = await getCategoryById({ selectedCategory: id.selectedCategory });
-        console.log("Response from API:", response);
         return response || [];
       } catch (error) {
-        console.error("Error during fetching:", error);
+        
         return [];
       }
     },

@@ -9,7 +9,7 @@ function ResetPassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("handleSubmit", token, password, confirmPassword);
+
     resetPassword({token, password, confirmPassword});
   };
   const handlePasswordChange = (e) => {

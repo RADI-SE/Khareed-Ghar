@@ -80,14 +80,12 @@ export const useSellerService = create((set) => ({
     try {
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(`http://localhost:5000/api/products`);
-      console.log(response.data.products);
 
       if (response.status === 200) {
         set({ isLoading: false, products: response.data.products });
         return response.data.products;
       }
     } catch (error) {
-      console.log(error.message);
       set({
         isLoading: false,
         isError: true,
@@ -102,7 +100,6 @@ export const useSellerService = create((set) => ({
   // getProductById
   getProductById: async (id) => {
     try {
-      console.log("id from the getProductById, ", id);
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(
         `http://localhost:5000/api/seller/productsById/${id}`
@@ -112,7 +109,6 @@ export const useSellerService = create((set) => ({
       }
       return response.data.product;
     } catch (error) {
-      console.log(error.message);
       set({
         isLoading: false,
         isError: true,
@@ -231,7 +227,6 @@ export const useSellerService = create((set) => ({
       });
       toast.success(response.data.message);
     } catch (error) {
-      console.log(error.message);
       set({ isLoading: false, isError: true, Error: error.message });
       toast.error(error.respone.data.message);
     }
@@ -249,7 +244,6 @@ export const useSellerService = create((set) => ({
       set({ isLoading: false, auctions: response.data.auctions });
       return response.data.auctions || [];
     } catch (error) {
-      console.log(error.message);
       set({
         isLoading: false,
         isError: true,
@@ -261,9 +255,7 @@ export const useSellerService = create((set) => ({
   
   getUserAuction: async () => {
     try {
-      console.log("Get Auction  ZS")
       const response = await axios.get(`http://localhost:5000/api/userAuctions`); 
-      console.log(response);      
       return response.data.auctions;
      } catch (error) {
       console.error("Error fetching user products:", error.message);
@@ -273,18 +265,12 @@ export const useSellerService = create((set) => ({
   // getAuctionsById
   getAuctionsById: async (id) => {
     try {
-      console.log("id from the getAuctionsById 2, ", id);
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(
         `http://localhost:5000/api/getAuctionsById/${id}`
       );
-      // if (response.status === 200) {
-      //   set({ isLoading: false, auctions: response.data.auction });
-      // }
-      console.log("respondd", response);
       return response.data;
     } catch (error) {
-      console.log(error.message);
       set({
         isLoading: false,
         isError: true,
@@ -300,49 +286,27 @@ export const useSellerService = create((set) => ({
   // Edit Auctions
 
   editAuctions: async(
-    token,
     id,
-    // name,
-    // description,
-    // specifications,
-    // price,
-    // category,
-    // seller,
-    // images
-
     startTime,
     endTime,
 
   ) =>{
     try {
+
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.put(
         `http://localhost:5000/api/editAuctions/${id}`,
         {
-          // name,
-          // description,
-          // specifications,
-          // price,
-          // category,
-          // seller,
-          // images,
-
           startTime,
           endTime,
 
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      ); 
       if (response.status === 200) {
         set({ isLoading: false, Error: null });
       }
       toast.success(response.data.message);
     } catch (error) {
-      console.log(error.message);
       set({
         isLoading: false,
         isError: true,

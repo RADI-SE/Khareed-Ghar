@@ -6,11 +6,6 @@ export const useSignInUser = () => {
 
   return useMutation({
     mutationFn: ({ email, password }) => signin(email, password),
-    onSuccess: (data) => {
-      console.log("User logged in successfully.", data);
-    },
-    onError: (error) => {
-      console.error("Error logging in user:", error);
-    },
+ 
   });
 };

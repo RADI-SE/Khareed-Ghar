@@ -15,8 +15,7 @@ export const useCreateProduct = (token) => {
       seller,
       images,
     }) => {
-      console.log("Received specifications payload: ", specifications); // Log the images payload dynamically
-      return addProduct(
+       return addProduct(
         token,
         name,
         description,
@@ -27,13 +26,6 @@ export const useCreateProduct = (token) => {
         seller,
         images
       );
-    },
-    onSuccess: (data) => {
-      console.log("Product created successfully.", data);
-      return data;
-    },
-    onError: (error) => {
-      console.error("Error creating product:", error);
     },
   });
 };

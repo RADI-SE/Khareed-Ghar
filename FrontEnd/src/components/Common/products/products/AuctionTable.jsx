@@ -20,8 +20,6 @@ const AuctionTable = () => {
   
 
     const handleEditClick = (auction) => {
-
-      console.log("auction from table",auction);
       setSelectedAuction(auction);
       setShowEditModal(true);
     };
@@ -42,24 +40,19 @@ const AuctionTable = () => {
     startIndex + rowsPerPage
   );
   const handlePageChange = (newPage) => {
+  
     setCurrentPage(newPage);
   };
 
-  const defaultImage = "/placeholder-image.jpg"; // Add appropriate default image path
+  const defaultImage = "/placeholder-image.jpg";  
 
   const onProductClick = (auction) => {
-    console.log("View auction:", auction);
-  };
-
-  // const handleEditClick = (auction) => {
-  //   console.log("Edit auction:", auction);
-  // };
+   };
+ 
 
   const handleDeleteClick = (auction) => {
-    console.log("Delete auction:", auction);
   };
-
-  console.log("Auction", auctions)
+ 
   return (
   <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
   <table className="w-full text-sm text-left text-gray-500">

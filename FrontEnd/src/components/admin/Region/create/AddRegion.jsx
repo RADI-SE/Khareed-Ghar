@@ -20,9 +20,7 @@ export const AddForm = () => {
     setCity("");
   };
 
-  console.log("State",state);
-  console.log("City", city);
-  console.log("User ID", userId);
+
   
   const handleSubmit = (e) => {
     e.preventDefault();

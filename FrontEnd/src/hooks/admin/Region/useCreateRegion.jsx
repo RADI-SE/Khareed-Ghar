@@ -6,14 +6,7 @@ export const useCreateRegion = () => {
 
   return useMutation({
     mutationFn: ({  id, state, city }) => {
-      console.log("Received payload: from react query : ",  id, state, city); // Log the images payload dynamically
-      return addRegion( id, state, city);
-    },
-    onSuccess: () => {
-      console.log("Region created successfully.");
-    },
-    onError: (error) => {
-      console.error("Error creating zoon:", error);
+       return addRegion( id, state, city);
     },
   });
 };

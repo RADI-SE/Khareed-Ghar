@@ -6,11 +6,6 @@ export const useResetPassword = () => {
 
   return useMutation({
     mutationFn: (email) => resetPassword(email),
-    onSuccess: (data) => {
-      console.log("Reset Password code sent successfully.", data);
-    },
-    onError: (error) => {
-      console.error("Error sending Reset Password code:", error);
-    },
+  
   });
 };

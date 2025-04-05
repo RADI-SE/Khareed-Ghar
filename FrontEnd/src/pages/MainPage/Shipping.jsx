@@ -31,8 +31,7 @@ const Shipping = () => {
       alert("Please select an address before proceeding.");
       return;
     }
-    const response = await fetchSelectedLocation(selectedAddress);
-    console.log("response", response);
+     await fetchSelectedLocation(selectedAddress);
     navigate("/cart/checkout");
   };
 

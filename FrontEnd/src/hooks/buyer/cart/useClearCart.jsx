@@ -6,11 +6,6 @@ export const useClearCart = () => {
 
   return useMutation({
     mutationFn: clearCart, 
-    onSuccess: (data) => {
-      console.log("Cart cleared successfully:", data);
-     },
-    onError: (error) => {
-      console.error("Error clearing cart:", error);
-     },
+ 
   });
 };

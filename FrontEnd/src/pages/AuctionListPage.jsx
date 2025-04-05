@@ -11,8 +11,7 @@ const AuctionListPage = () => {
 
   // In the parent component
   const handleBidSuccess = (newBidAmount) => {
-    // Handle successful bid (e.g., refresh auction list, show notification)
-    console.log('Bid successful:', newBidAmount);
+   
   };
 
 

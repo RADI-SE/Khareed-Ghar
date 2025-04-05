@@ -58,8 +58,7 @@ export const useCartService = create((set) => ({
   clearCart: async () => {
     try {
       const response = await axios.delete(`http://localhost:5000/api/clear`);
-      console.log("response", response);
-      set({ cart: response.data, isLoading: false });
+       set({ cart: response.data, isLoading: false });
       return response.data.message
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
@@ -119,8 +118,7 @@ export const useAddressService = create((set, get) => ({
       set({ isLoading: true, errorMessage: null });
       const response = await axios.delete(`http://localhost:5000/api/locations/${addressId}`);
       set({ address: response.data, isLoading: false });
-      console.log("response", response);
-      return response.data;
+       return response.data;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
@@ -128,13 +126,11 @@ export const useAddressService = create((set, get) => ({
 //  Fetch a selected location by ID
 fetchSelectedLocation: async (id) => {
   try {
-    console.log("Fetching location ID:", id);
-    set({ isLoading: true, errorMessage: null });
+     set({ isLoading: true, errorMessage: null });
     const response = await axios.get(
       `http://localhost:5000/api/selected-location/${id}`
     );
     set({ selectedLocation: response.data, isLoading: false });
-    console.log("Fetched location:", response.data);
     return response.data;
   } catch (error) {
     set({ errorMessage: error.message, isLoading: false });

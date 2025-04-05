@@ -34,7 +34,7 @@ const createCart = async (user,guestId, cart, productId, quantity, res) => {
     }
     cart.totalAmount = cart.items.reduce((acc, item) => acc + item.total, 0);
     const updated = await cart.save();
-    console.log("createCart Passed :) ");
+   
     return updated;
   } catch (err) {
     res.status(500).json({ message: "Server error" });
@@ -46,8 +46,7 @@ export const addToCart = async (req, res) => {
   const token = req.cookies.token;
   let userId ;
   let guestId = req.cookies.guestId || null;
-
-  console.log("token",token , "\nguestId",guestId)
+ 
   
   try {
     let cart;
@@ -76,11 +75,9 @@ export const addToCart = async (req, res) => {
         cart = new Cart({ user: userId, items: [], totalAmount: 0 });
       }
     }
-
-    console.log("userId || guestId, cart, productId, quantity")
+ 
 
     cart = await createCart(userId , guestId, cart, productId, quantity);
-    console.log("add to Cart Passed :) ")
     return res.status(200).json(cart);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -197,7 +194,7 @@ export const clearCart = async (req, res) => {
       if (cart) {
         await Cart.deleteOne({ _id: guestId }); 
       }
-      console.log("token passed")
+     
     } else {
       let decoded;
       try {
@@ -211,7 +208,7 @@ export const clearCart = async (req, res) => {
       if (cart) {
         await Cart.deleteOne({ _id: cart._id }); 
       }
-      console.log("with token passed")
+ 
     }
 
     res.status(200).json({ message: "Cart cleared successfully" });

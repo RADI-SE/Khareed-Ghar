@@ -19,7 +19,7 @@ import { sendEmail } from "../nodemailer/send.Email.js";
 export const signup = async (req, res) => {
   const { name, email, password, confirmPassword, role, isAgreeToTerms } = req.body;
 
-  console.log("signup", req.body);
+ 
   try {
     // Validation checks
     if (!name) {
@@ -150,7 +150,7 @@ export const resendVerificationCode = async (req, res) => {
 
 export const verifyEmail = async (req, res) => {
   const { code } = req.body;
-  console.log("verifyEmail", code);
+  
   try {
     const user = await User.findOne({
       verificationToken: code,
@@ -218,7 +218,7 @@ export const signin = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
-    console.log("error in login ", error);
+  
   }
 };
 
@@ -226,8 +226,6 @@ export const signin = async (req, res) => {
 export const logout = async (req, res) => {
   res.clearCookie("token");
   res.clearCookie("guestId");
-
-  console.log("logout");
   return res.status(200).json({
     success: true,
     message: "User logged out",
@@ -237,7 +235,7 @@ export const logout = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
-  console.log("forgotPassword", email);
+   
   try {
     const user = await User.findOne({ email: email });
     if (!user) {
@@ -268,14 +266,13 @@ export const forgotPassword = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
-    console.log("error in forgotPassword ", error);
+ 
   }
 };
 
 export const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password, confirmPassword } = req.body;
-  console.log("resetPassword", token, password, confirmPassword);
   try {
     const user = await User.findOne({
       resetPasswordToken: token,
@@ -313,7 +310,6 @@ export const resetPassword = async (req, res) => {
       .json({ success: true, message: "Password reset successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
-    console.log("error in resetPassword ", error);
   }
 };
 
@@ -333,6 +329,5 @@ export const checkAuth = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
-    console.log("error in checkAuth ", error);
   }
 };

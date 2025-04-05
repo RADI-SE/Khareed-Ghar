@@ -9,12 +9,7 @@ export const useFetchAddress = () => {
     queryFn: () => {
       return getLocationById();
     },
-    onSuccess: (data) => {
-      console.log("data", data);
-    },
-    onError: (error) => {
-      console.log("error", error);
-    },
+  
     refetchOnMount: true,
     refetchOnWindowFocus: true
   });

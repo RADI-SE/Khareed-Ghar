@@ -105,9 +105,7 @@ export const displayUserProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     res.json({ user });
-    console.log(user);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -134,10 +132,7 @@ export const banUsers = async (req, res) => {
       // Unban the user
       user.role = user.originalRole;
       user.isBanned = false;
-
-      console.log("User unbanned successfully");
       await user.save();
-
       return res.status(200).json({
         success: true,
         message: "User unbanned successfully",
@@ -154,7 +149,6 @@ export const banUsers = async (req, res) => {
       user.role = "banned";
       user.isBanned = true;
 
-      console.log("User banned successfully");
       await user.save();
 
       return res.status(200).json({

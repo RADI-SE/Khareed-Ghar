@@ -13,11 +13,6 @@ export const useAddToCart = () => {
         throw error;
       }
     },
-    onSuccess: (data) => {
-      console.log("Product added to cart successfully:", data);
-    },
-    onError: (error) => {
-      console.error("Error encountered while adding product to cart:", error.message);
-    },
+
   });
 };
