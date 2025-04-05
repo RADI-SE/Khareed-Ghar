@@ -223,7 +223,6 @@ export const editAuctions = async (req, res) => {
       endTime,
     } = req.body;
 
-    // Update product by ID
     const updatedAuctions = await Auction.findByIdAndUpdate(
       id,
       {

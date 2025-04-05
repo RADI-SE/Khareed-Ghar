@@ -22,7 +22,7 @@ router.get('/ongoing', getOngoingAuctions);
 
 router.get('/getAuctionsById/:id', getAuctionsById);
 
-router.post('/editAuctions/:id', editAuctions);
+router.put('/editAuctions/:id', editAuctions);
 
 router.post('/bidding/:id', placeBid);
  
