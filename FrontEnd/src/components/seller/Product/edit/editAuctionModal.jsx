@@ -5,15 +5,16 @@ import { useFetchAuctionsById } from "../../../../hooks/seller/Auctions/useFetch
 import { useEditAuctions } from "../../../../hooks/seller/Auctions/useEditAuctions";
 import AuctionForm from "./auctionForm";
 import { useFetchProductById } from "../../../../hooks/seller/useFetchProductsById";
+import { useCurrentLeftTime } from "../../../../hooks/seller/Auctions/useFetchCurrentLeftTime";
+
 
 const EditAuctionModal = ({ id, show, handleClose, onAuctionUpdated }) => {
   
   const { mutate: editAuctions, isLoading: isEditing } = useEditAuctions();
- 
   const { data: auction, isLoading, isError, error } = useFetchAuctionsById(id);
-
   const { data: product } = useFetchProductById(auction?.auction?.productId);
- 
+  const { data: currentLeftTime } = useCurrentLeftTime(id);
+
   const handleSubmit = (updatedAuctions) => {
     if (!id || !updatedAuctions) return;
     editAuctions({
@@ -63,6 +64,27 @@ const EditAuctionModal = ({ id, show, handleClose, onAuctionUpdated }) => {
                     <div className="col-md-6 mb-3">
                       <label className="form-label fw-semibold text-muted">Current End Time</label>
                       <p className="mb-0 fs-5">{auction?.auction?.endTime || "N/A"}</p>
+                    </div>
+                    <div className="col-12 mt-2">
+                      <label className="form-label fw-semibold text-muted small mb-2">Time Remaining</label>
+                      <div className="d-flex justify-content-between bg-white rounded p-3 shadow-sm">
+                        <div className="text-center px-3 border-end">
+                          <div className="fs-3">{currentLeftTime?.timeLeft?.days || "0"}</div>
+                          <div className="small text-muted">Days</div>
+                        </div>
+                        <div className="text-center px-3 border-end">
+                          <div className="fs-3  ">{currentLeftTime?.timeLeft?.hours || "0"}</div>
+                          <div className="small text-muted">Hours</div>
+                        </div>
+                        <div className="text-center px-3 border-end">
+                          <div className="fs-3  ">{currentLeftTime?.timeLeft?.minutes || "0"}</div>
+                          <div className="small text-muted">Minutes</div>
+                        </div>
+                        <div className="text-center px-3">
+                          <div className="fs-3  ">{currentLeftTime?.timeLeft?.seconds || "0"}</div>
+                          <div className="small text-muted">Seconds</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

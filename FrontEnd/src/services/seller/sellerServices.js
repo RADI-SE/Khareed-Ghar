@@ -317,12 +317,10 @@ export const useSellerService = create((set) => ({
   // deleteAuction
   deleteAuction: async (id) => {
     try {
-      console.log("id delete auction from service", id);
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.delete(`http://localhost:5000/api/deleteAuction/${id}`);
       toast.success(response.data.message);
       set({ isLoading: false, Error: null });
-      console.log("response delete auction from service", response.data);
       return response.data;
     } catch (error) {
       set({
@@ -331,6 +329,25 @@ export const useSellerService = create((set) => ({
         Error: error.message || "An error occurred while deleting auction.",
         });
       toast.error(error.respone.data.message);
+    }
+  },
+
+  getCurrentLeftTime: async (id) => {
+    try {
+
+       set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.get(`http://localhost:5000/api/getCurrentLeftTime/${id}`);
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Failed to fetch current left time');
+      }
+      return response.data;
+    } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching current left time.",
+      });
+      console.error("Error fetching current left time:", error.message);
     }
   },
 
