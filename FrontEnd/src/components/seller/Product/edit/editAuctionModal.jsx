@@ -7,9 +7,8 @@ import AuctionForm from "./auctionForm";
 import { useFetchProductById } from "../../../../hooks/seller/useFetchProductsById";
 
 const EditAuctionModal = ({ id, show, handleClose, onAuctionUpdated }) => {
-  const token = sessionStorage.getItem("token");
- 
-  const { mutate: editAuctions, isLoading: isEditing } = useEditAuctions(token);
+  
+  const { mutate: editAuctions, isLoading: isEditing } = useEditAuctions();
  
   const { data: auction, isLoading, isError, error } = useFetchAuctionsById(id);
 
@@ -17,7 +16,6 @@ const EditAuctionModal = ({ id, show, handleClose, onAuctionUpdated }) => {
  
   const handleSubmit = (updatedAuctions) => {
     if (!id || !updatedAuctions) return;
- 
     editAuctions({
       id,
       startTime: updatedAuctions.startTime,

@@ -3,7 +3,7 @@ import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { useState } from 'react';
 import Pagination from "../../pagination";
 import EditAuctionModal from "../../../seller/Product/edit/editAuctionModal";
-
+import {AuctionConfirmationModal} from "../../confirmationModal/AuctionConfirmationModel";
 
 const AuctionTable = () => {
   const {
@@ -12,21 +12,22 @@ const AuctionTable = () => {
     isError,
     error,
     refetch,
-  } = useFetchUserAuction(); // Fetch auctions using the hook
-  
+  } = useFetchUserAuction(); 
   
     const [selectedAuction, setSelectedAuction] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
-  
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     const handleEditClick = (auction) => {
       setSelectedAuction(auction);
       setShowEditModal(true);
+      setShowDeleteModal(false);
     };
     
     const handleModalClose = () => {
       setShowEditModal(false);
-      setSelectedAuction();
+      setShowDeleteModal(false);
     };
 
   const auctions = Array.isArray(data) ? data : data ? [data] : [];
@@ -40,17 +41,60 @@ const AuctionTable = () => {
     startIndex + rowsPerPage
   );
   const handlePageChange = (newPage) => {
-  
     setCurrentPage(newPage);
   };
 
   const defaultImage = "/placeholder-image.jpg";  
 
   const onProductClick = (auction) => {
+
    };
  
 
-  const handleDeleteClick = (auction) => {
+ 
+
+  const handleDeleteModalClose = (auction) => {
+    setSelectedAuction(auction);
+    setShowDeleteModal(true);
+    setModalMessage("Are you sure you want to delete this auction?");
+  };
+ 
+
+  /*
+
+  {
+    "auctionId": "67ce24192da291220616270d",
+    "startingBid": 150000,
+    "currentBid": 150000,
+    "currentBidder": null,
+    "startTime": "2027-09-03T12:52:00.000Z",
+    "endTime": "2027-09-03T12:52:00.000Z",
+    "status": "ongoing",
+    "productsName": "121",
+    "productsImg": [
+        "/uploads/1741562903333-150236465-default.jpeg"
+    ]
+}
+
+  */
+
+
+
+  const handleDelete = () => {
+    console.log("selectedAuction", selectedAuction);
+    deleteAuction(
+      { id: selectedAuction.auctionId },
+      {
+        onSuccess: () => {
+          setShowDeleteModal(false);
+          setModalMessage("Auction deleted successfully!");
+          refetch();
+        },
+        onError: (error) => {
+          setModalMessage(error.response?.data?.message || "Failed to delete auction");
+        },
+      }
+    );
   };
  
   return (
@@ -61,9 +105,10 @@ const AuctionTable = () => {
         <th className="px-6 py-3">S.N</th>
         <th className="px-6 py-3">Product ID</th>
         <th className="px-6 py-3">Product Name</th>
-        <th className="px-6 py-3">Brand</th>
-        <th className="px-6 py-3">Image</th>
-        <th className="px-6 py-3">Created Date</th>
+         <th className="px-6 py-3">Image</th>
+         <th className="px-6 py-3">Starting Bid</th>
+         <th className="px-6 py-3">Start Time</th>
+         <th className="px-6 py-3">End Time</th>
         <th className="px-6 py-3">Actions</th>
       </tr>
     </thead>
@@ -77,17 +122,17 @@ const AuctionTable = () => {
           <td colSpan="7" className="text-red-500">{error?.message || 'An error occurred'}</td>
         </tr>
       ) : paginatedAuctions.map((auction, index) => {
-        const { _id, productsName, productsImg, startingBid, startTime, endTime } = auction;
+        const { _id,auctionId, productsName, productsImg, startingBid, startTime, endTime } = auction;
         return (
           <tr
             key={_id}
             className="bg-white-500 border-b hover:bg-gray-300"
           >
             <td className="px-6 py-2">{startIndex + index + 1}</td>
-            <td className="px-6 py-2">{_id}</td>
+            <td className="px-6 py-2">{auctionId}</td>
+
             <td className="px-6 py-2">{productsName}</td>
-            <td className="px-6 py-2">{productsImg}</td>
-            <td className="px-6 py-2">
+             <td className="px-6 py-2">
               <img
                 src={
                   `../../../../../public/images${productsImg}` || defaultImage
@@ -100,9 +145,15 @@ const AuctionTable = () => {
                 }}
               />
             </td>
-
             <td className="px-6 py-2">
-              {new Date(startTime).toLocaleDateString()}
+              {startingBid}
+            </td>
+            <td className="px-6 py-2">
+            {startTime}
+            </td>
+                
+            <td className="px-6 py-2">
+              {endTime}
             </td>
 
             <td className="px-2 py-2">
@@ -120,7 +171,7 @@ const AuctionTable = () => {
               </button>
               <button
                 className="w-4 h-5 text-red-500"
-                onClick={() => handleDeleteClick(auction)}
+                onClick={() => handleDeleteModalClose(auction)}
               >
                 <FaTrashAlt />
               </button>
@@ -148,16 +199,13 @@ const AuctionTable = () => {
                 handleModalClose();
               }}
             />
-            {/* <ConfirmationModal
+            <AuctionConfirmationModal
               show={showDeleteModal}
               onClose={handleDeleteModalClose}
               onConfirm={handleDelete}
               isLoading={false}
               modalMessage={modalMessage}
-              confirmationName={confirmationName}
-              setConfirmationName={setConfirmationName}
-              selectedName={selectedProduct.name}
-            /> */}
+            />
           </>
         )}
 

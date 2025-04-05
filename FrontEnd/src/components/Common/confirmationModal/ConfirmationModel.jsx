@@ -40,7 +40,6 @@ export const ConfirmationModal = ({
           placeholder="Enter name to confirm"
           className="form-control"
         />
-        {modalMessage && <p className="mt-2 text-center">{modalMessage}</p>}
       </Modal.Body>
       <Modal.Footer>
         <Button

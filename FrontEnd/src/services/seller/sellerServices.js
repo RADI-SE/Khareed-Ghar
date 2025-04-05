@@ -292,7 +292,6 @@ export const useSellerService = create((set) => ({
 
   ) =>{
     try {
-
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.put(
         `http://localhost:5000/api/editAuctions/${id}`,
