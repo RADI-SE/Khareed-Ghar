@@ -281,10 +281,6 @@ export const useSellerService = create((set) => ({
       });
     }
   },
-
-
-  // Edit Auctions
-
   editAuctions: async(
     id,
     startTime,
@@ -314,6 +310,26 @@ export const useSellerService = create((set) => ({
           error.message ||
           "An error occurred while updating Auction.",
       });
+      toast.error(error.respone.data.message);
+    }
+  },
+
+  // deleteAuction
+  deleteAuction: async (id) => {
+    try {
+      console.log("id delete auction from service", id);
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.delete(`http://localhost:5000/api/deleteAuction/${id}`);
+      toast.success(response.data.message);
+      set({ isLoading: false, Error: null });
+      console.log("response delete auction from service", response.data);
+      return response.data;
+    } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while deleting auction.",
+        });
       toast.error(error.respone.data.message);
     }
   },

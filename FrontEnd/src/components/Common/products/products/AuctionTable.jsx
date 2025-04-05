@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Pagination from "../../pagination";
 import EditAuctionModal from "../../../seller/Product/edit/editAuctionModal";
 import {AuctionConfirmationModal} from "../../confirmationModal/AuctionConfirmationModel";
+import { useSellerService } from "../../../../services/seller/sellerServices";
 
 const AuctionTable = () => {
   const {
@@ -18,7 +19,7 @@ const AuctionTable = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
-
+    const { deleteAuction } = useSellerService();
     const handleEditClick = (auction) => {
       setSelectedAuction(auction);
       setShowEditModal(true);
@@ -59,42 +60,11 @@ const AuctionTable = () => {
     setModalMessage("Are you sure you want to delete this auction?");
   };
  
-
-  /*
-
-  {
-    "auctionId": "67ce24192da291220616270d",
-    "startingBid": 150000,
-    "currentBid": 150000,
-    "currentBidder": null,
-    "startTime": "2027-09-03T12:52:00.000Z",
-    "endTime": "2027-09-03T12:52:00.000Z",
-    "status": "ongoing",
-    "productsName": "121",
-    "productsImg": [
-        "/uploads/1741562903333-150236465-default.jpeg"
-    ]
-}
-
-  */
-
-
-
-  const handleDelete = () => {
+  const handleDelete = async () => {
     console.log("selectedAuction", selectedAuction);
-    deleteAuction(
-      { id: selectedAuction.auctionId },
-      {
-        onSuccess: () => {
-          setShowDeleteModal(false);
-          setModalMessage("Auction deleted successfully!");
-          refetch();
-        },
-        onError: (error) => {
-          setModalMessage(error.response?.data?.message || "Failed to delete auction");
-        },
-      }
-    );
+    await deleteAuction(selectedAuction.auctionId);
+    refetch();
+    handleModalClose();
   };
  
   return (
