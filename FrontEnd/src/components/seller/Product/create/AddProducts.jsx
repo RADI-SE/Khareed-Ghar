@@ -107,7 +107,8 @@ export const AddProductForm = () => {
         CategoryId,
         SubCategoryId,
         seller,
-        images
+        images,
+        isAuction
       );
       
       if (isAuction && productId) {

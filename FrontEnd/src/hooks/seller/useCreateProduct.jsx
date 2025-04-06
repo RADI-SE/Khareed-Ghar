@@ -14,6 +14,7 @@ export const useCreateProduct = (token) => {
       subcategory,
       seller,
       images,
+      isAuction
     }) => {
        return addProduct(
         token,
@@ -24,7 +25,8 @@ export const useCreateProduct = (token) => {
         category,
         subcategory,
         seller,
-        images
+        images,
+        isAuction
       );
     },
   });

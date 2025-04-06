@@ -8,7 +8,7 @@ export const addProduct = async (req, res) => {
       ? JSON.parse(req.body.specifications)
       : {};
 
-    const { name, description, price, category, subcategory, seller } =
+    const { name, description, price, category, subcategory, seller, isAuction } =
       req.body;
 
     const file = req.file; 
@@ -69,7 +69,6 @@ export const addProduct = async (req, res) => {
         message: "Invalid price. Price cannot be negative.",
       });
     }
-
     const categoryDoc = await Category.findById(category);
     if (!categoryDoc) {
       return res.status(404).json({
@@ -86,6 +85,7 @@ export const addProduct = async (req, res) => {
       category,
       subcategory,
       seller,
+      isAuction,
       images: imagePath,
     });
     const savedProduct = await product.save();
@@ -164,7 +164,7 @@ export const getProductById = async (req, res) => {
 export const getUserProducts = async (req, res) => {
   try {
     const { id } = req.params;
-    const products = await Product.find({ seller: id })
+    const products = await Product.find({ seller: id, isAuction: false })
      .populate("category")
      .populate("subcategory");
 
@@ -174,7 +174,7 @@ export const getUserProducts = async (req, res) => {
         message: "No products found.",
       });
     }
-
+    console.log("products",products);
 
      res.status(200).json({
       success: true,

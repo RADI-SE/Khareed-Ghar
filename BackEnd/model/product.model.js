@@ -31,7 +31,10 @@ const ProductSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-
+    isAuction: {
+      type: Boolean,
+      default: false,
+    },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Subcategory' },
     seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
