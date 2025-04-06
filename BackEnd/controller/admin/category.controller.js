@@ -307,7 +307,7 @@ export const getAllCategoryProducts = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Category not found" });
     }
-    const products = await Product.find({ category: id });
+    const products = await Product.find({ category: id, isAuction: false });
     res.json({ success: true, message: "Products fetched successfully", products });
   } catch (error) {
     console.error("Error in getAllCategoryProducts:", error);
