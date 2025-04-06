@@ -7,5 +7,7 @@ export const useFetchAuctionsById = (id) => {
     queryKey: ['auction', id], 
     queryFn: () => getAuctionsById(id),
     enabled: !!id,
+    refetchInterval: 1000,
+    refetchIntervalInBackground: true,
   });
 };

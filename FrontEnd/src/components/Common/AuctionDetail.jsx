@@ -4,6 +4,7 @@ import defaultProduct from "../../assets/images/default.jpeg";
 import { useFetchAuctionsById } from "../../hooks/seller/Auctions/useFetchAuctionsById";
 import { useFetchProductById } from '../../hooks/seller/useFetchProductsById';
 import { toast } from 'react-hot-toast';
+import { useBidNow } from '../../hooks/seller/Auctions/useBidNow';
 
 const AuctionDetail = () => {
   const { id } = useParams();
@@ -15,6 +16,8 @@ const AuctionDetail = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
+
+  const { mutate: bidNow } = useBidNow();
 
   if (isLoading) {
     return (
@@ -41,6 +44,10 @@ const AuctionDetail = () => {
       toast.error('Bid amount must be higher than the current price');
       return;
     }
+    bidNow({
+      auctionId: id,
+      bidAmount: bidValue,
+    });
 
     // Here you would typically call your bid submission API
     toast.success('Bid placed successfully!');
@@ -168,12 +175,15 @@ const AuctionDetail = () => {
                   </p>
                 </div>
                 {/* bidding input field */}
-                  <div class="w-full max-w-sm min-w-[200px]">
-                    <label class="text-gray-900 text-lg leading-8 font-medium mb-4">
+                  <div className="w-full max-w-sm min-w-[200px]">
+                    <label className="text-gray-900 text-lg leading-8 font-medium mb-4">
                         Bid Here 
                     </label>
-                    <input type="number" placeholder='Bid must be higher then current bid' className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '></input>
-                    <button className='text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2'>
+                    <input type="number" placeholder='Bid must be higher then current bid'
+                     className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                     value={bidAmount}
+                     onChange={(e) => setBidAmount(e.target.value)}></input>
+                    <button onClick={handleBidSubmit} className='text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2'>
                       SUBMIT
                     </button>
                   </div>

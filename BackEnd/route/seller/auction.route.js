@@ -30,7 +30,6 @@ router.delete('/deleteAuction/:id', deleteAuction);
 
 router.get('/getCurrentLeftTime/:id', getCurrentLeftTime);
 
-
 router.post('/bidding', placeBid);
  
 router.get('/userAuctions', getAuctionDetails);

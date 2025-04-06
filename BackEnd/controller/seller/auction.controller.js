@@ -54,7 +54,11 @@ export const getOngoingAuctions = async (req, res) => {
 export const placeBid = async (req, res) => {
   try {
     const { auctionId, bidAmount } = req.body;
- 
+    console.log(auctionId, bidAmount);
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
     const auction = await Auction.findById(auctionId);
     if (!auction) {
       return res.status(404).json({ message: 'Auction not found' });
@@ -68,7 +72,7 @@ export const placeBid = async (req, res) => {
       return res.status(400).json({ message: 'Bid must be higher than the current bid' });
     }
  
-    const fetchUser = await User.findById(req.user.id); 
+    const fetchUser = await User.findById(userId); 
     if (!fetchUser) {
       return res.status(404).json({ message: 'User not found' });
     }

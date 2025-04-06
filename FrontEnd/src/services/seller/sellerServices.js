@@ -352,6 +352,20 @@ export const useSellerService = create((set) => ({
     }
   },
 
+  bidAuction  : async (auctionId, bidAmount) => {
+    try {
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.post(`http://localhost:5000/api/bidding`, { auctionId, bidAmount });
+      return response.data;
+    } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching bidding.",
+      });
+      console.error("Error fetching bidding:", error.message);
+    }
+  },
 }));
 
 
