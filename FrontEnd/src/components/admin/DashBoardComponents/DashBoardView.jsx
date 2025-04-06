@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+import { useFetchOrders } from "../../../hooks/admin/Orders/useFetchOrders";
 
 import dollar from "./icons/dollor.png";
 import reviews from "./icons/reviews.png";
 import sales from "./icons/sales.png";
-import data from "../../../mockJsons/orderData.json";
 
 export const DashBoardView = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const rowsPerPage = 5;
+  const rowsPerPage = 3;
+
+  const { data = [] } = useFetchOrders();
 
   // Calculate the range of rows to display based on the current page
   const startIndex = currentPage * rowsPerPage;
@@ -62,40 +64,57 @@ export const DashBoardView = () => {
       {/* Orders Table */}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3 justify-stretch">
         <h3>Recent Orders</h3>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-white uppercase bg-blue-950 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th className="px-6 py-3">ID</th>
-              <th className="px-6 py-3">Item</th>
-              <th className="px-6 py-3">Customer</th>
-              <th className="px-6 py-3">Payment Method</th>
-              <th className="px-6 py-3">Price</th>
-            </tr>
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs text-white uppercase bg-blue-950">
+          <tr>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Total Amount</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Payment</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
+              </tr>
           </thead>
           <tbody>
-            {currentData.map((item) => (
-              <tr key={item.id} className="bg-white-500 border-b hover:bg-gray-300">
-                <td className="px-6 py-3">{item.id}</td>
-                <td className="px-6 py-3">
-                  <img
-                    className="order-item-img"
-                    src={item.item}
-                    alt={`Product ${item.item}`}
-                    width="50"
-                    height="50"
-                  />
-                </td>
-                <td className="px-6 py-3">{item.first_name}</td>
-                <td className="px-6 py-3">{item.payment}</td>
-                <td className="px-6 py-3">{item.price}</td>
-              </tr>
+            {currentData.map((order) => (
+              <tr
+              key={order._id}
+              onClick={() => handleRowClick(order)}
+              className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+            >
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {order._id.substring(order._id.length - 6)}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {order.user}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${order.totalAmount}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {order.paymentMethod}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className={`px-2 py-1 text-xs rounded-full ${
+                  order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                  order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
+                  order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {order.status}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {new Date(order.createdAt).toLocaleDateString()}
+              </td>
+            </tr>
             ))}
           </tbody>
         </table>
 
         {/* Pagination Buttons */}
         <div className="justify-stretch h-10">
-          <button onClick={handlePrevious} disabled={currentPage === 0} className="w-25 h-100 bg-blue-950 text-white rounded-lg">
+          <button onClick={handlePrevious} disabled={currentPage === 0} className="w-25 h-100 bg-blue-950 text-white rounded-lg my-4 mx-4">
             Previous
           </button>
           <span>
@@ -103,7 +122,7 @@ export const DashBoardView = () => {
           </span>
           <button
             onClick={handleNext}
-            disabled={(currentPage + 1) * rowsPerPage >= data.length}  className="w-25 h-100 bg-blue-950 text-white rounded-lg"
+            disabled={(currentPage + 1) * rowsPerPage >= data.length}  className="w-25 h-100 bg-blue-950 text-white rounded-lg my-4 mx-4"
           >
             Next
           </button>
