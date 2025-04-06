@@ -5,5 +5,5 @@ const router = express.Router();
 
 router.post("/", createOrder);
 router.get("/", getUserOrders);
-router.get("/all", getAllOrders);
+router.get("/all-orders", getAllOrders);
 export default router;

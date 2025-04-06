@@ -1,10 +1,7 @@
-import React, { useState } from "react";
 import { useFetchRegion } from "../../../../hooks/admin/Region/useFetchRegion";
 import { RegionTable} from "./RegionTable";
 
 export const DetailedRegionView = () => {
-  const [selectedRegion, setSelectedRegion] = useState(null);
-
   const {
     data: region = [],
     isLoading: isLoadingRegion,
