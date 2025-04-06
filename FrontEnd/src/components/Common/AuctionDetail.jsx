@@ -99,7 +99,7 @@ const AuctionDetail = () => {
                 )}
               </div>
 
-              {/* Bidders Table */}
+              {/* Bidders Table */} 
               <div className="bg-white rounded-lg shadow overflow-hidden">
                 <div className="px-4 py-2 sm:px-6 bg-blue-900">
                   <h3 className="text-lg font-medium leading-6 text-white">Auction Bidders</h3>

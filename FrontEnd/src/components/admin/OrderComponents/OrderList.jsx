@@ -9,12 +9,12 @@ const OrderList = () => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm">
+    <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="mb-6">
         <h4 className="text-2xl font-semibold text-gray-800">Recent Orders</h4>
       </div>
-      <div className="overflow-hidden rounded-lg border border-gray-200">
-        <div className="overflow-x-auto">
+      <div className="border-t border-gray-200">
+        <div className="overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-blue-950">
               <tr>
