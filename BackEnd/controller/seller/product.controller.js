@@ -107,7 +107,7 @@ export const addProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
   try {
     
-    const products = await Product.find()
+    const products = await Product.find({isAuction: false})
       .populate("category", "name")
       .populate("subcategory", "name")
       .populate({ path: "seller", select: "name" });
@@ -118,7 +118,6 @@ export const getProducts = async (req, res) => {
         message: "No products found.",
       });
     }
-
     res.status(200).json({
       success: true,
       products,
