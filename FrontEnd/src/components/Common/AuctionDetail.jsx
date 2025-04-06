@@ -5,6 +5,7 @@ import { useFetchAuctionsById } from "../../hooks/seller/Auctions/useFetchAuctio
 import { useFetchProductById } from '../../hooks/seller/useFetchProductsById';
 import { toast } from 'react-hot-toast';
 import { useBidNow } from '../../hooks/seller/Auctions/useBidNow';
+import { useCurrentLeftTime } from '../../hooks/seller/Auctions/useFetchCurrentLeftTime';
 
 const AuctionDetail = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const AuctionDetail = () => {
   const [bidAmount, setBidAmount] = useState('');
   const [selectedImage, setSelectedImage] = useState(0);
   const {data:product} = useFetchProductById(auction?.auction?.productId);
+  const { data: currentLeftTime } = useCurrentLeftTime(id);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -116,8 +118,8 @@ const AuctionDetail = () => {
                     </table>
                     <div className="max-h-[144px] overflow-y-auto">
                       <table className="min-w-full divide-y divide-gray-200">
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {auction?.auction?.bidders?.map((bidder) => (
+                        <tbody className="bg-white divide-y divide-gray-200 ">
+                          {[...auction?.auction?.bidders]?.reverse()?.map((bidder) => (
                             <tr key={bidder._id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 w-1/3">{bidder.name}</td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 w-1/3">${bidder.bidAmount.toFixed(2)}</td>
@@ -142,8 +144,6 @@ const AuctionDetail = () => {
                 </div>
               </div>
             </div>
-
-            {/* Right Section - Details and Bid Form */}
             <div className="md:w-1/2 p-6 border-l border-gray-200">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
@@ -165,7 +165,13 @@ const AuctionDetail = () => {
                 </div>
 
                 <div className="border-t border-b border-gray-200 py-4">
-                  <p className="font-stretch-extra-condensed">Ends: {new Date(auction?.auction?.endTime).toLocaleString()}</p>
+                  <p className="font-stretch-extra-condensed">Ends</p>
+                  <div className='flex gap-2'>
+                    <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.days || "0"}</p>
+                    <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.hours || "0"}</p>
+                    <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.minutes || "0"}</p>
+                    <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.seconds || "0"}</p>
+                  </div>
                 </div>
 
                 <div className="prose max-w-none">
