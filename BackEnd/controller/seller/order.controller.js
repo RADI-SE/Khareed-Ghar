@@ -63,8 +63,16 @@ export const createOrder = async (req, res) => {
   }
 }
 
-export const getOrders = async (req, res) => {
-    const orders = await Order.find({ seller: req.user._id });
+//get all user orders
+export const getUserOrders = async (req, res) => {
+    const orders = await Order.find({ user: req.user._id });
     res.status(200).json(orders);
 }
+
+//get all orders  
+export const getAllOrders = async (req, res) => {
+    const orders = await Order.find();
+    res.status(200).json(orders);
+}
+
 
