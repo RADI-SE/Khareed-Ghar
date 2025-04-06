@@ -68,9 +68,15 @@ export const placeBid = async (req, res) => {
       return res.status(400).json({ message: 'Bid must be higher than the current bid' });
     }
  
+    const fetchUser = await User.findById(req.user.id); 
+    if (!fetchUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+     
     auction.currentBid = bidAmount;
-    auction.currentBidder = req.user.id;
-    auction.bidders.push({ userId: req.user.id, bidAmount });
+    auction.currentBidder = fetchUser._id;
+     
+    auction.bidders.push({ userId: fetchUser._id , name: fetchUser.name,  bidAmount });
 
     await auction.save();
     res.status(200).json({ message: 'Bid placed successfully', auction });
