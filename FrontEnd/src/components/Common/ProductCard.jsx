@@ -45,7 +45,7 @@ const ProductCard = ({product}) => {
           className=""
           onClick={(e) => handleAddToCart(e, product._id)}
         >
-        <span className="flex justify-center cursor-pointer rounded-md bg-slate-900 p-2 mb-1 text-center text-sm font-medium text-white hover:bg-gray-700">
+        <span className="flex justify-center cursor-pointer rounded-md bg-blue-900 p-2 mb-1 text-center text-sm font-medium text-white hover:bg-blue-800">
           Add to Cart
         </span>
       </div>
@@ -53,7 +53,7 @@ const ProductCard = ({product}) => {
           className=""
           onClick={(e) => handleDetail(e, product._id)}
         >
-        <span className="flex items-center justify-center cursor-pointer rounded-md bg-slate-900 p-2 text-center text-sm font-medium text-white hover:bg-gray-700">
+        <span className="flex items-center justify-center cursor-pointer rounded-md bg-blue-900 p-2 text-center text-sm font-medium text-white hover:bg-blue-800">
           View</span>
       </div>
       </div>

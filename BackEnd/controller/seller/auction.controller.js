@@ -89,7 +89,28 @@ export const placeBid = async (req, res) => {
   }
 };
  
+// export const getAuctionDetails = async (req, res) => {
+//   try {
 
+ 
+//     const { auctionId } = req.params;
+
+
+//     const auction = await Auction.findById(auctionId)
+//       .populate('productId', 'name description price images')
+//       .populate('bidders.userId', 'name')
+//       .populate('currentBidder', 'name');
+
+//     if (!auction) {
+//       return res.status(404).json({ message: 'Auction not found' });
+//     }
+
+//     res.status(200).json(auction);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching auction details', error });
+//   }
+// };
+ 
 
 export const getAuctionDetails = async (req, res) => {
   try {

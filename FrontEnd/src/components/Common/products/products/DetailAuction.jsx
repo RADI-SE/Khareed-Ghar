@@ -29,7 +29,7 @@ const DetailAuction = ({
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
+  }; 
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -111,67 +111,45 @@ const DetailAuction = ({
               </div>
 
               {/* Bid History */}
-              <div className="border-b border-gray-100 py-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <FaDollarSign className="mr-2" />
-                  Bid History
-                </h3>
-                <div className="overflow-x-auto">
-                  {auction.bidders && auction.bidders.length > 0 ? (
+              {/* Bidders Table */} 
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <div className="px-4 py-2 sm:px-6 bg-blue-900">
+                  <h3 className="text-lg font-medium leading-6 text-white">Auction Bidders</h3>
+                  <p className="mt-1 max-w-2xl text-sm text-white">List of all bids placed on this item</p>
+                </div>
+                <div className="border-t border-gray-200">
+                  <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Bidder
-                          </th>
-                          <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Amount
-                          </th>
-                          <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
-                            Date & Time
-                          </th>
-                          <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bidder</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {auction.bidders.map((bidder, index) => (
-                          <tr key={index} className={index === 0 ? 'bg-green-50' : ''}>
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <FaUser className="text-gray-400 mr-2" />
-                                <span className="text-sm text-gray-900">Bidder {index + 1}</span>
-                              </div>
-                            </td>
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <FaDollarSign className={`${index === 0 ? 'text-green-600' : 'text-gray-400'} mr-1`} />
-                                <span className={`text-sm font-medium ${index === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-                                  {bidder.bidAmount}
-                                </span>
-                              </div>
-                            </td>
-                            <td className="px-4 py-4 whitespace-nowrap hidden sm:table-cell">
-                              <div className="flex items-center text-sm text-gray-500">
-                                <FaCalendar className="mr-2" />
-                                {formatDate(bidder.bidTime)}
-                              </div>
-                            </td>
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              {index === 0 && (
-                                <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
-                                  Current Bid
-                                </span>
-                              )}
-                            </td>
+                        {auction?.bidders?.length > 0 ? (
+                          [...auction.bidders].reverse().map((bidder) => (
+                            <tr key={bidder._id} className="hover:bg-gray-50">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{bidder.name}</td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${bidder.bidAmount.toFixed(2)}</td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {new Date(bidder.bidTime).toLocaleTimeString([], { 
+                                  hour: '2-digit', 
+                                  minute: '2-digit',
+                                  hour12: true 
+                                })}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="3" className="px-6 py-4 text-center text-sm text-gray-500">No bids placed yet</td>
                           </tr>
-                        ))}
+                        )}
                       </tbody>
                     </table>
-                  ) : (
-                    <p className="text-gray-500 text-center py-4">No bids yet</p>
-                  )}
+                  </div>
                 </div>
               </div>
 

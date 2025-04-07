@@ -9,11 +9,6 @@ const AuctionListPage = () => {
     isError: auctionsError,
   } = useFetchAuctions();
 
-  // In the parent component
-  const handleBidSuccess = (newBidAmount) => {
-   
-  };
-
 
   if (isLoadingAuctions) {
     return (
@@ -42,7 +37,7 @@ const AuctionListPage = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {auctions.map((auction) => (
-              <AuctionCard key={auction._id} auctions={auction} onBidSuccess={handleBidSuccess} />
+              <AuctionCard key={auction._id} auctions={auction} />
             ))}
           </div>
         )}

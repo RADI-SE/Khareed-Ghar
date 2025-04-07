@@ -1,5 +1,5 @@
 import React from "react";
-import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaUser, FaBell } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 import { useFetchCartItems } from "../../hooks/buyer/cart/useFetchCartItems";
@@ -61,6 +61,19 @@ const Navbar = () => {
               className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
               <FaShoppingCart className="w-6 h-6 text-blue-900" />
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                  {items.length}
+                </span>
+              )}
+            </button>
+
+            {/* Notification Button */}
+            <button 
+              onClick={() => navigate("/notification")} 
+              className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <FaBell className="w-6 h-6 text-blue-900" />
               {items.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                   {items.length}
