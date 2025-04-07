@@ -7,7 +7,7 @@ import sales from "./icons/sales.png";
 
 export const DashBoardView = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const rowsPerPage = 3;
+  const rowsPerPage = 5;
 
   const { data = [] } = useFetchOrders();
 
@@ -62,17 +62,17 @@ export const DashBoardView = () => {
       </div>
 
       {/* Orders Table */}
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3 justify-stretch">
+      <div className="relative shadow-md sm:rounded-lg mt-3 justify-stretch">
         <h3>Recent Orders</h3>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-white uppercase bg-blue-950">
           <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Total Amount</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Payment</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
+                <th className="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
+                <th className="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Total Amount</th>
+                <th className="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Payment</th>
+                <th className="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+                <th className="px-6 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
               </tr>
           </thead>
           <tbody>
@@ -82,19 +82,19 @@ export const DashBoardView = () => {
               onClick={() => handleRowClick(order)}
               className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
             >
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-900">
                 {order._id.substring(order._id.length - 6)}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-900">
                 {order.user}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-900">
                 ${order.totalAmount}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-900">
                 {order.paymentMethod}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-2 whitespace-nowrap">
                 <span className={`px-2 py-1 text-xs rounded-full ${
                   order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
                   order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
@@ -104,13 +104,14 @@ export const DashBoardView = () => {
                   {order.status}
                 </span>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-900">
                 {new Date(order.createdAt).toLocaleDateString()}
               </td>
             </tr>
             ))}
           </tbody>
         </table>
+          </div>
 
         {/* Pagination Buttons */}
         <div className="justify-stretch h-10">
@@ -127,7 +128,6 @@ export const DashBoardView = () => {
             Next
           </button>
         </div>
-      </div>
     </div>
   );
 };

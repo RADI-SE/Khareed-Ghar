@@ -6,6 +6,8 @@ import { useFetchProductById } from '../../hooks/seller/useFetchProductsById';
 import { toast } from 'react-hot-toast';
 import { useBidNow } from '../../hooks/seller/Auctions/useBidNow';
 import { useCurrentLeftTime } from '../../hooks/seller/Auctions/useFetchCurrentLeftTime';
+import { FaClock, FaDollarSign, FaUser, FaEdit, FaTrashAlt, FaCalendar } from 'react-icons/fa';
+
 
 const AuctionDetail = () => {
   const { id } = useParams();
@@ -62,6 +64,17 @@ const AuctionDetail = () => {
       : [auction.productId.images]
     : [];
 
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    };
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -73,7 +86,7 @@ const AuctionDetail = () => {
               <div>
                 <div className="relative h-[300px] overflow-hidden rounded-lg">
                   <img
-                    src={productImages[selectedImage] ? `/public/images/${productImages[selectedImage]}` : defaultProduct}
+                    src={productImages[selectedImage] ? `/images/${productImages[selectedImage]}` : defaultProduct}
                     alt={product?.name || 'Auction Item1'}
                     className="w-full h-full object-contain"
                   />
@@ -164,7 +177,7 @@ const AuctionDetail = () => {
                   </p>
                 </div>
 
-                <div className="border-t border-b border-gray-200 py-4">
+                {/* <div className="border-t border-b border-gray-200 py-4">
                   <p className="font-stretch-extra-condensed">Ends</p>
                   <div className='flex gap-2'>
                     <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.days || "0"}</p>
@@ -172,7 +185,41 @@ const AuctionDetail = () => {
                     <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.minutes || "0"}</p>
                     <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.seconds || "0"}</p>
                   </div>
+                </div> */}
+
+
+
+
+
+<div className="bg-white rounded-lg">
+                <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+                  <FaClock className="mr-2" />
+                  Time Remaining
+                </h3>
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-900">{currentLeftTime?.timeLeft?.days || "0"}</div>
+                    <div className="text-sm text-blue-600">Days</div>
+                  </div>
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-900">{currentLeftTime?.timeLeft?.hours || "0"}</div>
+                    <div className="text-sm text-blue-600">Hours</div>
+                  </div>
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-900">{currentLeftTime?.timeLeft?.minutes || "0"}</div>
+                    <div className="text-sm text-blue-600">Minutes</div>
+                  </div>
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-900">{currentLeftTime?.timeLeft?.seconds || "0"}</div>
+                    <div className="text-sm text-blue-600">Seconds</div>
+                  </div>
                 </div>
+              </div>
+
+
+
+
+
 
                 <div className="prose max-w-none">
                   <h3 className="text-gray-900 text-lg leading-8 font-medium mb-4">Description</h3>
