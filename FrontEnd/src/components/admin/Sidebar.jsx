@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
+import { FaBell } from "react-icons/fa";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -62,6 +63,15 @@ const Sidebar = () => {
               <li className="">
                 <NavLink className="border-blue-900 border-y no-underline text-white flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-800 group" to="/admin/zoneManager">
                   Region Management
+                </NavLink>
+              </li>
+              <li className="">
+                    <NavLink
+                      className="border-blue-900 border-y no-underline text-white flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-800 hover:text-white group"
+                      to="/admin/zoneManager"
+                    >
+                    Notification
+                    <FaBell className="w-6 h-6 ml-4 text-white" />
                 </NavLink>
               </li>
               <li>
