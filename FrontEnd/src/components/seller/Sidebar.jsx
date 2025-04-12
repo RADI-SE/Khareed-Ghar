@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
-import { FaBell } from "react-icons/fa";
-
+import {FaBell} from "react-icons/fa";
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { signout } = useAuthService();
