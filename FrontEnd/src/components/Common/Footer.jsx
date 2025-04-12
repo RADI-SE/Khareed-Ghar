@@ -11,7 +11,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <h3 className="text-2xl font-bold text-white">Khareed-Ghar</h3>
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <p className="text-gray-300 text-md leading-relaxed">
               Your one-stop destination for all your shopping needs. Experience the best in online retail with quality products and exceptional service.
             </p>
             <div className="space-y-2">
