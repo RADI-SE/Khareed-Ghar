@@ -90,9 +90,13 @@ export const placeBid = async (req, res) => {
       receipient: auction.sellerId,
       auction: auction._id,
       message: `${fetchUser.name} placed a new bid of $${bidAmount}`,
+      read: false,
+      readAt: null,
       link: `/auction/${auction._id}`,
     });
-  
+    
+    await sellerNotification.save();
+
     if (previousBidderId && previousBidderId.toString() !== fetchUser._id.toString() ) {
       const buyerNotification = new BuyerNotification({
         receipient: previousBidderId,
@@ -103,35 +107,13 @@ export const placeBid = async (req, res) => {
       await buyerNotification.save();
     }
     
-   await sellerNotification.save();
     res.status(200).json({ message: 'Bid placed successfully', auction });
   } catch (error) {
     res.status(500).json({ message: 'Error placing bid', error });
   }
 };
  
-// export const getAuctionDetails = async (req, res) => {
-//   try {
 
- 
-//     const { auctionId } = req.params;
-
-
-//     const auction = await Auction.findById(auctionId)
-//       .populate('productId', 'name description price images')
-//       .populate('bidders.userId', 'name')
-//       .populate('currentBidder', 'name');
-
-//     if (!auction) {
-//       return res.status(404).json({ message: 'Auction not found' });
-//     }
-
-//     res.status(200).json(auction);
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error fetching auction details', error });
-//   }
-// };
- 
 
 export const getAuctionDetails = async (req, res) => {
   try {

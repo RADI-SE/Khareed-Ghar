@@ -27,14 +27,16 @@ const SellerNotificationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    readAt: {
+      type: Date,
+    },
     link: {
       type: String,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
     },
   },
   { timestamps: true }
 );  
+
+
+SellerNotificationSchema.index({ readAt: 1 }, { expireAfterSeconds: 120  });
 export const SellerNotification = mongoose.model("SellerNotification", SellerNotificationSchema);

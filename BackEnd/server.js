@@ -12,6 +12,7 @@ import cartRoutes from "./route/buyer/cart.routes.js"
 import addLocation from "./route/buyer/location.routes.js"
 import manageAuctions from "./route/seller/auction.route.js"
 import orderRoutes from "./route/order.route.js"
+import notificationRoutes from "./route/notification.route.js"
 dotenv.config();
 
 const app = express();
@@ -47,6 +48,7 @@ app.use("/api", manageAuctions);
 
 app.use("/api", orderRoutes);
 
+app.use("/api", notificationRoutes);
 app.listen(PORT, () => {
 
   connect();
