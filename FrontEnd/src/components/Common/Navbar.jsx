@@ -94,19 +94,16 @@ const Navbar = () => {
                 <div className="flex items-center space-x-4">
                   <span className="text-gray-700">Hi, {user?.name || 'User'}</span>
                   
-
+                  
 <button 
   onClick={handleLogout}
-  className="px-6 py-2 border border-blue-900 bg-blue-900 text-white rounded-lg hover:bg-blue-700 hover:border-blue-700 transition-colors"
+  className="px-6 py-2 border border-blue-900 bg-blue-800 text-white rounded-lg hover:bg-blue-700 hover:border-blue-700 transition-colors"
 >
   Logout
 </button>
 
 
 
-
-
- 
                 </div>
               )}
             </div>
