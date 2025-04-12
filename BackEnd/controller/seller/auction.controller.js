@@ -1,7 +1,10 @@
 import {Auction} from "../../model/auction.model.js"
 import {Product} from "../../model/product.model.js"
-import jwt from "jsonwebtoken"
+import { SellerNotification } from "../../model/seller.notification.model.js";
+import { BuyerNotification } from "../../model/buyer.notification.model.js";
 import { User } from "../../model/user.model.js";
+import jwt from "jsonwebtoken"
+
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -19,7 +22,6 @@ export const createAuction = async (req, res) => {
     if (!product || product.seller?.toString() !== userId) {
       return res.status(400).json({ message: 'Invalid product or unauthorized access.' });
     }
- 
     const auction = new Auction({
       productId,
       sellerId: userId,
@@ -54,7 +56,6 @@ export const getOngoingAuctions = async (req, res) => {
 export const placeBid = async (req, res) => {
   try {
     const { auctionId, bidAmount } = req.body;
-    console.log(auctionId, bidAmount);
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
@@ -63,6 +64,7 @@ export const placeBid = async (req, res) => {
     if (!auction) {
       return res.status(404).json({ message: 'Auction not found' });
     }
+
  
     if (auction.status !== 'ongoing' || auction.endTime <= Date.now()) {
       return res.status(400).json({ message: 'Auction is no longer active' });
@@ -76,13 +78,32 @@ export const placeBid = async (req, res) => {
     if (!fetchUser) {
       return res.status(404).json({ message: 'User not found' });
     }
-     
+    const previousBidderId = auction.currentBidder;
+    console.log("previousBidderId", previousBidderId)
     auction.currentBid = bidAmount;
     auction.currentBidder = fetchUser._id;
      
     auction.bidders.push({ userId: fetchUser._id , name: fetchUser.name,  bidAmount });
 
     await auction.save();
+    const sellerNotification = new SellerNotification({
+      receipient: auction.sellerId,
+      auction: auction._id,
+      message: `${fetchUser.name} placed a new bid of $${bidAmount}`,
+      link: `/auction/${auction._id}`,
+    });
+  
+    if (previousBidderId && previousBidderId.toString() !== fetchUser._id.toString() ) {
+      const buyerNotification = new BuyerNotification({
+        receipient: previousBidderId,
+        product: auction.productId,
+        message: `You’ve been outbid by ${fetchUser.name} with $${bidAmount}`,
+        link: `/auction/${auction._id}`,
+      });
+      await buyerNotification.save();
+    }
+    
+   await sellerNotification.save();
     res.status(200).json({ message: 'Bid placed successfully', auction });
   } catch (error) {
     res.status(500).json({ message: 'Error placing bid', error });

@@ -173,8 +173,7 @@ export const getUserProducts = async (req, res) => {
         message: "No products found.",
       });
     }
-    console.log("products",products);
-
+ 
      res.status(200).json({
       success: true,
       products,

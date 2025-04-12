@@ -7,11 +7,17 @@ const AuctionForm = ({ auction, onSubmit }) => {
   const [endTime, setEndTime] = useState(auction?.endTime || "");
 
   const handleChange = (e) => {
-    setStartTime(e.target.value);
-    setEndTime(e.target.value);
-
+    const { name, value } = e.target;
+  
+    if (!value) return;
+  
+    if (name === "startTime") {
+      setStartTime(value);
+    } else if (name === "endTime") {
+      setEndTime(value);
+    }
   };
-
+  
   const handleSubmit = (e) => { 
     e.preventDefault();
     onSubmit({ startTime, endTime });

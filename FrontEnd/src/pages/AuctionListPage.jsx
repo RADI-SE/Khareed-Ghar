@@ -1,4 +1,3 @@
-import React from "react";
 import AuctionCard from "../components/Common/AuctionCard"
 import { useFetchAuctions } from "../hooks/seller/Auctions/useFetchAuctions";
 

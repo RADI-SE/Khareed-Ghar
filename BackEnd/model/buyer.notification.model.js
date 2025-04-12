@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 
-const NotificationSchema = new mongoose.Schema(
+const BuyerNotificationSchema = new mongoose.Schema(
   {
     receipient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    participant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     product: {
       type: mongoose.Schema.Types.ObjectId,
@@ -23,7 +27,18 @@ const NotificationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    read: {
+      type: Boolean,
+      default: false,
+    },
+    link: {
+      type: String,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );  
-export const Notification = mongoose.model("Notification", NotificationSchema);
+export const BuyerNotification = mongoose.model("BuyerNotification", BuyerNotificationSchema);
