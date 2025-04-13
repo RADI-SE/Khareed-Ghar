@@ -1,18 +1,14 @@
 import { Routes, Route, Outlet } from "react-router-dom";
-import Home from "./MainPage/Home";
 import HomeLayout from "../components/layouts/HomeLayout";
 import NotFound from "../components/NotFound";
-import Cart from "./MainPage/Cart";
 import Checkout from "../components/Common/Checkout";
-import OrderConfirmation from "../components/Common/OrderConfirmation";
 import Shipping from "./MainPage/shipping";
 import Review from "./MainPage/Review";
 
 export const CartRoutes = ({ setOrder, order }) => {
   return (
     <HomeLayout>
-      {/* Outlet provides access to child routes */}
-      <Outlet context={{ order, setOrder }} />
+       <Outlet context={{ order, setOrder }} />
     </HomeLayout>
   );
 };

@@ -18,7 +18,7 @@ const ProductDetail = () => {
   const { mutate: AddToCart } = useAddToCart();
   const [quantity, setQuantity] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
-  
+   
   // Reset state and scroll to top when product changes
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -118,15 +118,15 @@ const ProductDetail = () => {
   const similarProducts = getAllCategoryProducts?.filter(p => p._id !== id) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-12">
-          <div className="md:flex">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl overflow-hidden mb-8 sm:mb-12">
+          <div className="flex flex-col md:flex-row">
             {/* Image Gallery Section */}
-            <div className="md:w-1/2 relative">
+            <div className="w-full md:w-1/2 relative">
               <div className="sticky top-0">
                 {/* Main Image */}
-                <div className="relative h-[500px] overflow-hidden">
+                <div className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden">
                   <img
                     src={`../../../../../public/images/${productImages[selectedImage]}` || 'https://placeholder.com/400'}
                     alt={`${product?.name} - Image ${selectedImage + 1}`}
@@ -142,7 +142,7 @@ const ProductDetail = () => {
                         <button
                           key={index}
                           onClick={() => setSelectedImage(index)}
-                          className={`flex-none w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                          className={`flex-none w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
                             selectedImage === index ? 'border-blue-500 scale-105' : 'border-gray-200'
                           }`}
                         >
@@ -160,19 +160,19 @@ const ProductDetail = () => {
             </div>
 
             {/* Product Details Section */}
-            <div className="md:w-1/2 p-8 lg:p-12">
-              <div className="space-y-8">
+            <div className="w-full md:w-1/2 p-4 sm:p-6 lg:p-8">
+              <div className="space-y-6 sm:space-y-8">
                 {/* Product Title and Price */}
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-900 mb-4">{product?.name}</h1>
-                  <p className="text-3xl font-bold text-blue-600">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">{product?.name}</h1>
+                  <p className="text-2xl sm:text-3xl font-bold text-blue-600">
                     ${product?.price?.toFixed(2)}
                   </p>
                 </div>
 
                 {/* Description */}
-                <div className="border-t border-b border-gray-100 py-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
+                <div className="border-t border-b border-gray-100 py-4 sm:py-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2 sm:mb-3">Description</h3>
                   <p className="text-gray-600 leading-relaxed">
                     {product?.description}
                   </p>
@@ -180,9 +180,9 @@ const ProductDetail = () => {
 
                 {/* Specifications */}
                 {product?.specifications && Object.keys(product.specifications).length > 0 && (
-                  <div className="border-b border-gray-100 py-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Specifications</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="border-b border-gray-100 py-4 sm:py-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 sm:mb-3">Specifications</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {Object.entries(product.specifications).map(([key, value]) => (
                         <div key={key} className="flex flex-col">
                           <span className="text-sm text-gray-500 capitalize">{key}</span>
@@ -194,7 +194,7 @@ const ProductDetail = () => {
                 )}
 
                 {/* Seller Information */}
-                <div className="bg-gray-50 rounded-lg p-6">
+                <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Seller Information</h3>
                   <Link 
                     to={`/seller/${product?.seller?._id}`}
@@ -215,11 +215,11 @@ const ProductDetail = () => {
                     isInCart 
                       ? 'bg-gray-400 cursor-not-allowed' 
                       : 'bg-blue-600 hover:bg-blue-700 transform hover:scale-[1.02] active:scale-[0.98]'
-                  } text-white py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center text-lg font-semibold shadow-lg`}
+                  } text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-200 flex items-center justify-center text-base sm:text-lg font-semibold shadow-lg`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 mr-2"
+                    className="h-5 w-5 sm:h-6 sm:w-6 mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -234,8 +234,8 @@ const ProductDetail = () => {
 
         {/* Similar Products Section */}
         {similarProducts.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
               More {categoryName || 'Similar Products'}
             </h2>
             <div className="relative">
@@ -244,53 +244,50 @@ const ProductDetail = () => {
                 onClick={scrollLeft}
                 className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white shadow-lg rounded-full p-2 backdrop-blur-sm"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
+
+              {/* Similar Products Grid */}
+              <div 
+                ref={scrollContainerRef}
+                className="flex overflow-x-auto gap-4 sm:gap-6 pb-4 scrollbar-hide"
+              >
+                {similarProducts.map((similarProduct) => (
+                  <div
+                    key={similarProduct._id}
+                    onClick={() => handleSimilarProductClick(similarProduct._id)}
+                    className="flex-none w-48 sm:w-56 md:w-64 bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
+                  >
+                    <div className="h-40 sm:h-48 md:h-56 overflow-hidden">
+                      <img
+                        src={`../../../../../public/images/${similarProduct.images?.[0]}` || 'https://placeholder.com/400'}
+                        alt={similarProduct.name}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-3 sm:p-4">
+                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1 sm:mb-2 line-clamp-2">
+                        {similarProduct.name}
+                      </h3>
+                      <p className="text-lg sm:text-xl font-bold text-blue-600">
+                        ${similarProduct.price?.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
               {/* Scroll Right Button */}
               <button
                 onClick={scrollRight}
                 className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white shadow-lg rounded-full p-2 backdrop-blur-sm"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
-
-              {/* Scrollable Container */}
-              <div
-                ref={scrollContainerRef}
-                className="flex overflow-x-auto gap-6 scroll-smooth scrollbar-hide px-1"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {similarProducts.map((similarProduct) => (
-                  <div 
-                    key={similarProduct._id} 
-                    className="flex-none w-64 cursor-pointer"
-                    onClick={() => handleSimilarProductClick(similarProduct._id)}
-                  >
-                    <div className="bg-gray-50 rounded-lg overflow-hidden hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
-                      <div className="aspect-w-1 aspect-h-1">
-                        <img
-                          src={`../../../../../public/images/${similarProduct.images}`}
-                          alt={similarProduct.name}
-                          className="w-full h-48 object-cover"
-                        />
-                      </div>
-                      <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2 truncate">
-                          {similarProduct.name}
-                        </h3>
-                        <p className="text-blue-600 font-bold">
-                          ${similarProduct.price?.toFixed(2)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         )}
