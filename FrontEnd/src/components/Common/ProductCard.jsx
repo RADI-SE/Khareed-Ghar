@@ -13,7 +13,7 @@ const ProductCard = ({product}) => {
   const handleDetail = (e, productId) => {
     e.preventDefault();
     navigate(`/products/${productId}`);
-  }
+  } 
   const handleAddToCart = (e, productId) => {
     e.preventDefault();
     setQuantity((prev) => prev + 1); 
@@ -21,41 +21,48 @@ const ProductCard = ({product}) => {
     toast.success(`Product added to Cart (Quantity: ${quantity + 1})`);
   };
 
-
   return (
     <div
       key={product.id}
-      className="relative m-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md"
+      className="relative mx-2 my-4 sm:mx-4 sm:my-6 md:mx-6 md:my-8 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md hover:shadow-lg transition-shadow duration-300"
     >
-      <img
-        src={`../../../public/images/${product?.images}` ||  defaultProduct}
-        alt={product?.name || "Product"}
-        className="object-cover h-48 w-full"
-      />
-      <div className="mt-2 px-5 pb-2">
-      <h5 className="text-xl tracking-tight text-slate-900">{product.name}</h5>
-      <div className="mt-2 mb-5 flex">
-        <p className="text-3xl font-bold text-slate-900">${product.price}</p>
-        <div className="">
-          <FaStar className="h-5 w-5 text-yellow-300"></FaStar>
+      <div className="relative h-48 sm:h-56 md:h-64 w-full overflow-hidden">
+        <img
+          src={`../../../public/images/${product?.images}` || defaultProduct}
+          alt={product?.name || "Product"}
+          className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+      
+      <div className="p-4 sm:p-5 flex flex-col flex-grow">
+        <h5 className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 line-clamp-2">
+          {product.name}
+        </h5>
+        
+        <div className="mt-3 mb-4 flex items-center justify-between">
+          <p className="text-2xl sm:text-3xl font-bold text-slate-900">
+            ${product.price}
+          </p>
+          <div className="flex items-center">
+            <FaStar className="h-5 w-5 text-yellow-300" />
+          </div>
         </div>
-      </div>
-   
-      <div
-          className=""
-          onClick={(e) => handleAddToCart(e, product._id)}
-        >
-        <span className="flex justify-center cursor-pointer rounded-md bg-blue-900 p-2 mb-1 text-center text-sm font-medium text-white hover:bg-blue-800">
-          Add to Cart
-        </span>
-      </div>
-      <div
-          className=""
-          onClick={(e) => handleDetail(e, product._id)}
-        >
-        <span className="flex items-center justify-center cursor-pointer rounded-md bg-blue-900 p-2 text-center text-sm font-medium text-white hover:bg-blue-800">
-          View</span>
-      </div>
+        
+        <div className="mt-auto space-y-2">
+          <button
+            onClick={(e) => handleAddToCart(e, product._id)}
+            className="w-full py-2 px-4 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition-colors duration-300 text-sm sm:text-base font-medium"
+          >
+            Add to Cart
+          </button>
+          
+          <button
+            onClick={(e) => handleDetail(e, product._id)}
+            className="w-full py-2 px-4 border border-blue-900 text-blue-900 rounded-md hover:bg-blue-50 transition-colors duration-300 text-sm sm:text-base font-medium"
+          >
+            View Details
+          </button>
+        </div>
       </div>
     </div>
   );
