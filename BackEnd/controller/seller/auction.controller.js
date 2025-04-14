@@ -320,6 +320,23 @@ export const getCurrentLeftTime = async (req, res) => {
     const hours = Math.floor((timeLeftInMillis / (1000 * 60 * 60)) % 24);
     const days = Math.floor(timeLeftInMillis / (1000 * 60 * 60 * 24));
 
+    console.log("timeLeftInMillis", timeLeftInMillis) 
+    if(timeLeftInMillis <= 494){
+      auction.status = "completed"
+      await auction.save();
+      console.log("status Completed");
+
+      const sellerNotification = new SellerNotification({
+        receipient: auction.sellerId,
+        auction: auction._id,
+        message: `Auction has ended.`,
+        read: false,
+        readAt: null,
+        link: `/auction/${auction._id}`,
+        
+      });
+      await sellerNotification.save();
+    }
     res.status(200).json({
       success: true,
       timeLeft: {

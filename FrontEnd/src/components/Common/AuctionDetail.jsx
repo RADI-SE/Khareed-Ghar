@@ -42,7 +42,7 @@ const AuctionDetail = () => {
   const handleBidSubmit = (e) => {
     e.preventDefault();
     const bidValue = parseFloat(bidAmount);
-    const currentPrice = auction.currentPrice || auction.startingPrice;
+    const currentPrice = auction?.auction?.currentBid || auction?.auction?.startingBid;
 
     if (bidValue <= currentPrice) {
       toast.error('Bid amount must be higher than the current price');
@@ -53,7 +53,6 @@ const AuctionDetail = () => {
       bidAmount: bidValue,
     });
 
-    // Here you would typically call your bid submission API
     toast.success('Bid placed successfully!');
     setBidAmount('');
   };
@@ -64,16 +63,7 @@ const AuctionDetail = () => {
       : [auction.productId.images]
     : [];
 
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      return date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    };
+   
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -130,6 +120,7 @@ const AuctionDetail = () => {
                       </thead>
                     </table>
                     <div className="max-h-[144px] overflow-y-auto">
+                    
                       <table className="min-w-full divide-y divide-gray-200">
                         <tbody className="bg-white divide-y divide-gray-200 ">
                           {[...auction?.auction?.bidders]?.reverse()?.map((bidder) => (
@@ -163,11 +154,7 @@ const AuctionDetail = () => {
                   <h1 className="font-manrope font-bold text-3xl leading-10 text-gray-900 mb-2 capitalize">
                     {product?.name || 'Auction Item'}
                   </h1>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    auction?.auction?.status === 'ongoing' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    {auction?.auction?.status === 'ongoing' ? 'Active' : 'Ended'}
-                  </span>
+                  
                 </div>
 
                 <div className="space-y-2">
@@ -177,16 +164,7 @@ const AuctionDetail = () => {
                   </p>
                 </div>
 
-                {/* <div className="border-t border-b border-gray-200 py-4">
-                  <p className="font-stretch-extra-condensed">Ends</p>
-                  <div className='flex gap-2'>
-                    <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.days || "0"}</p>
-                    <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.hours || "0"}</p>
-                    <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.minutes || "0"}</p>
-                    <p className='bg-white rounded-lg p-2'>{currentLeftTime?.timeLeft?.seconds || "0"}</p>
-                  </div>
-                </div> */}
-
+              
 
 
 

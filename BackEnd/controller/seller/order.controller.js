@@ -3,26 +3,7 @@ import { Product } from "../../model/product.model.js";
 import { UserLocation } from "../../model/location.model.js";
 import { Cart } from "../../model/cart.model.js";
 import jwt from "jsonwebtoken";
-/*
- "user": "64f8e4b2c9b1a3d2e8f1a2b3", // Sample ObjectId for a user
-  "products": [
-    {
-      "product": "64f8e4b2c9b1a3d2e8f1a2b4", // Sample ObjectId for a product
-      "quantity": 2,
-      "price": 29.99
-    },
-    {
-      "product": "64f8e4b2c9b1a3d2e8f1a2b5", // Sample ObjectId for another product
-      "quantity": 1,
-      "price": 49.99
-    }
-  ],
-  "totalAmount": 109.97, // Updated total amount
-  "status": "Processing", // Updated status
-  "paymentMethod": "Credit Card", // Updated payment method
-  "shippingAddress": "64f8e4b2c9b1a3d2e8f1a2b6", // Sample ObjectId for shipping address
 
-*/
 export const createOrder = async (req, res) => {
   try {
     const token = req.cookies.token;

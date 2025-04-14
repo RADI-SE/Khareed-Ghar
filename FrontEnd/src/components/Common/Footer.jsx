@@ -31,16 +31,16 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-white">Quick Links</h4>
             <ul className="space-y-2 text-gray-300">
               <li>
-                <Link to="/" className="hover:text-white transition-colors duration-200">Home</Link>
+                <Link to="/" className="text-white hover:text-gray-500 transition-colors duration-200 no-underline">Home</Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-white transition-colors duration-200">About Us</Link>
+                <Link to="/about" className="text-white hover:text-gray-500 transition-colors duration-200 no-underline">About Us</Link>
               </li>
               <li>
-                <Link to="/products" className="hover:text-white transition-colors duration-200">Products</Link>
+                <Link to="/products" className="text-white hover:text-gray-500 transition-colors duration-200 no-underline">Products</Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-white transition-colors duration-200">Contact Us</Link>
+                <Link to="/contact" className="text-white hover:text-gray-500 transition-colors duration-200 no-underline">Contact Us</Link>
               </li>
             </ul>
           </div>
@@ -48,17 +48,7 @@ const Footer = () => {
           {/* Connect */}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-white">Stay Connected</h4>
-            <p className="text-gray-300 text-sm">Subscribe for updates and offers!</p>
-            <div className="flex space-x-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="px-4 py-2 rounded-lg bg-blue-800 text-white placeholder-gray-400 border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow"
-              />
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors duration-200">
-                Subscribe
-              </button>
-            </div>
+            <p className="text-gray-300 text-sm">Follow us for updates and offers!</p>
             <div className="pt-4">
               <div className="flex space-x-4">
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors duration-200">
@@ -73,13 +63,6 @@ const Footer = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="border-t border-blue-800 py-6">
-          <p className="text-center text-gray-300 text-sm">
-            © {new Date().getFullYear()} Khareed-Ghar. All rights reserved.
-          </p>
         </div>
       </div>
     </footer>
