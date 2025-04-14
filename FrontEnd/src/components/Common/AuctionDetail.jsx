@@ -31,7 +31,7 @@ const AuctionDetail = () => {
     );
   }
 
-  if (!auction) {
+  if (isError || !auction) {
     return (
       <div className="container mx-auto py-12 text-center">
         <p className="text-red-600 text-lg">Error loading auction details. Please try again later.</p>
@@ -42,7 +42,7 @@ const AuctionDetail = () => {
   const handleBidSubmit = (e) => {
     e.preventDefault();
     const bidValue = parseFloat(bidAmount);
-    const currentPrice = auction.currentPrice || auction.startingPrice;
+    const currentPrice = auction?.auction?.currentBid || auction?.auction?.startingBid;
 
     if (bidValue <= currentPrice) {
       toast.error('Bid amount must be higher than the current price');
@@ -62,6 +62,8 @@ const AuctionDetail = () => {
       ? auction.productId.images
       : [auction.productId.images]
     : [];
+
+   
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -100,7 +102,7 @@ const AuctionDetail = () => {
                 )}
               </div>
 
-       
+              {/* Bidders Table */} 
               <div className="bg-white rounded-lg shadow overflow-hidden">
                 <div className="px-4 py-2 sm:px-6 bg-blue-900">
                   <h3 className="text-lg font-medium leading-6 text-white">Auction Bidders</h3>
@@ -118,6 +120,7 @@ const AuctionDetail = () => {
                       </thead>
                     </table>
                     <div className="max-h-[144px] overflow-y-auto">
+                    
                       <table className="min-w-full divide-y divide-gray-200">
                         <tbody className="bg-white divide-y divide-gray-200 ">
                           {[...auction?.auction?.bidders]?.reverse()?.map((bidder) => (
@@ -151,11 +154,7 @@ const AuctionDetail = () => {
                   <h1 className="font-manrope font-bold text-3xl leading-10 text-gray-900 mb-2 capitalize">
                     {product?.name || 'Auction Item'}
                   </h1>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    auction?.auction?.status === 'ongoing' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    {auction?.auction?.status === 'ongoing' ? 'Active' : 'Ended'}
-                  </span>
+                  
                 </div>
 
                 <div className="space-y-2">
@@ -165,11 +164,16 @@ const AuctionDetail = () => {
                   </p>
                 </div>
 
-              <div className="bg-white rounded-lg">
-                 <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+              
+
+
+
+
+<div className="bg-white rounded-lg">
+                <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
                   <FaClock className="mr-2" />
                   Time Remaining
-                 </h3>
+                </h3>
                 <div className="grid grid-cols-4 gap-4">
                   <div className="text-center p-4 bg-blue-50 rounded-lg">
                     <div className="text-2xl font-bold text-blue-900">{currentLeftTime?.timeLeft?.days || "0"}</div>
@@ -189,12 +193,19 @@ const AuctionDetail = () => {
                   </div>
                 </div>
               </div>
+
+
+
+
+
+
                 <div className="prose max-w-none">
                   <h3 className="text-gray-900 text-lg leading-8 font-medium mb-4">Description</h3>
                   <p className="text-gray-500 text-base font-normal mb-5">
                     {product?.description || 'No description available'}
                   </p>
                 </div>
+                {/* bidding input field */}
                   <div className="w-full max-w-sm min-w-[200px]">
                     <label className="text-gray-900 text-lg leading-8 font-medium mb-4">
                         Bid Here 

@@ -42,7 +42,7 @@ function CategoryManagement() {
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={currentView === tab.id ? 'bg-blue-900 text-white w-40 h-10 rounded-lg' : 'text-white rounded-lg'}
+              className={currentView === tab.id ? 'bg-blue-900 text-white w-30 p-2 h-10 rounded-lg' : 'text-white rounded-lg'}
             >
               {tab.label}
             </button>

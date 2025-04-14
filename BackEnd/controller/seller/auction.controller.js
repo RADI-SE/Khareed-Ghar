@@ -79,8 +79,10 @@ export const placeBid = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const previousBidderId = auction.currentBidder;
+    console.log("previousBidderId", previousBidderId)
     auction.currentBid = bidAmount;
     auction.currentBidder = fetchUser._id;
+     
     auction.bidders.push({ userId: fetchUser._id , name: fetchUser.name,  bidAmount });
 
     await auction.save();
@@ -115,9 +117,13 @@ export const placeBid = async (req, res) => {
 
 export const getAuctionDetails = async (req, res) => {
   try {
+
+    
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
+    
+    
     
     const userID = await User.findById(userId)
     // .populate('productId', 'name description price images')
@@ -146,17 +152,6 @@ export const getAuctionDetails = async (req, res) => {
     if(!products){
       return res.status(404).json({ message: 'No Auction yet'})
     }
-    const now = new Date();
-    for (const auction of UserAuctions) {
-      if (auction.status === 'ongoing' && new Date(auction.endTime) <= now) {
-        auction.status = 'completed';
-        await auction.save();
-      }
-      else{
-        auction.status = 'ongoing';
-        await auction.save();
-      }
-    }
     const auctionDetails = await Promise.all(UserAuctions.map(async (auctionItem) => {
       const product = await Product.findById(auctionItem.productId);
       return {
@@ -178,6 +173,10 @@ export const getAuctionDetails = async (req, res) => {
   }
 };
 
+
+
+
+
 export const completeAuction = async (req, res) => {
   try {
     const { auctionId } = req.params;
@@ -187,10 +186,12 @@ export const completeAuction = async (req, res) => {
       return res.status(404).json({ message: 'Auction not found' });
     }
 
+    // Check if the auction is already completed
     if (auction.status !== 'ongoing') {
       return res.status(400).json({ message: 'Auction is not active' });
     }
-  
+
+    // Mark auction as completed
     auction.status = 'completed';
     await auction.save();
 
@@ -200,70 +201,32 @@ export const completeAuction = async (req, res) => {
   }
 };
 
-
-export const getCompletedAuctions = async (req, res) => {
-  try {
-    const {userId} = req.params;
-    const user = await User.findById(userId);
-    if(!user){
-      return res.status(404).json({ message: 'User not found' });
-    }
-    const auctions = await Auction.find({ status: 'completed' , bidders: { $elemMatch: { userId: user._id } } });
-    if(!auctions){
-      return res.status(404).json({ message: 'No completed auctions' });
-    }
-    
-    res.status(200).json({ auctions });
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching completed auctions', error });
-  }
-};
-
 export const getAuctionsById = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const auction = await Auction.findById(id);
+      const auction = await Auction.findById(id)
+      // .populate("category")
+      // .populate("seller");
+     
 
     if (!auction) {
       return res.status(404).json({
         success: false,
-        message: "Auction not found.",
-      });
-    }
-//    end time = 10 
-//    now = 5
-//    10 <= 5
-    const now = new Date();
-    if (auction.status === 'ongoing' && new Date(auction.endTime) <= now) {
-      auction.status = 'completed';
-      await auction.save();
-    } else if (auction.status !== 'completed') {
-      auction.status = 'ongoing';
-      await auction.save();
-    }
-
-     if (auction.status === 'completed') {
-      return res.status(400).json({
-        success: false,
-        message: "Auction has ended.",
+        message: "auction not found.",
       });
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       auction,
     });
-
   } catch (error) {
-    console.error("Auction fetch error:", error);
     res.status(500).json({
       success: false,
       message: "Server error. Please try again later.",
     });
   }
 };
-
 
 export const editAuctions = async (req, res) => {
   try {
@@ -273,19 +236,12 @@ export const editAuctions = async (req, res) => {
       endTime,
     } = req.body;
 
-    if(!startTime || !endTime){
-      return res.status(400).json({ message: 'Start time and end time are required' });
-    }
-    if(startTime >= endTime){
-      return res.status(400).json({ message: 'Start time must be before end time' });
-    }
-    
     const updatedAuctions = await Auction.findByIdAndUpdate(
       id,
       {
         startTime,
         endTime,
-        status: 'ongoing',
+
       },
       { new: true }
     );
@@ -309,6 +265,8 @@ export const editAuctions = async (req, res) => {
     });
   }
 };
+
+
 export const deleteAuction = async (req, res) => {
   try {
     const { id } = req.params;
@@ -362,6 +320,23 @@ export const getCurrentLeftTime = async (req, res) => {
     const hours = Math.floor((timeLeftInMillis / (1000 * 60 * 60)) % 24);
     const days = Math.floor(timeLeftInMillis / (1000 * 60 * 60 * 24));
 
+    console.log("timeLeftInMillis", timeLeftInMillis) 
+    if(timeLeftInMillis <= 494){
+      auction.status = "completed"
+      await auction.save();
+      console.log("status Completed");
+
+      const sellerNotification = new SellerNotification({
+        receipient: auction.sellerId,
+        auction: auction._id,
+        message: `Auction has ended.`,
+        read: false,
+        readAt: null,
+        link: `/auction/${auction._id}`,
+        
+      });
+      await sellerNotification.save();
+    }
     res.status(200).json({
       success: true,
       timeLeft: {

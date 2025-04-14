@@ -5,13 +5,13 @@ import { Outlet } from "react-router-dom"; // This renders the route content ins
 
 const AdminLayout = () => {
   return (
-    <div className="grid grid-cols-4 gap-4">
-      <div className="lg:col-span-1">
-        <Sidebar /> {/* Sidebar will stay constant */}
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      <div className="lg:w-64">
+        <Sidebar />
       </div>
-      <div className="lg:col-start-2 lg:col-span-3 m-4">
-        <Outlet /> {/* This renders the content based on the route */}
-      </div>
+      <main className="flex-1 p-4 lg:p-6 overflow-x-hidden">
+        <Outlet />
+      </main>
     </div>
   );
 };

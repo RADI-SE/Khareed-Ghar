@@ -1,7 +1,6 @@
 import { Order } from "../../model/order.model.js";
 import { Product } from "../../model/product.model.js";
 import { UserLocation } from "../../model/location.model.js";
-import { SellerNotification } from "../../model/seller.notification.model.js";
 import { Cart } from "../../model/cart.model.js";
 import jwt from "jsonwebtoken";
 
@@ -24,6 +23,7 @@ export const createOrder = async (req, res) => {
     if(!shippingAddress){
       return res.status(404).json({ error: "Please select a shipping location before placing your order." });
     }
+
     const order = await Order.create({
       user: userId,
       products: cart.items.map(item => ({
@@ -36,28 +36,6 @@ export const createOrder = async (req, res) => {
       paymentMethod: PAYMENT_METHOD,
       status: "Pending",
     })
- 
-    const notifiedSellers = [];
-
-for (const item of cart.items) {
-  const product = await Product.findById(item.product);
-  if (!product || notifiedSellers.includes(product.seller.toString())) {
-    continue;
-  }
-
-  const sellerNotification = new SellerNotification({
-    receipient: product.seller,
-    order: order._id,
-    message: `${userId} placed a new order of ${item.quantity} ${product.name}`,
-    read: false,
-    readAt: null,
-    link: `/order/${order._id}`,
-  });
-
-  console.log("sellerNotification", sellerNotification);
-  await sellerNotification.save();
-    notifiedSellers.push(product.seller.toString());
-}
 
     await Cart.findByIdAndDelete(CART_ID);
     res.status(201).json({ message: "Order created successfully", order }); 
