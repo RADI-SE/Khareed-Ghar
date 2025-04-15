@@ -1,7 +1,5 @@
 import { Category } from "../../model/category.model.js";
 import { Product } from "../../model/product.model.js";
-
-// Create Product
 export const addProduct = async (req, res) => {
   try {
     const specifications = req.body.specifications
