@@ -38,7 +38,7 @@ function ProductManagement() {
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className="bg-blue-900 text-white w-40 h-10 rounded-lg text-white rounded-lg"
+              className="bg-blue-900 text-white w-30 h-10 px-3 rounded-lg text-white rounded-lg"
             >
               {tab.label}
             </button>

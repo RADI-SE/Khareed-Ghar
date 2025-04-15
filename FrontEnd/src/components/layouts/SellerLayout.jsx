@@ -4,13 +4,13 @@ import { Outlet } from "react-router-dom";
 
 const SellerLayout = () => {
   return (
-    <div className="grid grid-cols-4 gap-4">
-      <div className="col-span-1">
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      <div className="lg:w-64">
         <Sidebar />
       </div>
-      <div className="col-start-2 col-span-3 m-4">
+      <main className="flex-1 p-4 lg:p-6 overflow-x-hidden">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 };

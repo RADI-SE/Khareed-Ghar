@@ -1,4 +1,3 @@
-// AdminLayout.jsx
 import React from "react";
 import Sidebar from "../../components/admin/Sidebar";
 import { Outlet } from "react-router-dom"; // This renders the route content inside the layout

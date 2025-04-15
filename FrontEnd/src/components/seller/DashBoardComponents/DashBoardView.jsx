@@ -27,10 +27,10 @@ export const DashBoardView = () => {
   return (
     <div className="">
 
-      <div className="relative overflow-x-auto shadow-md">
+      <div className="relative overflow-x-auto shadow-lg">
         <h3>Recent Sales</h3>
-        <table className="w-full mt-2 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
-          <thead className="text-xs text-white uppercase bg-blue-950 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full mt-2 text-sm text-left rtl:text-right text-black rounded-lg">
+          <thead className="text-xs text-white uppercase bg-blue-950">
             <tr>
               <th className="px-6 py-4">ID</th>
               <th className="px-6 py-4">Item</th>
