@@ -6,6 +6,7 @@ import ProductManagement from "../components/seller/Product/rootRoutes";
 import OrderDetails from "../components/seller/OrderComponents/OrderDetails";
 import OrderList from "../components/seller/OrderComponents/OrderList";
 import NotFound from "../components/NotFound"; 
+import Notifications from "../components/seller/Notifications/Notifications";
 
 const SellerRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const SellerRoutesWrapper = () => {
       <Route path="orders" element={<OrderList />} />
       <Route path="orders/order-details" element={<OrderDetails />} />
       <Route path="products" element={<ProductManagement />} /> 
+      <Route path="notifications" element={<Notifications />} />
       <Route path="*" element={<NotFound />} />
      </Route>
     </Routes>

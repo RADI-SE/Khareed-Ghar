@@ -1,5 +1,6 @@
 import { BuyerNotification } from "../model/buyer.notification.model.js";
 import { SellerNotification } from "../model/seller.notification.model.js";
+import jwt from "jsonwebtoken";
 
 export const getNotifications = async (req, res) => {
   const { receipient } = req.params;
@@ -12,9 +13,11 @@ export const getNotifications = async (req, res) => {
 };  
 
 export const getSellerNotifications = async (req, res) => {
-  const { id } = req.params;
+  const token = req.cookies.token;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userId = decoded.userId;  
   try {
-    const notifications = await SellerNotification.find({ receipient: id });
+    const notifications = await SellerNotification.find({ receipient: userId });
     res.status(200).json(notifications);
   } catch (error) {
     res.status(500).json({ message: error.message });

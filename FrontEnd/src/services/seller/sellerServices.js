@@ -366,6 +366,30 @@ export const useSellerService = create((set) => ({
       console.error("Error fetching bidding:", error.message);
     }
   },
+
+  getNotifications: async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/seller-notifications`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching notifications:", error.message);
+    }
+  },
+
+  updateNotification: async (id, read) => {
+    try {
+      console.log("updateNotification called");
+      const response = await axios.put(`http://localhost:5000/api/seller-notifications/${id}`, { read } );
+      console.log("response", response.data); 
+      return response.data;
+    } catch (error) {
+      console.error("Error updating notification:", error.message);
+    }
+  },  
+
+
+
+
 }));
 
 
