@@ -184,11 +184,10 @@ return (
         {/* Right: Info Section */}
         <div className="col-12 col-md-6 p-4 p-md-5 bg-light d-flex flex-column justify-content-center">
           <div>
-            <h3 className="fw-bold mb-3">What is Lorem Ipsum?</h3>
+            <h3 className="fw-bold mb-4">Join Our Auction Platform Where Sellers Meet Buyers in a Thriving Marketplace.</h3>
             <p className="text-muted">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text ever
-              since the 1500s.
+            
+At " Khareed Ghar ", create an account to experience competitive auctions and transparent transactions. Sellers can list items and get the best price from eager buyers. Buyers place bids, track in real-time, and secure items at great rates. Our process is fair and transparent, ensuring the highest bidder wins. Sign up now and be part of a dynamic, trust-driven marketplace!
             </p>
           </div>
         </div>
