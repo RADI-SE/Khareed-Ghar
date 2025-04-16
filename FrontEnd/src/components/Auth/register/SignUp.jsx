@@ -69,122 +69,137 @@ function SignUp() {
       return <Navigate to="/auth/verify-email/" />;
     }
   }
+ 
+ 
+return (
+  <div className="d-flex justify-content-center align-items-start min-vh-100 bg-light pt-5">
+    <div className="container px-3 px-md-0" style={{ maxWidth: "70%" }}>
+      <div className="row g-0 shadow rounded-4 overflow-hidden bg-white" style={{ minHeight: "500px" }}>
+        
+        {/* Left: Form Section */}
+        <div className="col-12 col-md-6 p-4 p-md-5 d-flex flex-column justify-content-center">
+          <div>
+            <h2 className="auth-title mb-3">Sign Up</h2>
+            <p className="auth-subtitle mb-4">Create an account to get started!</p>
 
-  return (
-    <div className="auth-container d-flex flex-column flex-md-row align-items-center">
-      <div className="form-section col-12 col-md-6 p-4">
-        <h2 className="auth-title">Sign Up</h2>
-        <p className="auth-subtitle">Create an account to get started!</p>
-
-        <form onSubmit={handleSignUp}>
-          <InputField
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <InputField
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <InputField
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <InputField
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-
-          <div className="form-group">
-            <label htmlFor="role">Role:</label>
-            <div className="form-check">
-              <input
-                type="radio"
-                id="sellerRole"
-                name="role"
-                value="seller"
-                checked={role === "seller"}
-                onChange={(e) => setRole(e.target.value)}
-                className="form-check-input"
+            <form onSubmit={handleSignUp}>
+              <InputField
+                type="text"
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-              <label htmlFor="sellerRole" className="form-check-label">
-                Seller
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                type="radio"
-                id="buyerRole"
-                name="role"
-                value="buyer"
-                checked={role === "buyer"}
-                onChange={(e) => setRole(e.target.value)}
-                className="form-check-input"
+              <InputField
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-              <label htmlFor="buyerRole" className="form-check-label">
-                Buyer
-              </label>
-            </div>
+              <InputField
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <InputField
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+
+              <div className="mb-3">
+                <label className="form-label d-block">Role:</label>
+                <div className="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    id="sellerRole"
+                    name="role"
+                    value="seller"
+                    checked={role === "seller"}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="form-check-input"
+                  />
+                  <label htmlFor="sellerRole" className="form-check-label">
+                    Seller
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    id="buyerRole"
+                    name="role"
+                    value="buyer"
+                    checked={role === "buyer"}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="form-check-input"
+                  />
+                  <label htmlFor="buyerRole" className="form-check-label">
+                    Buyer
+                  </label>
+                </div>
+              </div>
+
+              {error && <div className="alert alert-danger">{error}</div>}
+              {creationError && (
+                <div className="alert alert-danger">
+                  {creationErrorMessage?.message || "Error creating account"}
+                </div>
+              )}
+
+              <div className="form-check mt-3">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="termsCheckbox"
+                  checked={isAgreeToTerms}
+                  onChange={(e) => setAgreeToTerms(e.target.checked)}
+                />
+                <label className="form-check-label" htmlFor="termsCheckbox">
+                  I agree to the{" "}
+                  <Link to="/auth/terms" className="text-link">
+                    Terms and Conditions
+                  </Link>
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn-primary w-100 mt-3"
+                disabled={isCreating}
+              >
+                {isCreating ? "Loading..." : "Sign Up"}
+              </button>
+
+              <p className="text-center mt-3">
+                Already have an account?{" "}
+                <Link to="/auth/signin" className="text-link">
+                  Login
+                </Link>
+              </p>
+            </form>
           </div>
+        </div>
 
-          {error && <div className="alert alert-danger">{error}</div>}
-
-          {creationError && (
-            <div className="alert alert-danger">
-              {creationErrorMessage?.message || "Error creating account"}
-            </div>
-          )}
-
-          <div className="form-check mt-3">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="termsCheckbox"
-              checked={isAgreeToTerms}
-              onChange={(e) => setAgreeToTerms(e.target.checked)}
-            />
-            <label className="form-check-label" htmlFor="termsCheckbox">
-              I agree to the{" "}
-              <Link to="/auth/terms" className="text-link">
-                Terms and Conditions
-              </Link>
-            </label>
+        {/* Right: Info Section */}
+        <div className="col-12 col-md-6 p-4 p-md-5 bg-light d-flex flex-column justify-content-center">
+          <div>
+            <h3 className="fw-bold mb-3">What is Lorem Ipsum?</h3>
+            <p className="text-muted">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text ever
+              since the 1500s.
+            </p>
           </div>
+        </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary w-100 mt-3"
-            disabled={isCreating}
-          >
-            {isCreating ? "Loading..." : "Sign Up"}
-          </button>
-
-          <p className="text-center mt-3">
-            Already have an account?{" "}
-            <Link to="/auth/signin" className="text-link">
-              Login
-            </Link>
-          </p>
-        </form>
-      </div>
-
-      <div className="image-section col-12 col-md-6 d-none d-md-block">
-        <h3>What is Lorem Ipsum?</h3>
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s.
-        </p>
       </div>
     </div>
-  );
+  </div>
+);
+
+  
+
 }
 
 export default SignUp;
