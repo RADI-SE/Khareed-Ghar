@@ -376,6 +376,28 @@ export const useSellerService = create((set) => ({
     }
   },
 
+
+  getBuyerNotifications: async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/buyer-notifications`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching notifications:", error.message);
+    }
+  },
+
+  updateBuyerNotification: async (id, read) => {
+    console.log("updateNotification called");
+    try {
+      console.log("id", id);
+      console.log("read", read);
+      const response = await axios.put(`http://localhost:5000/api/buyer-notifications/${id}`, { read } );
+      console.log("response", response.data); 
+      return response.data;
+    } catch (error) {
+      console.error("Error updating notification:", error.message);
+    }
+  },  
   updateNotification: async (id, read) => {
     console.log("updateNotification called");
     try {

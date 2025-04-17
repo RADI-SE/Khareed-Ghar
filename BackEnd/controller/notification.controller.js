@@ -3,9 +3,13 @@ import { SellerNotification } from "../model/seller.notification.model.js";
 import jwt from "jsonwebtoken";
 
 export const getNotifications = async (req, res) => {
-  const { receipient } = req.params;
+  const token = req.cookies.token;
+  console.log("token", token);
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  console.log("decoded", decoded);
+  const userId = decoded.userId;  
   try {
-    const notifications = await BuyerNotification.find({ receipient });
+    const notifications = await BuyerNotification.find({ receipient: userId });
     res.status(200).json(notifications);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -14,11 +18,23 @@ export const getNotifications = async (req, res) => {
 
 export const getSellerNotifications = async (req, res) => {
   const token = req.cookies.token;
+  console.log("token", token);
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  console.log("decoded", decoded);
   const userId = decoded.userId;  
   try {
+    if(!token){
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    if(userId){
+      
     const notifications = await SellerNotification.find({ receipient: userId });
     res.status(200).json(notifications);
+    }
+    else{
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

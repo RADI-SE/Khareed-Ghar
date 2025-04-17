@@ -1,11 +1,45 @@
 import React, { useState } from "react";
-import { FaSearch, FaShoppingCart, FaUser, FaBell, FaBars, FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { FaSearch, FaShoppingCart, FaUser, FaBell, FaBars, FaTimes, FaCheck } from "react-icons/fa";
+import { MdOutlineCancel } from "react-icons/md";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 import { useFetchCartItems } from "../../hooks/buyer/cart/useFetchCartItems";
 import { useClearCart } from "../../hooks/buyer/cart/useClearCart";
+import { useFetchNotifications } from '../../hooks/buyer/Notifications/useFetchNotifications'
+import { useSellerService } from '../../services/seller/sellerServices'
 
 const Navbar = () => {
+
+
+
+//   [
+//     {
+//         "_id": "67fb50eeeb183b2635f41639",
+//         "receipient": "6732321729f3c194f3563432",
+//         "order": "67fb50edeb183b2635f4162f",
+//         "message": "6732321729f3c194f3563432 placed a new order of 1 xyz",
+//         "read": true,
+//         "readAt": "2025-04-17T08:53:39.800Z",
+//         "link": "/order/67fb50edeb183b2635f4162f",
+//         "createdAt": "2025-04-13T05:51:42.546Z",
+//         "updatedAt": "2025-04-17T08:53:39.801Z",
+//         "__v": 0
+//     }
+// ]
+
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  /*
+
+  bool notification = false;
+  !showNotification
+  onclick = () => {
+    setShowNotification(!showNotification)
+
+
+
+    
+  */
   const { signout, isAuthenticated, user } = useAuthService();
   const { mutate: clearCartMutation } = useClearCart();
   const { data: cart = {} } = useFetchCartItems();
@@ -13,6 +47,10 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const {updateBuyerNotification} = useSellerService();
+  const { data = [], isLoading, isError } = useFetchNotifications();
+
+  console.log("data", data);
   const handleLogin = () => {
     navigate("/auth/signin");
   }; 
@@ -25,6 +63,12 @@ const Navbar = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleUpdateNotification = async (id) => {
+    console.log("id", id);
+    const read = true;
+    await updateBuyerNotification(id, read);
   };
 
   return (
@@ -79,16 +123,58 @@ const Navbar = () => {
             </button>
 
             <button 
-              onClick={() => navigate("/notification")} 
+              onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
               <FaBell className="w-6 h-6 text-blue-900" />
-              {items.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                  {items.length}
-                </span>
-              )}
+              {data.length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                        {data.length}
+                      </span>
+                    )}
             </button>
+            {/* Notification Dropdown */}
+            {showNotifications && (
+                    <div className="absolute right-1 top-10 h-auto w-80 bg-white rounded-lg shadow-lg">
+                      <div className="px-4 py-2 border-b border-gray-200">
+                        <h3 className="text-sm font-semibold text-gray-700">Notifications</h3>
+                      </div>
+                      <div className="">
+                        {data.map((notification) => (
+                          <Link
+                          onClick={() => handleUpdateNotification(notification?._id)}
+                          key={notification?._id}
+                          className={`no-underline ${notification?.read ? 'bg-gray-50 hover:bg-gray-100' : 'bg-blue-50 hover:bg-blue-100'}`}>
+                          <div
+                            key={notification._id}
+                            className="px-4 py-3 hover:bg-gray-100 cursor-pointer flex justify-between items-start"
+                          >
+                            <div>
+                              <p className="text-sm text-gray-800">{notification?.message}</p>
+                              <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
+                            </div>
+                            <div className="flex flex-col items-end space-y-1">
+                              <button className="px-1 ml-1 py-1 text-sm hover:bg-blue-100 rounded-md" onClick>
+                                <FaCheck className="w-4 h-5 text-green-600"/>
+                              </button>
+                              <button className="px-1 ml-1 py-1 text-sm hover:bg-red-100 rounded-md" onClick>
+                                <MdOutlineCancel className="w-4 h-5 text-red-600"/>
+                              </button>
+                            </div>
+                          </div>
+                          </Link>
+                        ))}
+                      </div>
+                      <div>
+                        
+                      </div>
+                      {data.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-gray-500">
+                          No new notifications
+                        </div>
+                      )}
+                    </div>
+                  )}
 
             {!isAuthenticated ? (
               <button
@@ -145,16 +231,58 @@ const Navbar = () => {
                 </button>
 
                 <button 
-                  onClick={() => navigate("/notification")} 
+                  onClick={() => setShowNotifications(!showNotifications)}
                   className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <FaBell className="w-6 h-6 text-blue-900" />
-                  {items.length > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                      {items.length}
-                    </span>
-                  )}
+                  {data.length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                        {data.length}
+                      </span>
+                    )}
                 </button>
+                {/* MobileNotification Dropdown */}
+            {showNotifications && (
+                    <div className="absolute right-1 top-10 h-auto w-80 bg-white rounded-lg shadow-lg">
+                      <div className="px-4 py-2 border-b border-gray-200">
+                        <h3 className="text-sm font-semibold text-gray-700">Notifications</h3>
+                      </div>
+                      <div className="">
+                        {data.map((notification) => (
+                          <Link
+                          onClick={() => handleUpdateNotification(notification?._id)}
+                          key={notification?._id}
+                          className={`no-underline ${notification?.read ? 'bg-gray-50 hover:bg-gray-100' : 'bg-blue-50 hover:bg-blue-100'}`}>
+                          <div
+                            key={notification._id}
+                            className="px-4 py-3 hover:bg-gray-100 cursor-pointer flex justify-between items-start"
+                          >
+                            <div>
+                              <p className="text-sm text-gray-800">{notification?.message}</p>
+                              <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
+                            </div>
+                            <div className="flex flex-col items-end space-y-1">
+                              <button className="px-1 ml-1 py-1 text-sm hover:bg-blue-100 rounded-md" onClick>
+                                <FaCheck className="w-4 h-5 text-green-600"/>
+                              </button>
+                              <button className="px-1 ml-1 py-1 text-sm hover:bg-red-100 rounded-md" onClick>
+                                <MdOutlineCancel className="w-4 h-5 text-red-600"/>
+                              </button>
+                            </div>
+                          </div>
+                          </Link>
+                        ))}
+                      </div>
+                      <div>
+                        
+                      </div>
+                      {data.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-gray-500">
+                          No new notifications
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                 {!isAuthenticated ? (
                   <button

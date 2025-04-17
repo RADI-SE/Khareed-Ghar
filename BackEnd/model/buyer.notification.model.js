@@ -31,6 +31,9 @@ const BuyerNotificationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    readAt: {
+      type: Date,
+    },
     link: {
       type: String,
     },
@@ -41,4 +44,6 @@ const BuyerNotificationSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );  
+BuyerNotificationSchema.index({ readAt: 1 }, { expireAfterSeconds: 120  });
+
 export const BuyerNotification = mongoose.model("BuyerNotification", BuyerNotificationSchema);

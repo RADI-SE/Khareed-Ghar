@@ -1,10 +1,10 @@
 import express from "express";
-import { getNotifications, getSellerNotifications, updateNotification } from "../controller/notification.controller.js";
+import { getNotifications, getSellerNotifications, updateNotification, updateBuyerNotification } from "../controller/notification.controller.js";
 
 const router = express.Router();
 
-router.get("/buyer-notifications/:id", getNotifications);
-
+router.get("/buyer-notifications", getNotifications);
+router.put("/buyer-notifications/:id", updateBuyerNotification);
 
 router.get("/seller-notifications", getSellerNotifications);
 router.put("/seller-notifications/:id", updateNotification);

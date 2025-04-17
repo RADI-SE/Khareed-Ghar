@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
-import {FaBell, FaBars, FaTimes} from "react-icons/fa";
+import {FaBell, FaBars, FaTimes, FaCheck} from "react-icons/fa";
+import { MdOutlineCancel } from "react-icons/md";
 import { useFetchNotifications } from '../../hooks/seller/Notifications/useFetchNotifications'
 import { Link } from 'react-router-dom'
 import { useSellerService } from '../../services/seller/sellerServices'
@@ -17,7 +18,7 @@ const Sidebar = () => {
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
-
+console.log("data", data);
   const handleLogout = async () => {
     await signout();
     navigate("/signin");
@@ -85,13 +86,26 @@ const Sidebar = () => {
                           className={`no-underline ${notification?.read ? 'bg-gray-50 hover:bg-gray-100' : 'bg-blue-50 hover:bg-blue-100'}`}>
                           <div
                             key={notification._id}
-                            className="px-4 py-3 hover:bg-gray-100 cursor-pointer"
+                            className="px-4 py-3 hover:bg-gray-100 cursor-pointer flex justify-between items-start"
                           >
-                            <p className="text-sm text-gray-800">{notification?.message}</p>
-                            <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
+                            <div>
+                              <p className="text-sm text-gray-800">{notification?.message}</p>
+                              <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
+                            </div>
+                            <div className="flex flex-col items-end space-y-1">
+                              <button className="px-1 ml-1 py-1 text-sm hover:bg-blue-100 rounded-md" onClick>
+                                <FaCheck className="w-4 h-5 text-green-600"/>
+                              </button>
+                              <button className="px-1 ml-1 py-1 text-sm hover:bg-red-100 rounded-md" onClick>
+                                <MdOutlineCancel className="w-4 h-5 text-red-600"/>
+                              </button>
+                            </div>
                           </div>
                           </Link>
                         ))}
+                      </div>
+                      <div>
+                        
                       </div>
                       {data.length === 0 && (
                         <div className="px-4 py-3 text-sm text-gray-500">
