@@ -377,8 +377,10 @@ export const useSellerService = create((set) => ({
   },
 
   updateNotification: async (id, read) => {
+    console.log("updateNotification called");
     try {
-      console.log("updateNotification called");
+      console.log("id", id);
+      console.log("read", read);
       const response = await axios.put(`http://localhost:5000/api/seller-notifications/${id}`, { read } );
       console.log("response", response.data); 
       return response.data;

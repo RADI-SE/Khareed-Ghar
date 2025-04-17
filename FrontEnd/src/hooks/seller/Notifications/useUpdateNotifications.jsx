@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSellerService } from "../../services/seller/sellerServices";
+import { useSellerService } from "../../../services/seller/sellerServices";
 
 export const useUpdateNotifications = () => {
   const { updateNotification } = useSellerService();

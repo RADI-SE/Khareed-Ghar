@@ -2,10 +2,17 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 import {FaBell, FaBars, FaTimes} from "react-icons/fa";
+import { useFetchNotifications } from '../../hooks/seller/Notifications/useFetchNotifications'
+import { Link } from 'react-router-dom'
+import { useSellerService } from '../../services/seller/sellerServices'
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const { signout } = useAuthService();
+
+  const {updateNotification} = useSellerService();
+  const { data = [], isLoading, isError } = useFetchNotifications();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -14,6 +21,12 @@ const Sidebar = () => {
   const handleLogout = async () => {
     await signout();
     navigate("/signin");
+  };
+
+  const handleUpdateNotification = async (id) => {
+    console.log("id", id);
+    const read = true;
+    await updateNotification(id, read);
   };
 
   return (
@@ -43,7 +56,52 @@ const Sidebar = () => {
         <div className="h-full pr-3 py-4 overflow-y-auto">
           <ul className="space-y-4 font-medium">
             <li>
-              <h4 className="text-white mb-10 text-xl font-bold">Seller Panel</h4>
+              <h4 className="text-white mb-10 text-xl font-bold flex items-center justify-between">
+                Seller Panel
+                <div className="relative">
+                  <button
+                    onClick={() => setShowNotifications(!showNotifications)}
+                    className="text-white hover:text-blue-300 transition-colors"
+                  >
+                    <FaBell className="w-5 h-5" />
+                    {data.length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                        {data.length}
+                      </span>
+                    )}
+                  </button>
+                  
+                  {/* Notification Dropdown */}
+                  {showNotifications && (
+                    <div className="absolute right-0 mt-2 w-60 bg-white rounded-lg shadow-lg py-2">
+                      <div className="px-4 py-2 border-b border-gray-200">
+                        <h3 className="text-sm font-semibold text-gray-700">Notifications</h3>
+                      </div>
+                      <div className="max-h-80 overflow-y-auto">
+                        {data.map((notification) => (
+                          <Link
+                          onClick={() => handleUpdateNotification(notification?._id)}
+                          key={notification?._id}
+                          className={`no-underline ${notification?.read ? 'bg-gray-50 hover:bg-gray-100' : 'bg-blue-50 hover:bg-blue-100'}`}>
+                          <div
+                            key={notification._id}
+                            className="px-4 py-3 hover:bg-gray-100 cursor-pointer"
+                          >
+                            <p className="text-sm text-gray-800">{notification?.message}</p>
+                            <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
+                          </div>
+                          </Link>
+                        ))}
+                      </div>
+                      {data.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-gray-500">
+                          No new notifications
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </h4>
             </li>
             <li>
               <NavLink 
@@ -83,20 +141,6 @@ const Sidebar = () => {
                 onClick={() => window.innerWidth < 1024 && setIsCollapsed(false)}
               >
                 Product Management
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
-                  }`
-                }
-                to="/seller/notifications"
-                onClick={() => window.innerWidth < 1024 && setIsCollapsed(false)}
-              >
-                <span className="flex-1">Notification</span>
-                <FaBell className="w-5 h-5" />
               </NavLink>
             </li>
             <li className="mt-10">
