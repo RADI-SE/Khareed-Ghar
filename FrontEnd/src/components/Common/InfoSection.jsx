@@ -22,7 +22,7 @@ const InfoSection = () => {
   ];
 
   return (
-    <div className="w-100 mx-auto pb-8 pt-12 flex justify-center items-center">
+    <div className="w-100 mx-auto pb-8 pt-12 flex justify-center items-center hidden lg:block md:block">
       <div className="container w-100 mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {infoItems.map((items, index) => (
           <div

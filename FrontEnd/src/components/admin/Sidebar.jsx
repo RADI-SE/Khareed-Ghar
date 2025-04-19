@@ -18,7 +18,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-50">
       {/* Mobile Toggle Button */}
       <button 
         className="fixed top-4 left-4 z-50 p-2 rounded-md bg-blue-950 text-white lg:hidden"
@@ -124,20 +124,6 @@ const Sidebar = () => {
                 onClick={() => window.innerWidth < 1024 && setIsCollapsed(false)}
               >
                 Region Management
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
-                  }`
-                }
-                to="/admin/zoneManager"
-                onClick={() => window.innerWidth < 1024 && setIsCollapsed(false)}
-              >
-                <span className="flex-1">Notification</span>
-                <FaBell className="w-5 h-5" />
               </NavLink>
             </li>
             <li className="mt-10">

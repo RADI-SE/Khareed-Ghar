@@ -135,7 +135,7 @@ const Navbar = () => {
             </button>
             {/* Notification Dropdown */}
             {showNotifications && (
-                    <div className="absolute right-1 top-10 h-auto w-80 bg-white rounded-lg shadow-lg">
+                    <div className="absolute right-1 top-10 h-[500px] w-80 bg-white rounded-lg shadow-lg">
                       <div className="px-4 py-2 border-b border-gray-200">
                         <h3 className="text-sm font-semibold text-gray-700">Notifications</h3>
                       </div>
@@ -241,7 +241,7 @@ const Navbar = () => {
                       </span>
                     )}
                 </button>
-                {/* MobileNotification Dropdown */}
+                {/* Mobile Notification Dropdown */}
             {showNotifications && (
                     <div className="absolute right-1 top-10 h-auto w-80 bg-white rounded-lg shadow-lg">
                       <div className="px-4 py-2 border-b border-gray-200">
@@ -309,7 +309,7 @@ const Navbar = () => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="bg-blue-900">
+      <div className="bg-blue-900 hidden lg:block md:block">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center space-x-4 md:space-x-8 py-3 overflow-x-auto">
             <button 

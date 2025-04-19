@@ -26,7 +26,7 @@ const ProductCard = ({product}) => {
       key={product.id}
       className="relative mx-2 my-4 sm:mx-4 sm:my-6 md:mx-6 md:my-8 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md hover:shadow-lg transition-shadow duration-300"
     >
-      <div className="relative h-48 sm:h-56 md:h-64 w-full overflow-hidden">
+      <div className="relative h-full sm:h-64 w-64 overflow-hidden">
         <img
           src={`../../../public/images/${product?.images}` || defaultProduct}
           alt={product?.name || "Product"}
@@ -34,13 +34,13 @@ const ProductCard = ({product}) => {
         />
       </div>
       
-      <div className="p-4 sm:p-5 flex flex-col flex-grow">
-        <h5 className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 line-clamp-2">
+      <div className="px-4 py-1 sm:px-4 sm:py-1 flex flex-col flex-grow">
+        <h5 className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 line-clamp-2 sm:mt-1 sm:mb-1 ">
           {product.name}
         </h5>
         
-        <div className="mt-3 mb-4 flex items-center justify-between">
-          <p className="text-2xl sm:text-3xl font-bold text-slate-900">
+        <div className="mt-3 mb-4 sm:mt-0 sm:mb-0 sm:mt-1 sm:mb-1 flex items-center justify-between">
+          <p className="text-2xl sm:text-2xl font-bold text-slate-900">
             ${product.price}
           </p>
           <div className="flex items-center">
@@ -48,23 +48,24 @@ const ProductCard = ({product}) => {
           </div>
         </div>
         
-        <div className="mt-auto space-y-2">
+        <div className="mt-1 space-y-1">
           <button
             onClick={(e) => handleAddToCart(e, product._id)}
-            className="w-full py-2 px-4 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition-colors duration-300 text-sm sm:text-base font-medium"
+            className="w-full py-2 px-1 bg-blue-900 text-white sm:text-sm rounded-md hover:bg-blue-800 transition-colors duration-300 text-sm sm:text-base font-medium"
           >
             Add to Cart
           </button>
           
           <button
             onClick={(e) => handleDetail(e, product._id)}
-            className="w-full py-2 px-4 border border-blue-900 text-blue-900 rounded-md hover:bg-blue-50 transition-colors duration-300 text-sm sm:text-base font-medium"
+            className="w-full py-2 px-1 border border-blue-900 text-blue-900 sm:text-sm rounded-md hover:bg-blue-50 transition-colors duration-300 text-sm sm:text-base font-medium"
           >
             View Details
           </button>
         </div>
       </div>
     </div>
+
   );
 }
 
