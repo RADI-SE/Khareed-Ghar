@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useGetAllCategoryProducts } from "../../hooks/Categories/useGetAllCategoryProducts";
-import { useGetCategoryById } from "../../hooks/Categories/searchCategoryById";
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useFetchProductById } from '../../hooks/seller/useFetchProductsById';
 import { useAddToCart } from "../../hooks/buyer/cart/useAddToCart";
+import { useSellerService } from "../../services/seller/sellerServices";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,11 +12,13 @@ const ProductDetail = () => {
   const { data: product } = useFetchProductById(id);
   const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
+  const { getSimilarProducts } = useSellerService();
   
   const [isInCart, setIsInCart] = useState(false);
   const { mutate: AddToCart } = useAddToCart();
   const [quantity, setQuantity] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [similarProducts, setSimilarProducts] = useState([]);
    
   // Reset state and scroll to top when product changes
   useEffect(() => {
@@ -25,7 +26,22 @@ const ProductDetail = () => {
     setSelectedImage(0);
     setQuantity(0);
     setIsInCart(false);
-  }, [id]);
+
+    // Fetch similar products when product ID changes
+    const fetchSimilarProducts = async () => {
+      try {
+        const products = await getSimilarProducts(id);
+        setSimilarProducts(products?.similarProducts || []);
+      } catch (error) {
+        console.error("Error fetching similar products:", error);
+        setSimilarProducts([]);
+      }
+    };
+
+    if (id) {
+      fetchSimilarProducts();
+    }
+  }, [id, getSimilarProducts]);
   
   // Convert single image to array if needed
   const productImages = Array.isArray(product?.images) 
@@ -83,22 +99,7 @@ const ProductDetail = () => {
     }
   };
 
-  const {
-    data: getAllCategoryProducts,
-    isLoading: categoryProductsLoading,
-    error: categoryProductsError,
-  } = useGetAllCategoryProducts({ selectedCategory: product?.category?._id });
-
-  const { data: getCategoryById } = useGetCategoryById({ selectedCategory: product?.category?._id });
-  const [categoryName, setCategoryName] = useState("");
-
-  useEffect(() => {
-    if (getCategoryById) {
-      setCategoryName(getCategoryById.name);
-    }
-  }, [getCategoryById]);
-
-  if (!product || categoryProductsLoading) {
+  if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -106,16 +107,8 @@ const ProductDetail = () => {
     );
   }
 
-  if (categoryProductsError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        Error loading data...
-      </div>
-    );
-  }
-
   // Filter out the current product and ensure we have valid products
-  const similarProducts = getAllCategoryProducts?.filter(p => p._id !== id) || [];
+  const filteredSimilarProducts = similarProducts.filter(p => p._id !== id);
 
   return (
     <div className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12 px-4 sm:px-6 lg:px-8">
@@ -233,10 +226,10 @@ const ProductDetail = () => {
         </div>
 
         {/* Similar Products Section */}
-        {similarProducts.length > 0 && (
+        {filteredSimilarProducts.length > 0 && (
           <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
-              More {categoryName || 'Similar Products'}
+              Similar Products
             </h2>
             <div className="relative">
               {/* Scroll Left Button */}
@@ -254,7 +247,7 @@ const ProductDetail = () => {
                 ref={scrollContainerRef}
                 className="flex overflow-x-auto gap-4 sm:gap-6 pb-4 scrollbar-hide"
               >
-                {similarProducts.map((similarProduct) => (
+                {filteredSimilarProducts.map((similarProduct) => (
                   <div
                     key={similarProduct._id}
                     onClick={() => handleSimilarProductClick(similarProduct._id)}
