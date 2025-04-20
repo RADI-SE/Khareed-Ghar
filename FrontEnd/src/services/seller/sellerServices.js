@@ -215,6 +215,16 @@ export const useSellerService = create((set) => ({
     }
   },
 
+  getSimilarProducts: async (id) => {
+    try {
+      console.log("id", id);
+      const response = await axios.get(`http://localhost:5000/api/seller/getSimilarProducts/${id}`);
+      console.log("response", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching similar products:", error.message);
+    }
+  },
   // createAuction
   createAuction: async (productId, startingBid, startTime, endTime) => {
     try {

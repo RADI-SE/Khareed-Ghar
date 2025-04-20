@@ -1,38 +1,3 @@
-// import React from "react";
-// import ProductCard from "../../components/Common/ProductCard";
-// import { useFetchProducts } from "../../hooks/seller/useFetchProducts";
-
-// const ProductsOnHomePage = () => {
-//   const {
-//     data: products = [],
-//     isLoading: isLoadingProducts,
-//     isError: productsError,
-//   } = useFetchProducts();
-
-//   if (isLoadingProducts) {
-//     return <p>Loading...</p>;
-//   }
-//   if (productsError) {
-//     return <p>Error fetching products. Please try again later.</p>;
-//   }
-//   return (
-//     <>
-//       <div className="container mx-auto py-12">
-//         <h2 className="mx-2xl font-bold mb-6 text-center ">
-//           Best Mobile Deals!
-//         </h2>
-//         <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-2">
-//           {products.map((product) => (
-//             <ProductCard product={product} />
-//           ))}
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ProductsOnHomePage;
-
 import React, { useRef } from "react";
 import ProductCard from "../../components/Common/ProductCard";
 import { useFetchProducts } from "../../hooks/seller/useFetchProducts";
@@ -76,8 +41,7 @@ const ProductsOnHomePage = () => {
         <ChevronLeft />
       </button>
 
-      {/* Scrollable Product Cards */}
-      <div
+       <div
         ref={scrollRef}
         className="flex overflow-x-auto space-x-4 scrollbar-hide px-4"
       >

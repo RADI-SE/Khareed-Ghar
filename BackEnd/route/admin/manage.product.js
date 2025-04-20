@@ -5,7 +5,8 @@ import {
   getProductById, 
   deleteProduct,
   editProduct,
-  getUserProducts
+  getUserProducts,
+  getSimilarProducts
 } from "../../controller/seller/product.controller.js";
 import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
 import { AuthorizeRoles } from "../../middleware/AuthorizeRoles.js";
@@ -28,6 +29,8 @@ router.get("/seller/productsById/:id", getProductById);
 
 router.put("/seller/products/:id", verifySeller, editProduct);
 
-router.delete("/seller/products/:id", verifyAdminSeller, deleteProduct);
+router.delete("/seller/products/:id" , verifyAdminSeller, deleteProduct);
+
+router.get("/seller/getSimilarProducts/:id", getSimilarProducts);
 
 export default router;

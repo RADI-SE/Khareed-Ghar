@@ -4,15 +4,18 @@ import defaultProduct from "../../assets/images/default.jpeg";
 import { useAddToCart } from "../../hooks/buyer/cart/useAddToCart";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
-
+import { useSellerService } from "../../services/seller/sellerServices";
+ 
 const ProductCard = ({product}) => {
   const { mutate: AddToCart } = useAddToCart();
   const [quantity, setQuantity] = useState(0); 
   const navigate = useNavigate();
-
-  const handleDetail = (e, productId) => {
+  const { getSimilarProducts } = useSellerService();
+  const handleDetail  = async (e, productId) => {
     e.preventDefault();
     navigate(`/products/${productId}`);
+    const similarProducts = await getSimilarProducts(productId);
+    console.log("similarProducts", similarProducts);
   } 
   const handleAddToCart = (e, productId) => {
     e.preventDefault();
