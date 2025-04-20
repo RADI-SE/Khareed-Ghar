@@ -79,8 +79,7 @@ export const placeBid = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const previousBidderId = auction.currentBidder;
-    console.log("previousBidderId", previousBidderId)
-    auction.currentBid = bidAmount;
+     auction.currentBid = bidAmount;
     auction.currentBidder = fetchUser._id;
      
     auction.bidders.push({ userId: fetchUser._id , name: fetchUser.name,  bidAmount });
@@ -320,12 +319,10 @@ export const getCurrentLeftTime = async (req, res) => {
     const hours = Math.floor((timeLeftInMillis / (1000 * 60 * 60)) % 24);
     const days = Math.floor(timeLeftInMillis / (1000 * 60 * 60 * 24));
 
-    console.log("timeLeftInMillis", timeLeftInMillis) 
-    if(timeLeftInMillis <= 494){
+     if(timeLeftInMillis <= 494){
       auction.status = "completed"
       await auction.save();
-      console.log("status Completed");
-
+ 
       const sellerNotification = new SellerNotification({
         receipient: auction.sellerId,
         auction: auction._id,

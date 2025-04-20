@@ -1,5 +1,7 @@
 import { Category } from "../../model/category.model.js";
 import { Product } from "../../model/product.model.js";
+import axios from "axios";
+ 
 export const addProduct = async (req, res) => {
   try {
     const specifications = req.body.specifications
@@ -271,5 +273,81 @@ export const deleteProduct = async (req, res) => {
       success: false,
       message: "Server error. Please try again later.",
     });
+  }
+};
+
+
+export const getSimilarProducts = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("id",id);
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Product not found." });
+    }
+
+    const otherProducts = await Product.find({
+      _id: { $ne: id },
+      category: product.category,
+      subcategory: product.subcategory,
+      isAuction: false,
+    }).limit(20); // limit context size
+ 
+    console.log("otherProducts",otherProducts);
+    const prompt = `
+You are an AI assistant helping to find similar products.
+
+Here is the selected product:
+---
+Title: ${product.name}
+Description: ${product.description}
+Category: ${product.category}
+Subcategory: ${product.subcategory}
+---
+
+Here are some other products:
+${otherProducts.map((p, i) =>
+  `(${i + 1}) Title: ${p.name} | Description: ${p.description} | Id: ${p._id}`
+).join('\n')}
+
+Recommend the 5 most similar products based on title and description.
+
+Return ONLY the product Ids, one per line, with no bullet points, no extra text, and no formatting — just like this:
+
+6802ba4db60d654741244e05
+6802ba4db60d654741244e06
+6802ba4db60d654741244e07
+6802ba4db60d654741244e08
+6802ba4db60d654741244e09
+`;
+
+    const aiResponse = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        contents: [{ parts: [{ text: prompt }] }],
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    const aiText = aiResponse?.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    console.log("aiText",aiText);
+
+    const matchedTitles = aiText
+    .split("\n")
+    .map(line => line.replace(/^[-*]\s*/, '').trim())
+    .filter(Boolean);
+    console.log("matchedTitles",matchedTitles);
+
+    const similarProducts = await Product.find({
+      _id: { $in: matchedTitles },
+      isAuction: false,
+    });
+    console.log("similarProducts",similarProducts);
+
+    return res.status(200).json({ success: true, similarProducts });
+
+  } catch (error) {
+    console.error("Error getting similar products:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
