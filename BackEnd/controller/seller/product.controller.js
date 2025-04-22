@@ -1,21 +1,16 @@
 import { Category } from "../../model/category.model.js";
 import { Product } from "../../model/product.model.js";
 import axios from "axios";
- 
-
 export const addProduct = async (req, res) => {
   try {
     const specifications = req.body.specifications
       ? JSON.parse(req.body.specifications)
       : {};
 
-    console.log("specifications",specifications);
     const { name, description, price, category, subcategory, seller, isAuction } =
       req.body;
 
-    console.log("req.body",req.body);
     const file = req.file; 
-    console.log("file",file);
     if (!file) {
       return res.status(400).json({
         success: false,

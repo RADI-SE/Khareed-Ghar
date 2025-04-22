@@ -79,7 +79,8 @@ export const placeBid = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const previousBidderId = auction.currentBidder;
-     auction.currentBid = bidAmount;
+    console.log("previousBidderId", previousBidderId)
+    auction.currentBid = bidAmount;
     auction.currentBidder = fetchUser._id;
      
     auction.bidders.push({ userId: fetchUser._id , name: fetchUser.name,  bidAmount });
@@ -100,7 +101,7 @@ export const placeBid = async (req, res) => {
       const buyerNotification = new BuyerNotification({
         receipient: previousBidderId,
         product: auction.productId,
-        message: `You’ve been outbid by ${fetchUser.name} with $${bidAmount}`,
+        message: `You've been outbid by ${fetchUser.name} with $${bidAmount}`,
         link: `/auction/${auction._id}`,
       });
       await buyerNotification.save();
@@ -136,23 +137,30 @@ export const getAuctionDetails = async (req, res) => {
     const UserAuctions = await Auction.find()
      const UserAuction = await Auction.findOne(
       {
-
         sellerId: userID._id
       }
     )
     if(!UserAuction)
     {
-      return res.status(404).json({ message: 'No Auction yet'})
+      return res.status(404).json({ message: 'No auctions found for this seller'})
     }
-
-
-    const products = await Product.findById(UserAuction.productId)
-
-    if(!products){
-      return res.status(404).json({ message: 'No Auction yet'})
+     
+ 
+    let product = null;
+    try {
+      product = await Product.findById(UserAuction.productId);
+    } catch (error) {
+      console.error("Error fetching product:", error);
     }
+   
+
     const auctionDetails = await Promise.all(UserAuctions.map(async (auctionItem) => {
-      const product = await Product.findById(auctionItem.productId);
+      let product = null;
+      try {
+        product = await Product.findById(auctionItem.productId);
+      } catch (error) {
+        console.error("Error fetching product for auction:", error);
+      }
       return {
         auctionId: auctionItem._id,
         startingBid: auctionItem.startingBid,
@@ -161,7 +169,7 @@ export const getAuctionDetails = async (req, res) => {
         startTime: auctionItem.startTime,
         endTime: auctionItem.endTime,
         status: auctionItem.status,
-        productsName: product ? product.name : 'N/A',
+        productsName: product ? product.name : 'Product not found',
         productsImg: product ? product.images : null,
       };
     }));
@@ -319,10 +327,12 @@ export const getCurrentLeftTime = async (req, res) => {
     const hours = Math.floor((timeLeftInMillis / (1000 * 60 * 60)) % 24);
     const days = Math.floor(timeLeftInMillis / (1000 * 60 * 60 * 24));
 
-     if(timeLeftInMillis <= 494){
+    console.log("timeLeftInMillis", timeLeftInMillis) 
+    if(timeLeftInMillis <= 494){
       auction.status = "completed"
       await auction.save();
- 
+      console.log("status Completed");
+
       const sellerNotification = new SellerNotification({
         receipient: auction.sellerId,
         auction: auction._id,
