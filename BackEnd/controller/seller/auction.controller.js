@@ -323,6 +323,7 @@ export const getCurrentLeftTime = async (req, res) => {
           message: `Auction has ended. ${findCurrentBidder.name} won with a bid of ${auction.currentBid}.`,
           read: false,
           readAt: null,
+          auctionEnded: true,
           link: `/auction/${auction._id}`,
         });
         await sellerNotification.save();
@@ -372,15 +373,20 @@ export const getCurrentLeftTime = async (req, res) => {
 export const getAuctionStatus = async (req, res) => {
   try {
     const { auctionId } = req.params;
+    console.log("auctionId getAuctionStatus ", auctionId);
     const {auctionStatus} = req.body;
     const auction = await Auction.findById(auctionId);
+
+    console.log("auction status getAuctionStatus ", auctionStatus);
+  
     if (!auction) {
       return res.status(404).json({
         success: false,
         message: "Auction not found.",
       });
     } 
-    if(auctionStatus === "awarded")
+    console.log("auction not found getAuctionStatus ", auction);
+    if(auctionStatus === true )
     {
       const findHighestBidder = await User.findById(auction.currentBidder);
       const buyerNotification = new BuyerNotification({
@@ -389,9 +395,11 @@ export const getAuctionStatus = async (req, res) => {
         message: `You have been awarded the auction,please continue with the payment process.`,
         link: `/auction/${auction._id}`,
       });
+      auction.auctionStatus = "awarded";
+      await auction.save();
       await buyerNotification.save();
     }
-    if(auctionStatus === "rejected")
+    if(auctionStatus === false)
     {
       const findHighestBidder = await User.findById(auction.currentBidder);
       const buyerNotification = new BuyerNotification({
@@ -399,10 +407,11 @@ export const getAuctionStatus = async (req, res) => {
         product: auction.productId,
         message: `You have been rejected from the auction, please try again later.`,
         link: `/auction/${auction._id}`,
-      });
+      });  
+      auction.auctionStatus = "rejected";
+      await auction.save();
       await buyerNotification.save();
-    }
-    auction.auctionStatus = auctionStatus;
+    } 
     await auction.save();
     res.status(200).json({
       success: true,

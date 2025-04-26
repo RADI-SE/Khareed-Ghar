@@ -6,5 +6,9 @@ export const useFetchNotifications = () => {
   return useQuery({
     queryKey: ['notifications'], 
     queryFn: () => getNotifications(),
+    staleTime: 1000,   // 1 second
+    refetchInterval: 1000,  
+    refetchIntervalInBackground: true,
   });
+  
 };

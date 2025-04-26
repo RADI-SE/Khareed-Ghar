@@ -379,6 +379,24 @@ export const useSellerService = create((set) => ({
       console.error("Error fetching bidding:", error.message);
     }
   },
+  getAuctionStatus: async (auctionId, auctionStatus ) => {
+    try {
+      console.log("auctionId", auctionId);
+      console.log("auctionStatus", auctionStatus);
+      
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.patch(`http://localhost:5000/api/${auctionId}/auctionStatus`, { auctionStatus });
+      return response.data;
+    } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching auction status.",
+      });
+      console.error("Error fetching auction status:", error.message);
+    }
+  },
+  
 
   getNotifications: async () => {
     try {

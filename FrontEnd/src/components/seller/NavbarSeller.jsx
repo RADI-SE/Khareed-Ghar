@@ -5,42 +5,46 @@ import { MdOutlineCancel } from "react-icons/md";
 import { Link } from 'react-router-dom'
 import { useFetchNotifications } from '../../hooks/seller/Notifications/useFetchNotifications'
 import { useSellerService } from '../../services/seller/sellerServices'
+import { useNavigate } from 'react-router-dom';
 
 function NavbarSeller() {
   const [showNotifications, setShowNotifications] = useState(false);
-  const { signout, isAuthenticated, user } = useAuthService();
-
+  const { signout, user } = useAuthService();
+   const navigate = useNavigate(); 
+  const {getAuctionStatus} = useSellerService();
   const {updateNotification} = useSellerService();
-  const { data = [], isLoading, isError } = useFetchNotifications();
+  const { data = [] } = useFetchNotifications();
 
   const handleLogout = async () => {
     await signout();
-    navigate("/signin");
+    navigate("/");
   };
 
   const handleUpdateNotification = async (id) => {
-    console.log("id", id);
     const read = true;
     await updateNotification(id, read);
   };
 
+    const handleAuctionEnded = async (auctionId,status) => {
+      if(status === true){
+        await getAuctionStatus(auctionId,true);
+      }else{
+        await getAuctionStatus(auctionId,false);
+      }
+    };
+    console.log("notification data ", data);
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Left side - Brand */}
-          <div className="flex items-center">
+           <div className="flex items-center">
             
           </div>
-
-          {/* Right side - User controls */}
           <div className="flex items-center space-x-6">
-            {/* Account holder name */}
             <div className="hidden md:flex items-center">
               <h3 className='mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 justify-center items-center pt-3'>Welcome <span className="text-2xl font-medium text-blue-900 items-center"> {user?.name || 'User'}</span></h3>
             </div>
 
-            {/* Notifications */}
             <div className="relative">
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
@@ -53,8 +57,6 @@ function NavbarSeller() {
                   </span>
                 )}
               </button>
-              
-              {/* Notification Dropdown */}
               {showNotifications && (
                 <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl py-2 z-[9999]">
                   <div className="px-4 py-2 border-b border-gray-200">
@@ -73,14 +75,17 @@ function NavbarSeller() {
                               <p className="text-sm text-gray-800">{notification?.message}</p>
                               <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
                             </div>
+                            
+                              {notification?.auctionEnded === true && (
                             <div className="flex space-x-2 ml-2">
-                              <button className="p-1 hover:bg-green-100 rounded-full transition-colors">
+                              <button className="p-1 hover:bg-green-100 rounded-full transition-colors" onClick={() => handleAuctionEnded(notification?.auction,true)}>
                                 <FaCheck className="w-4 h-4 text-green-600"/>
                               </button>
-                              <button className="p-1 hover:bg-red-100 rounded-full transition-colors">
+                              <button className="p-1 hover:bg-red-100 rounded-full transition-colors" onClick={() => handleAuctionEnded(notification?.auction,false)}>
                                 <MdOutlineCancel className="w-4 h-4 text-red-600"/>
                               </button>
                             </div>
+                            )}
                           </div>
                         </div>
                       </Link>

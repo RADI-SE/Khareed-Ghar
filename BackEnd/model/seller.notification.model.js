@@ -30,6 +30,10 @@ const SellerNotificationSchema = new mongoose.Schema(
     readAt: {
       type: Date,
     },
+    auctionEnded: {
+      type: Boolean,
+      default: false,
+    },
     link: {
       type: String,
     },
