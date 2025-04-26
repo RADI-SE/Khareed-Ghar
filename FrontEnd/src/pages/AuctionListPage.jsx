@@ -8,6 +8,7 @@ const AuctionListPage = () => {
     isError: auctionsError,
   } = useFetchAuctions();
 
+  console.log("auctions", auctions)
 
   if (isLoadingAuctions) {
     return (

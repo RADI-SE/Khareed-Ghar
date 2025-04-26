@@ -245,9 +245,10 @@ export const useSellerService = create((set) => ({
 
   getAuctions: async () => {
     try {
+      console.log("getAuctions called");
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(`http://localhost:5000/api/ongoing`);
-      
+      console.log("response", response.data);
       if (!response.data.success) {
         throw new Error(response.data.message || 'Failed to fetch auctions');
       }

@@ -40,9 +40,10 @@ export const createAuction = async (req, res) => {
  
 export const getOngoingAuctions = async (req, res) => {
   try {
-    const auctions = await Auction.find({ status: 'ongoing', endTime: { $gt: Date.now() } })
+    const auctions = await Auction.find({ status: 'ongoing' })
       .populate('productId', 'name price images')  
       .populate('currentBidder', 'name'); 
+    console.log("auctions", auctions)
     res.status(200).json({ success: true, auctions: auctions || [] });
   } catch (error) {
     res.status(500).json({ 
@@ -52,7 +53,6 @@ export const getOngoingAuctions = async (req, res) => {
     });
   }
 };
- 
 export const placeBid = async (req, res) => {
   try {
     const { auctionId, bidAmount } = req.body;
@@ -113,18 +113,13 @@ export const placeBid = async (req, res) => {
   }
 };
  
-
-
 export const getAuctionDetails = async (req, res) => {
   try {
-
-    
+  
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
-    
-    
-    
+  
     const userID = await User.findById(userId)
     // .populate('productId', 'name description price images')
     // .populate('bidders.userId', 'name')
@@ -144,8 +139,6 @@ export const getAuctionDetails = async (req, res) => {
     {
       return res.status(404).json({ message: 'No auctions found for this seller'})
     }
-     
- 
     let product = null;
     try {
       product = await Product.findById(UserAuction.productId);
@@ -246,6 +239,7 @@ export const editAuctions = async (req, res) => {
     const updatedAuctions = await Auction.findByIdAndUpdate(
       id,
       {
+        status: 'ongoing',
         startTime,
         endTime,
 
