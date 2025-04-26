@@ -298,6 +298,8 @@ export const deleteAuction = async (req, res) => {
   }
 };
 
+ 
+
 export const getCurrentLeftTime = async (req, res) => {
   try {
     const { id } = req.params;
@@ -311,41 +313,50 @@ export const getCurrentLeftTime = async (req, res) => {
     }
 
     const currentTime = new Date();
-    const endTime = new Date(auction.endTime); // Ensure proper Date object
+    const endTime = new Date(auction.endTime);
     const timeLeftInMillis = endTime - currentTime;
 
-    if (timeLeftInMillis <= 0) {
+
+     if (timeLeftInMillis <= 0) {
+       if (auction.status !== "completed") {
+        auction.status = "completed";
+        await auction.save();
+        const findCurrentBidder = await User.findById(auction.currentBidder);
+
+         const sellerNotification = new SellerNotification({
+          receipient: auction.sellerId,
+          auction: auction._id,
+          message: `Auction has ended. ${findCurrentBidder.name} won with a bid of ${auction.currentBid}.`,
+          read: false,
+          readAt: null,
+          link: `/auction/${auction._id}`,
+        });
+        await sellerNotification.save();
+
+         const buyerNotification = new BuyerNotification({
+          receipient: auction.currentBidder,
+          product: auction.productId,
+          message: `Congratulations! You won the auction.`,
+          link: `/auction/${auction._id}`,
+        });
+        await buyerNotification.save();
+      }
+
       return res.status(200).json({
         success: true,
+        status: "completed",
         timeLeft: 0,
         message: "Auction has ended.",
       });
     }
-
     const seconds = Math.floor((timeLeftInMillis / 1000) % 60);
     const minutes = Math.floor((timeLeftInMillis / (1000 * 60)) % 60);
     const hours = Math.floor((timeLeftInMillis / (1000 * 60 * 60)) % 24);
     const days = Math.floor(timeLeftInMillis / (1000 * 60 * 60 * 24));
 
-    console.log("timeLeftInMillis", timeLeftInMillis) 
-    if(timeLeftInMillis <= 494){
-      auction.status = "completed"
-      await auction.save();
-      console.log("status Completed");
-
-      const sellerNotification = new SellerNotification({
-        receipient: auction.sellerId,
-        auction: auction._id,
-        message: `Auction has ended.`,
-        read: false,
-        readAt: null,
-        link: `/auction/${auction._id}`,
-        
-      });
-      await sellerNotification.save();
-    }
     res.status(200).json({
       success: true,
+      status: auction.status,
       timeLeft: {
         totalMilliseconds: timeLeftInMillis,
         days,
@@ -355,11 +366,10 @@ export const getCurrentLeftTime = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("Error in getCurrentLeftTime:", error);
     res.status(500).json({
       success: false,
       message: "Server error. Please try again later.",
     });
   }
 };
-
-
