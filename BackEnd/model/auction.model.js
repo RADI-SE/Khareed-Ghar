@@ -47,6 +47,12 @@ const auctionSchema = new mongoose.Schema({
     enum: ['ongoing', 'completed', 'cancelled'],
     default: 'ongoing',
   },
+  auctionStatus: {
+    type: String,
+    enum: ['pending', 'awarded', 'rejected'],
+    default: 'pending',
+  }
+  
 });
 
 export const Auction = mongoose.model('Auction', auctionSchema);

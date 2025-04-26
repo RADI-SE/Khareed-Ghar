@@ -9,6 +9,7 @@ import {
     getAuctionsById,
     deleteAuction,
     getCurrentLeftTime,
+    getAuctionStatus,  
 } from '../../controller/seller/auction.controller.js';
 
 import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
@@ -31,7 +32,9 @@ router.delete('/deleteAuction/:id', deleteAuction);
 router.get('/getCurrentLeftTime/:id', getCurrentLeftTime);
 
 router.post('/bidding', placeBid);
- 
+
+router.patch('/:auctionId/auctionStatus', getAuctionStatus);
+
 router.get('/userAuctions', getAuctionDetails);
 
  router.patch('/:auctionId/complete', verifySeller, completeAuction);

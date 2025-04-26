@@ -334,8 +334,9 @@ export const getCurrentLeftTime = async (req, res) => {
           link: `/auction/${auction._id}`,
         });
         await buyerNotification.save();
+        auction.auctionStatus = "pending";
+        await auction.save();
       }
-
       return res.status(200).json({
         success: true,
         status: "completed",
@@ -367,3 +368,51 @@ export const getCurrentLeftTime = async (req, res) => {
     });
   }
 };
+
+export const getAuctionStatus = async (req, res) => {
+  try {
+    const { auctionId } = req.params;
+    const {auctionStatus} = req.body;
+    const auction = await Auction.findById(auctionId);
+    if (!auction) {
+      return res.status(404).json({
+        success: false,
+        message: "Auction not found.",
+      });
+    } 
+    if(auctionStatus === "awarded")
+    {
+      const findHighestBidder = await User.findById(auction.currentBidder);
+      const buyerNotification = new BuyerNotification({
+        receipient: findHighestBidder._id,
+        product: auction.productId,
+        message: `You have been awarded the auction,please continue with the payment process.`,
+        link: `/auction/${auction._id}`,
+      });
+      await buyerNotification.save();
+    }
+    if(auctionStatus === "rejected")
+    {
+      const findHighestBidder = await User.findById(auction.currentBidder);
+      const buyerNotification = new BuyerNotification({
+        receipient: findHighestBidder._id,
+        product: auction.productId,
+        message: `You have been rejected from the auction, please try again later.`,
+        link: `/auction/${auction._id}`,
+      });
+      await buyerNotification.save();
+    }
+    auction.auctionStatus = auctionStatus;
+    await auction.save();
+    res.status(200).json({
+      success: true,
+      auctionStatus: auctionStatus,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
+  }
+};
+
