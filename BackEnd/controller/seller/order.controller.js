@@ -3,7 +3,8 @@ import { Product } from "../../model/product.model.js";
 import { UserLocation } from "../../model/location.model.js";
 import { Cart } from "../../model/cart.model.js";
 import jwt from "jsonwebtoken";
-
+import { SellerNotification } from "../../model/seller.notification.model.js";
+import {Auction} from "../../model/auction.model.js"
 export const createOrder = async (req, res) => {
   try {
     const token = req.cookies.token;
@@ -22,8 +23,8 @@ export const createOrder = async (req, res) => {
     const shippingAddress = await UserLocation.findById(SHIPPING_ADDRESS_ID);
     if(!shippingAddress){
       return res.status(404).json({ error: "Please select a shipping location before placing your order." });
-    }
-
+    } 
+ 
     const order = await Order.create({
       user: userId,
       products: cart.items.map(item => ({
@@ -36,7 +37,35 @@ export const createOrder = async (req, res) => {
       paymentMethod: PAYMENT_METHOD,
       status: "Pending",
     })
+    for(let i=0;i<order.products.length;i++){
+      const auction = await Auction.findOne({productId: order.products[i].product});
+      if(auction){
+        const sellerNotification = new SellerNotification({
+        receipient: auction.sellerId,
+        product: auction.productId,
+        order: order._id,
+        message: `You have a new order for product ${auction.productId}`,
+        read: false,
+        readAt: null,
+        link: `/seller/orders/${order._id}`
+      });
+      await sellerNotification.save();
 
+      const notifySeller = await Product.findById(order.products[i].product);
+      if(notifySeller){
+        const sellerNotification = new SellerNotification({
+          receipient: notifySeller.seller,
+          product: notifySeller._id,
+          order: order._id,
+          message: `You have a new order for product ${notifySeller.name}`,
+          read: false,
+          readAt: null,
+          link: `/seller/orders/${order._id}`
+        })
+        await sellerNotification.save();
+      }
+    }
+    }
     await Cart.findByIdAndDelete(CART_ID);
     res.status(201).json({ message: "Order created successfully", order }); 
   } catch (error) {
