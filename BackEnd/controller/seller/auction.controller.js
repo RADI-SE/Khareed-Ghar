@@ -255,6 +255,16 @@ export const editAuctions = async (req, res) => {
       });
     }
 
+    for(let i = 0; i < updatedAuctions.bidders.length; i++)
+    {
+      const buyerNotification = new BuyerNotification({
+        receipient: updatedAuctions.bidders[i].userId,
+        product: updatedAuctions.productId,
+        message: `Auction has been updated.`,
+        link: `/auction/${updatedAuctions._id}`,
+      });
+      await buyerNotification.save();
+    }
     res.status(200).json({
       success: true,
       message: "Auction updated successfully.",
@@ -279,6 +289,16 @@ export const deleteAuction = async (req, res) => {
         success: false,
         message: "Auction not found.",
       });
+    }
+    for(let i = 0; i < auction.bidders.length; i++)
+    {
+      const buyerNotification = new BuyerNotification({
+        receipient: auction.bidders[i].userId,
+        product: auction.productId,
+        message: `Auction has been deleted.`,
+        link: `/auction/${auction._id}`,
+      });
+      await buyerNotification.save();
     }
     res.status(200).json({
       success: true,
@@ -393,30 +413,6 @@ export const getAuctionStatus = async (req, res) => {
         link: `/auction/${auction._id}`,
       });
 
-      /*
-    items: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',  
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          default: 1,
-          min: 1,
-        },
-        price: {
-          type: Number,
-          required: true,
-        },
-        total: {
-          type: Number,
-          required: true,
-        },
-      },  
-    ],
-      */
       auction.auctionStatus = "awarded";
       await auction.save();
       await buyerNotification.save();
