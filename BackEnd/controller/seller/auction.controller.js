@@ -3,6 +3,7 @@ import {Product} from "../../model/product.model.js"
 import { SellerNotification } from "../../model/seller.notification.model.js";
 import { BuyerNotification } from "../../model/buyer.notification.model.js";
 import { User } from "../../model/user.model.js";
+import { Cart } from "../../model/cart.model.js";
 import jwt from "jsonwebtoken"
 
 
@@ -373,31 +374,85 @@ export const getCurrentLeftTime = async (req, res) => {
 export const getAuctionStatus = async (req, res) => {
   try {
     const { auctionId } = req.params;
-    console.log("auctionId getAuctionStatus ", auctionId);
     const {auctionStatus} = req.body;
     const auction = await Auction.findById(auctionId);
-
-    console.log("auction status getAuctionStatus ", auctionStatus);
-  
     if (!auction) {
       return res.status(404).json({
         success: false,
         message: "Auction not found.",
       });
     } 
-    console.log("auction not found getAuctionStatus ", auction);
     if(auctionStatus === true )
     {
       const findHighestBidder = await User.findById(auction.currentBidder);
       const buyerNotification = new BuyerNotification({
         receipient: findHighestBidder._id,
+        
         product: auction.productId,
         message: `You have been awarded the auction,please continue with the payment process.`,
         link: `/auction/${auction._id}`,
       });
+
+      /*
+    items: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',  
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+          min: 1,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        total: {
+          type: Number,
+          required: true,
+        },
+      },  
+    ],
+      */
       auction.auctionStatus = "awarded";
       await auction.save();
       await buyerNotification.save();
+      console.log("findHighestBidder", findHighestBidder._id);
+      const cart = await Cart.findOne({user: findHighestBidder._id});
+      if(!cart)
+      {
+        const cart = new Cart({
+          user: findHighestBidder._id,
+          items: [
+            {
+              product: auction.productId,
+              quantity: 1,
+              price: auction.currentBid,
+              total: auction.currentBid,
+            },
+          ],
+          totalAmount: auction.currentBid,
+        });
+        await cart.save();
+      }
+      else
+      {
+        cart.items.push({
+          product: auction.productId,
+          quantity: 1,
+          price: auction.currentBid,
+          total: auction.currentBid,
+        });
+        cart.totalAmount = auction.currentBid;
+      }
+      await cart.save();
+      console.log(" added to cart", cart);
+      await cart.save();
+    console.log("passed to cart");
+
     }
     if(auctionStatus === false)
     {
@@ -412,6 +467,7 @@ export const getAuctionStatus = async (req, res) => {
       await auction.save();
       await buyerNotification.save();
     } 
+    console.log("passed to cart");
     await auction.save();
     res.status(200).json({
       success: true,

@@ -176,6 +176,7 @@ export const getCart = async (req, res) => {
         await guestCart.deleteOne();
       }
     }
+  
     res.status(200).json(cart);
   } catch (err) {
     console.error("Error fetching cart:", err);
