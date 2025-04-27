@@ -276,7 +276,7 @@ const Navbar = () => {
           </h2>
         </div>
         <button
-          onClick=""
+          onClick={""}
           className="bg-white text-blue-900 hover:bg-indigo-100 font-medium py-2 px-6 rounded-full transition duration-300 ease-in-out transform border border-4 border-blue-900 hover:scale-105"
         >
           BECOME A SELLER!
