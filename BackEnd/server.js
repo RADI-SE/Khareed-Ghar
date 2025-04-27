@@ -13,6 +13,7 @@ import addLocation from "./route/buyer/location.routes.js"
 import manageAuctions from "./route/seller/auction.route.js"
 import orderRoutes from "./route/order.route.js"
 import notificationRoutes from "./route/notification.route.js"
+import sellerStoreRoutes from "./route/seller/seller.store.route.js"
 dotenv.config();
 
 const app = express();
@@ -49,6 +50,9 @@ app.use("/api", manageAuctions);
 app.use("/api", orderRoutes);
 
 app.use("/api", notificationRoutes);
+
+app.use("/api", sellerStoreRoutes);
+
 app.listen(PORT, () => {
 
   connect();

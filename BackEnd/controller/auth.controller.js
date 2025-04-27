@@ -3,21 +3,11 @@ import crypto from "crypto";
 import { User } from "../model/user.model.js";
 import { generatTokenAndSetCookies } from "../Utils/generatTokenAndSetCookies.js";
 import { sendEmail } from "../nodemailer/send.Email.js";
-
-// script
-// export const del = async (req, res)=>{
-//   try {
-//     const user = await User.deleteMany({role: 'buyer'});
-
-//     res.json({ success: true, message: "User deleted successfully" });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ success: false, message: "Server Error" });
-//   }
-// }
+import SellerStore from "../model/seller.store.model.js";
 
 export const signup = async (req, res) => {
   const { name, email, password, confirmPassword, role, isAgreeToTerms } = req.body;
+  const { storeName, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName, businessPhoto } = req.body;
 
  
   try {
@@ -54,6 +44,7 @@ export const signup = async (req, res) => {
     if (userAlreadyExists) {
       return res.status(400).json({ success: false, message: "User already exists" });
     } 
+  
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
@@ -70,6 +61,23 @@ export const signup = async (req, res) => {
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
     });
 
+    if(role === "seller"){
+      if(!storeName || !businessType || !storeTagline || !physicalStoreAddress || !phoneNumber || !bankAccountNumber || !bankName || !businessPhoto){
+        return res.status(400).json({ success: false, message: "All fields are required" });
+      }
+      const sellerStore = new SellerStore({
+        sellerId: user._id,
+        storeName: storeName,
+        businessType: businessType,
+        storeTagline: storeTagline,
+        physicalStoreAddress: physicalStoreAddress,
+        phoneNumber: phoneNumber,
+        bankAccountNumber: bankAccountNumber,
+        bankName: bankName,
+        businessPhoto: businessPhoto,
+      });
+      await sellerStore.save();
+    }
 
     const message = `verification code is ${verificationToken}`;   
     try {
