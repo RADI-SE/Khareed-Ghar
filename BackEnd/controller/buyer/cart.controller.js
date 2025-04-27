@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import { Cart } from "../../model/cart.model.js";
 import { Product } from "../../model/product.model.js";
 import jwt from "jsonwebtoken";
-
+import { Auction } from "../../model/auction.model.js";
+import { SellerNotification } from "../../model/seller.notification.model.js";
 const createCart = async (user,guestId, cart, productId, quantity, res) => {
   let a;
   if(user){
@@ -89,6 +90,7 @@ export const removeFromCart = async (req, res) => {
   const guestId = req.cookies.guestId;
   let cart ;
   const { productId } = req.body;
+  const auction = await Auction.findOne({productId: productId});
   try {
     if(!token){
       cart = await Cart.findOne({_id: guestId})
@@ -106,6 +108,16 @@ export const removeFromCart = async (req, res) => {
         return res.status(403).json({ message: "Invalid or expired token." });
       }
       const userId = decoded.userId;
+ 
+      if(auction){
+        const sellerNotification = new SellerNotification({
+          receipient: auction.sellerId,
+          product: auction.productId,
+          message: `The highest bidder has been removed the auction.`,
+          link: `/auction/${auction._id}`,       
+        });
+        await sellerNotification.save();
+      }
       cart = await Cart.findOne({ user: userId });
       if( cart && cart.items.length <= 1 ){
         cart = await Cart.deleteOne()
@@ -114,11 +126,14 @@ export const removeFromCart = async (req, res) => {
          return res.status(404).json({ message: "Cart not found" });
        }
     }
+
+
     cart.items = cart.items.filter(
-      (item) => item.product.toString() !== productId
-    );
+      (item) => item.product.toString() !== productId);
     cart.totalAmount = cart.items.reduce((acc, item) => acc + item.total, 0);
+   
     await cart.save();
+   
     res.status(200).json(cart);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
@@ -176,6 +191,7 @@ export const getCart = async (req, res) => {
         await guestCart.deleteOne();
       }
     }
+  
     res.status(200).json(cart);
   } catch (err) {
     console.error("Error fetching cart:", err);
