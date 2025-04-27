@@ -59,7 +59,7 @@ const ProductCard = ({ product }) => {
             className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition-colors duration-300 text-sm"
           >
             <FaShoppingCart className="w-3.5 h-3.5" />
-            <span>Add to Cart</span>
+            <span className="text-sm">Add to Cart</span>
           </button>
           
           <button

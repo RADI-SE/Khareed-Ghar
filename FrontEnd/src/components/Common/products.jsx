@@ -27,7 +27,7 @@ const AllCategoryProducts = () => {
   }, [id]);
 
   return (
-    <div>
+    <div className="container mx-auto py-12">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-start flex-1">{categoryName}</h2>
       </div>

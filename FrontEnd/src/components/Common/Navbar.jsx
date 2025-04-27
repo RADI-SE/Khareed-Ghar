@@ -10,45 +10,20 @@ import { useSellerService } from '../../services/seller/sellerServices'
 
 const Navbar = () => {
 
-
-
-//   [
-//     {
-//         "_id": "67fb50eeeb183b2635f41639",
-//         "receipient": "6732321729f3c194f3563432",
-//         "order": "67fb50edeb183b2635f4162f",
-//         "message": "6732321729f3c194f3563432 placed a new order of 1 xyz",
-//         "read": true,
-//         "readAt": "2025-04-17T08:53:39.800Z",
-//         "link": "/order/67fb50edeb183b2635f4162f",
-//         "createdAt": "2025-04-13T05:51:42.546Z",
-//         "updatedAt": "2025-04-17T08:53:39.801Z",
-//         "__v": 0
-//     }
-// ]
-
   const [showNotifications, setShowNotifications] = useState(false);
-
-  /*
-
-  bool notification = false;
-  !showNotification
-  onclick = () => {
-    setShowNotification(!showNotification)
-
-
-
-    
-  */
   const { signout, isAuthenticated, user } = useAuthService();
   const { mutate: clearCartMutation } = useClearCart();
   const { data: cart = {} } = useFetchCartItems();
   const items = cart?.items || [];
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const {updateBuyerNotification} = useSellerService();
   const { data = [], isLoading, isError } = useFetchNotifications();
+
+  // Sort notifications by creation date in descending order
+  const sortedNotifications = [...data].sort((a, b) => 
+    new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
   console.log("data", data);
   const handleLogin = () => {
@@ -135,12 +110,12 @@ const Navbar = () => {
             </button>
             {/* Notification Dropdown */}
             {showNotifications && (
-                    <div className="absolute right-1 top-10 h-[500px] w-80 bg-white rounded-lg shadow-lg">
+                    <div className="absolute right-1 top-10 h-[500px] w-80 bg-white rounded-lg shadow-lg overflow-y-auto z-10">
                       <div className="px-4 py-2 border-b border-gray-200">
                         <h3 className="text-sm font-semibold text-gray-700">Notifications</h3>
                       </div>
                       <div className="">
-                        {data.map((notification) => (
+                        {sortedNotifications.map((notification) => (
                           <Link
                           onClick={() => handleUpdateNotification(notification?._id)}
                           key={notification?._id}
@@ -152,14 +127,6 @@ const Navbar = () => {
                             <div>
                               <p className="text-sm text-gray-800">{notification?.message}</p>
                               <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
-                            </div>
-                            <div className="flex flex-col items-end space-y-1">
-                              <button className="px-1 ml-1 py-1 text-sm hover:bg-blue-100 rounded-md" onClick>
-                                <FaCheck className="w-4 h-5 text-green-600"/>
-                              </button>
-                              <button className="px-1 ml-1 py-1 text-sm hover:bg-red-100 rounded-md" onClick>
-                                <MdOutlineCancel className="w-4 h-5 text-red-600"/>
-                              </button>
                             </div>
                           </div>
                           </Link>
@@ -243,12 +210,12 @@ const Navbar = () => {
                 </button>
                 {/* Mobile Notification Dropdown */}
             {showNotifications && (
-                    <div className="absolute right-1 top-10 h-auto w-80 bg-white rounded-lg shadow-lg">
+                    <div className="absolute right-1 top-10 h-auto w-80 bg-white rounded-lg shadow-lg overflow-y-auto">
                       <div className="px-4 py-2 border-b border-gray-200">
                         <h3 className="text-sm font-semibold text-gray-700">Notifications</h3>
                       </div>
                       <div className="">
-                        {data.map((notification) => (
+                        {sortedNotifications.map((notification) => (
                           <Link
                           onClick={() => handleUpdateNotification(notification?._id)}
                           key={notification?._id}
@@ -260,14 +227,6 @@ const Navbar = () => {
                             <div>
                               <p className="text-sm text-gray-800">{notification?.message}</p>
                               <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
-                            </div>
-                            <div className="flex flex-col items-end space-y-1">
-                              <button className="px-1 ml-1 py-1 text-sm hover:bg-blue-100 rounded-md" onClick>
-                                <FaCheck className="w-4 h-5 text-green-600"/>
-                              </button>
-                              <button className="px-1 ml-1 py-1 text-sm hover:bg-red-100 rounded-md" onClick>
-                                <MdOutlineCancel className="w-4 h-5 text-red-600"/>
-                              </button>
                             </div>
                           </div>
                           </Link>
@@ -309,30 +268,21 @@ const Navbar = () => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="bg-blue-900 hidden lg:block md:block">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center space-x-4 md:space-x-8 py-3 overflow-x-auto">
-            <button 
-              onClick={() => navigate("/")} 
-              className="text-white hover:text-blue-200 font-medium transition-colors whitespace-nowrap"
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => navigate("/cart")} 
-              className="text-white hover:text-blue-200 font-medium transition-colors whitespace-nowrap"
-            >
-              Cart
-            </button>
-            <button 
-              onClick={() => navigate("/sell")} 
-              className="text-white hover:text-blue-200 font-medium transition-colors whitespace-nowrap"
-            >
-              Sell
-            </button>
-          </div>
+      <div className="bg-gradient-to-r from-white to-blue-500 hidden lg:block md:block z-0">
+      <div className="flex justify-between mx-auto px-4">
+        <div className="mb-4 md:mb-0">
+          <h2 className="text-xl font-bold">
+            
+          </h2>
         </div>
+        <button
+          onClick=""
+          className="bg-white text-blue-900 hover:bg-indigo-100 font-medium py-2 px-6 rounded-full transition duration-300 ease-in-out transform border border-4 border-blue-900 hover:scale-105"
+        >
+          BECOME A SELLER!
+        </button>
       </div>
+    </div>
     </nav>
   );
 };

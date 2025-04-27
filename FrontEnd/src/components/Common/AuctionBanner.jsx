@@ -5,11 +5,10 @@ import { useNavigate } from 'react-router-dom';
 const AuctionBanner = () => {
    const navigate = useNavigate();
   return (
-    <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 px-6 rounded-lg shadow-md mx-4 my-4">
+    <div className="bg-gradient-to-r from-white to-blue-500 text-white py-4 px-6 rounded-lg shadow-md mx-4 my-4">
       <div className="flex flex-col md:flex-row items-center justify-between">
         <div className="flex items-center mb-4 md:mb-0">
-          {/* <Gavel className="h-8 w-8 mr-3" /> */}
-          <h2 className="text-xl font-bold">
+          <h2 className="text-xl text-blue-900 font-bold">
             Join Now
           </h2>
         </div>
