@@ -304,9 +304,12 @@ export const useAdminService = create((set) => ({
 
   getAllCategoryProducts: async (id) => {
     try {
+      // 674f9d1ca625626a2353c342
+      console.log("Fetching products for category ID:", id); // Debugging line
       const response = await axios.get(
-        `http://localhost:5000/api/get-products-by-category/${id.selectedCategory}`,
+        `http://localhost:5000/api/get-products-by-category/${id}`,
       );
+      console.log("Fetched products:", response.data); // Debugging line
       return response.data.products;
     } catch (error) {
       toast.error("Failed to fetch products for category");

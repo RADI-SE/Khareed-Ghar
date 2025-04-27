@@ -23,8 +23,7 @@ const CategoryBar = () => {
   };
 
   const handleCategoryClick = (categoryId) => {
-    setSelectedCategoryId(categoryId);
-    navigate(`/collection/${categoryId}`);
+     navigate(`/collection/${categoryId}`);
   };
 
   useEffect(() => {
@@ -84,7 +83,7 @@ const CategoryBar = () => {
       </div>
       
       {selectedCategoryId && (
-        <AllCategoryProducts selectedCategory={selectedCategoryId} />
+        <AllCategoryProducts  />
       )}
     </>
   );

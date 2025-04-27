@@ -1,86 +1,77 @@
 import React, { useState } from "react";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaShoppingCart } from "react-icons/fa";
 import defaultProduct from "../../assets/images/default.jpeg";
 import { useAddToCart } from "../../hooks/buyer/cart/useAddToCart";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
-import { useSellerService } from "../../services/seller/sellerServices";
- 
-const ProductCard = ({product}) => {
+
+
+const ProductCard = ({ product }) => {
   const { mutate: AddToCart } = useAddToCart();
-  const [quantity, setQuantity] = useState(0); 
+  const [quantity, setQuantity] = useState(0);
   const navigate = useNavigate();
-  const { getSimilarProducts } = useSellerService();
-  const handleDetail  = async (e, productId) => {
+
+
+  const handleDetail = async (e, productId) => {
     e.preventDefault();
     navigate(`/products/${productId}`);
-    const similarProducts = await getSimilarProducts(productId);
-    console.log("similarProducts", similarProducts);
-  } 
+  }
+
   const handleAddToCart = (e, productId) => {
     e.preventDefault();
-    setQuantity((prev) => prev + 1); 
+    setQuantity((prev) => prev + 1);
     AddToCart({ productId, quantity: quantity + 1 });
     toast.success(`Product added to Cart (Quantity: ${quantity + 1})`);
   };
 
   return (
-    <div
-      key={product.id}
-      className="relative mx-2 my-4 sm:mx-4 sm:my-6 md:mx-6 md:my-8 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md hover:shadow-lg transition-shadow duration-300"
-    >
-      <div className="relative h-full sm:h-64 w-64 overflow-hidden">
+    <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+      {/* Product Image */}
+      <div className="relative h-48 overflow-hidden border border-2 border-blue-900">
         <img
           src={`../../../public/images/${product?.images}` || defaultProduct}
           alt={product?.name || "Product"}
-          className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover"
         />
+        <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-300" />
       </div>
-      
-      <div className="px-4 py-1 sm:px-4 sm:py-1 flex flex-col flex-grow">
-        <h5 className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 line-clamp-2 sm:mt-1 sm:mb-1 ">
+
+      {/* Product Info */}
+      <div className="p-3">
+        <h3 className="text-base font-medium text-gray-900 mb-1.5 line-clamp-2">
           {product.name}
-        </h5>
+        </h3>
         
-        <div className="mt-3 mb-4 sm:mt-0 sm:mb-0 sm:mt-1 sm:mb-1 flex items-center justify-between">
-          <p className="text-2xl sm:text-2xl font-bold text-slate-900">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-lg font-bold text-gray-900">
             ${product.price}
           </p>
           <div className="flex items-center">
-            <FaStar className="h-5 w-5 text-yellow-300" />
+            <FaStar className="w-3.5 h-3.5 text-yellow-400" />
+            <span className="ml-1 text-xs text-gray-600">4.5</span>
           </div>
         </div>
-        
-        <div className="mt-1 space-y-1">
+
+        {/* Action Buttons */}
+        <div className="flex gap-1.5">
           <button
             onClick={(e) => handleAddToCart(e, product._id)}
-            className="w-full py-2 px-1 bg-blue-900 text-white sm:text-sm rounded-md hover:bg-blue-800 transition-colors duration-300 text-sm sm:text-base font-medium"
+            className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition-colors duration-300 text-sm"
           >
-            Add to Cart
+            <FaShoppingCart className="w-3.5 h-3.5" />
+            <span>Add to Cart</span>
           </button>
           
           <button
             onClick={(e) => handleDetail(e, product._id)}
-            className="w-full py-2 px-1 border border-blue-900 text-blue-900 sm:text-sm rounded-md hover:bg-blue-50 transition-colors duration-300 text-sm sm:text-base font-medium"
+            className="flex-1 py-1.5 px-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors duration-300 text-sm"
           >
             View Details
           </button>
         </div>
       </div>
     </div>
-
   );
 }
 
 export default ProductCard;
-
-
-//  flex items-center justify-center w-10 h-10 
-// bg-red-500 hover:bg-red-600 group text-white text-sm rounded-full 
-// hover:w-32 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl
-// transform hover:scale-105 cursor-pointer
-
-// flex items-center justify-center w-24 h-10 
-//           bg-gray-700 hover:bg-gray-800 text-white text-base font-medium rounded-full 
-//           transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl
-//           transform hover:scale-105 cursor-pointer gap-1
