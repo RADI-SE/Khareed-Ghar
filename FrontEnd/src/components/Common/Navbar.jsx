@@ -7,10 +7,12 @@ import { useFetchCartItems } from "../../hooks/buyer/cart/useFetchCartItems";
 import { useClearCart } from "../../hooks/buyer/cart/useClearCart";
 import { useFetchNotifications } from '../../hooks/buyer/Notifications/useFetchNotifications'
 import { useSellerService } from '../../services/seller/sellerServices'
+import BecomeSellerModal from '../Buyer/BecomeSellerModal';
 
 const Navbar = () => {
 
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showSellerModal, setShowSellerModal] = useState(false);
   const { signout, isAuthenticated, user } = useAuthService();
   const { mutate: clearCartMutation } = useClearCart();
   const { data: cart = {} } = useFetchCartItems();
@@ -276,13 +278,18 @@ const Navbar = () => {
           </h2>
         </div>
         <button
-          onClick={""}
+          onClick={() => setShowSellerModal(true)}
           className="bg-white text-blue-900 hover:bg-indigo-100 font-medium py-2 px-6 rounded-full transition duration-300 ease-in-out transform border border-4 border-blue-900 hover:scale-105"
         >
           BECOME A SELLER!
         </button>
       </div>
     </div>
+
+    <BecomeSellerModal 
+      isOpen={showSellerModal} 
+      onClose={() => setShowSellerModal(false)} 
+    />
     </nav>
   );
 };
