@@ -13,6 +13,25 @@ function SignUp() {
   const [isAgreeToTerms, setAgreeToTerms] = useState(false);
   const [error, setError] = useState("");
   const [isRegistered, setIsRegistered] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
+
+    const [sellerDetails, setSellerDetails] = useState({
+      storeName: '',
+      businessType: '',
+      physicalStoreAddress: '',
+      storeTagline: '',
+      phoneNumber: '',
+      bankName: '',
+      bankAccountNumber: '',
+    });
+  
+    const handleChange = (e) => {
+      const { name, value, files } = e.target;
+      setSellerDetails(prev => ({
+        ...prev,
+        [name]: files ? files[0] : value
+      }));
+    };
 
   const {
     mutate: createUser,
@@ -44,12 +63,12 @@ function SignUp() {
     if (password !== confirmPassword) return setError("Passwords do not match");
     if (!isAgreeToTerms)
       return setError("Please agree to the terms and conditions");
-    if (!role) return setError("Please select a role");
+    if (!role) return setRole("Buyer");
 
     setError("");
 
     createUser(
-      { name, email, password, confirmPassword, role, isAgreeToTerms },
+      { name, email, password, confirmPassword, role, isAgreeToTerms, storeName: sellerDetails.storeName, businessType: sellerDetails.businessType, storeTagline:  sellerDetails.storeTagline, physicalStoreAddress: sellerDetails.physicalStoreAddress, phoneNumber: sellerDetails.phoneNumber, bankAccountNumber: sellerDetails.bankAccountNumber, bankName: sellerDetails.bankName },
       {
         onSuccess: (data) => {
           setIsRegistered(true);
@@ -63,12 +82,29 @@ function SignUp() {
     );
   };
 
+  const handleSellerToggle = (e) => {
+    // setIsSeller(e.target.checked);
+    if(e.target.checked) {
+      setIsSeller(true);
+      setRole("seller");
+    }
+  };
+
+  const handleSellerDetailsChange = (e) => {
+    setSellerDetails({
+      ...sellerDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   if (isRegistered) {
     const isVerified = localStorage.getItem("isVerified") === "true";
     if (!isVerified) {
       return <Navigate to="/auth/verify-email/" />;
     }
   }
+
+  console.log("Seller Details:", sellerDetails);
  
  
 return (
@@ -112,30 +148,17 @@ return (
                 <label className="form-label d-block">Role:</label>
                 <div className="form-check form-check-inline">
                   <input
-                    type="radio"
+                    type="checkbox"
                     id="sellerRole"
-                    name="role"
+                    name="isSeller"
+                    checked={isSeller}
                     value="seller"
-                    checked={role === "seller"}
-                    onChange={(e) => setRole(e.target.value)}
+                    // onChange={(e) => setRole(e.target.value)}
+                    onChange={handleSellerToggle}
                     className="form-check-input"
                   />
                   <label htmlFor="sellerRole" className="form-check-label">
                     Seller
-                  </label>
-                </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    type="radio"
-                    id="buyerRole"
-                    name="role"
-                    value="buyer"
-                    checked={role === "buyer"}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="form-check-input"
-                  />
-                  <label htmlFor="buyerRole" className="form-check-label">
-                    Buyer
                   </label>
                 </div>
               </div>
@@ -162,6 +185,119 @@ return (
                   </Link>
                 </label>
               </div>
+{/* 
+              <div className="flex items-center space-x-2 mt-4">
+                  <label className="text-sm font-medium text-gray-700">Sellers</label>
+                  <input
+                    type="checkbox"
+                    checked={isSeller}
+                    onChange={handleSellerToggle}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  />
+                </div> */}
+
+              {isSeller && (
+                  <div className="bg-gray-100 p-4 rounded-lg space-y-4 mt-4">
+                    <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Store Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="storeName"
+                      value={sellerDetails.storeName}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    </div>
+
+                    <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Business Type *
+                    </label>
+                    <input
+                      type="text"
+                      name="businessType"
+                      value={sellerDetails.businessType}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    </div>
+
+                    <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Store Physical Address *
+                    </label>
+                    <input
+                      type="text"
+                      name="physicalStoreAddress"
+                      value={sellerDetails.physicalStoreAddress}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Store Tagline *
+                      </label>
+                      <input
+                        type="text"
+                        name="storeTagline"
+                        value={sellerDetails.storeTagline}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        name="phoneNumber"
+                        value={sellerDetails.phoneNumber}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Bank Name *
+                      </label>
+                      <input
+                        type="bankName"
+                        name="bankName"
+                        value={sellerDetails.bankName}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Bank Account Number *
+                      </label>
+                      <input
+                        type="text"
+                        name="bankAccountNumber"
+                        value={sellerDetails.bankAccountNumber}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                  </div>
+                )}
 
               <button
                 type="submit"

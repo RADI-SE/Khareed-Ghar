@@ -113,49 +113,27 @@ export const placeBid = async (req, res) => {
     res.status(500).json({ message: 'Error placing bid', error });
   }
 };
- 
+
 export const getAuctionDetails = async (req, res) => {
   try {
-  
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
-  
-    const userID = await User.findById(userId)
-    // .populate('productId', 'name description price images')
-    // .populate('bidders.userId', 'name')
-    // .populate('currentBidder', 'name');
- 
+    const { id } = req.params;
+    const UserAuctions = await Auction.find({ sellerId: userId }); // Query only the auctions of the specific user
 
-    if (!userID) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    const UserAuctions = await Auction.find()
-     const UserAuction = await Auction.findOne(
-      {
-        sellerId: userID._id
-      }
-    )
-    if(!UserAuction)
-    {
-      return res.status(404).json({ message: 'No auctions found for this seller'})
-    }
-    let product = null;
-    try {
-      product = await Product.findById(UserAuction.productId);
-    } catch (error) {
-      console.error("Error fetching product:", error);
-    }
-   
+    const auctionDetails = [];
 
-    const auctionDetails = await Promise.all(UserAuctions.map(async (auctionItem) => {
+    for (let i = 0; i < UserAuctions.length; i++) {
+      const auctionItem = UserAuctions[i];
       let product = null;
       try {
         product = await Product.findById(auctionItem.productId);
       } catch (error) {
         console.error("Error fetching product for auction:", error);
       }
-      return {
+
+      auctionDetails.push({
         auctionId: auctionItem._id,
         startingBid: auctionItem.startingBid,
         currentBid: auctionItem.currentBid,
@@ -165,18 +143,14 @@ export const getAuctionDetails = async (req, res) => {
         status: auctionItem.status,
         productsName: product ? product.name : 'Product not found',
         productsImg: product ? product.images : null,
-      };
-    }));
+      });
+    }
 
-    res.status(200).json({ sellerId: userID._id, auctions: auctionDetails });
+    res.status(200).json({ sellerId: userId, auctions: auctionDetails });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching auction details', error });
   }
 };
-
-
-
-
 
 export const completeAuction = async (req, res) => {
   try {

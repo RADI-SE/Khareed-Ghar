@@ -36,7 +36,7 @@ const sellerStoreSchema = new mongoose.Schema({
     },
     businessPhoto: {
         type: String,
-        required: true,
+        default: null,
     },
     createdAt: {
         type: Date,

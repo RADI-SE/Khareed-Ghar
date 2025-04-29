@@ -5,11 +5,16 @@ import { generatTokenAndSetCookies } from "../Utils/generatTokenAndSetCookies.js
 import { sendEmail } from "../nodemailer/send.Email.js";
 import SellerStore from "../model/seller.store.model.js";
 
-export const signup = async (req, res) => {
-  const { name, email, password, confirmPassword, role, isAgreeToTerms } = req.body;
-  const { storeName, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName, businessPhoto } = req.body;
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
- 
+export const signup = async (req, res) => {
+  const { name, email, password, confirmPassword, role, isAgreeToTerms, storeName, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName } = req.body;
+
+  console.log("Request body:", req.body); // Log the request body for debugging
   try {
     // Validation checks
     if (!name) {
@@ -46,25 +51,40 @@ export const signup = async (req, res) => {
     } 
   
 
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
+    console.log("Role", role);
     const user = new User({
       name,
       email,
       password: hashedPassword,
       confirmPassword: hashedConfirmPassword,
-      role,
+      role: role.toLowerCase(),
       isAgreeToTerms,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
     });
 
-    if(role === "seller"){
-      if(!storeName || !businessType || !storeTagline || !physicalStoreAddress || !phoneNumber || !bankAccountNumber || !bankName || !businessPhoto){
+    let bool = false;
+    if (role === "Seller" || role === "seller") {
+      bool = true;
+
+    }
+
+
+    await user.save();
+    await sleep(5000); // Simulate a delay of 3 second
+    console.log("User created successfully:", user);
+
+    if(bool){
+      console.log("Seller role detected, creating seller store...");
+      if(!storeName || !businessType || !storeTagline || !physicalStoreAddress || !phoneNumber || !bankAccountNumber || !bankName){
         return res.status(400).json({ success: false, message: "All fields are required" });
       }
+      console.log("Seller Dataaaaaa", user._id);
       const sellerStore = new SellerStore({
         sellerId: user._id,
         storeName: storeName,
@@ -74,9 +94,10 @@ export const signup = async (req, res) => {
         phoneNumber: phoneNumber,
         bankAccountNumber: bankAccountNumber,
         bankName: bankName,
-        businessPhoto: businessPhoto,
       });
+      // console.log("Seller store data:", sellerStore); // Log the seller store data for debugging
       await sellerStore.save();
+      console.log("Seller store created successfully:", sellerStore);
     }
 
     const message = `verification code is ${verificationToken}`;   

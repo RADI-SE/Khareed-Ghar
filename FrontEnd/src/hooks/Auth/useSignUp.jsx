@@ -12,6 +12,13 @@ export const useCreateUser= () => {
       confirmPassword,
       role,
       isAgreeToTerms,
+      storeName, 
+      businessType, 
+      storeTagline, 
+      physicalStoreAddress, 
+      phoneNumber, 
+      bankAccountNumber, 
+      bankName
     }) =>
         signup(
         name,
@@ -19,7 +26,14 @@ export const useCreateUser= () => {
         password,
         confirmPassword,
         role,
-        isAgreeToTerms
+        isAgreeToTerms,
+        storeName, 
+        businessType, 
+        storeTagline, 
+        physicalStoreAddress, 
+        phoneNumber, 
+        bankAccountNumber, 
+        bankName
       ),
  
   });

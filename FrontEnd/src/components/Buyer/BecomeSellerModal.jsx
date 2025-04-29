@@ -8,7 +8,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
     businessType: '',
     storeTagline: '',
     phoneNumber: '',
-    // bankName,
+    bankName: '',
     bankAccountNumber: '',
     businessPhoto: null
   });
@@ -60,19 +60,13 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Business Type *
               </label>
-              <select
+              <input
                 name="businessType"
                 value={formData.businessType}
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select Business Type</option>
-                <option value="retail">Retail</option>
-                <option value="wholesale">Wholesale</option>
-                <option value="manufacturer">Manufacturer</option>
-                <option value="service">Service Provider</option>
-              </select>
+              />
             </div>
 
             <div className="md:col-span-2">

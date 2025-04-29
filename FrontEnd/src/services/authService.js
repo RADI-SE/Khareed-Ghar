@@ -24,7 +24,14 @@ export const useAuthService = create((set) => ({
     password,
     confirmPassword,
     role,
-    isAgreeToTerms
+    isAgreeToTerms,
+    storeName, 
+    businessType, 
+    storeTagline, 
+    physicalStoreAddress, 
+    phoneNumber, 
+    bankAccountNumber, 
+    bankName, 
   ) => {
     set({ isLoading: true, errorMessage: null });
     try {
@@ -35,7 +42,19 @@ export const useAuthService = create((set) => ({
         confirmPassword: confirmPassword,
         role: role,
         isAgreeToTerms,
-      });
+        storeName, 
+        businessType, 
+        storeTagline, 
+        physicalStoreAddress, 
+        phoneNumber, 
+        bankAccountNumber, 
+        bankName
+        
+      }
+    
+    );
+
+
 
       set({
         user: response.data.user,

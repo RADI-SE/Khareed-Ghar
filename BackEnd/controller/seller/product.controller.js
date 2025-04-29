@@ -1,8 +1,12 @@
+import jwt from "jsonwebtoken";
 import { Category } from "../../model/category.model.js";
 import { Product } from "../../model/product.model.js";
 import axios from "axios";
 export const addProduct = async (req, res) => {
   try {
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
     const specifications = req.body.specifications
       ? JSON.parse(req.body.specifications)
       : {};
@@ -83,7 +87,7 @@ export const addProduct = async (req, res) => {
       price,
       category,
       subcategory,
-      seller,
+      seller: userId,
       isAuction,
       images: imagePath,
     });
@@ -161,8 +165,12 @@ export const getProductById = async (req, res) => {
 // get user products
 export const getUserProducts = async (req, res) => {
   try {
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+    console.log("userId",userId);
     const { id } = req.params;
-    const products = await Product.find({ seller: id, isAuction: false })
+    const products = await Product.find({ seller: userId, isAuction: false })
      .populate("category")
      .populate("subcategory");
 
