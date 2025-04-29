@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
+
 const useBidSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
