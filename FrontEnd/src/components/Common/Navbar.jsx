@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaSearch, FaShoppingCart, FaUser, FaBell, FaBars, FaTimes, FaCheck } from "react-icons/fa";
-import { MdOutlineCancel } from "react-icons/md";
+import { MdAccountCircle } from "react-icons/md";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 import { useFetchCartItems } from "../../hooks/buyer/cart/useFetchCartItems";
@@ -110,6 +110,14 @@ const Navbar = () => {
                       </span>
                     )}
             </button>
+            
+            <button 
+              onClick={() => navigate("/profile")}
+              className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <MdAccountCircle className="w-6 h-6 text-blue-900" />
+            </button>
+
             {/* Notification Dropdown */}
             {showNotifications && (
                     <div className="absolute right-1 top-10 h-[500px] w-80 bg-white rounded-lg shadow-lg overflow-y-auto z-10">
@@ -210,6 +218,14 @@ const Navbar = () => {
                       </span>
                     )}
                 </button>
+                
+                <button 
+                  onClick={() => navigate("/profile")}
+                  className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <MdAccountCircle className="w-6 h-6 text-blue-900" />
+                </button>
+
                 {/* Mobile Notification Dropdown */}
             {showNotifications && (
                     <div className="absolute right-1 top-10 h-auto w-80 bg-white rounded-lg shadow-lg overflow-y-auto">
@@ -273,9 +289,9 @@ const Navbar = () => {
       <div className="bg-gradient-to-r from-white to-blue-500 hidden lg:block md:block z-0">
       <div className="flex justify-between mx-auto px-4">
         <div className="mb-4 md:mb-0">
-          <h2 className="text-xl font-bold">
+          <p className="text-xl font-bold">
             
-          </h2>
+          </p>
         </div>
         <button
           onClick={() => setShowSellerModal(true)}

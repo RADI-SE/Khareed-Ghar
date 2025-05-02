@@ -9,6 +9,7 @@ import ProductDetail from "../components/Common/ProductDetail";
 import AllCategoryProducts from "../components/Common/products";
 import AuctionListPage from "./AuctionListPage";
 import AuctionDetail from "../components/Common/AuctionDetail";
+import BuyerProfile from "../components/Buyer/BuyerProfile";
 
 export const HomeRoutes = ({ setOrder, order }) => {
   return (
@@ -25,6 +26,7 @@ const HomeRoutesWrapper = ({ setOrder, order }) => {
         <Route path="auctions" element={<AuctionListPage />} />
         <Route path="auction/:id" element={<AuctionDetail />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="profile" element={<BuyerProfile />} />
         <Route path="filter-data" element={<FilterData />} />
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="collection/:id" element={<AllCategoryProducts />} />

@@ -3,6 +3,7 @@ import ProductCard from "../../components/Common/ProductCard";
 import { useFetchProducts } from "../../hooks/seller/useFetchProducts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import BuyerProfile from "../../components/Buyer/BuyerProfile";
 
 const ProductsOnHomePage = () => {
   const {
