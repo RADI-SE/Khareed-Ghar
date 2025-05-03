@@ -27,7 +27,6 @@ const Navbar = () => {
     new Date(b.createdAt) - new Date(a.createdAt)
   );
 
-  console.log("data", data);
   const handleLogin = () => {
     navigate("/auth/signin");
   }; 
@@ -43,7 +42,6 @@ const Navbar = () => {
   };
 
   const handleUpdateNotification = async (id) => {
-    console.log("id", id);
     const read = true;
     await updateBuyerNotification(id, read);
   };

@@ -62,7 +62,6 @@ export const useSellerService = create((set) => ({
       toast.success(response.data.message);
       return  response.data.product._id;
     } catch (error) {
-      console.error("Error while adding product:", error.message);
       toast.success(error.response.data.message);
   
       set({
@@ -191,7 +190,6 @@ export const useSellerService = create((set) => ({
       }
       toast.success(response.data.message);
     } catch (error) {
-      console.error("Error deleting product:", error.message);
  
       set({
         isLoading: false,
@@ -208,21 +206,31 @@ export const useSellerService = create((set) => ({
   // getUserProducts
   getUserProducts: async (id) => {
     try {
-       const response = await axios.get(`http://localhost:5000/api/getProductsByUserId/${id}`);       
+       set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.get(`http://localhost:5000/api/getProductsByUserId/${id}`);
+      
+      if (!response.data || !response.data.products) {
+        console.warn("getUserProducts - No products found in response");
+        return [];
+      }
+      
+      set({ isLoading: false });
       return response.data.products;
-     } catch (error) {
-      console.error("Error fetching user products:", error.message);
+    } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.response?.data?.message || error.message || "Error fetching user products"
+      });
+      return [];
     }
   },
 
   getSimilarProducts: async (id) => {
     try {
-      console.log("id", id);
       const response = await axios.get(`http://localhost:5000/api/seller/getSimilarProducts/${id}`);
-      console.log("response", response.data);
       return response.data;
     } catch (error) {
-      console.error("Error fetching similar products:", error.message);
     }
   },
   // createAuction
@@ -245,10 +253,8 @@ export const useSellerService = create((set) => ({
 
   getAuctions: async () => {
     try {
-      console.log("getAuctions called");
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(`http://localhost:5000/api/ongoing`);
-      console.log("response", response.data);
       if (!response.data.success) {
         throw new Error(response.data.message || 'Failed to fetch auctions');
       }
@@ -265,13 +271,11 @@ export const useSellerService = create((set) => ({
     }
   },
   
-  getUserAuction: async () => {
+  getUserAuction: async (sellerId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/userAuctions`); 
-      console.log("response", response.data);
+      const response = await axios.get(`http://localhost:5000/api/userAuctions/${sellerId}`); 
       return response.data.auctions;
      } catch (error) {
-      console.error("Error fetching user products:", error.message);
     }
   },
 
@@ -361,7 +365,6 @@ export const useSellerService = create((set) => ({
         isError: true,
         Error: error.message || "An error occurred while fetching current left time.",
       });
-      console.error("Error fetching current left time:", error.message);
     }
   },
 
@@ -376,14 +379,10 @@ export const useSellerService = create((set) => ({
         isError: true,
         Error: error.message || "An error occurred while fetching bidding.",
       });
-      console.error("Error fetching bidding:", error.message);
     }
   },
   getAuctionStatus: async (auctionId, auctionStatus ) => {
-    try {
-      console.log("auctionId", auctionId);
-      console.log("auctionStatus", auctionStatus);
-      
+    try {    
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.patch(`http://localhost:5000/api/${auctionId}/auctionStatus`, { auctionStatus });
       return response.data;
@@ -393,7 +392,6 @@ export const useSellerService = create((set) => ({
         isError: true,
         Error: error.message || "An error occurred while fetching auction status.",
       });
-      console.error("Error fetching auction status:", error.message);
     }
   },
   
@@ -403,7 +401,6 @@ export const useSellerService = create((set) => ({
       const response = await axios.get(`http://localhost:5000/api/seller-notifications`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching notifications:", error.message);
     }
   },
 
@@ -413,33 +410,23 @@ export const useSellerService = create((set) => ({
       const response = await axios.get(`http://localhost:5000/api/buyer-notifications`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching notifications:", error.message);
     }
   },
 
   updateBuyerNotification: async (id, read) => {
-    console.log("updateNotification called");
     try {
-      console.log("id", id);
-      console.log("read", read);
+
       const response = await axios.put(`http://localhost:5000/api/buyer-notifications/${id}`, { read } );
-      console.log("response", response.data); 
       return response.data;
     } catch (error) {
-      console.error("Error updating notification:", error.message);
     }
   },  
   updateNotification: async (id, read) => {
-    console.log("updateNotification called");
+
     try {
-      console.log("id", id);
-      console.log("read", read);
       const response = await axios.put(`http://localhost:5000/api/seller-notifications/${id}`, { read } );
-      console.log("response", response.data); 
       return response.data;
-    } catch (error) {
-      console.error("Error updating notification:", error.message);
-    }
+    } catch (error) {    }
   },  
 
 

@@ -49,10 +49,6 @@ const ProductsOnHomePage = () => {
     return <p>Error fetching data. Please try again later.</p>;
   }
 
-  // Debug logs
-  console.log('Products:', products);
-  console.log('Grouped Products:', productsByCategory);
-
   return (
     <div className="container mx-auto py-12">
       {Object.entries(productsByCategory)

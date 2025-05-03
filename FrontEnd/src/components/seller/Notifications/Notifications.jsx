@@ -23,11 +23,9 @@ function Notifications() {
   //     </div>
   //   );
   // }
-  // console.log("data", data);
 
 
   // const handleUpdateNotification = async (id) => {
-  //   console.log("id", id);
   //   const read = true;
   //   await updateNotification(id, read);
   // };

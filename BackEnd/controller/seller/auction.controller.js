@@ -44,7 +44,6 @@ export const getOngoingAuctions = async (req, res) => {
     const auctions = await Auction.find({ status: 'ongoing' })
       .populate('productId', 'name price images')  
       .populate('currentBidder', 'name'); 
-    console.log("auctions", auctions)
     res.status(200).json({ success: true, auctions: auctions || [] });
   } catch (error) {
     res.status(500).json({ 
@@ -80,7 +79,6 @@ export const placeBid = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const previousBidderId = auction.currentBidder;
-    console.log("previousBidderId", previousBidderId)
     auction.currentBid = bidAmount;
     auction.currentBidder = fetchUser._id;
      
@@ -390,7 +388,6 @@ export const getAuctionStatus = async (req, res) => {
       auction.auctionStatus = "awarded";
       await auction.save();
       await buyerNotification.save();
-      console.log("findHighestBidder", findHighestBidder._id);
       const cart = await Cart.findOne({user: findHighestBidder._id});
       if(!cart)
       {
@@ -419,9 +416,7 @@ export const getAuctionStatus = async (req, res) => {
         cart.totalAmount = auction.currentBid;
       }
       await cart.save();
-      console.log(" added to cart", cart);
       await cart.save();
-    console.log("passed to cart");
 
     }
     if(auctionStatus === false)
@@ -437,7 +432,6 @@ export const getAuctionStatus = async (req, res) => {
       await auction.save();
       await buyerNotification.save();
     } 
-    console.log("passed to cart");
     await auction.save();
     res.status(200).json({
       success: true,

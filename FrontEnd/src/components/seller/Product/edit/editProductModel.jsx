@@ -29,7 +29,6 @@ const EditProductModal = ({ id, show, handleClose, onProductUpdated }) => {
         onProductUpdated();  
       },
       onError: (err) => {
-        console.error("Error updating product:", err);
       },
     });
   };

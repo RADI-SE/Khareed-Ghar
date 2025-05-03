@@ -30,7 +30,6 @@ export const useCartService = create((set) => ({
       set({ cart: response.data, isLoading: false });
       return response.data;
     } catch (error) {
-      console.error("Error fetching cart:", error);
       set({
         errorMessage: error.response?.data?.message || error.message,
         isLoading: false,

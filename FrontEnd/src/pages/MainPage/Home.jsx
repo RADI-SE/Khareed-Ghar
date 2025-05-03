@@ -18,7 +18,6 @@ const Home = () => {
   useEffect(() => {
     initTWE({ Carousel });
   }, []);
-console.log("Home page loaded");
   return (
     
     <>

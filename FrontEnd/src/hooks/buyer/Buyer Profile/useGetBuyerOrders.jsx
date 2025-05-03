@@ -14,7 +14,6 @@ const useGetBuyerOrders = (userId) => {
         const response = await getBuyerOrders({ userId });
         return response || [];
       } catch (error) {
-        console.error("Error fetching buyer orders:", error);
         return [];
       }
     },

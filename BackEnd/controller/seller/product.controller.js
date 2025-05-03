@@ -168,7 +168,6 @@ export const getUserProducts = async (req, res) => {
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
-    console.log("userId",userId);
     const { id } = req.params;
     const products = await Product.find({ seller: userId, isAuction: false })
      .populate("category")
@@ -287,7 +286,6 @@ export const deleteProduct = async (req, res) => {
 export const getSimilarProducts = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("id",id);
     const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found." });
@@ -300,7 +298,6 @@ export const getSimilarProducts = async (req, res) => {
       isAuction: false,
     }).limit(20); // limit context size
  
-    console.log("otherProducts",otherProducts);
     const prompt = `
 You are an AI assistant helping to find similar products.
 
@@ -337,19 +334,16 @@ Return ONLY the product Ids, one per line, with no bullet points, no extra text,
     );
 
     const aiText = aiResponse?.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    console.log("aiText",aiText);
 
     const matchedTitles = aiText
     .split("\n")
     .map(line => line.replace(/^[-*]\s*/, '').trim())
     .filter(Boolean);
-    console.log("matchedTitles",matchedTitles);
 
     const similarProducts = await Product.find({
       _id: { $in: matchedTitles },
       isAuction: false,
     });
-    console.log("similarProducts",similarProducts);
 
     return res.status(200).json({ success: true, similarProducts });
 

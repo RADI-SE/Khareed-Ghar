@@ -1,4 +1,3 @@
-
 import { Routes, Route, Outlet } from "react-router-dom";
 import Home from "./MainPage/Home";
 import HomeLayout from "../components/layouts/HomeLayout";
@@ -10,6 +9,7 @@ import AllCategoryProducts from "../components/Common/products";
 import AuctionListPage from "./AuctionListPage";
 import AuctionDetail from "../components/Common/AuctionDetail";
 import BuyerProfile from "../components/Buyer/BuyerProfile";
+import SellerStore from "../components/seller/Product/SellerStore";
 
 export const HomeRoutes = ({ setOrder, order }) => {
   return (
@@ -30,6 +30,7 @@ const HomeRoutesWrapper = ({ setOrder, order }) => {
         <Route path="filter-data" element={<FilterData />} />
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="collection/:id" element={<AllCategoryProducts />} />
+        <Route path="store/:id" element={<SellerStore />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

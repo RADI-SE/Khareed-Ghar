@@ -4,6 +4,10 @@ import { User } from "../model/user.model.js";
 import { generatTokenAndSetCookies } from "../Utils/generatTokenAndSetCookies.js";
 import { sendEmail } from "../nodemailer/send.Email.js";
 import SellerStore from "../model/seller.store.model.js";
+import { Product } from "../model/product.model.js";
+import { Auction } from "../model/auction.model.js";
+import { mongo } from "mongoose";
+
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -14,7 +18,6 @@ function sleep(ms) {
 export const signup = async (req, res) => {
   const { name, email, password, confirmPassword, role, isAgreeToTerms, storeName, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName } = req.body;
 
-  console.log("Request body:", req.body); // Log the request body for debugging
   try {
     // Validation checks
     if (!name) {
@@ -56,7 +59,6 @@ export const signup = async (req, res) => {
     const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
-    console.log("Role", role);
     const user = new User({
       name,
       email,
@@ -77,14 +79,11 @@ export const signup = async (req, res) => {
 
     await user.save();
     await sleep(5000); // Simulate a delay of 3 second
-    console.log("User created successfully:", user);
 
     if(bool){
-      console.log("Seller role detected, creating seller store...");
       if(!storeName || !businessType || !storeTagline || !physicalStoreAddress || !phoneNumber || !bankAccountNumber || !bankName){
         return res.status(400).json({ success: false, message: "All fields are required" });
       }
-      console.log("Seller Dataaaaaa", user._id);
       const sellerStore = new SellerStore({
         sellerId: user._id,
         storeName: storeName,
@@ -95,9 +94,7 @@ export const signup = async (req, res) => {
         bankAccountNumber: bankAccountNumber,
         bankName: bankName,
       });
-      // console.log("Seller store data:", sellerStore); // Log the seller store data for debugging
       await sellerStore.save();
-      console.log("Seller store created successfully:", sellerStore);
     }
 
     const message = `verification code is ${verificationToken}`;   
@@ -109,6 +106,7 @@ export const signup = async (req, res) => {
       });
       generatTokenAndSetCookies(res, user._id)
       await user.save();
+       
     
       res.status(201).json({
         success: true,
@@ -121,7 +119,6 @@ export const signup = async (req, res) => {
         
       });
     } catch (emailError) {
-      console.error("Email sending error:", emailError);
       // If email fails, still create user but return a warning
       res.status(201).json({
         success: true,
@@ -170,7 +167,6 @@ export const resendVerificationCode = async (req, res) => {
 
       res.status(200).json({ success: true, message: "Verification code sent successfully" });
     } catch (error) {
-      console.error("Email sending error:", error);
     }
    } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -291,7 +287,6 @@ export const forgotPassword = async (req, res) => {
 
       res.status(200).json({ success: true, message: "Reset password link sent to your email" });
     } catch (error) {
-      console.error("Email sending error:", error);
     }
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
@@ -331,7 +326,6 @@ export const resetPassword = async (req, res) => {
       });  
         res.status(200).json({ success: true, message: "Password reset successfully" }); 
       } catch (error) {
-        console.error("Email sending error:", error);
       }
 
     res
@@ -357,6 +351,61 @@ export const checkAuth = async (req, res) => {
       },
     });
   } catch (error) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
+export const getUserProfile = async (req, res) => {
+  try{
+    const id = req.params;
+
+    const mongoId = new mongo.ObjectId(id.id); // Convert the string to a MongoDB ObjectId
+    const user = await User.findById(mongoId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+     
+    
+    const getUserProducts = await Product.find({ seller: id.id, isAuction: false })
+      .populate("category", "name")
+      .populate("subcategory", "name")
+      .populate({ path: "seller", select: "name" });
+      const getUserAuctions = await Auction.find({ sellerId: id.id }); // Query only the auctions of the specific user
+      const auctionDetails = [];
+  
+      for (let i = 0; i < getUserAuctions.length; i++) {
+        const auctionItem = getUserAuctions[i];
+        let product = null;
+        try {
+          product = await Product.findById(auctionItem.productId);
+        } catch (error) {
+        }
+  
+        auctionDetails.push({
+          auctionId: auctionItem._id,
+          startingBid: auctionItem.startingBid,
+          currentBid: auctionItem.currentBid,
+          currentBidder: auctionItem.currentBidder,
+          startTime: auctionItem.startTime,
+          endTime: auctionItem.endTime,
+          status: auctionItem.status,
+          productsName: product ? product.name : 'Product not found',
+          productsImg: product ? product.images : null,
+        });
+      }
+      
+    res.status(200).json({
+      success: true,
+      user: {
+        ...user._doc,
+        password: undefined,
+        confirmPassword: undefined,
+      },
+      products: getUserProducts,
+      auctions: getUserAuctions,
+    });
+  }catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

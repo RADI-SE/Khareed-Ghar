@@ -12,7 +12,6 @@ export const useEditAddress = () => {
       queryClient.invalidateQueries(['address']);
     },
     onError: (error) => {
-      console.error("Error updating address:", error);
     }
   });
 };

@@ -1,13 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSellerService } from "../../../services/seller/sellerServices";
 
-export const useFetchUserAuction = () => {
+export const useFetchUserAuction = (sellerId) => {
   const { getUserAuction } = useSellerService();
   return useQuery({
-    queryKey: ['auction'], 
-    queryFn: () => getUserAuction(),
-
-
+    queryKey: ['auction', sellerId], 
+    queryFn: () => getUserAuction(sellerId),
+    enabled: !!sellerId,
   });
 };
 

@@ -51,7 +51,6 @@ export const updateNotification = async (req, res) => {
   notification.read = read;
   notification.readAt = new Date();
   await notification.save();
-  console.log(notification.readAt);
   res.status(200).json({ message: "Notification updated" });
   } catch (error) {
     res.status(500).json({ message: error.message });

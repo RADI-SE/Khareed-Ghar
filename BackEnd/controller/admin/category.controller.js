@@ -233,11 +233,7 @@ export const deleteCategory = async (req, res) => {
 
     await Product.deleteMany({ category: categoryId });
     await Category.findByIdAndDelete(categoryId);
-    console.log(
-      "Category and associated products deleted successfully: ",
-      deletedCategory
-    );
-
+ 
     return res.json({
       success: true,
       message: "Category and associated products deleted successfully",
@@ -286,7 +282,6 @@ export const deleteSubategory = async (req, res) => {
         .json({ success: false, message: "Subcategory not found in database" });
     }
 
-    console.log("Subcategory and associated products deleted successfully");
     res.json({
       success: true,
       message: "Subcategory and associated products deleted successfully",

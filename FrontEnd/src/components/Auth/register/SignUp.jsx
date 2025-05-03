@@ -102,10 +102,7 @@ function SignUp() {
     if (!isVerified) {
       return <Navigate to="/auth/verify-email/" />;
     }
-  }
-
-  console.log("Seller Details:", sellerDetails);
- 
+  } 
  
 return (
   <div className="d-flex justify-content-center align-items-start min-vh-100 bg-light pt-5">

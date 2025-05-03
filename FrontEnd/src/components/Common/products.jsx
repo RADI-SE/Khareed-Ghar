@@ -12,13 +12,10 @@ const AllCategoryProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log("Fetching products for category ID:", id); // Debugging line
         const response = await getAllCategoryProducts(id);
-        console.log("Fetched products:", response); // Debugging line
         setProducts(Array.isArray(response) ? response : []); // Ensure products is always an array
         setCategoryName(response?.categoryName || ""); // Set category name if available
       } catch (error) {
-        console.error("Error fetching products:", error);
         setProducts([]); // Fallback to an empty array on error
       }
     };

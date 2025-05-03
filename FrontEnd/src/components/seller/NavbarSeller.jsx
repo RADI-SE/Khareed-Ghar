@@ -32,7 +32,7 @@ function NavbarSeller() {
         await getAuctionStatus(auctionId,false);
       }
     };
-    console.log("notification data ", data);
+    
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
       <div className="w-full px-4 sm:px-6 lg:px-8">

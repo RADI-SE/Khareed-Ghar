@@ -19,14 +19,12 @@ export const useOrderService = create((set) => ({
              const response = await axios.post(API_URL, {CART_ID, SHIPPING_ADDRESS_ID, PAYMENT_METHOD});
             set({ orders: response.data });
         } catch (error) {
-            console.error("error", error.response.data.message);
         }
     },
 
     getOrders: async () => {
         try {
             set({ isLoading: true });
-            console.log("getOrders");
             const response = await axios.get(API_URL +"all-orders");
             set({ orders: response.data });
             return response.data;

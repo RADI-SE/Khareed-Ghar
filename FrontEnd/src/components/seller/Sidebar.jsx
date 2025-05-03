@@ -90,7 +90,7 @@ const Sidebar = () => {
                 Product Management
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink 
                 className={({ isActive }) => 
                   `flex items-center py-3 px-1 text-white hover:bg-blue-800 transition-colors no-underline ${
@@ -102,7 +102,7 @@ const Sidebar = () => {
               >
                 Seller Store
               </NavLink>
-            </li>
+            </li> */}
           </ul>
         </div>
       </nav>

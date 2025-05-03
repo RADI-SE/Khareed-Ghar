@@ -13,7 +13,6 @@ export const useEditRegion = (token) => {
       queryClient.invalidateQueries(["region"]);
     },
     onError: (error) => {
-      console.error("Mutation failed:", error.message);
     },
   });
 };

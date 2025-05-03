@@ -52,7 +52,6 @@ export const useAdminService = create((set) => ({
     } catch (error) {
       // Handle error and stop loading
       set({ errorMessage: error.message, isLoading: false });
-      console.error("Error fetching user profile:", error);
     }
   },
  
@@ -80,7 +79,6 @@ export const useAdminService = create((set) => ({
       
       const errorMessage = error.response?.data?.message || 'An error occurred while updating the profile';
       toast.error(errorMessage);
-      console.error('Profile update error:', errorMessage);
       return null;
     }
   },
@@ -109,7 +107,6 @@ export const useAdminService = create((set) => ({
         isLoading: false,
       });
 
-      console.error("Error banning/unbanning user:", error.response || error);
       toast.error(response.data.message);
       throw error; 
       

@@ -9,7 +9,6 @@ export const useAddToCart = () => {
         const response = await addToCart( productId, quantity);
         return response;
       } catch (error) {
-        console.error("Error during addToCart API call:", error);
         throw error;
       }
     },

@@ -60,7 +60,6 @@ const AuctionTable = () => {
   };
  
   const handleDelete = async () => {
-    console.log("selectedAuction", selectedAuction);
     await deleteAuction(selectedAuction.auctionId);
     refetch();
     handleModalClose();
