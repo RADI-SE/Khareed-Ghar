@@ -6,7 +6,7 @@ export const useEditProduct = (token) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, name, description, specifications, price, category, seller, images }) =>
+    mutationFn: ({ id, name, description, specifications, price, images }) =>
       editProduct(
         token,
         id,
@@ -14,8 +14,6 @@ export const useEditProduct = (token) => {
         description,
         specifications,
         price,
-        category,
-        seller,
         images
       ),
     onSuccess: () => {

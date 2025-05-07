@@ -2,52 +2,52 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 
 export const ProductForm = ({ product = {}, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    name: product.name || "",
-    description: product.description || "",
-    specifications: product.specifications || {
-      condition: "",
-      color: "",
-      capacity: "",
-    },
-    price: product.price || "",
-    images: product.images || [],
+  const [name, setName] = useState(product.name || "");
+  const [description, setDescription] = useState(product.description || "");
+  const [specifications, setSpecifications] = useState({
+    condition: product?.specifications?.condition || "",
+    color: product?.specifications?.color || "",
+    capacity: product?.specifications?.capacity || "",
   });
+  const [price, setPrice] = useState(product.price || "");
+  const [images, setImages] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === "name") setName(value);
+    if (name === "description") setDescription(value);
+    if (name === "price") setPrice(value);
   };
 
   const handleSpecificationsChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      specifications: { ...prevData.specifications, [name]: value },
+    setSpecifications((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setFormData((prevData) => ({
-      ...prevData,
-      images: files,
-    }));
+    setImages(files);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (!formData.name || !formData.description || !formData.price  || formData.images.length === 0) {
-      alert("Please fill in all the required fields!"); 
-      return false; 
+
+    if (!name || !description || !price || images.length === 0) {
+      alert("Please fill in all required fields.");
+      return;
     }
 
-    // if (name != description != price != CategoryId != SubCategoryId != images.length === 0) {
-    //   alert("Product added successfully!");
-      
-    // }
-    
+    const formData = {
+      name,
+      description,
+      price,
+      specifications,
+      images,
+    };
+
     onSubmit(formData);
   };
 
@@ -58,10 +58,9 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
         <Form.Control
           type="text"
           name="name"
-          value={formData.name}
+          value={name}
           onChange={handleChange}
           placeholder="Enter product name"
-           
         />
       </Form.Group>
 
@@ -70,10 +69,9 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
         <Form.Control
           as="textarea"
           name="description"
-          value={formData.description}
+          value={description}
           onChange={handleChange}
           placeholder="Enter product description"
-           
         />
       </Form.Group>
 
@@ -81,9 +79,8 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
         <Form.Label>Condition</Form.Label>
         <Form.Select
           name="condition"
-          value={formData.specifications.condition}
+          value={specifications.condition}
           onChange={handleSpecificationsChange}
-           
         >
           <option value="" disabled>Select condition</option>
           <option value="New">New</option>
@@ -95,9 +92,8 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
         <Form.Label>Color</Form.Label>
         <Form.Select
           name="color"
-          value={formData.specifications.color}
+          value={specifications.color}
           onChange={handleSpecificationsChange}
-           
         >
           <option value="" disabled>Select color</option>
           <option value="Red">Red</option>
@@ -111,9 +107,8 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
         <Form.Label>Capacity</Form.Label>
         <Form.Select
           name="capacity"
-          value={formData.specifications.capacity}
+          value={specifications.capacity}
           onChange={handleSpecificationsChange}
-           
         >
           <option value="" disabled>Select capacity</option>
           <option value="64GB">64GB</option>
@@ -128,10 +123,9 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
         <Form.Control
           type="number"
           name="price"
-          value={formData.price}
+          value={price}
           onChange={handleChange}
           placeholder="Enter product price"
-           
         />
       </Form.Group>
 

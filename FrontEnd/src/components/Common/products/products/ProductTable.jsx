@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Pagination from "../../pagination";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import EditProductModal from "../../../seller/Product/edit/editProductModel";
 import { ConfirmationModal } from "../../confirmationModal/ConfirmationModel";
 import { useDeleteProduct } from "../../../../hooks/seller/useDeleteProduct";
 import defaultImage from "../../../../assets/images/default.jpeg";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 
 const ProductTable = ({ products, onProductClick }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -28,6 +27,7 @@ const ProductTable = ({ products, onProductClick }) => {
   const handleEditClick = (product) => {
     setSelectedProduct(product);
     setShowEditModal(true);
+    console.log("product",product);
   };
 
   const handleDeleteClick = (product) => {
@@ -92,22 +92,21 @@ const ProductTable = ({ products, onProductClick }) => {
           </thead>
           <tbody>
             {paginatedProducts?.map((product, index) => {
-              const { _id, name, subcategory, images, createdAt } = product;
-              return (
+               return (
                 <tr
-                  key={_id}
+                  key={product._id}
                   className="bg-white-500 border-b hover:bg-gray-300"
                 >
                   <td className="px-6 py-2">{startIndex + index + 1}</td>
-                  <td className="px-6 py-2">{_id}</td>
-                  <td className="px-6 py-2">{name}</td>
-                  <td className="px-6 py-2">{subcategory?.name || "N/A"}</td>
+                  <td className="px-6 py-2">{product._id}</td>
+                  <td className="px-6 py-2">{product.name}</td>
+                  <td className="px-6 py-2">{product.subcategory?.name || "N/A"}</td>
                   <td className="px-6 py-2">
                     <img
                       src={
-                        `../../../../../public/images${images}` || defaultImage
+                        `../../../../../public/images${product.images}` || defaultImage
                       }
-                      alt={name}
+                      alt={product.name}
                       style={{
                         width: "60px",
                         height: "60px",
@@ -117,7 +116,7 @@ const ProductTable = ({ products, onProductClick }) => {
                   </td>
 
                   <td className="px-6 py-2">
-                    {new Date(createdAt).toLocaleDateString()}
+                    {new Date(product.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-2 py-2">
                     <button

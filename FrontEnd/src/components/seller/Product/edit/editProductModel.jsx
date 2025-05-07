@@ -14,14 +14,13 @@ const EditProductModal = ({ id, show, handleClose, onProductUpdated }) => {
   const handleSubmit = (updatedProduct) => {
     if (!id || !updatedProduct) return;
  
+    console.log("updatedProduct",updatedProduct);
     editProduct({
       id,
       name: updatedProduct.name,
       description: updatedProduct.description,
       specifications: updatedProduct.specifications,
       price: updatedProduct.price,
-      category: updatedProduct.category,
-      seller: updatedProduct.seller,
       images: updatedProduct.images,
     }, {
       onSuccess: () => {

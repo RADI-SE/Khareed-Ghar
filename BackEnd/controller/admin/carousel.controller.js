@@ -1,8 +1,8 @@
-import { Carousel } from "../../model/carousel.model";
+import { Carousel } from "../../model/carousel.model.js";
 
 export const createCarousel = async (req, res) => {
     try {
-        const { image, title, active, order } = req.body;
+        const { title, active, order } = req.body;
         const file = req.file; 
         if (!file) {
           return res.status(400).json({
@@ -12,10 +12,10 @@ export const createCarousel = async (req, res) => {
         }
         const relativePath = file.path.replace(/\\/g, "/").split("uploads")[1];
         const imagePath = `/uploads/carousel/${relativePath}`;
-        if (!image || !title) {
+        if (!imagePath || !title) {
             return res.status(400).json({ message: "Image and title are required" });
-      }
-  const carousel = await Carousel.create({ image: imagePath, title, active, order });
+        }
+        const carousel = await Carousel.create({ image: imagePath, title, active, order });
   res.status(201).json(carousel);
 } catch (error) {
   res.status(500).json({ message: error.message });

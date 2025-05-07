@@ -1,6 +1,6 @@
 import express from "express";
-import { createCarousel, updateCarousel, deleteCarousel, getCarousel } from "../../controller/admin/carousel.controller";
-import { upload } from "../../Utils/multerconfig";
+import { createCarousel, updateCarousel, deleteCarousel, getCarousel } from "../../controller/admin/carousel.controller.js";
+import { upload } from "../../Utils/multerconfig.js";
 
 const router = express.Router();
 

@@ -202,11 +202,23 @@ export const editProduct = async (req, res) => {
       description,
       specifications,
       price,
-      category,
-      seller,
-      images,
     } = req.body;
 
+    console.log("req.body",req.body);
+    console.log("req.file",req.file);
+    
+    const file = req.file; 
+    if (!file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded.",
+      });
+    }
+    const relativePath = file.path.replace(/\\/g, "/").split("uploads")[1];
+    const imagePath = `/uploads${relativePath}`;
+
+    console.log("imagePath",imagePath);
+    
     // Update product by ID
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
@@ -215,9 +227,7 @@ export const editProduct = async (req, res) => {
         description,
         specifications,
         price,
-        category,
-        seller,
-        images,
+        images: imagePath,
       },
       { new: true }
     );

@@ -127,27 +127,32 @@ export const useSellerService = create((set) => ({
     description,
     specifications,
     price,
-    category,
-    seller,
     images
   ) =>{
+
+    console.log("images",images);
+    console.log("name",name);
+    console.log("description",description);
+    console.log("specifications",specifications);
+    console.log("price",price);
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("specifications", JSON.stringify(specifications));
+    formData.append("price", price);
+    images.forEach((file) => {
+      formData.append("file", file);
+     });
     let response;
     try {
       set({ isLoading: true, Error: null, isError: false });
       response = await axios.put(
         `${API_URL}/seller/products/${id}`,
-        {
-          name,
-          description,
-          specifications,
-          price,
-          category,
-          seller,
-          images,
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
