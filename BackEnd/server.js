@@ -14,6 +14,7 @@ import manageAuctions from "./route/seller/auction.route.js"
 import orderRoutes from "./route/order.route.js"
 import notificationRoutes from "./route/notification.route.js"
 import sellerStoreRoutes from "./route/seller/seller.store.route.js"
+import manageCarousel from "./route/admin/manage.carousel.js"
 dotenv.config();
 
 const app = express();
@@ -52,6 +53,8 @@ app.use("/api", orderRoutes);
 app.use("/api", notificationRoutes);
 
 app.use("/api", sellerStoreRoutes);
+
+app.use("/api", manageCarousel);
 
 app.listen(PORT, () => {
 

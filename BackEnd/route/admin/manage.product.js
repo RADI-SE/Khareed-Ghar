@@ -27,7 +27,7 @@ router.get("/getProductsByUserId/:id", getUserProducts);
 
 router.get("/seller/productsById/:id", getProductById);
 
-router.put("/seller/products/:id", verifySeller, editProduct);
+router.put("/seller/products/:id", upload.single("file"), verifySeller, editProduct);
 
 router.delete("/seller/products/:id" , verifyAdminSeller, deleteProduct);
 
