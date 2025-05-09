@@ -7,7 +7,8 @@ import { toast } from 'react-hot-toast';
 import { useBidNow } from '../../hooks/seller/Auctions/useBidNow';
 import { useCurrentLeftTime } from '../../hooks/seller/Auctions/useFetchCurrentLeftTime';
 import { FaClock, FaDollarSign, FaUser, FaEdit, FaTrashAlt, FaCalendar } from 'react-icons/fa';
-
+import { useAuthService } from '../../services/authService';
+import { useNavigate } from 'react-router-dom';
 
 const AuctionDetail = () => {
   const { id } = useParams();
@@ -16,11 +17,16 @@ const AuctionDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const {data:product} = useFetchProductById(auction?.auction?.productId);
   const { data: currentLeftTime } = useCurrentLeftTime(id);
-
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuthService();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
-
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      console.log(user);
+    }
+  }, [isAuthenticated, user]);
   const { mutate: bidNow } = useBidNow();
 
   if (isLoading) {
@@ -44,16 +50,20 @@ const AuctionDetail = () => {
     const bidValue = parseFloat(bidAmount);
     const currentPrice = auction?.auction?.currentBid || auction?.auction?.startingBid;
 
-    if (bidValue <= currentPrice) {
+    if (bidValue <= currentPrice && isAuthenticated && user) {
       toast.error('Bid amount must be higher than the current price');
       return;
     }
-    bidNow({
-      auctionId: id,
-      bidAmount: bidValue,
-    });
-
-    toast.success('Bid placed successfully!');
+    if(isAuthenticated && user){  
+      bidNow({
+        auctionId: id,
+        bidAmount: bidValue,
+      });
+      toast.success('Bid placed successfully!');
+    }else{
+      toast.error('Please login to bid');
+      navigate('/auth/signin');
+    }
     setBidAmount('');
   };
 

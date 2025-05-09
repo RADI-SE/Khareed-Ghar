@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 import { useGetBuyerOrders } from "../../hooks/buyer/Buyer Profile/useGetBuyerOrders";
@@ -9,9 +9,11 @@ export const BuyerProfile = () => {
   const { isAuthenticated, user, isCheckingAuth } = useAuthService();
   const { data: orders = [], isLoading: isLoadingOrders } = useGetBuyerOrders(user?._id);
 
-  if (!isAuthenticated || !user) {
-    navigate("/auth/signin");
-  }
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      navigate("/auth/signin");
+    }
+  }, [isAuthenticated, user, navigate]);
 
   return (
     <>

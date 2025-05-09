@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { useCartService } from "../../services/buyer/buyerServices";
 import { useAddressService } from "../../services/buyer/buyerServices";
 import { useOrderService } from "../../services/orderServices";
@@ -13,8 +12,7 @@ const Checkout = () => {
   const {getSelectedLocation } = useAddressService();
   const { createOrder } = useOrderService(); 
   const selectedLocation = getSelectedLocation();
-  const navigate = useNavigate();
- 
+  
   useEffect(() => {
     if (cart?.items) {
       const newTotal = cart.items.reduce(
