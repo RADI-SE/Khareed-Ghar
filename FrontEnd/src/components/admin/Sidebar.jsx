@@ -59,7 +59,19 @@ const Sidebar = () => {
                 Dashboard
               </NavLink>
             </li>
-
+            <li>
+              <NavLink 
+                className={({ isActive }) => 
+                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
+                    isActive ? 'bg-blue-800' : ''
+                  }`
+                }
+                to="/admin/carousel"
+                onClick={() => window.innerWidth < 1024 && setIsCollapsed(false)}
+              >
+                Home Page Carousel
+              </NavLink>
+            </li>
             <li>
               <NavLink 
                 className={({ isActive }) => 
@@ -125,14 +137,6 @@ const Sidebar = () => {
               >
                 Region Management
               </NavLink>
-            </li>
-            <li className="mt-10">
-              <button 
-                className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors"
-                onClick={handleLogout}
-              >
-                LOGOUT 
-              </button>
             </li>
           </ul>
         </div>

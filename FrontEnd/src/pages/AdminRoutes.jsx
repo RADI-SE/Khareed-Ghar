@@ -10,6 +10,7 @@ import DetailedProductView from "../components/admin/Category/dashboard/view";
 import NotFound from "../components/NotFound";
 import RegionManagement from "../components/admin/Region/rootRoutes";
 import ProductManagement from "../components/admin/Product/rootRoutes";
+import CarouselEditor from "../components/admin/SlideImageChanger/CarouselEditor";
 
 const AdminRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AdminRoutesWrapper = () => {
       <Route path="/" element={<AdminRoutes />}>
         <Route index element={<DashBoardView />} />
         <Route path="dashboard" element={<DashBoardView />} />
+        <Route path="carousel" element={<CarouselEditor />} />
         <Route path="orders" element={<OrderList />} />
         <Route path="orders/order-details" element={<OrderDetails />} />
         <Route path="users/*" element={<UserManagement />} />
