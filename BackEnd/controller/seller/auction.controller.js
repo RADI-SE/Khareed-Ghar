@@ -2,6 +2,7 @@ import {Auction} from "../../model/auction.model.js"
 import {Product} from "../../model/product.model.js"
 import { SellerNotification } from "../../model/seller.notification.model.js";
 import { BuyerNotification } from "../../model/buyer.notification.model.js";
+import { AdminNotification } from "../../model/admin.notification.model.js";
 import { User } from "../../model/user.model.js";
 import { Cart } from "../../model/cart.model.js";
 import jwt from "jsonwebtoken"
@@ -32,6 +33,13 @@ export const createAuction = async (req, res) => {
       endTime,
     });
 
+    const adminNotification = new AdminNotification({
+      receipient: "6728e930dc54a1f881e1d0cd",
+      auction: auction._id,
+      message: ` ${auction.productId.name} Auction has been created by the seller ${auction.sellerId}.`,
+      link: `/auction/${auction._id}`,
+    });
+    await adminNotification.save();
     await auction.save();
     res.status(201).json({ message: 'Auction created successfully', auction });
   } catch (error) {
@@ -105,7 +113,7 @@ export const placeBid = async (req, res) => {
       });
       await buyerNotification.save();
     }
-    
+
     res.status(200).json({ message: 'Bid placed successfully', auction });
   } catch (error) {
     res.status(500).json({ message: 'Error placing bid', error });
@@ -117,8 +125,7 @@ export const getAuctionDetails = async (req, res) => {
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
-    const { id } = req.params;
-    const UserAuctions = await Auction.find({ sellerId: userId }); // Query only the auctions of the specific user
+     const UserAuctions = await Auction.find({ sellerId: userId }); // Query only the auctions of the specific user
 
     const auctionDetails = [];
 
@@ -158,13 +165,10 @@ export const completeAuction = async (req, res) => {
     if (!auction) {
       return res.status(404).json({ message: 'Auction not found' });
     }
-
-    // Check if the auction is already completed
     if (auction.status !== 'ongoing') {
       return res.status(400).json({ message: 'Auction is not active' });
     }
-
-    // Mark auction as completed
+ 
     auction.status = 'completed';
     await auction.save();
 
@@ -204,31 +208,49 @@ export const getAuctionsById = async (req, res) => {
 export const editAuctions = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      startTime,
-      endTime,
-    } = req.body;
+    let { startTime, endTime } = req.body;
 
+    startTime = new Date(startTime);
+    endTime = new Date(endTime);
+    const currentTime = new Date();
+ 
+    if (isNaN(startTime) || isNaN(endTime)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid start or end time format.",
+      });
+    }
+    if (startTime >= endTime)   {
+      return res.status(400).json({
+        success: false,
+        message: "Start time must be before end time.",
+      });
+    }
+
+    if (endTime <= currentTime) {
+      return res.status(400).json({
+        success: false,
+        message: "End time must be in the future.",
+      });
+    }
+  
     const updatedAuctions = await Auction.findByIdAndUpdate(
       id,
       {
         status: 'ongoing',
         startTime,
         endTime,
-
       },
       { new: true }
     );
-
     if (!updatedAuctions) {
       return res.status(404).json({
         success: false,
         message: "Auction not found.",
       });
     }
-
-    for(let i = 0; i < updatedAuctions.bidders.length; i++)
-    {
+ 
+    for (let i = 0; i < updatedAuctions.bidders.length; i++) {
       const buyerNotification = new BuyerNotification({
         receipient: updatedAuctions.bidders[i].userId,
         product: updatedAuctions.productId,
@@ -237,19 +259,30 @@ export const editAuctions = async (req, res) => {
       });
       await buyerNotification.save();
     }
+    const product = await Product.findById(updatedAuctions.productId);
+
+    const adminNotification = new AdminNotification({
+      receipient: "6728e930dc54a1f881e1d0cd",
+      auction: updatedAuctions._id,
+      message: ` ${product.name} Auction has been updated by the seller ${updatedAuctions.sellerId}.`,
+      link: `/auction/${updatedAuctions._id}`,
+    });
+    await adminNotification.save();
+    console.log("test 1");
+    console.log(product.name);
     res.status(200).json({
+
       success: true,
       message: "Auction updated successfully.",
       auction: updatedAuctions,
     });
-  } catch (error) {
+    } catch (error) {
     res.status(500).json({
       success: false,
       message: "Server error. Please try again later.",
     });
   }
 };
-
 
 export const deleteAuction = async (req, res) => {
   try {
@@ -272,6 +305,13 @@ export const deleteAuction = async (req, res) => {
       });
       await buyerNotification.save();
     }
+    const adminNotification = new AdminNotification({
+      receipient: "6728e930dc54a1f881e1d0cd",
+      auction: auction._id,
+      message: ` ${auction.productId.name} Auction has been deleted by the seller ${auction.sellerId}.`,
+      link: `/auction/${auction._id}`,
+    });
+    await adminNotification.save();
     res.status(200).json({
       success: true,
       message: "Auction deleted successfully.",
@@ -303,34 +343,60 @@ export const getCurrentLeftTime = async (req, res) => {
     const endTime = new Date(auction.endTime);
     const timeLeftInMillis = endTime - currentTime;
 
+    let findCurrentBidder = null;
 
-     if (timeLeftInMillis <= 0) {
-       if (auction.status !== "completed") {
+    if (timeLeftInMillis <= 0) {
+      if (auction.status !== "completed") {
         auction.status = "completed";
-        await auction.save();
-        const findCurrentBidder = await User.findById(auction.currentBidder);
 
-         const sellerNotification = new SellerNotification({
-          receipient: auction.sellerId,
-          auction: auction._id,
-          message: `Auction has ended. ${findCurrentBidder.name} won with a bid of ${auction.currentBid}.`,
-          read: false,
-          readAt: null,
-          auctionEnded: true,
-          link: `/auction/${auction._id}`,
-        });
-        await sellerNotification.save();
+        if (auction.currentBidder) {
+          findCurrentBidder = await User.findById(auction.currentBidder);
 
-         const buyerNotification = new BuyerNotification({
-          receipient: auction.currentBidder,
-          product: auction.productId,
-          message: `Congratulations! You won the auction.`,
-          link: `/auction/${auction._id}`,
-        });
-        await buyerNotification.save();
+          const sellerNotification = new SellerNotification({
+            receipient: auction.sellerId,
+            auction: auction._id,
+            message: `Auction has ended. ${findCurrentBidder.name} won with a bid of ${auction.currentBid}.`,
+            read: false,
+            readAt: null,
+            auctionEnded: true,
+            link: `/auction/${auction._id}`,
+          });
+          await sellerNotification.save();
+
+          const buyerNotification = new BuyerNotification({
+            receipient: auction.currentBidder,
+            product: auction.productId,
+            message: `Congratulations! You won the auction.`,
+            link: `/auction/${auction._id}`,
+          });
+          await buyerNotification.save();
+        } else {
+          const sellerNotification = new SellerNotification({
+            receipient: auction.sellerId,
+            auction: auction._id,
+            message: `Auction has ended with no bidders.`,
+            read: false,
+            readAt: null,
+            auctionEnded: true,
+            link: `/auction/${auction._id}`,
+          });
+          await sellerNotification.save();
+        }
+
         auction.auctionStatus = "pending";
         await auction.save();
       }
+
+      const adminNotification = new AdminNotification({
+        receipient: "6728e930dc54a1f881e1d0cd",
+        auction: auction._id,
+        message: `Auction has ended for product "${auction.productId.name}". ${
+          findCurrentBidder ? `${findCurrentBidder.name} won with a bid of ${auction.currentBid}.` : `There were no bidders.`
+        }`,
+        link: `/auction/${auction._id}`,
+      });
+      await adminNotification.save();
+
       return res.status(200).json({
         success: true,
         status: "completed",
@@ -338,6 +404,7 @@ export const getCurrentLeftTime = async (req, res) => {
         message: "Auction has ended.",
       });
     }
+
     const seconds = Math.floor((timeLeftInMillis / 1000) % 60);
     const minutes = Math.floor((timeLeftInMillis / (1000 * 60)) % 60);
     const hours = Math.floor((timeLeftInMillis / (1000 * 60 * 60)) % 24);

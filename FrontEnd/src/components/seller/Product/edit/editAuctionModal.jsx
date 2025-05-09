@@ -27,6 +27,7 @@ const EditAuctionModal = ({ id, show, handleClose, onAuctionUpdated }) => {
         onAuctionUpdated();  
       },
       onError: (err) => {
+        console.log(err);
       },
     });
   };

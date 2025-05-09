@@ -276,11 +276,18 @@ export const useSellerService = create((set) => ({
     }
   },
   
-  getUserAuction: async (sellerId) => {
+  getUserAuction: async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/userAuctions/${sellerId}`); 
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.get(`http://localhost:5000/api/userAuctions`); 
       return response.data.auctions;
      } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching auctions."
+      });
+      throw error;
     }
   },
 
@@ -311,6 +318,9 @@ export const useSellerService = create((set) => ({
 
   ) =>{
     try {
+      console.log("id",id);
+      console.log("startTime",startTime);
+      console.log("endTime",endTime);
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.put(
         `http://localhost:5000/api/editAuctions/${id}`,
@@ -320,6 +330,7 @@ export const useSellerService = create((set) => ({
 
         },
       ); 
+      console.log("response",response);
       if (response.status === 200) {
         set({ isLoading: false, Error: null });
       }
