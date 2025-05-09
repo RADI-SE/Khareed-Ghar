@@ -1,47 +1,82 @@
-import AuctionCard from "../components/Common/AuctionCard"
+import { useState } from "react";
+import AuctionCard from "../components/Common/AuctionCard";
 import { useFetchAuctions } from "../hooks/seller/Auctions/useFetchAuctions";
 
 const AuctionListPage = () => {
+  const [activeTab, setActiveTab] = useState("active");
+
   const {
     data: auctions = [],
-    isLoading: isLoadingAuctions,
-    isError: auctionsError,
+    isLoading,
+    isError,
   } = useFetchAuctions();
 
-
-  if (isLoadingAuctions) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent" />
       </div>
     );
   }
 
-  if (auctionsError) {
+  if (isError) {
     return (
       <div className="container mx-auto py-12 text-center">
-        <p className="text-red-600 text-lg">Error fetching auctions. Please try again later.</p>
+        <p className="text-red-600 text-lg font-medium">
+          Error fetching auctions. Please try again later.
+        </p>
       </div>
     );
   }
+ 
+  const activeAuctions = auctions.filter((a) => a.status === "ongoing");
+  const completedAuctions = auctions.filter((a) => a.status === "completed");
+  
+
+  const isActive = activeTab === "active";
+  const filteredAuctions = isActive ? activeAuctions : completedAuctions;
 
   return (
-    <>
-      <div className="container mx-auto py-12 px-4">
-        <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
+    <div className="container mx-auto py-10 px-4">
+      {/* Tabs */}
+      <div className="flex justify-center mb-8 space-x-4">
+        <button
+          className={`px-6 py-2 rounded-full font-medium transition ${
+            isActive
+              ? "bg-red-600 text-white shadow-md"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+          onClick={() => setActiveTab("active")}
+        >
           Active Auctions
-        </h2>
-        {auctions.length === 0 ? (
-          <p className="text-center text-gray-600 text-lg">No active auctions available at the moment.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {auctions.map((auction) => (
-              <AuctionCard key={auction._id} auctions={auction} />
-            ))}
-          </div>
-        )}
+        </button>
+        <button
+          className={`px-6 py-2 rounded-full font-medium transition ${
+            !isActive
+              ? "bg-red-600 text-white shadow-md"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+          onClick={() => setActiveTab("completed")}
+        >
+          Completed Auctions
+        </button>
       </div>
-    </>
+
+      {/* Auction Cards */}
+      {filteredAuctions.length === 0 ? (
+        <p className="text-center text-gray-600 text-lg mt-8">
+          {isActive
+            ? "No active auctions available at the moment."
+            : "No completed auctions yet."}
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          {filteredAuctions.map((auction) => (
+            <AuctionCard key={auction._id} auctions={auction} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

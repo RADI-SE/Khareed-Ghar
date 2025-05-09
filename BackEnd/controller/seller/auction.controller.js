@@ -49,7 +49,7 @@ export const createAuction = async (req, res) => {
  
 export const getOngoingAuctions = async (req, res) => {
   try {
-    const auctions = await Auction.find({ status: 'ongoing' })
+    const auctions = await Auction.find()
       .populate('productId', 'name price images')  
       .populate('currentBidder', 'name'); 
     res.status(200).json({ success: true, auctions: auctions || [] });
@@ -192,7 +192,7 @@ export const getAuctionsById = async (req, res) => {
         message: "auction not found.",
       });
     }
-
+    
     res.status(200).json({
       success: true,
       auction,

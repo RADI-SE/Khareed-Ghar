@@ -8,7 +8,7 @@ import {
     editAuctions,
     getAuctionsById,
     deleteAuction,
-    getCurrentLeftTime,
+    getCurrentLeftTime, 
     getAuctionStatus,  
 } from '../../controller/seller/auction.controller.js';
 
@@ -37,6 +37,7 @@ router.patch('/:auctionId/auctionStatus', getAuctionStatus);
 
 router.get('/userAuctions', getAuctionDetails);
 
- router.patch('/:auctionId/complete', verifySeller, completeAuction);
+router.patch('/:auctionId/complete', verifySeller, completeAuction);
+
 
  export default router;
