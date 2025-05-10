@@ -15,6 +15,8 @@ import orderRoutes from "./route/order.route.js"
 import notificationRoutes from "./route/notification.route.js"
 import sellerStoreRoutes from "./route/seller/seller.store.route.js"
 import manageCarousel from "./route/admin/manage.carousel.js"
+import editUserProfile from "./route/edit.profile.route.js";
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -63,6 +65,8 @@ app.use("/api", notificationRoutes);
 app.use("/api", sellerStoreRoutes);
 
 app.use("/api", manageCarousel);
+
+app.use("/api", editUserProfile);
 
 app.listen(PORT, () => {
 

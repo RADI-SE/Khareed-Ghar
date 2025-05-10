@@ -8,12 +8,14 @@ import { useClearCart } from "../../hooks/buyer/cart/useClearCart";
 import { useFetchNotifications } from '../../hooks/buyer/Notifications/useFetchNotifications'
 import { useSellerService } from '../../services/seller/sellerServices'
 import BecomeSellerModal from '../Buyer/BecomeSellerModal';
+import { useProfileInfo } from "../../hooks/Users/useProfileInfo";
 
 const Navbar = () => {
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSellerModal, setShowSellerModal] = useState(false);
-  const { signout, isAuthenticated, user } = useAuthService();
+  const { signout, isAuthenticated } = useAuthService();
+  const { data:user } = useProfileInfo();
   const { mutate: clearCartMutation } = useClearCart();
   const { data: cart = {} } = useFetchCartItems();
   const items = cart?.items || [];
@@ -160,7 +162,7 @@ const Navbar = () => {
               </button>
             ) : (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-700">Hi, {user?.name || 'User'}</span>
+                <span className="text-gray-700 text-lg font-serif">Hi, {user?.name || 'User'}</span>
                 <button 
                   onClick={handleLogout}
                   className="px-6 py-2 border border-blue-900 bg-blue-800 text-white rounded-lg hover:bg-blue-700 hover:border-blue-700 transition-colors"
@@ -268,7 +270,7 @@ const Navbar = () => {
                   </button>
                 ) : (
                   <div className="flex items-center space-x-4">
-                    <span className="text-gray-700">Hi, {user?.name || 'User'}</span>
+                    <span className="text-gray-700 text-sm font-serif">Hi, {user?.name || 'User'}</span>
                     <button 
                       onClick={handleLogout}
                       className="px-6 py-2 border border-blue-900 bg-blue-800 text-white rounded-lg hover:bg-blue-700 hover:border-blue-700 transition-colors"

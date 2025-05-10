@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useAuthService } from "../../services/authService";
 import {FaBell, FaCheck} from "react-icons/fa";
-import { MdOutlineCancel } from "react-icons/md";
+import { MdAccountCircle, MdOutlineCancel } from "react-icons/md";
 import { Link } from 'react-router-dom'
 import { useFetchNotifications } from '../../hooks/seller/Notifications/useFetchNotifications'
 import { useSellerService } from '../../services/seller/sellerServices'
@@ -42,15 +42,22 @@ function NavbarSeller() {
           </div>
           <div className="flex items-center space-x-6">
             <div className="hidden md:flex items-center">
-              <h3 className='mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 justify-center items-center pt-3'>Welcome <span className="text-2xl font-medium text-blue-900 items-center"> {user?.name || 'User'}</span></h3>
+              <h3 className='mb-4 text-lg font-serif font-extrabold leading-none tracking-tight text-gray-900 justify-center items-center pt-4'>Welcome <span className="font-medium text-blue-900 items-center font-serif"> {user?.name || 'User'}</span></h3>
             </div>
+
+            <button 
+              onClick={() => navigate("/profile")}
+              className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <MdAccountCircle className="w-6 h-6 text-blue-900" />
+            </button>
 
             <div className="relative">
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
               >
-                <FaBell className="w-5 h-5 text-gray-600" />
+                <FaBell className="w-5 h-5 text-blue-900" />
                 {data.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {data.length}
