@@ -5,26 +5,32 @@ import { Cart } from "../../model/cart.model.js";
 import jwt from "jsonwebtoken";
 import { SellerNotification } from "../../model/seller.notification.model.js";
 import {Auction} from "../../model/auction.model.js"
+import { User } from "../../model/user.model.js";
+
 export const createOrder = async (req, res) => {
   try {
     const token = req.cookies.token;
-    const {CART_ID, SHIPPING_ADDRESS_ID, PAYMENT_METHOD } = req.body;
+    const { CART_ID, SHIPPING_ADDRESS_ID, PAYMENT_METHOD } = req.body;
+
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (error) {
       return res.status(403).json({ message: "Invalid or expired token." });
     }
-    const userId = decoded.userId; 
+
+    const userId = decoded.userId;
+
     const cart = await Cart.findById(CART_ID);
-    if(!cart){
-      return res.status(404).json({ error: "Please add some items to your cart before placing your order." });
+    if (!cart) {
+      return res.status(404).json({ error: "Please add items to your cart before placing your order." });
     }
+
     const shippingAddress = await UserLocation.findById(SHIPPING_ADDRESS_ID);
-    if(!shippingAddress){
-      return res.status(404).json({ error: "Please select a shipping location before placing your order." });
-    } 
- 
+    if (!shippingAddress) {
+      return res.status(404).json({ error: "Please select a shipping address." });
+    }
+
     const order = await Order.create({
       user: userId,
       products: cart.items.map(item => ({
@@ -36,47 +42,78 @@ export const createOrder = async (req, res) => {
       shippingAddress: shippingAddress._id,
       paymentMethod: PAYMENT_METHOD,
       status: "Pending",
-    })
-    for(let i=0;i<order.products.length;i++){
-      const auction = await Auction.findOne({productId: order.products[i].product});
-      if(auction){
-        const sellerNotification = new SellerNotification({
-        receipient: auction.sellerId,
-        product: auction.productId,
-        order: order._id,
-        message: `You have a new order for product ${auction.productId}`,
-        read: false,
-        readAt: null,
-        link: `/seller/orders/${order._id}`
-      });
-      await sellerNotification.save();
+    });
 
-      const notifySeller = await Product.findById(order.products[i].product);
-      if(notifySeller){
+    // Notify sellers
+    for (const item of order.products) {
+      const auction = await Auction.findOne({ productId: item.product });
+      let sellerId = null;
+      let productName = null;
+
+      if (auction) {
+        sellerId = auction.sellerId;
+        productName = auction.productId;
+      } else {
+        const product = await Product.findById(item.product);
+        if (product) {
+          sellerId = product.seller;
+          productName = product.name;
+        }
+      }
+
+      if (sellerId) {
         const sellerNotification = new SellerNotification({
-          receipient: notifySeller.seller,
-          product: notifySeller._id,
+          receipient: sellerId,
+          product: item.product,
           order: order._id,
-          message: `You have a new order for product ${notifySeller.name}`,
+          message: `You have a new order for product ${productName}`,
           read: false,
           readAt: null,
           link: `/seller/orders/${order._id}`
-        })
+        });
         await sellerNotification.save();
       }
     }
-    }
+
     await Cart.findByIdAndDelete(CART_ID);
-    res.status(201).json({ message: "Order created successfully", order }); 
+    res.status(201).json({ message: "Order created successfully", order });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
-
+};
 export const getUserOrders = async (req, res) => {
-    const orders = await Order.find({ user: req.user._id });
+  try {
+    const token = req.cookies.token;
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      return res.status(403).json({ message: "Invalid or expired token." });
+    }
+    const userId = decoded.userId;
+    const user = await User.findById(userId);
+    if(!user){
+      return res.status(404).json({ error: "User not found." });
+    }
+    if(user.role !== "seller"){
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+    const product = await Product.find({ seller: userId });
+    if(!product){
+      return res.status(404).json({ error: "No products found." });
+    }
+    const productIds = product.map(p => p._id);
+
+    const orders = await Order.find({ "products.product": { $in: productIds } });
+    if(!orders){
+      return res.status(404).json({ error: "No orders found." });
+    }
     res.status(200).json(orders);
-}
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+} 
  
 export const getAllOrders = async (req, res) => {
     const orders = await Order.find();

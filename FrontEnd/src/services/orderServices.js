@@ -10,7 +10,8 @@ export const useOrderService = create((set) => ({
     isAuthenticated: false,
     isLoading: false,
     isError: false,
-    Error: null,
+    Error: null, 
+
     setError: (message) => set({ Error: message }),
     clearError: () => set({ Error: null, isError: false, isLoading: true }),
  
@@ -19,6 +20,7 @@ export const useOrderService = create((set) => ({
              const response = await axios.post(API_URL, {CART_ID, SHIPPING_ADDRESS_ID, PAYMENT_METHOD});
             set({ orders: response.data });
         } catch (error) {
+            set({ isError: true, Error: error.response.data.message });
         }
     },
 
@@ -32,5 +34,17 @@ export const useOrderService = create((set) => ({
             set({ isError: true, Error: error.response.data.message });
         }
     },
+    getUserOrders: async () => {
+        try {
+            console.log("getUserOrders");
+            set({ isLoading: true });
+            const response = await axios.get(API_URL +"get-user-orders");
+            set({ orders: response.data });
+            console.log("response.data",response.data);
+            return response.data;
+        } catch (error) {
+            set({ isError: true, Error: error.response.data.message });
+        }
+    }
 }));
 
