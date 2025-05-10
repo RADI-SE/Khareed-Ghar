@@ -34,8 +34,8 @@ const OrderDetails = () => {
       
       <div className="space-y-4 mb-6">
         <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-          <span className="text-gray-600 font-medium">Sub Total:</span>
-          <span className="text-gray-800 font-semibold">{order.total}</span>
+          <span className="text-gray-600 font-medium">Payment Method:</span>
+          <span className="text-gray-800 font-semibold">{order.paymentMethod}</span>
         </div>
         <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
           <span className="text-gray-600 font-medium">Delivery Fees:</span>
@@ -43,7 +43,7 @@ const OrderDetails = () => {
         </div>
         <div className="flex justify-between items-center p-4 bg-gray-100 rounded-lg border border-gray-200">
           <span className="text-gray-800 font-bold">Total Amount:</span>
-          <span className="text-gray-900 font-bold text-lg">{order.total}</span>
+          <span className="text-gray-900 font-bold text-lg">{order.totalAmount}</span>
         </div>
       </div>
 
