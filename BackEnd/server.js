@@ -15,9 +15,14 @@ import orderRoutes from "./route/order.route.js"
 import notificationRoutes from "./route/notification.route.js"
 import sellerStoreRoutes from "./route/seller/seller.store.route.js"
 import manageCarousel from "./route/admin/manage.carousel.js"
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 dotenv.config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cookieParser());
 
@@ -31,6 +36,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // enable set cookie  
 }));
+
+// Serve static files from the frontend public directory
+app.use('/uploads', express.static(path.join(__dirname, '../../FrontEnd/public/images/uploads')));
 
 app.use("/api/auth", authRoutes);
 

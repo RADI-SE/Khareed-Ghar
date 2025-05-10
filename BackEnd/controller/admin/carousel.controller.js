@@ -11,7 +11,7 @@ export const createCarousel = async (req, res) => {
           });
         }
         const relativePath = file.path.replace(/\\/g, "/").split("uploads")[1];
-        const imagePath = `/uploads/carousel/${relativePath}`;
+        const imagePath = `/uploads${relativePath}`;
         if (!imagePath || !title) {
             return res.status(400).json({ message: "Image and title are required" });
         }
@@ -31,7 +31,7 @@ export const updateCarousel = async (req, res) => {
             return res.status(400).json({ message: "Image is required" });
         }
         const relativePath = file.path.replace(/\\/g, "/").split("uploads")[1];
-        const imagePath = `/uploads/carousel/${relativePath}`;
+        const imagePath = `/uploads${relativePath}`;
         const carousel = await Carousel.findByIdAndUpdate(id, { image: imagePath, title, active, order }, { new: true });
         res.status(200).json(carousel);
     } catch (error) {

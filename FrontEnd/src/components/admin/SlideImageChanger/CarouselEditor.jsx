@@ -1,43 +1,35 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useAdminService } from "../../../services/adminServices";
 
 const CarouselEditor = () => {
-  const [image, setImage] = useState(null);
-  const [title, setTitle] = useState("");
   const [carousels, setCarousels] = useState([]);
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState(null);
   const [editModal, setEditModal] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editImage, setEditImage] = useState(null);
 
-  const fetchCarousels = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/carousel", {
-        withCredentials: true,
-      });
-      setCarousels(Array.isArray(res.data) ? res.data : []);
-    } catch (err) {
-      console.error("Error fetching carousels:", err);
-      setCarousels([]);
-    }
+  const { fetchCarousels, uploadCarousel, deleteCarousel, updateCarousel } = useAdminService();
+
+  useEffect(() => {
+    loadCarousels();
+  }, []);
+
+  const loadCarousels = async () => {
+    const data = await fetchCarousels();
+    setCarousels(data);
   };
 
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!image || !title) return alert("Image and title are required");
 
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("title", title);
-
     try {
-      await axios.post("http://localhost:5000/api/carousel", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      });
+      await uploadCarousel(image, title);
       setTitle("");
       setImage(null);
-      fetchCarousels();
+      loadCarousels();
     } catch (err) {
       console.error(err);
     }
@@ -45,10 +37,8 @@ const CarouselEditor = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/carousel/${id}`, {
-        withCredentials: true,
-      });
-      fetchCarousels();
+      await deleteCarousel(id);
+      loadCarousels();
     } catch (err) {
       console.error(err);
     }
@@ -62,29 +52,14 @@ const CarouselEditor = () => {
   };
 
   const handleEditSubmit = async () => {
-    const formData = new FormData();
-    formData.append("title", editTitle);
-    if (editImage) formData.append("image", editImage);
-
     try {
-      await axios.put(
-        `http://localhost:5000/api/carousel/${editId}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          withCredentials: true,
-        }
-      );
+      await updateCarousel(editId, editTitle, editImage);
       setEditModal(false);
-      fetchCarousels();
+      loadCarousels();
     } catch (err) {
       console.error(err);
     }
   };
-
-  useEffect(() => {
-    fetchCarousels();
-  }, []);
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
