@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import defaultProduct from "../../assets/images/default.jpeg";
 import { useFetchAuctionsById } from "../../hooks/seller/Auctions/useFetchAuctionsById";
@@ -6,7 +6,7 @@ import { useFetchProductById } from '../../hooks/seller/useFetchProductsById';
 import { toast } from 'react-hot-toast';
 import { useBidNow } from '../../hooks/seller/Auctions/useBidNow';
 import { useCurrentLeftTime } from '../../hooks/seller/Auctions/useFetchCurrentLeftTime';
-import { FaClock, FaDollarSign, FaUser, FaEdit, FaTrashAlt, FaCalendar } from 'react-icons/fa';
+import { FaClock } from 'react-icons/fa';
 import { useAuthService } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 
@@ -72,9 +72,7 @@ const AuctionDetail = () => {
       ? auction.productId.images
       : [auction.productId.images]
     : [];
-
    
-
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -133,7 +131,7 @@ const AuctionDetail = () => {
                     
                       <table className="min-w-full divide-y divide-gray-200">
                         <tbody className="bg-white divide-y divide-gray-200 ">
-                          {[...auction?.auction?.bidders]?.reverse()?.map((bidder) => (
+                          {auction?.auction?.bidders ? [...auction.auction.bidders].reverse().map((bidder) => (
                             <tr key={bidder._id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 w-1/3">{bidder.name}</td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 w-1/3">${bidder.bidAmount.toFixed(2)}</td>
@@ -145,8 +143,7 @@ const AuctionDetail = () => {
                                 })}
                               </td>
                             </tr>
-                          ))}
-                          {(!auction?.auction?.bidders || auction.auction.bidders.length === 0) && (
+                          )) : (
                             <tr>
                               <td colSpan="3" className="px-6 py-4 text-center text-sm text-gray-500">No bids placed yet</td>
                             </tr>
@@ -173,12 +170,6 @@ const AuctionDetail = () => {
                     Current Bid: ${(auction?.auction?.currentBid || auction?.auction?.startingBid)?.toFixed(2)}
                   </p>
                 </div>
-
-              
-
-
-
-
 <div className="bg-white rounded-lg">
                 <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
                   <FaClock className="mr-2" />
@@ -215,19 +206,35 @@ const AuctionDetail = () => {
                     {product?.description || 'No description available'}
                   </p>
                 </div>
-                {/* bidding input field */}
+                {auction?.auction?.status === "ongoing" && (
                   <div className="w-full max-w-sm min-w-[200px]">
+                    {/* Bidding input field */}
                     <label className="text-gray-900 text-lg leading-8 font-medium mb-4">
-                        Bid Here 
+                      Bid Here 
                     </label>
-                    <input type="number" placeholder='Bid must be higher then current bid'
-                     className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
-                     value={bidAmount}
-                     onChange={(e) => setBidAmount(e.target.value)}></input>
-                    <button onClick={handleBidSubmit} className='text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2'>
+
+                    <input
+                      type="number"
+                      placeholder="Bid must be higher than current bid"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      value={bidAmount}
+                      onChange={(e) => setBidAmount(e.target.value)}
+                    />
+
+                    <button
+                      onClick={handleBidSubmit}
+                      className="text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2"
+                    >
                       SUBMIT
                     </button>
                   </div>
+                )}
+                {auction?.auction?.status === "completed" && (
+                  <p className="text-gray-900 text-lg leading-8 font-medium mb-4">
+                    Auction is completed
+                  </p>
+                )}
+                
               </div>
             </div>
           </div>
