@@ -138,4 +138,24 @@ fetchSelectedLocation: async (id) => {
 
 //  Get selected location from state
 getSelectedLocation: () => get().selectedLocation,
+
+
 }));
+export const useBuyerService = create((set) => ({
+  becomeSeller: async (storeName, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName) => {
+    try {
+      console.log("test-1")
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.post(`http://localhost:5000/api/create-seller-store`, {storeName, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName});
+      console.log("test-2")
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      console.log("test-3")
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  }
+}));
+
+
+ 

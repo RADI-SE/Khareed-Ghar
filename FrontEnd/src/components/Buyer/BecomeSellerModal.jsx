@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
-
+import { useBuyerService } from '../../services/buyer/buyerServices';
 const BecomeSellerModal = ({ isOpen, onClose }) => {
+  const { becomeSeller } = useBuyerService();
   const [formData, setFormData] = useState({
     storeName: '',
     physicalStoreAddress: '',
@@ -13,7 +14,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
     businessPhoto: null
   });
 
-  const handleChange = (e) => {
+  const handleChange =(e) => {
     const { name, value, files } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -21,10 +22,14 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    onClose();
+    try{
+      await becomeSeller(formData.storeName, formData.businessType, formData.storeTagline, formData.physicalStoreAddress, formData.phoneNumber, formData.bankAccountNumber, formData.bankName);
+      onClose();
+    }catch(error){
+      console.log(error);
+    }
   };
 
   if (!isOpen) return null;
@@ -73,7 +78,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 Store Physical Address *
               </label>
               <textarea
-                name="storeAddress"
+                name="physicalStoreAddress"
                 value={formData.physicalStoreAddress}
                 onChange={handleChange}
                 required

@@ -7,6 +7,10 @@ const AdminNotificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    userRequest: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",

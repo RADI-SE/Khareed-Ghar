@@ -1,8 +1,10 @@
 import express from "express";
-import { getSellerStore } from "../../controller/seller/seller.store.controller.js";
-
+import { getSellerStore ,
+    createSellerStore
+} from "../../controller/seller/seller.store.controller.js";
 const router = express.Router();
 
 router.get("/seller-store", getSellerStore);
+router.post("/create-seller-store", createSellerStore);
 export default router;
 
