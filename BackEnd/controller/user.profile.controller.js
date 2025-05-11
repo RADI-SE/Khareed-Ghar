@@ -1,5 +1,5 @@
 import { User } from "../model/user.model.js";
-import SellerStore from "../model/seller.store.model.js";
+import {SellerStore} from "../model/seller.store.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
@@ -12,6 +12,8 @@ export const editUserProfile = async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
     let user = await User.findById(userId);
+     const sellerStore = await SellerStore.find({ sellerId: user._id });
+    console.log("User", user);
 
     if (!user) {
       return res
@@ -61,29 +63,54 @@ export const editUserProfile = async (req, res) => {
 
     }
 
-
-    
+    console.log("Test 1 Passed");
+    isStore === true;
+    console.log("Test 2 Passed");
 
 
 
         if(user.role === "seller" || user.role === "Seller" && isStore){
 
-            const sellerStore = await SellerStore.findOne({ sellerId: user._id });
+          console.log("Test 3 Passed");
+          console.log("User ID", user._id);
+           
 
+            console.log("Test 4 Passed");
+            console.log("sellerStore", sellerStore);
             if (sellerStore) {
+              console.log("Test 5 Passed");
               // Update the existing seller store
-              sellerStore.storeName = storeName;
-              sellerStore.businessType = businessType;
-              sellerStore.storeTagline = storeTagline;
-              sellerStore.physicalStoreAddress = physicalStoreAddress;
-              sellerStore.phoneNumber = phoneNumber;
-              sellerStore.bankAccountNumber = bankAccountNumber;
-              sellerStore.bankName = bankName;
-              await sellerStore.save();
+               if(storeName){
+                sellerStore[0].storeName = storeName; 
+               }
+               if(businessType){
+                sellerStore[0].businessType = businessType;
+               }
+               if(storeTagline){
+                sellerStore[0].storeTagline = storeTagline;
+               }
+               if(physicalStoreAddress){
+                sellerStore[0].physicalStoreAddress = physicalStoreAddress;
+               }
+               if(phoneNumber){
+                sellerStore[0].phoneNumber = phoneNumber;
+               }
+               if(bankAccountNumber){
+                sellerStore[0].bankAccountNumber = bankAccountNumber;
+               }
+               if(bankName){
+                sellerStore[0].bankName = bankName;
+               }
+            
             }
-        }
+          }
+          
+          await user.save();
+          await sellerStore[0]?.save()
 
-        await user.save();
+          console.log("Test 6 Passed");
+          console.log("Seller Store", sellerStore);
+          
 
         res.status(200).json({
           success: true,

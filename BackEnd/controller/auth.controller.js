@@ -3,7 +3,7 @@ import crypto from "crypto";
 import { User } from "../model/user.model.js";
 import { generatTokenAndSetCookies } from "../Utils/generatTokenAndSetCookies.js";
 import { sendEmail } from "../nodemailer/send.Email.js";
-import SellerStore from "../model/seller.store.model.js";
+import {SellerStore} from "../model/seller.store.model.js";
 import { Product } from "../model/product.model.js";
 import { Auction } from "../model/auction.model.js";
 import { mongo } from "mongoose";
@@ -59,17 +59,19 @@ export const signup = async (req, res) => {
     const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
+
     const user = new User({
       name,
       email,
       password: hashedPassword,
       confirmPassword: hashedConfirmPassword,
-      role: role.toLowerCase(),
+      role: role.toLowerCase() === "seller" ? "seller" : "buyer",
       isAgreeToTerms,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
     });
 
+    console.log("test 1 ", user);
     let bool = false;
     if (role === "Seller" || role === "seller") {
       bool = true;

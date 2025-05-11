@@ -48,6 +48,4 @@ const sellerStoreSchema = new mongoose.Schema({
     },
 });
 
-const SellerStore = mongoose.model("SellerStore", sellerStoreSchema);
-
-export default SellerStore;
+export const SellerStore = mongoose.model("SellerStore", sellerStoreSchema);

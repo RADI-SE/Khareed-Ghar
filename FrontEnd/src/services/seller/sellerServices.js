@@ -444,11 +444,52 @@ export const useSellerService = create((set) => ({
       return response.data;
     } catch (error) {    }
   },  
+}));
 
+export const useStoreService = create((set) => ({
+  sellerStore: async(id) => {
+    try {
+      console.log("test-1 from Services")
+      const response = await axios.get(`http://localhost:5000/api/seller-store/${id}`);
+      console.log("test-2 from Services")
+      console.log("response",response);
+      return response.data;
+    } catch (error) {
 
-
-
+    }
+  }
 }));
 
 
-
+// response 
+// {data: Array(1), status: 200, statusText: 'OK', headers: AxiosHeaders, config: {…}, …}
+// config
+// : 
+// {transitional: {…}, adapter: Array(3), transformRequest: Array(1), transformResponse: Array(1), timeout: 0, …}
+// data
+// : 
+// Array(1)
+// 0
+// : 
+// {_id: '6820ba3e2b1d9c9aed9802f1', sellerId: '6820ba392b1d9c9aed9802ef', storeName: 'Radhi', businessType: 'Fazool', storeTagline: 'Gandagi', …}
+// length
+// : 
+// 1
+// [[Prototype]]
+// : 
+// Array(0)
+// headers
+// : 
+// AxiosHeaders {content-length: '365', content-type: 'application/json; charset=utf-8'}
+// request
+// : 
+// XMLHttpRequest {onreadystatechange: null, readyState: 4, timeout: 0, withCredentials: true, upload: XMLHttpRequestUpload, …}
+// status
+// : 
+// 200
+// statusText
+// : 
+// "OK"
+// [[Prototype]]
+// : 
+// Object

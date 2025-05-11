@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useFetchProductById } from '../../hooks/seller/useFetchProductsById';
 import { useAddToCart } from "../../hooks/buyer/cart/useAddToCart";
-import { useSellerService } from "../../services/seller/sellerServices";
+import { useSellerService, useStoreService } from "../../services/seller/sellerServices";
+
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,20 +14,38 @@ const ProductDetail = () => {
   const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
   const { getSimilarProducts } = useSellerService();
+  const { sellerStore } = useStoreService();
   
   const [isInCart, setIsInCart] = useState(false);
   const { mutate: AddToCart } = useAddToCart();
   const [quantity, setQuantity] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [similarProducts, setSimilarProducts] = useState([]);
-   
+
+  const [storeName, setStoreName] = useState('');
+
   // Reset state and scroll to top when product changes
   useEffect(() => {
     window.scrollTo(0, 0);
     setSelectedImage(0);
     setQuantity(0);
     setIsInCart(false);
-
+    
+    const fetchStoreName = async () => {
+      
+        try {
+          const storeData = await sellerStore(id);
+          console.log("Store Data", storeData);
+          setStoreName(storeData);
+        } catch (error) {
+          console.error("Error fetching store data:", error);
+          setStoreName('Store Name');
+        }
+      
+    };
+    
+    fetchStoreName();
+    
     // Fetch similar products when product ID changes
     const fetchSimilarProducts = async () => {
       try {
@@ -37,12 +56,13 @@ const ProductDetail = () => {
         setSimilarProducts([]);
       }
     };
-
+    
     if (id) {
       fetchSimilarProducts();
     }
-  }, [id, getSimilarProducts]);
-  
+  }, [id, getSimilarProducts, product, sellerStore]);
+console.log("Noumannnnnnnnnnnnnnnnnnnnnn", storeName?.sellerStore?.[0]?.storeName);
+ 
   // Convert single image to array if needed
   const productImages = Array.isArray(product?.images) 
     ? product?.images 
@@ -193,7 +213,7 @@ const ProductDetail = () => {
                     to={`/store/${product?.seller?._id}`}
                     className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
                   >
-                    <span className="mr-2">{product?.seller?.sellerId?.storeName || 'Store Name'}</span>
+                    <span className="mr-2">{storeName?.sellerStore?.[0]?.storeName|| 'Store Name'}</span>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>

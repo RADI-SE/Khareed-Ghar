@@ -1,4 +1,4 @@
-import SellerStore from "../../model/seller.store.model.js";
+import {SellerStore} from "../../model/seller.store.model.js";
 import { AdminNotification } from "../../model/admin.notification.model.js";
 import {User} from "../../model/user.model.js";
 import jwt from "jsonwebtoken";
