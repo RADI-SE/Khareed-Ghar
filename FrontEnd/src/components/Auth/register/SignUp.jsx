@@ -53,18 +53,6 @@ function SignUp() {
 
   const handleSignUp = (e) => {
     e.preventDefault();
-
-    if (!name) return setError("User Name is required");
-    if (!email) return setError("User Email is required");
-    if (!password) return setError("Password is required");
-    if (password.length < 8)
-      return setError("Password should be at least 8 characters long");
-    if (!confirmPassword) return setError("Confirm Password is required");
-    if (password !== confirmPassword) return setError("Passwords do not match");
-    if (!isAgreeToTerms)
-      return setError("Please agree to the terms and conditions");
-    if (!role) return setRole("Buyer");
-
     setError("");
 
     createUser(
@@ -76,7 +64,13 @@ function SignUp() {
         },
         onError: (err) => {
           console.error("Sign-up error:", err);
-          setError("Sign-up failed. Please try again.");
+          if (!err.response) {
+            setError("Network error: Please check your internet connection");
+          } else if (err.response.status === 500) {
+            setError("Server error: Please try again later");
+          } else {
+            setError(err.response?.data?.message || "Sign-up failed. Please try again.");
+          }
         },
       }
     );
@@ -160,12 +154,13 @@ return (
                 </div>
               </div>
 
-              {error && <div className="alert alert-danger">{error}</div>}
-              {creationError && (
-                <div className="alert alert-danger">
-                  {creationErrorMessage?.message || "Error creating account"}
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  <i className="fas fa-exclamation-circle me-2"></i>
+                  {error}
                 </div>
               )}
+           
 
               <div className="form-check mt-3">
                 <input
@@ -182,16 +177,7 @@ return (
                   </Link>
                 </label>
               </div>
-{/* 
-              <div className="flex items-center space-x-2 mt-4">
-                  <label className="text-sm font-medium text-gray-700">Sellers</label>
-                  <input
-                    type="checkbox"
-                    checked={isSeller}
-                    onChange={handleSellerToggle}
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                  />
-                </div> */}
+ 
 
               {isSeller && (
                   <div className="bg-gray-100 p-4 rounded-lg space-y-4 mt-4">

@@ -49,20 +49,33 @@ export const useAuthService = create((set) => ({
         phoneNumber, 
         bankAccountNumber, 
         bankName
-        
-      }
-    
-    );
-
-
+      });
 
       set({
         user: response.data.user,
         isAuthenticated: true,
         isLoading: false,
+        successMessage: response.data.message
       });
+      return response.data;
     } catch (error) {
-      set({ isLoading: false, isError:true , errorMessage: error.response.data.message });
+      let errorMessage;
+      if (!error.response) {
+        // Network error
+        errorMessage = "Network error: Please check your internet connection";
+      } else if (error.response.status === 500) {
+        // Server error
+        errorMessage = "Server error: Please try again later";
+      } else {
+        // Backend validation error or other error
+        errorMessage = error.response?.data?.message || "An error occurred during signup";
+      }
+      
+      set({ 
+        isLoading: false, 
+        isError: true, 
+        errorMessage: errorMessage 
+      });
       throw error;
     }
   },
