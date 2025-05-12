@@ -155,11 +155,13 @@ export const useBuyerService = create((set) => ({
       set({ errorMessage: error.message, isLoading: false });
     }
   },
-  searchProduct: async (name) => {
+  searchProduct: async (name, type) => {
     try {
       console.log("test-1")
+      console.log(name);
+      console.log(type);
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.get(`http://localhost:5000/api/search?name=${name}`);
+      const response = await axios.get(`http://localhost:5000/api/search?name=${name}&type=${type}`);
       console.log("test-2")
       set({ isLoading: false });
       return response.data;

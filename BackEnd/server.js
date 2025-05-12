@@ -17,6 +17,7 @@ import sellerStoreRoutes from "./route/seller/seller.store.route.js"
 import manageCarousel from "./route/admin/manage.carousel.js"
 import editUserProfile from "./route/edit.profile.route.js";
 import searchRoutes from "./route/buyer/search.routes.js";
+import feedbackRoutes from "./route/feedback.route.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -69,6 +70,9 @@ app.use("/api", manageCarousel);
 app.use("/api", editUserProfile);
 
 app.use("/api", searchRoutes);
+
+app.use("/api", feedbackRoutes);
+
 app.listen(PORT, () => {
 
   connect();

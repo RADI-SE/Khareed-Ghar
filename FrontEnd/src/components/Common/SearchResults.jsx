@@ -1,20 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useBuyerService } from "../../services/buyer/buyerServices";
-import { useEffect, useState } from "react";
 
 const SearchResults = () => {
   const { search } = useLocation();
   const query = new URLSearchParams(search).get("q");
+  const type = new URLSearchParams(search).get("type")
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const { searchProduct } = useBuyerService();
-  console.log(query);
 
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        const res = await searchProduct(query);
+        const res = await searchProduct(query,type);
         setResults(res?.products || []);
       } catch (err) {
         console.error("Error fetching search results:", err);
@@ -24,21 +23,27 @@ const SearchResults = () => {
     };
 
     if (query) {
+      setLoading(true); // Reset loading state on query/type change
       fetchSearchResults();
     }
-  }, [query]);
+  }, [query, type]);
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-semibold mb-4">Search Results for "{query}"</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        Search Results for "{query}" ({type === "all" ? "All Types" : type})
+      </h2>
       {loading ? (
         <p>Loading...</p>
       ) : results.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {results.map((product) => (
-            <div key={product._id} className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
+            <div
+              key={product._id}
+              className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow"
+            >
               <img
-                src={`../../../../../public/images${product.images[0]}`}
+                src={`/images${product.images[0]}`}
                 alt={product.name}
                 className="w-full h-48 object-cover rounded"
               />
@@ -52,7 +57,9 @@ const SearchResults = () => {
                   </span>
                 </div>
                 {product.seller && (
-                  <p className="text-sm text-gray-500 mt-1">Seller: {product.seller.name}</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Seller: {product.seller.name}
+                  </p>
                 )}
               </div>
             </div>
