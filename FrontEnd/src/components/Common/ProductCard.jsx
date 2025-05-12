@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
         <img
           src={`../../../public/images/${product?.images}` || defaultProduct}
           alt={product?.name || "Product"}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
         />
         <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-300" />
       </div>
@@ -56,15 +56,15 @@ const ProductCard = ({ product }) => {
         <div className="flex gap-1.5">
           <button
             onClick={(e) => handleAddToCart(e, product._id)}
-            className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition-colors duration-300 text-sm"
+            className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-[#10C8B8] text-white rounded-md transition-colors duration-300 text-sm"
           >
             <FaShoppingCart className="w-3.5 h-3.5" />
-            <span className="text-sm">Add to Cart</span>
+            <span className="text-sm hover:text-[#FFD700]">Add to Cart</span>
           </button>
           
           <button
             onClick={(e) => handleDetail(e, product._id)}
-            className="flex-1 py-1.5 px-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors duration-300 text-sm"
+            className="flex-1 py-1.5 px-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 hover:text-[#10C8B8] transition-colors duration-300 text-sm"
           >
             View Details
           </button>

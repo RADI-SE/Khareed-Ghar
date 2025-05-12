@@ -2,9 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useFetchProductById } from '../../hooks/seller/useFetchProductsById';
 import { useAddToCart } from "../../hooks/buyer/cart/useAddToCart";
-import { useSellerService } from "../../services/seller/sellerServices";
+import { useSellerService, useStoreService } from "../../services/seller/sellerServices";
+
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import FeedBackModal from "./FeedBackModal";
 
 const ProductDetail = () => {
   const userid = sessionStorage.getItem("id");
@@ -13,20 +15,40 @@ const ProductDetail = () => {
   const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
   const { getSimilarProducts } = useSellerService();
+  const { sellerStore } = useStoreService();
   
   const [isInCart, setIsInCart] = useState(false);
   const { mutate: AddToCart } = useAddToCart();
   const [quantity, setQuantity] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [similarProducts, setSimilarProducts] = useState([]);
-   
+
+  const [storeName, setStoreName] = useState('');
+
+  const [showFeedBackModal, setShowFeedBackModal] = useState(false);
+
   // Reset state and scroll to top when product changes
   useEffect(() => {
     window.scrollTo(0, 0);
     setSelectedImage(0);
     setQuantity(0);
     setIsInCart(false);
-
+    
+    const fetchStoreName = async () => {
+      
+        try {
+          const storeData = await sellerStore(id);
+          console.log("Store Data", storeData);
+          setStoreName(storeData);
+        } catch (error) {
+          console.error("Error fetching store data:", error);
+          setStoreName('Store Name');
+        }
+      
+    };
+    
+    fetchStoreName();
+    
     // Fetch similar products when product ID changes
     const fetchSimilarProducts = async () => {
       try {
@@ -37,12 +59,13 @@ const ProductDetail = () => {
         setSimilarProducts([]);
       }
     };
-
+    
     if (id) {
       fetchSimilarProducts();
     }
-  }, [id, getSimilarProducts]);
-  
+  }, [id, getSimilarProducts, product, sellerStore]);
+console.log("Noumannnnnnnnnnnnnnnnnnnnnn", storeName?.sellerStore?.[0]?.storeName);
+ 
   // Convert single image to array if needed
   const productImages = Array.isArray(product?.images) 
     ? product?.images 
@@ -119,7 +142,7 @@ const ProductDetail = () => {
             <div className="w-full md:w-1/2 relative">
               <div className="sticky top-0">
                 {/* Main Image */}
-                <div className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden">
+                <div className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden p-4">
                   <img
                     src={`../../../../../public/images/${productImages[selectedImage]}` || 'https://placeholder.com/400'}
                     alt={`${product?.name} - Image ${selectedImage + 1}`}
@@ -158,7 +181,7 @@ const ProductDetail = () => {
                 {/* Product Title and Price */}
                 <div>
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">{product?.name}</h1>
-                  <p className="text-2xl sm:text-3xl font-bold text-blue-600">
+                  <p className="text-2xl sm:text-3xl font-bold text-[#FFD700]">
                     ${product?.price?.toFixed(2)}
                   </p>
                 </div>
@@ -191,24 +214,22 @@ const ProductDetail = () => {
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Seller Information</h3>
                   <Link 
                     to={`/store/${product?.seller?._id}`}
-                    className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                    className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors no-underline"
                   >
-                    <span className="mr-2">{product?.seller?.sellerId?.storeName || 'Store Name'}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
+                    <span className="mr-2 text-[#FFD700] text-lg hover:text-[#10C8B8]">{storeName?.sellerStore?.[0]?.storeName|| 'Store'}</span>
                   </Link>
                 </div>
 
                 {/* Add to Cart Button */}
+                <div className="flex space-x-4">
                 <button
                   onClick={(e) => handleAddToCart(e, product._id)}
                   disabled={isInCart}
-                  className={`w-full ${
+                  className={`w-1/2 ${
                     isInCart 
                       ? 'bg-gray-400 cursor-not-allowed' 
-                      : 'bg-blue-600 hover:bg-blue-700 transform hover:scale-[1.02] active:scale-[0.98]'
-                  } text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-200 flex items-center justify-center text-base sm:text-lg font-semibold shadow-lg`}
+                      : 'bg-[#10C8B8] transform hover:scale-[1.02] active:scale-[0.98]'
+                  } text-white py-3 sm:py-4 hover:text-[#FFD700] px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-200 flex items-center justify-center text-base sm:text-lg font-semibold shadow-lg`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -220,6 +241,13 @@ const ProductDetail = () => {
                   </svg>
                   {isInCart ? 'Added to Cart' : 'Add to Cart'}
                 </button>
+                <button
+                onClick={() => setShowFeedBackModal(true)}
+                  className="w-1/2 bg-white text-[#FFD700] p-3 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-200 flex items-center justify-center text-base sm:text-lg font-semibold shadow-lg border border-3 hover:bg-gray-300"
+                >
+                  Review
+                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -285,6 +313,10 @@ const ProductDetail = () => {
           </div>
         )}
       </div>
+      <FeedBackModal 
+                      isOpen={showFeedBackModal} 
+                      onClose={() => setShowFeedBackModal(false)} 
+                     />
     </div>
   );
 }

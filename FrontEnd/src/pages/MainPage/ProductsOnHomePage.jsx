@@ -3,7 +3,6 @@ import ProductCard from "../../components/Common/ProductCard";
 import { useFetchProducts } from "../../hooks/seller/useFetchProducts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import BuyerProfile from "../../components/Buyer/BuyerProfile";
 
 const ProductsOnHomePage = () => {
   const {
@@ -57,14 +56,14 @@ const ProductsOnHomePage = () => {
           <div key={categoryId} className="mb-12">
             <button 
               onClick={() => navigate(`/collection/${categoryId}`)} 
-              className="md:text-2xl font-bold text-blue-900 hover:text-blue-700 text-2xl font-bold mb-6 text-center capitalize transition-colors">
+              className="md:text-2xl font-bold text-[#10C8B8] hover:text-[#FFD700] text-2xl font-bold mb-6 text-center capitalize transition-colors">
               {categoryData.name}
             </button>
             <div className="relative">
               {/* Left Button */}
               <button
                 onClick={() => scroll(categoryId, "left")}
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-100 shadow p-2 rounded-full hover:bg-gray-200 border border-4 border-white"
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-100 text-[#10C8B8] shadow p-2 rounded-full hover:bg-gray-200 border border-4 border-white"
               >
                 <ChevronLeft />
               </button>
@@ -86,7 +85,7 @@ const ProductsOnHomePage = () => {
               {/* Right Button */}
               <button
                 onClick={() => scroll(categoryId, "right")}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-100 shadow p-2 rounded-full hover:bg-gray-200 border border-4 border-white"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-100 text-[#10C8B8] shadow p-2 rounded-full hover:bg-gray-200 border border-4 border-white"
               >
                 <ChevronRight />
               </button>

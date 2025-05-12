@@ -56,7 +56,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 value={formData.storeName}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
               />
             </div>
 
@@ -69,7 +69,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 value={formData.businessType}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
               />
             </div>
 
@@ -83,7 +83,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 required
                 rows="2"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
               />
             </div>
 
@@ -97,7 +97,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 value={formData.storeTagline}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
               />
             </div>
 
@@ -111,7 +111,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
               />
             </div>
 
@@ -125,7 +125,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 value={formData.bankName}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
               />
             </div>
 
@@ -139,7 +139,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 value={formData.bankAccountNumber}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
               />
             </div>
 
@@ -153,7 +153,7 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 accept="image/*"
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
               />
             </div>
           </div>
@@ -168,9 +168,9 @@ const BecomeSellerModal = ({ isOpen, onClose }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800"
+              className="px-4 py-2 bg-[#10C8B8] text-white rounded-md hover:bg-[#10C8B8]"
             >
-              Submit Application
+              Submit
             </button>
           </div>
         </form>

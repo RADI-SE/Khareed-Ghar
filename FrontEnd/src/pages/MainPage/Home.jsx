@@ -55,7 +55,7 @@ const Home = () => {
   return (
     <div className="w-full mt-2 px-3 md:px-16 lg:px-24">
       <div className="container mx-auto py-4 flex flex-col md:flex-row space-x-2">
-        <div className="relative w-full mt-8 md:mt-0 h-96 overflow-hidden">
+        <div className="relative w-full mt-8 md:mt-0 h-[300px] overflow-hidden">
           {/* Carousel items */}
           {carouselImages.length > 0 ? (
             carouselImages.map((item, index) => (
@@ -70,9 +70,9 @@ const Home = () => {
                   alt={item.title || `Slide ${index + 1}`}
                   className="h-80 w-full object-cover"
                 />
-                <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-2 w-full">
+                {/* <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-2 w-full">
                   <h3 className="text-lg font-bold">{item.title || `Slide ${index + 1}`}</h3>
-                </div>
+                </div> */}
               </div>
             ))
           ) : (

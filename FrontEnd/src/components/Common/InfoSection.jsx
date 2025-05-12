@@ -3,18 +3,18 @@ import { FaExchangeAlt, FaGavel, FaShoppingCart } from "react-icons/fa";
 const InfoSection = () => {
   const infoItems = [
     {
-      icon: <FaShoppingCart className="text-3xl text-blue-900" />,
+      icon: <FaShoppingCart className="text-3xl text-[#FFD700]" />,
       title: "Buy-Sell",
       description: "Buy and Sell with ease, through our platform!",
     },
     {
-      icon: <FaGavel className="text-3xl text-blue-900" />,
+      icon: <FaGavel className="text-3xl text-[#FFD700]" />,
       title: "Auction",
       description:
         "Place your bid, compete for exclusive items, and win today!",
     },
     {
-      icon: <FaExchangeAlt className="text-3xl text-blue-900" />,
+      icon: <FaExchangeAlt className="text-3xl text-[#FFD700]" />,
       title: "Consignment Selling",
       description:
         "Sell your items through consignment, reach buyers, and earn profits!",
