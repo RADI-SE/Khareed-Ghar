@@ -10,7 +10,7 @@ import AuctionListPage from "./AuctionListPage";
 import AuctionDetail from "../components/Common/AuctionDetail";
 import BuyerProfile from "../components/Buyer/BuyerProfile";
 import SellerStore from "../components/seller/Product/SellerStore";
-
+import SearchResults from "../components/Common/SearchResults";
 export const HomeRoutes = ({ setOrder, order }) => {
   return (
     <HomeLayout>
@@ -31,6 +31,7 @@ const HomeRoutesWrapper = ({ setOrder, order }) => {
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="collection/:id" element={<AllCategoryProducts />} />
         <Route path="store/:id" element={<SellerStore />} />
+        <Route path="search" element={<SearchResults />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

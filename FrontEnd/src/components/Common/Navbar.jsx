@@ -9,6 +9,7 @@ import { useFetchNotifications } from '../../hooks/buyer/Notifications/useFetchN
 import { useSellerService } from '../../services/seller/sellerServices'
 import BecomeSellerModal from '../Buyer/BecomeSellerModal';
 import { useProfileInfo } from "../../hooks/Users/useProfileInfo";
+import { useBuyerService } from "../../services/buyer/buyerServices";
 
 const Navbar = () => {
 
@@ -22,7 +23,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {updateBuyerNotification} = useSellerService();
-  const { data = [], isLoading, isError } = useFetchNotifications();
+  const { data = [] } = useFetchNotifications();
 
   // Sort notifications by creation date in descending order
   const sortedNotifications = [...data].sort((a, b) => 
@@ -48,6 +49,9 @@ const Navbar = () => {
     await updateBuyerNotification(id, read);
   };
 
+  const handleSearch = async (e) => {
+    navigate(`/search?q=${e.target.value}`);
+  };
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 md:px-6 py-4">
@@ -75,6 +79,7 @@ const Navbar = () => {
                 type="text"
                 placeholder="Search products..."
                 className="w-full py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => handleSearch(e)}
               />
               <button 
                 type="submit" 

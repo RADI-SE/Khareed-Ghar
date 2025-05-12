@@ -154,8 +154,20 @@ export const useBuyerService = create((set) => ({
       console.log("test-3")
       set({ errorMessage: error.message, isLoading: false });
     }
+  },
+  searchProduct: async (name) => {
+    try {
+      console.log("test-1")
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.get(`http://localhost:5000/api/search?name=${name}`);
+      console.log("test-2")
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      console.log("test-3")
+      set({ errorMessage: error.message, isLoading: false });
+    }
   }
 }));
-
 
  
