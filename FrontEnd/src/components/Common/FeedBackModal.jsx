@@ -1,4 +1,33 @@
-<form onSubmit={handleSubmit} className="p-4 flex flex-col h-full">
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { FaStar, FaRegStar } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+const FeedBackModal = ({ onClose, onSubmit }) => {
+  const productId = useParams();
+  const [formData, setFormData] = useState({
+    productId: productId,
+    rating: 0,
+    comment: '',
+  });
+
+  
+
+  const handleRatingClick = (value) => {
+    setFormData({ ...formData, rating: value });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+  <form onSubmit={handleSubmit} className="p-4 flex flex-col h-full">
   <div className="flex flex-col md:flex-row gap-4 flex-grow">
     <div className="w-full md:w-1/3">
       <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -47,3 +76,12 @@
     </button>
   </div>
 </form>
+  );
+};
+
+FeedBackModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+
+export default FeedBackModal;

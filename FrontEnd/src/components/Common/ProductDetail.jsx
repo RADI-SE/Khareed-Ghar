@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useFetchProductById } from '../../hooks/seller/useFetchProductsById';
 import { useAddToCart } from "../../hooks/buyer/cart/useAddToCart";
 import { useSellerService, useStoreService } from "../../services/seller/sellerServices";
-
+import { useBuyerService } from "../../services/buyer/buyerServices";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import FeedBackModal from "./FeedBackModal";
@@ -22,12 +22,11 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [similarProducts, setSimilarProducts] = useState([]);
-
   const [storeName, setStoreName] = useState('');
-
   const [showFeedBackModal, setShowFeedBackModal] = useState(false);
-
-  // Reset state and scroll to top when product changes
+  
+  const { addFeedback } = useBuyerService();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     setSelectedImage(0);
@@ -48,8 +47,7 @@ const ProductDetail = () => {
     };
     
     fetchStoreName();
-    
-    // Fetch similar products when product ID changes
+     
     const fetchSimilarProducts = async () => {
       try {
         const products = await getSimilarProducts(id);
@@ -64,9 +62,7 @@ const ProductDetail = () => {
       fetchSimilarProducts();
     }
   }, [id, getSimilarProducts, product, sellerStore]);
-console.log("Noumannnnnnnnnnnnnnnnnnnnnn", storeName?.sellerStore?.[0]?.storeName);
- 
-  // Convert single image to array if needed
+  
   const productImages = Array.isArray(product?.images) 
     ? product?.images 
     : product?.images ? [product.images] : [];
@@ -129,6 +125,11 @@ console.log("Noumannnnnnnnnnnnnnnnnnnnnn", storeName?.sellerStore?.[0]?.storeNam
       </div>
     );
   }
+
+  const handleSubmit = (data) => {
+    addFeedback(product._id, data.rating, data.comment);
+    setShowFeedBackModal(false);
+  };
 
   // Filter out the current product and ensure we have valid products
   const filteredSimilarProducts = similarProducts.filter(p => p._id !== id);
@@ -307,6 +308,7 @@ console.log("Noumannnnnnnnnnnnnnnnnnnnnn", storeName?.sellerStore?.[0]?.storeNam
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+
                 </svg>
               </button>
             </div>
@@ -314,9 +316,10 @@ console.log("Noumannnnnnnnnnnnnnnnnnnnnn", storeName?.sellerStore?.[0]?.storeNam
         )}
       </div>
       <FeedBackModal 
-                      isOpen={showFeedBackModal} 
-                      onClose={() => setShowFeedBackModal(false)} 
-                     />
+        isOpen={showFeedBackModal} 
+         onClose={() => setShowFeedBackModal(false)} 
+         onSubmit={handleSubmit}
+         />
     </div>
   );
 }

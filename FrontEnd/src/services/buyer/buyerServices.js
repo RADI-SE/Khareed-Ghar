@@ -169,7 +169,21 @@ export const useBuyerService = create((set) => ({
       console.log("test-3")
       set({ errorMessage: error.message, isLoading: false });
     }
+  },
+  addFeedback: async (productId, rating, comment) => {
+    try {
+      console.log("test-1feedback")
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.post(`http://localhost:5000/api/add-feedback`, { productId, rating, comment });
+      console.log("test-2feedback")
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      console.log("test-3feedback")
+      set({ errorMessage: error.message, isLoading: false });
+    }
   }
+  
 }));
 
  

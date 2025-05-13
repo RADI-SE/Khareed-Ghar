@@ -2,7 +2,7 @@ import express from 'express';
 import { addFeedback, updateFeedback, deleteFeedback, getFeedbackByProductId } from '../controller/feedback.controller.js';
 const router = express.Router();
 
-router.post("/", addFeedback);
+router.post("/add-feedback", addFeedback);
 
 router.put("/:id", updateFeedback);
 

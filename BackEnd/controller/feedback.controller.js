@@ -1,14 +1,14 @@
 import { Feedback } from '../model/feedback.model.js';
 import jwt from 'jsonwebtoken';
 export const addFeedback = async (req, res) => {
-    try {
+    try {  
         const { productId, rating, comment } = req.body;
         const token  = req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
+        const userId = decoded.userId;
         const feedback = new Feedback({ productId, userId, rating, comment });
         await feedback.save();
-        res.status(201).json(feedback);
+        res.status(201).json({ message: "Feedback added successfully", feedback });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
