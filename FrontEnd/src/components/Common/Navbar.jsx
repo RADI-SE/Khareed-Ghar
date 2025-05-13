@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaSearch, FaShoppingCart, FaUser, FaBell, FaBars, FaTimes, FaCheck } from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaBell, FaBars, FaTimes } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
@@ -9,7 +9,7 @@ import { useFetchNotifications } from '../../hooks/buyer/Notifications/useFetchN
 import { useSellerService } from '../../services/seller/sellerServices'
 import BecomeSellerModal from '../Buyer/BecomeSellerModal';
 import { useProfileInfo } from "../../hooks/Users/useProfileInfo";
-import { useBuyerService } from "../../services/buyer/buyerServices";
+
 
 const Navbar = () => {
 
@@ -26,7 +26,7 @@ const Navbar = () => {
   const { data = [] } = useFetchNotifications();
   const [type, setType] = useState("product");
 
-  // Sort notifications by creation date in descending order
+  const [search, setSearch] = useState("");
   const sortedNotifications = [...data].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
@@ -50,8 +50,8 @@ const Navbar = () => {
     await updateBuyerNotification(id, read);
   };
 
-  const handleSearch = async (e) => {
-    navigate(`/search?q=${e.target.value}&type=${type}`);
+  const handleSearch = async () => {
+    navigate(`/search?q=${search}&type=${type}`);
   };
 
   return (
@@ -84,11 +84,13 @@ const Navbar = () => {
                 type="text"
                 placeholder="Search products..."
                 className="w-full py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10C8B8] focus:border-transparent"
-                onChange={(e) => handleSearch(e)}
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
                 <select className="text-gray-500 text-sm bg-transparent outline-none"
                  onChange={(e) => setType(e.target.value)}
+                 value={type}
                 >
                   <option value="product">Product</option>
                   <option value="auction">Auction</option>
@@ -98,6 +100,7 @@ const Navbar = () => {
               <button 
                 type="submit" 
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#10C8B8]"
+                onClick={handleSearch}
               >
                 <FaSearch className="w-5 h-5" />
               </button>
