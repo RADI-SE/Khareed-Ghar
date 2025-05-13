@@ -35,9 +35,9 @@ function ResetPassword() {
           value={confirmPassword}
           onChange={handleConfirmPasswordChange}
         />
-        <button type="submit">Reset Password</button>
+        <button type="submit" className="w-full p-2 rounded text-white bg-[#10C8B8] hover:bg-[#0eb2a6]">Reset Password</button>
       </form>
-      <Link to="/auth/signin" className="btn btn-primary mt-3">
+      <Link to="/auth/signin" className="text-[#FFD700] no-underline">
         Go to Login
       </Link>
     </div>

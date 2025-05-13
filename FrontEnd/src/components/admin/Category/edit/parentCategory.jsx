@@ -72,8 +72,8 @@ export const EditCategoriesForm = () => {
       </div>
       {CategoryId && (
         <form onSubmit={handleSubmit}>
-          <h3>Edit Category</h3>
-          <div className="form-group">
+          <h5 className="p-2">Edit Category</h5>
+          <div className="form-group pt-2">
             <label>Category Name</label>
             <input
               type="text"
@@ -95,7 +95,7 @@ export const EditCategoriesForm = () => {
           {errorMessage && (
             <p className="alert alert-danger">{errorMessage}</p>
           )}
-          <button type="submit" disabled={isUpdating} className="bg-[#10C8B8] py-2 px-3 rounded">
+          <button type="submit" disabled={isUpdating} className="bg-[#10C8B8] hover:bg-[#0eb2a6] py-2 px-3 rounded text-white">
             {isUpdating ? "Updating..." : "Submit"}
           </button>
         </form>

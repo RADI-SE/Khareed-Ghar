@@ -66,6 +66,7 @@ export const AddSubCategoriesForm = () => {
             <select
               value={CategoryId}
               onChange={(e) => setParentCategoryId(e.target.value)}
+              className="w-full border p-2 mt-2 mr-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
             >
               <option value="">Select parent category</option>
               {categories.map((category) => (
@@ -83,6 +84,7 @@ export const AddSubCategoriesForm = () => {
             value={name}
             onChange={(e) => setSubCategoryName(e.target.value)}
             placeholder="Enter subcategory name"
+            className="w-full border p-2 mt-2 mr-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
           />
         </div>
         <div className="form-group">
@@ -91,11 +93,16 @@ export const AddSubCategoriesForm = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter subcategory description"
+            className="w-full border p-2 mt-2 mr-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
           />
         </div>
 
         
-        <button type="submit" disabled={isCreating}>
+        <button
+        type="submit"
+        disabled={isCreating}
+        className={`w-full p-2 rounded bg-[#10C8B8] hover:bg-[#0eb2a6] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}>
+        
           {isCreating ? "Adding..." : "Submit"}
         </button>
       </form>

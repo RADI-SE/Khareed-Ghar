@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "../style.css"; 
- import { AddSubCategoriesForm } from "./chiledCategory";
+import { AddSubCategoriesForm } from "./chiledCategory";
 import { AddCategoryForm } from "./parentCategory";
+
 function AddCategory() {
   const [currentView, setCurrentView] = useState("addCategory"); 
   return (

@@ -98,7 +98,7 @@ const User = ({ role }) => {
                         <td className="px-6 py-2">{email}</td>
                         <td className="px-6 py-2">
                           <span
-                            className={`badge ${getStatusBadgeClass(role)}`}
+                            className={`badge ${getStatusBadgeClass(role)} w-[80px] py-2 text-lg`}
                             style={
                               role === "buyer"
                                 ? { color: "#fff", backgroundColor: "#1A2B49" }

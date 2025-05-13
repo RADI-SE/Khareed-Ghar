@@ -49,7 +49,7 @@ const UserForm = ({ user, onSubmit }) => {
           <option value="moderator">Moderator</option>
         </Form.Select>
       </Form.Group>
-      <Button variant="primary" type="submit">
+      <Button type="submit" className="bg-[#10C8B8]">
         Save Changes
       </Button>
     </Form>

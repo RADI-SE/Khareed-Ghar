@@ -297,7 +297,7 @@ const Navbar = () => {
                 {!isAuthenticated ? (
                   <button
                     onClick={handleLogin}
-                    className="px-6 py-2 bg-[#10C8B8] text-white rounded-lg hover:bg-[#10C8B8] transition-colors"
+                    className="px-6 py-2 bg-[#10C8B8] text-white rounded-lg hover:bg-[#0eb2a6] transition-colors"
                   >
                     Login | Register
                   </button>

@@ -67,7 +67,7 @@ export const Del_P = () => {
           id="category-select"
           value={selectedCategory}
           onChange={handleCategoryChange}
-          className="form-control"
+          className="py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10C8B8] focus:border-transparent"
         >
           <option value="">-- Select a Category --</option>
           {categories.map((cat) => (

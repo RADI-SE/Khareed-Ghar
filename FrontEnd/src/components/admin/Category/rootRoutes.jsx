@@ -3,7 +3,6 @@ import AddCategory from './create/AddCategory';
 import EditCategory from './edit/EditCategory';
 import DeleteCategory from './delete/DeleteCategory';
 import DetailedProductView from './dashboard/view';
-import './style.css';
 
 function CategoryManagement() {
   const [searchTerm, setSearchTerm] = useState('');

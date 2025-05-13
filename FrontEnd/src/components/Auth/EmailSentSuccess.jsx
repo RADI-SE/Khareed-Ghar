@@ -7,7 +7,7 @@ function EmailSentSuccess() {
       <p className="auth-subtitle">
         Please check your email for the verification code.
       </p>
-      <Link to="/auth/signin" className="btn btn-primary mt-3">
+      <Link to="/auth/signin" className="text-[#FFD700] no-underline">
         Go to Login
       </Link>
     </div>

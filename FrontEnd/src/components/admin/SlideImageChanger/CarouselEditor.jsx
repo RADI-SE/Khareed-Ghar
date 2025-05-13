@@ -71,7 +71,7 @@ const CarouselEditor = () => {
           placeholder="Enter title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 mr-2 focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
+          className="border p-2 h-[47px] mr-2 focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
           required
         />
         <input

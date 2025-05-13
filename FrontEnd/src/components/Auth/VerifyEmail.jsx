@@ -91,7 +91,7 @@ function VerifyEmail() {
 
           <button
             type="submit"
-            className="btn btn-primary w-100"
+            className="w-full p-2 rounded text-white bg-[#10C8B8] hover:bg-[#0eb2a6]"
             disabled={verifying}
           >
             {verifying ? "Verifying..." : "Verify"}
@@ -99,7 +99,7 @@ function VerifyEmail() {
           <p className="text-center mt-3">
             Didn't receive the code?{" "}
             <span
-              className="text-link"
+              className="text-[#FFD700] no-underline"
               style={{ cursor: "pointer" }}
               onClick={handleResendCode}
               disabled={resending}

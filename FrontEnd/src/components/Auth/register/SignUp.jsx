@@ -165,14 +165,14 @@ return (
               <div className="form-check mt-3">
                 <input
                   type="checkbox"
-                  className="form-check-input"
+                  className="form-check-input bg-green-500 text-green-500"
                   id="termsCheckbox"
                   checked={isAgreeToTerms}
                   onChange={(e) => setAgreeToTerms(e.target.checked)}
                 />
                 <label className="form-check-label" htmlFor="termsCheckbox">
                   I agree to the{" "}
-                  <Link to="/auth/terms" className="text-link">
+                  <Link to="/auth/terms" className="text-[#FFD700] no-underline">
                     Terms and Conditions
                   </Link>
                 </label>
@@ -275,7 +275,7 @@ return (
                         value={sellerDetails.bankAccountNumber}
                         onChange={handleChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
                       />
                     </div>
 
@@ -284,7 +284,7 @@ return (
 
               <button
                 type="submit"
-                className="btn btn-primary w-100 mt-3"
+                className="border p-2 w-full rounded mr-2 bg-[#10C8B8] hover:bg-[#0eb2a6] text-white"
                 disabled={isCreating}
               >
                 {isCreating ? "Loading..." : "Sign Up"}
@@ -292,7 +292,7 @@ return (
 
               <p className="text-center mt-3">
                 Already have an account?{" "}
-                <Link to="/auth/signin" className="text-link">
+                <Link to="/auth/signin" className="text-[#FFD700] no-underline">
                   Login
                 </Link>
               </p>
@@ -301,7 +301,7 @@ return (
         </div>
 
         {/* Right: Info Section */}
-        <div className="col-12 col-md-6 p-4 p-md-5 bg-light d-flex flex-column justify-content-center">
+        <div className="col-12 col-md-6 p-4 p-md-5 bg-light d-flex flex-column justify-content-center d-none d-md-block">
           <div>
             <h3 className="fw-bold mb-4">Join Our Auction Platform Where Sellers Meet Buyers in a Thriving Marketplace.</h3>
             <p className="text-muted">

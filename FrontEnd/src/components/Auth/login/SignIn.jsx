@@ -55,7 +55,7 @@ function SignIn() {
       case "seller":
         return <Navigate to="/seller" />;
       case "buyer":
-        return <Navigate to="/buyer" />;
+        return <Navigate to="/" />;
    
     }
   }
@@ -76,17 +76,19 @@ return (
                 type="email"
                 placeholder="Email"
                 value={email}
+                className="p-2 h-[47px] mr-2 focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
                 onChange={(e) => setEmail(e.target.value)}
               />
               <InputField
                 type="password"
                 placeholder="Password"
                 value={password}
+                className="p-2 h-[47px] mr-2 focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
                 onChange={(e) => setPassword(e.target.value)}
               />
 
               <div className="text-end mb-3">
-                <Link to="/auth/forgot-password" className="text-link">
+                <Link to="/auth/forgot-password" className="text-[#FFD700] no-underline">
                   Forgot your password?
                 </Link>
               </div>
@@ -97,7 +99,7 @@ return (
 
               <button
                 type="submit"
-                className="btn btn-primary w-100"
+                className="border p-2 w-full rounded mr-2 bg-[#10C8B8] hover:bg-[#0eb2a6] text-white"
                 disabled={isSigning}
               >
                 {isSigning ? "Loading..." : "Sign In"}
@@ -105,7 +107,7 @@ return (
 
               <p className="text-center mt-3">
                 Don't have an account?{" "}
-                <Link to="/auth/signup" className="text-link">
+                <Link to="/auth/signup" className="text-[#FFD700] no-underline">
                   Create account
                 </Link>
               </p>
@@ -114,7 +116,7 @@ return (
         </div>
 
         {/* Right: Info Section */}
-        <div className="col-12 col-md-6 p-5 bg-light d-flex flex-column justify-content-center">
+        <div className="col-12 col-md-6 p-5 bg-light d-flex flex-column justify-content-center d-none d-md-block">
           <div>
             <h3 className="fw-bold mb-3">Auction, Seller and Buyer</h3>
             <p className="text-muted">
