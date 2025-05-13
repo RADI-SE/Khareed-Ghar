@@ -4,9 +4,9 @@ const router = express.Router();
 
 router.post("/add-feedback", addFeedback);
 
-router.put("/:id", updateFeedback);
+router.put("/update-feedback/:id", updateFeedback);
 
-router.delete("/:id", deleteFeedback);
+router.delete("/delete-feedback/:id", deleteFeedback);
 
 router.get("/get-product-feedback/:id", getFeedBacksByProductId);
 

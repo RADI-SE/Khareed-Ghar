@@ -195,7 +195,27 @@ export const useBuyerService = create((set) => ({
       console.log("test-3 get feedback")
       set({ errorMessage: error.message, isLoading: false });
     }
-  }
+  },
+  updateFeedback: async (id, rating, comment) => {
+    try {
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.put(`http://localhost:5000/api/update-feedback/${id}`, { rating, comment });
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  },
+  deleteFeedback: async (id) => {
+    try {
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.delete(`http://localhost:5000/api/delete-feedback/${id}`);
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  },
   
 
 }));

@@ -82,7 +82,8 @@ export const updateFeedback = async (req, res) => {
         const { rating, comment } = req.body;
         const token  = req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
+        const userId = decoded.userId;
+        console.log("test-1 update feedback")
         const feedback = await Feedback.findByIdAndUpdate(id, { rating, comment, userId }, { new: true });
         res.status(200).json(feedback);
     } catch (error) {
@@ -93,6 +94,13 @@ export const updateFeedback = async (req, res) => {
 export const deleteFeedback = async (req, res) => {
     try {
         const { id } = req.params;
+        const token  = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        const feedback = await Feedback.findById(id);
+        if(userId !== feedback.userId){
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
         await Feedback.findByIdAndDelete(id);
         res.status(200).json({ message: 'Feedback deleted successfully' });
     } catch (error) {
