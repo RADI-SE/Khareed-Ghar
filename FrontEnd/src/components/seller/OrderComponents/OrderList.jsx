@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useFetchUserOrders } from "../../../hooks/admin/Orders/useFetchUserOrders";
+import OrderDetails from "../../admin/OrderComponents/OrderDetails";
 
 const OrderList = () => {
   const id = sessionStorage.getItem("id");
@@ -24,9 +25,8 @@ const OrderList = () => {
       <div className="border-t border-gray-200">
         <div className="overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-blue-950">
+            <thead className="bg-[#10C8B8]">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Total Amount</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Payment</th>
@@ -41,9 +41,6 @@ const OrderList = () => {
                   onClick={() => handleRowClick(order)}
                   className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order._id.substring(order._id.length - 6)}
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {order.user}
                   </td>

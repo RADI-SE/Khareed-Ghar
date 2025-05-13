@@ -129,6 +129,7 @@ const ProductDetail = () => {
   const handleSubmit = (data) => {
     addFeedback(product._id, data.rating, data.comment);
     setShowFeedBackModal(false);
+    console.log("Daata", data);
   };
 
   // Filter out the current product and ensure we have valid products
@@ -315,15 +316,11 @@ const ProductDetail = () => {
           </div>
         )}
       </div>
-      {
-        showFeedBackModal && (
-          <FeedBackModal 
-            isOpen={showFeedBackModal} 
-            onClose={() => setShowFeedBackModal(false)} 
-            onSubmit={handleSubmit}
-          />
-        )
-      }
+      <FeedBackModal 
+        isOpen={showFeedBackModal} 
+         onClose={() => setShowFeedBackModal(false)} 
+         onSubmit={handleSubmit}
+         />
     </div>
   );
 }

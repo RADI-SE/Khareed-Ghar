@@ -87,7 +87,7 @@ const ProductDetail = ({ selectedProduct }) => {
 
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-xl font-semibold text-gray-700">
-                Seller: <span className="text-gray-600">{selectedProduct?.seller.name || "No seller information available"}</span>
+                Seller: <span className="text-gray-600">{selectedProduct?.seller?.name || "My Product"}</span>
               </h3>
             </div>
           </div>

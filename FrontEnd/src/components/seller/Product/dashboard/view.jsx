@@ -13,6 +13,8 @@ const DetailedProductView = () => {
     isError: productsError,
   } = useFetchProductsByUserId(id);
 
+
+  console.log("Productsss View", products)
   const handleProductClick = (product) => {
     setSelectedProduct(product);
   };
@@ -48,7 +50,7 @@ const DetailedProductView = () => {
         <div className="bg-white shadow-lg rounded-xl overflow-hidden transition-all duration-300">
           <div className="p-6">
           <button
-            className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-gray-700 bg-white hover:text-[#FFD700] border border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FFD700] transition-colors duration-200"
             onClick={handleBackClick}
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

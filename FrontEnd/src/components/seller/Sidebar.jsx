@@ -23,7 +23,7 @@ const Sidebar = () => {
     <div className="relative z-50">
       {/* Mobile Toggle Button */}
       <button 
-        className="fixed top-4 left-4 z-50 p-2 rounded-md bg-blue-950 text-white lg:hidden"
+        className="fixed top-4 left-4 z-50 p-2 rounded-md bg-[#10C8B8] text-white lg:hidden"
         onClick={toggleSidebar}
       >
         {isCollapsed ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -39,9 +39,9 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <nav
-        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-all duration-300 transform ${
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-all duration-300 transform shadow-lg ${
           isCollapsed ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 bg-blue-950`}
+        } lg:translate-x-0 bg-[#10C8B8]`}
       >
         <div className="h-full pr-3 py-4 overflow-y-auto">
           <ul className="space-y-4 font-medium">
@@ -53,8 +53,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-sm hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white rounded-sm hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/seller/dashboard"
@@ -67,8 +67,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/seller/orders"
@@ -80,8 +80,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/seller/products"

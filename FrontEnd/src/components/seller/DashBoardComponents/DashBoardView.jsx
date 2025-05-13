@@ -1,81 +1,78 @@
-import React, { useState } from "react";
-import dollar from "./icons/dollor.png";
-import reviews from "./icons/reviews.png";
-import sales from "./icons/sales.png";
-import data from "../../../mockJsons/orderData.json";
+import { useNavigate } from "react-router-dom";
+import { useFetchUserOrders } from "../../../hooks/admin/Orders/useFetchUserOrders";
 
-export const DashBoardView = () => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const rowsPerPage = 5;
 
-  // Calculate the range of rows to display based on the current page
-  const startIndex = currentPage * rowsPerPage;
-  const currentData = data.slice(startIndex, startIndex + rowsPerPage);
+const DashBoardView = () => {
+  const id = sessionStorage.getItem("id");
+  console.log("User ID:", id);
+  const navigate = useNavigate();
+  const { data = [] } = useFetchUserOrders();
 
-  const handleNext = () => {
-    if ((currentPage + 1) * rowsPerPage < data.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  // 67322fc629f3c194f356342a
 
-  const handlePrevious = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
+  // Filter orders that belong to the specific user
+  const userOrders = data.filter((order) => order.user === id);
+
+  const handleRowClick = (order) => {
+    navigate("order-details", { state: { order } });
   };
 
   return (
-    <div className="">
-
-      <div className="relative overflow-x-auto shadow-lg">
-        <h3>Recent Sales</h3>
-        <table className="w-full mt-2 text-sm text-left rtl:text-right text-black rounded-lg">
-          <thead className="text-xs text-white uppercase bg-blue-950">
-            <tr>
-              <th className="px-6 py-4">ID</th>
-              <th className="px-6 py-4">Item</th>
-              <th className="px-6 py-4">Customer</th>
-              <th className="px-6 py-4">Payment Method</th>
-              <th className="px-6 py-4">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentData.map((item) => (
-              <tr key={item.id} className="bg-white-500 border-b hover:bg-gray-300">
-                <td className="px-6 py-4">{item.id}</td>
-                <td className="px-6 py-4">
-                  <img
-                    className="order-item-img"
-                    src={item.item}
-                    alt={`Product ${item.item}`}
-                    width="50"
-                    height="50"
-                  />
-                </td>
-                <td className="px-6 py-4">{item.first_name}</td>
-                <td className="px-6 py-4">{item.payment}</td>
-                <td className="px-6 py-4">{item.price}</td>
+    <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="mb-6">
+        <h4 className="text-2xl font-semibold text-gray-800">Delievered Orders</h4>
+      </div>
+      <div className="border-t border-gray-200">
+        <div className="overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-[#10C8B8]">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Total Amount</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Payment</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Pagination Buttons */}
-        <div className="h-20 p-3 flex flex-wrap items-center justify-between">
-          <button onClick={handlePrevious} disabled={currentPage === 0} className="text-white bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-            Previous
-          </button>
-          <span>
-            Page {currentPage + 1}
-          </span>
-          <button
-            onClick={handleNext}
-            disabled={(currentPage + 1) * rowsPerPage >= data.length}  className="text-white bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-          >
-            Next
-          </button>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {userOrders.map((order) => (
+                <tr
+                  key={order._id}
+                  className=""
+                >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {order.user}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    ${order.totalAmount}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {order.paymentMethod}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 py-1 text-xs rounded-full ${
+                      order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                      order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
+                      order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {userOrders.length === 0 && (
+            <div className="p-4 text-gray-500 text-center">No orders found for this user.</div>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
+export default DashBoardView;

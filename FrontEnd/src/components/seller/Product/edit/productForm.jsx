@@ -139,7 +139,7 @@ export const ProductForm = ({ product = {}, onSubmit }) => {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" className="bg-[#10C8B8] hover:bg-[#0eb2a6]">
         Save Changes
       </Button>
     </Form>
