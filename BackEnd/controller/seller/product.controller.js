@@ -358,7 +358,6 @@ Return ONLY the product Ids, one per line, with no bullet points, no extra text,
     return res.status(200).json({ success: true, similarProducts });
 
   } catch (error) {
-    console.error("Error getting similar products:", error.message);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

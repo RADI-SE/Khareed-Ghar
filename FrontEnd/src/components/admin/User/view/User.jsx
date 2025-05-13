@@ -66,7 +66,7 @@ const User = ({ role }) => {
               <div>
                 <input
                   type="text"
-                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                  className="border p-2 mr-2 focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
                   placeholder="Search by name or email"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}  // Handle search term change
@@ -76,9 +76,8 @@ const User = ({ role }) => {
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                <thead className="text-xs text-white uppercase bg-blue-950">
+                <thead className="text-xs text-white uppercase bg-[#10C8B8]">
                   <tr>
-                    <th className="px-6 py-3">ID</th>
                     <th className="px-6 py-3">First-Name</th>
                     <th className="px-6 py-3">Email</th>
                     <th className="px-6 py-3">Role</th>
@@ -91,9 +90,8 @@ const User = ({ role }) => {
                     const { _id, id, name, email, role, lastLogin } = user;
                     return (
                       <tr key={_id} className="bg-white-500 border-b hover:bg-gray-300">
-                        <td className="px-6 py-2">{id || _id}</td>
                         <td>
-                          <Link to={`/admin/users/user/${_id}`} className="px-6 py-2">
+                          <Link to={`/admin/users/user/${_id}`} className="px-6 py-2 no-underline text-[#10C8B8]">
                             {name}
                           </Link>
                         </td>

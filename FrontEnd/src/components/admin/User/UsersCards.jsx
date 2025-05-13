@@ -6,7 +6,7 @@ const UserCards = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Moderators Card */}
-        <Link to="/admin/users/mod" className="transform transition-all duration-300 hover:scale-105">
+        <Link to="/admin/users/mod" className="transform transition-all duration-300 hover:scale-105 no-underline">
           <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl shadow-lg overflow-hidden">
             <div className="p-6">
               <div className="flex items-center justify-center mb-4">
@@ -23,7 +23,7 @@ const UserCards = () => {
         </Link>
 
         {/* Sellers Card */}
-        <Link to="/admin/users/seller" className="transform transition-all duration-300 hover:scale-105">
+        <Link to="/admin/users/seller" className="transform transition-all duration-300 hover:scale-105 no-underline">
           <div className="bg-gradient-to-br from-green-400 to-green-600 rounded-xl shadow-lg overflow-hidden">
             <div className="p-6">
               <div className="flex items-center justify-center mb-4">
@@ -40,7 +40,7 @@ const UserCards = () => {
         </Link>
 
         {/* Buyers Card */}
-        <Link to="/admin/users/buyer" className="transform transition-all duration-300 hover:scale-105">
+        <Link to="/admin/users/buyer" className="transform transition-all duration-300 hover:scale-105 no-underline">
           <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl shadow-lg overflow-hidden">
             <div className="p-6">
               <div className="flex items-center justify-center mb-4">

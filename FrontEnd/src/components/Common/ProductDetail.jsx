@@ -7,6 +7,7 @@ import { useBuyerService } from "../../services/buyer/buyerServices";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import FeedBackModal from "./FeedBackModal";
+import { useFetchFeedbacks } from "../../hooks/feedback/useFetchFeedbacks";
 
 const ProductDetail = () => {
   const userid = sessionStorage.getItem("id");
@@ -24,8 +25,10 @@ const ProductDetail = () => {
   const [similarProducts, setSimilarProducts] = useState([]);
   const [storeName, setStoreName] = useState('');
   const [showFeedBackModal, setShowFeedBackModal] = useState(false);
-  
+  const { data:feedbacks, isLoading:loadingFeedbacks } = useFetchFeedbacks(id);
+   console.log("feedbackssss", feedbacks);
   const { addFeedback } = useBuyerService();
+
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -134,6 +137,8 @@ const ProductDetail = () => {
 
   // Filter out the current product and ensure we have valid products
   const filteredSimilarProducts = similarProducts.filter(p => p._id !== id);
+
+  console.log("Feedback", feedbacks);
 
   return (
     <div className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12 px-4 sm:px-6 lg:px-8">
@@ -315,6 +320,39 @@ const ProductDetail = () => {
             </div>
           </div>
         )}
+
+                  {/* Product Reviews Section */}
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 mt-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+              Product Reviews
+            </h2>
+
+            {loadingFeedbacks ? (
+              <p className="text-gray-500">Loading reviews...</p>
+            ) : feedbacks && feedbacks.length > 0 ? (
+              <div className="space-y-4">
+                {feedbacks.map((fb, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-center mb-2">
+                      <div className="text-yellow-500 text-sm font-bold mr-2">
+                        {Array.from({ length: fb.rating }).map((_, i) => (
+                          <span key={i}>★</span>
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-500">by {fb?.user?.name || 'Anonymous'}</span>
+                    </div>
+                    <p className="text-gray-700">{fb.comment}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No reviews yet.</p>
+            )}
+
+          </div>
+
+
+
       </div>
       <FeedBackModal 
         isOpen={showFeedBackModal} 

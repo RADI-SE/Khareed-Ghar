@@ -9,6 +9,7 @@ function EditCategory() {
     <div className="add-category-form">
       <div className="tabs">
         <button
+        className="bg-[#10C8B8]"
           onClick={() => {
             setCurrentView("EditCategoriesForm");  
           }}
@@ -16,6 +17,7 @@ function EditCategory() {
           Edit Category
         </button>
         <button
+        className="bg-[#10C8B8]"
           onClick={() => {
             setCurrentView("EditSubCategoriesForm");
           }}

@@ -28,12 +28,12 @@ function RegionManagement() {
   return (
     <div className="">
       <nav className="">
-        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-blue-950 rounded-lg">
+        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-[#10C8B8] rounded-lg">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className="bg-blue-900 text-white w-40 h-10 rounded-lg text-white rounded-lg"
+              className="bg-[#0eb2a6] text-white w-40 h-10 rounded-lg text-white rounded-lg"
             >
               {tab.label}
             </button>

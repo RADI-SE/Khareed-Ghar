@@ -71,19 +71,19 @@ const CarouselEditor = () => {
           placeholder="Enter title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 mr-2"
+          className="border p-2 mr-2 focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
           required
         />
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setImage(e.target.files[0])}
-          className="border p-2 mr-2"
+          className="border p-2 mr-2 focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
           required
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-[#10C8B8] text-white px-4 py-2 rounded hover:bg-[#0eb2a6]"
         >
           Upload
         </button>

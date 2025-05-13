@@ -37,12 +37,12 @@ function CategoryManagement() {
   return (
     <div>
       <nav className="">
-        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-blue-950 rounded-lg">
+        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-[#10C8B8] rounded-lg">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={currentView === tab.id ? 'bg-blue-900 text-white w-30 p-2 h-10 rounded-lg' : 'text-white rounded-lg'}
+              className={currentView === tab.id ? 'bg-[#0eb2a6] text-white w-30 p-2 h-10 rounded-lg' : 'text-white rounded-lg'}
             >
               {tab.label}
             </button>
@@ -56,7 +56,7 @@ function CategoryManagement() {
             onChange={(e) => {
               setSearchTerm(e.target.value);
             }}
-            className="block w-full p-4 ps-10 text-sm h-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
+            className="border p-2 mt-2 mr-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
           />
         )}
       </nav>

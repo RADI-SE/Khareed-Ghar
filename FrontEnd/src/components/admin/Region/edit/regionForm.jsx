@@ -48,7 +48,10 @@ export const RegionForm = ({ region: region = {}, onSubmit }) => {
       </Form.Group>
 
       {/* Save Button */}
-      <Button variant="primary" type="submit">
+      <Button
+        type="submit"
+        className="px-4 py-2 text-white bg-[#10C8B8] hover:bg-[#0eb2a6] rounded-lg"
+      >
         Save Changes
       </Button>
     </Form>

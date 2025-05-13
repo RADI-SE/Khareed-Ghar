@@ -7,7 +7,7 @@ import axios from "axios";
 export const getFeedBacksByProductId = async (req, res) => {
     try {
       const { id } = req.params;
-  
+
       const product = await Product.findById(id);
       if (!product) {
         return res.status(404).json({ success: false, message: "Product not found." });
@@ -42,9 +42,11 @@ export const getFeedBacksByProductId = async (req, res) => {
         },
         { headers: { "Content-Type": "application/json" } }
       );
-   
+      console.log("Ai Response", aiResponse);
       const aiText = aiResponse?.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-   
+      
+      console.log("Test 6", aiText);
+
       const relevantIds = aiText
         .split("\n")
         .map(line => line.trim())

@@ -16,7 +16,7 @@ const OrderList = () => {
       <div className="border-t border-gray-200">
         <div className="overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-blue-950">
+            <thead className="bg-[#10C8B8]">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>

@@ -84,9 +84,8 @@ export const DashBoardView = () => {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-blue-950">
+            <thead className="bg-[#10C8B8]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Total Amount</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Payment</th>
@@ -102,10 +101,7 @@ export const DashBoardView = () => {
                   className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order._id.substring(order._id.length - 6)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order.user}
+                    {order?.user}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${order.totalAmount}
@@ -141,7 +137,7 @@ export const DashBoardView = () => {
               className={`px-4 py-2 text-sm font-medium rounded-lg ${
                 currentPage === 0
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  : 'bg-blue-950 text-white hover:bg-blue-900'
+                  : 'bg-[#10C8B8] text-white hover:bg-blue-900'
               }`}
             >
               Previous
@@ -155,7 +151,7 @@ export const DashBoardView = () => {
               className={`px-4 py-2 text-sm font-medium rounded-lg ${
                 (currentPage + 1) * rowsPerPage >= data.length
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  : 'bg-blue-950 text-white hover:bg-blue-900'
+                  : 'bg-[#10C8B8] text-white hover:bg-blue-900'
               }`}
             >
               Next

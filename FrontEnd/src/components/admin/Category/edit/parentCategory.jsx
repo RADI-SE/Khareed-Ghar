@@ -59,7 +59,9 @@ export const EditCategoriesForm = () => {
     <div className="add-category-form">
       <div className="form-group">
         <label>Select Category</label>
-        <select value={CategoryId} onChange={handleCategoryChange}>
+        <select value={CategoryId} onChange={handleCategoryChange}
+        className="py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10C8B8] focus:border-transparent"
+        >
           <option value="">Select parent category</option>
           {categories.map((category) => (
             <option key={category._id} value={category._id}>
@@ -76,6 +78,7 @@ export const EditCategoriesForm = () => {
             <input
               type="text"
               value={CategoryName}
+              className="py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10C8B8] focus:border-transparent"
               onChange={(e) => setCategoryName(e.target.value)}
               placeholder="Enter category name"
             />
@@ -85,13 +88,14 @@ export const EditCategoriesForm = () => {
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              className="py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10C8B8] focus:border-transparent"
               placeholder="Enter category description"
             />
           </div>
           {errorMessage && (
             <p className="alert alert-danger">{errorMessage}</p>
           )}
-          <button type="submit" disabled={isUpdating}>
+          <button type="submit" disabled={isUpdating} className="bg-[#10C8B8] py-2 px-3 rounded">
             {isUpdating ? "Updating..." : "Submit"}
           </button>
         </form>

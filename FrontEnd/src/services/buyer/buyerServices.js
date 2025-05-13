@@ -185,10 +185,10 @@ export const useBuyerService = create((set) => ({
   },
   getProductFeedback: async (id) => {
     try {
-      console.log("test-1 get feedback")
+      console.log("test-1 get feedback", id)
       set({ isLoading: true, errorMessage: null });
       const response = await axios.get(`http://localhost:5000/api/get-product-feedback/${id}`);
-      console.log("test-2 get feedback")
+      console.log("test-2 get feedback", response)
       set({ isLoading: false });
       return response.data;
     } catch (error) {

@@ -9,6 +9,7 @@ function DeleteCategory() {
     <div className="add-category-form">
       <div className="tabs">
         <button
+        className="bg-[#10C8B8]"
           onClick={() => {
             setCurrentView("Del_P");  
           }}
@@ -16,6 +17,7 @@ function DeleteCategory() {
           Delete Category
         </button>
         <button
+        className="bg-[#10C8B8]"
           onClick={() => {
             setCurrentView("Del_C");
           }}

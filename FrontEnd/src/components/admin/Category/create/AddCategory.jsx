@@ -8,16 +8,14 @@ function AddCategory() {
     <div className="add-category-form">
       <div className="tabs">
         <button
-          onClick={() => {
-            setCurrentView("AddCategoriesForm");  
-          }}
+          className="bg-[#10C8B8]"
+          onClick={() => {setCurrentView("AddCategoriesForm"); }}
         >
           Add Category
         </button>
         <button
-          onClick={() => {
-            setCurrentView("AddSubCategoriesForm");
-          }}
+          className="bg-[#10C8B8]"
+          onClick={() => {setCurrentView("AddSubCategoriesForm");}}
         >
           Add SubCategory
         </button>

@@ -42,7 +42,7 @@ export const AddForm = () => {
             value={state}
             onChange={(e) => setState(e.target.value)}
             placeholder="Enter State Name"
-            className="bg-white border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-white border border-gray-500 text-gray-900 text-lg rounded-lg focus:border-blue-500 block w-full p-2.5 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
           />
         </div>
 
@@ -52,17 +52,17 @@ export const AddForm = () => {
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder="Enter City Name" 
-            className="bg-white border border-gray-500 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+            className="bg-white border border-gray-500 text-gray-900 text-lg block w-full p-2.5 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
           />
         </div>
 
         {/* {Error && <div className="alert alert-danger">{Error}</div>} */}
 
         <div className="pt-4">
-          <button type="submit" disabled={isLoading} className="text-white bg-blue-950 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
+          <button type="submit" disabled={isLoading} className="text-white bg-[#10C8B8] hover:bg-[#0eb2a6] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
             {isLoading ? "Adding..." : "Save"}
           </button>
-          <button type="button" onClick={handleReset} disabled={isLoading} className="text-white bg-blue-950 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
+          <button type="button" onClick={handleReset} disabled={isLoading} className="text-white bg-[#10C8B8] hover:bg-[#0eb2a6] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
             {isLoading ? "Adding..." : "Reset"}
           </button>
         </div>
