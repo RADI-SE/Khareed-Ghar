@@ -63,10 +63,8 @@ const AuctionForm = ({ auction, onSubmit }) => {
 
       <div className="d-flex justify-content-end mt-4">
         <Button 
-          type="submit" 
-          variant="primary" 
-          size="lg"
-          className="px-4"
+          type="submit"  
+          className="px-4 py-2 text-white bg-[#10C8B8] hover:bg-[#0eb2a6] rounded-lg"
         >
           <i className="bi bi-clock me-2"></i>
           Update Auction Time

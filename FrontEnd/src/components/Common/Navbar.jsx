@@ -319,7 +319,8 @@ const Navbar = () => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="bg-[#10C8B8] hidden lg:block md:block z-0">
+      {user?.role !== 'seller' ? (
+      <div className="bg-[#10C8B8] lg:block md:block z-0">
       <div className="flex justify-between mx-auto px-4">
         <div className="mb-4 md:mb-0">
           <p className="text-xl font-bold">
@@ -334,6 +335,25 @@ const Navbar = () => {
         </button>
       </div>
     </div>
+    ) : 
+    (
+      <div className="bg-[#10C8B8] lg:block md:block z-0 collapse ">
+      <div className="flex justify-between mx-auto px-4">
+        <div className="mb-4 md:mb-0">
+          <p className="text-xl font-bold">
+            
+          </p>
+        </div>
+        <button
+          onClick={() => setShowSellerModal(true)}
+          className="bg-white text-[#10C8B8] hover:bg-indigo-100 font-medium py-2 px-6 rounded-full transition duration-300 ease-in-out transform border border-4 hover:scale-105"
+        >
+          BECOME A SELLER!
+        </button>
+      </div>
+    </div>
+    )
+    }
 
     <BecomeSellerModal 
       isOpen={showSellerModal} 

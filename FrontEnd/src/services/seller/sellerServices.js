@@ -211,6 +211,7 @@ export const useSellerService = create((set) => ({
   // getUserProducts
   getUserProducts: async (id) => {
     try {
+      console.log("test 178r", id);
        set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(`http://localhost:5000/api/getProductsByUserId/${id}`);
       

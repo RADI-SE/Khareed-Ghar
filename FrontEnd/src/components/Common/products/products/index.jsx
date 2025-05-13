@@ -17,7 +17,7 @@ const ProductTable = ({ products, refetch }) => {
   const [modalMessage, setModalMessage] = useState("");
   const token = sessionStorage.getItem("token");
 
-
+console.log(products);
   const paginatedProducts = products.slice(
     startIndex,
     startIndex + rowsPerPage

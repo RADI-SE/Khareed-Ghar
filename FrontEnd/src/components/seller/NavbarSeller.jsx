@@ -42,14 +42,14 @@ function NavbarSeller() {
           </div>
           <div className="flex items-center space-x-6">
             <div className="hidden md:flex items-center">
-              <h3 className='mb-4 text-lg font-serif font-extrabold leading-none tracking-tight text-gray-900 justify-center items-center pt-4'>Welcome <span className="font-medium text-blue-900 items-center font-serif"> {user?.name || 'User'}</span></h3>
+              <h3 className='mb-4 text-lg font-serif font-extrabold leading-none tracking-tight text-[#10C8B8] justify-center items-center pt-4'>Welcome <span className="text-[#FFD700] items-center font-serif"> {user?.name || 'User'}</span></h3>
             </div>
 
             <button 
               onClick={() => navigate("/profile")}
               className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <MdAccountCircle className="w-6 h-6 text-blue-900" />
+              <MdAccountCircle className="w-6 h-6 text-[#10C8B8]" />
             </button>
 
             <div className="relative">
@@ -57,9 +57,9 @@ function NavbarSeller() {
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
               >
-                <FaBell className="w-5 h-5 text-blue-900" />
+                <FaBell className="w-5 h-5 text-[#10C8B8]" />
                 {data.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-[#FFD700] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {data.length}
                   </span>
                 )}
@@ -110,7 +110,7 @@ function NavbarSeller() {
             {/* Logout Button */}
             <div>
               <button 
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-900 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-white bg-[#10C8B8] rounded-md hover:bg-[#0eb2a6] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                 onClick={handleLogout}
               >
                 Logout

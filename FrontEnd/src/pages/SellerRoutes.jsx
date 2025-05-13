@@ -1,9 +1,9 @@
 import React from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import SellerLayout from "../components/layouts/SellerLayout";
-import { DashBoardView } from "../components/seller/DashBoardComponents/DashBoardView";
+import DashBoardView from "../components/seller/DashBoardComponents/DashBoardView";
 import ProductManagement from "../components/seller/Product/rootRoutes";
-import OrderDetails from "../components/seller/OrderComponents/OrderDetails";
+import OrderDetails from "../components/admin/OrderComponents/OrderDetails";
 import OrderList from "../components/seller/OrderComponents/OrderList";
 import NotFound from "../components/NotFound"; 
 import Notifications from "../components/seller/Notifications/Notifications";

@@ -39,7 +39,7 @@ const Sidebar = () => {
       <nav
         className={`fixed top-0 left-0 z-40 w-64 h-screen transition-all duration-300 transform ${
           isCollapsed ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 bg-blue-950`}
+        } lg:translate-x-0 bg-[#10C8B8]`}
       >
         <div className="h-full pr-3 py-4 overflow-y-auto">
           <ul className="space-y-4 font-medium">
@@ -49,8 +49,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/admin/dashboard"
@@ -62,8 +62,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/admin/carousel"
@@ -75,8 +75,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/admin/users"
@@ -88,8 +88,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/admin/orders"
@@ -101,8 +101,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/admin/categories"
@@ -114,8 +114,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/admin/products"
@@ -128,8 +128,8 @@ const Sidebar = () => {
             <li>
               <NavLink 
                 className={({ isActive }) => 
-                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-blue-800 transition-colors no-underline ${
-                    isActive ? 'bg-blue-800' : ''
+                  `flex items-center py-3 px-1 text-white rounded-lg hover:bg-[#0eb2a6] transition-colors no-underline ${
+                    isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
                 to="/admin/zoneManager"

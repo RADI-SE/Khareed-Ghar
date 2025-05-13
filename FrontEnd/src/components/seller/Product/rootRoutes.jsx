@@ -33,12 +33,12 @@ function ProductManagement() {
   return (
     <div className="">
       <nav className="">
-        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-blue-950 rounded-lg">
+        <div className="flex flex-wrap items-center justify-between mx-auto p-4 bg-gray-100 rounded-lg">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className="bg-blue-900 text-white w-30 h-10 px-3 rounded-lg text-white rounded-lg"
+              className="bg-[#10C8B8] text-white w-30 h-10 px-3 rounded-lg text-white rounded-lg hover:bg-[#0eb2a6]"
             >
               {tab.label}
             </button>

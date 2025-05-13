@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaTimes, FaStar, FaRegStar } from 'react-icons/fa';
 import { useBuyerService } from '../../services/buyer/buyerServices';
 
-const FeedBackModal = ({ isOpen, onClose }) => {
+const FeedBackModal = ({ isOpen, onClose, onSubmit}) => {
 
   const [formData, setFormData] = useState({
     rating: '',
@@ -24,14 +24,9 @@ const FeedBackModal = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await becomeSeller(formData.rating, formData.comment);
-      onClose();
-    } catch (error) {
-      console.log(error);
-    }
+    onSubmit(formData);
   };
 
   if (!isOpen) return null;
