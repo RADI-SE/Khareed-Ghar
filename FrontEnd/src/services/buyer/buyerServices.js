@@ -182,8 +182,22 @@ export const useBuyerService = create((set) => ({
       console.log("test-3feedback")
       set({ errorMessage: error.message, isLoading: false });
     }
+  },
+  getProductFeedback: async (id) => {
+    try {
+      console.log("test-1 get feedback")
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.get(`http://localhost:5000/api/get-product-feedback/${id}`);
+      console.log("test-2 get feedback")
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      console.log("test-3 get feedback")
+      set({ errorMessage: error.message, isLoading: false });
+    }
   }
   
+
 }));
 
  

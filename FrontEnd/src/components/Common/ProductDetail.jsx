@@ -315,11 +315,15 @@ const ProductDetail = () => {
           </div>
         )}
       </div>
-      <FeedBackModal 
-        isOpen={showFeedBackModal} 
-         onClose={() => setShowFeedBackModal(false)} 
-         onSubmit={handleSubmit}
-         />
+      {
+        showFeedBackModal && (
+          <FeedBackModal 
+            isOpen={showFeedBackModal} 
+            onClose={() => setShowFeedBackModal(false)} 
+            onSubmit={handleSubmit}
+          />
+        )
+      }
     </div>
   );
 }

@@ -1,33 +1,51 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { FaStar, FaRegStar } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
-const FeedBackModal = ({ onClose, onSubmit }) => {
-  const productId = useParams();
+import React, { useState } from 'react';
+import { FaTimes, FaStar, FaRegStar } from 'react-icons/fa';
+import { useBuyerService } from '../../services/buyer/buyerServices';
+
+const FeedBackModal = ({ isOpen, onClose }) => {
+
   const [formData, setFormData] = useState({
-    productId: productId,
-    rating: 0,
-    comment: '',
+    rating: '',
+    comment: ''
   });
-
-  
-
-  const handleRatingClick = (value) => {
-    setFormData({ ...formData, rating: value });
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
+  const handleRatingClick = (ratingValue) => {
+    setFormData(prev => ({
+      ...prev,
+      rating: ratingValue
+    }));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await becomeSeller(formData.rating, formData.comment);
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (!isOpen) return null;
 
   return (
-  <form onSubmit={handleSubmit} className="p-4 flex flex-col h-full">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center p-4 border-b">
+          <h2 className="text-xl font-bold text-gray-800">Leave Feedback</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <FaTimes className="w-5 h-5" />
+          </button>
+        </div>
+<form onSubmit={handleSubmit} className="p-4 flex flex-col h-full">
   <div className="flex flex-col md:flex-row gap-4 flex-grow">
     <div className="w-full md:w-1/3">
       <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -76,12 +94,9 @@ const FeedBackModal = ({ onClose, onSubmit }) => {
     </button>
   </div>
 </form>
+</div>
+    </div>
   );
-};
-
-FeedBackModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default FeedBackModal;
