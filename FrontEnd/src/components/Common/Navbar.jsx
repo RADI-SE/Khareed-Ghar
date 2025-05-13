@@ -88,12 +88,12 @@ const Navbar = () => {
                 value={search}
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-                <select className="text-gray-500 text-sm bg-transparent outline-none"
+                <select className="text-gray-500 text-sm outline-none"
                  onChange={(e) => setType(e.target.value)}
                  value={type}
                 >
-                  <option value="product">Product</option>
-                  <option value="auction">Auction</option>
+                  <option value="product" >Product</option>
+                  <option value="auction" >Auction</option>
                 </select>
                 <FaSearch className="w-5 h-5 cursor-pointer" />
               </div>
