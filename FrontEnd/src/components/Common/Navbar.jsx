@@ -31,7 +31,7 @@ const Navbar = () => {
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
 
-  console.log("User", user);
+ 
   const handleLogin = () => {
     navigate("/auth/signin");
   }; 

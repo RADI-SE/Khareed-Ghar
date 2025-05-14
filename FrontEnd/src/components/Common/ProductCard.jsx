@@ -25,7 +25,9 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+    <>
+    {!product.isConsigned && (
+        <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
       {/* Product Image */}
       <div className="relative h-48 overflow-hidden border border-2 border-blue-900">
         <img
@@ -57,7 +59,7 @@ const ProductCard = ({ product }) => {
           <button
             onClick={(e) => handleAddToCart(e, product._id)}
             className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-[#10C8B8] text-white rounded-md transition-colors duration-300 text-sm"
-          >
+            >
             <FaShoppingCart className="w-3.5 h-3.5" />
             <span className="text-sm hover:text-[#FFD700]">Add to Cart</span>
           </button>
@@ -65,12 +67,23 @@ const ProductCard = ({ product }) => {
           <button
             onClick={(e) => handleDetail(e, product._id)}
             className="flex-1 py-1.5 px-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 hover:text-[#10C8B8] transition-colors duration-300 text-sm"
-          >
+            >
             View Details
           </button>
         </div>
       </div>
     </div>
+    )}
+    {product.isConsigned && product.isConsigned && product.consigneeId && (
+      <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+        <div className="p-3">
+          <h3 className="text-base font-medium text-gray-900 mb-1.5 line-clamp-2">
+            {product.name}
+          </h3>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
 

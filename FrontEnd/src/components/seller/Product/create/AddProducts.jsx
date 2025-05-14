@@ -72,6 +72,8 @@ export const AddProductForm = () => {
     setCategoryId("");
     setSubCategoryId("");
     setImage([]); // Reset images to an empty array
+    setIsAuction(false);
+    setIsConsigned(false);
   };
 
   const handleAuctionToggle = (e) => {
@@ -130,6 +132,8 @@ export const AddProductForm = () => {
 
   const handleConsignedToggle = (e) => {
     setIsConsigned(e.target.checked);
+    console.log(isConsigned);
+    
   };
 
   return (
