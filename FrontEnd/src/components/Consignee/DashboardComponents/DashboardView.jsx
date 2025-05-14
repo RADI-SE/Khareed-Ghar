@@ -1,137 +1,89 @@
-import { useNavigate } from "react-router-dom";
-import { useFetchUserOrders } from "../../../hooks/admin/Orders/useFetchUserOrders";
 
+import React, { useEffect, useState } from "react";
+import { useFetchProducts } from "../../../hooks/seller/useFetchProducts";
+import ProductTable from "../../Common/products/products/ProductTable";
+import ProductDetail from "../../seller/Product/dashboard/ProductDetail";
 
-const DashBoardView = () => {
-  const id = sessionStorage.getItem("id");
-  console.log("User ID:", id);
-  const navigate = useNavigate();
-  const { data = [] } = useFetchUserOrders();
+const DashboardView = () => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // 67322fc629f3c194f356342a
+  const {
+    data: products = [],
+    isLoading: isLoadingProducts,
+    isError: productsError,
+  } = useFetchProducts();
 
-  // Filter orders that belong to the specific user
-  const userOrders = data.filter((order) => order.user === id);
-
-  const handleRowClick = (order) => {
-    navigate("order-details", { state: { order } });
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
   };
 
-  return (
+  const handleBackClick = () => {
+    setSelectedProduct(null);
+  };
+
+
+  if (isLoadingProducts) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (productsError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
+          <strong className="font-bold">Error!</strong>
+          <span className="block sm:inline"> {productsError.message}</span>
+        </div>
+      </div>
+    );
+  }
+
+  console.log("Products From Consignee", products);
+
+  return (  
     <>
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="mb-6">
-        <h4 className="text-2xl font-semibold text-gray-800">Delievered Orders</h4>
-      </div>
-      <div className="border-t border-gray-200">
-        <div className="overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-[#10C8B8]">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Total Amount</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Payment</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {userOrders.map((order) => (
-                <tr
-                  key={order._id}
-                  className=""
-                >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order.user}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${order.totalAmount}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order.paymentMethod}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs rounded-full ${
-                      order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                      order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                      order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {new Date(order.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {userOrders.length === 0 && (
-            <div className="p-4 text-gray-500 text-center">No orders found for this user.</div>
-          )}
-        </div>
-      </div>
-      </div>
 
-      {/*Available Products for consignee */}
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
-      <div className="mb-6 mt-4">
-        <h4 className="text-2xl font-semibold text-gray-800">Products Available For Consignment</h4>
-      </div>
-      <div className="border-t border-gray-200">
-        <div className="overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-[#10C8B8]">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Total Amount</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Payment</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {userOrders.map((order) => (
-                <tr
-                  key={order._id}
-                  className=""
-                >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order.user}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${order.totalAmount}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order.paymentMethod}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs rounded-full ${
-                      order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                      order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                      order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {new Date(order.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {userOrders.length === 0 && (
-            <div className="p-4 text-gray-500 text-center">No orders found for this user.</div>
-          )}
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      {selectedProduct ? (
+        <div className="max-w-7xl mx-auto">
+          <button
+            className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            onClick={handleBackClick}
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Products
+          </button>
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h4 className="text-2xl font-bold text-gray-900 mb-6">Details of {selectedProduct.name}</h4>
+            {selectedProduct._id ? (
+              <ProductDetail selectedProduct={selectedProduct} />
+            ) : (
+              <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+                <strong className="font-bold">Warning!</strong>
+                <span className="block sm:inline"> No details available for {selectedProduct.name}.</span>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-
+      ) : (
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h4 className="text-2xl font-bold text-gray-900">Products</h4>
+            </div>
+            <div className="p-6">
+              <ProductTable products={products} onProductClick={handleProductClick} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-    </>
+  </>
   );
 };
-
-export default DashBoardView;
+export default DashboardView;
