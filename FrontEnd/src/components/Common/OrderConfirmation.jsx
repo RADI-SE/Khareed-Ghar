@@ -3,8 +3,12 @@ import React from 'react'
 const OrderConfirmation = ({order}) => {
   return (
     <div className='container mx-auto py-8 px-4 md:px-16 lg:px-24'>
-        <h2 className='text-2xl font-semibold mb-4'>Thank you for shopping</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur enim minus quo, laborum, dolor pariatur.</p>
+        <h2 className='text-2xl font-semibold mb-4'>Thank You for Shopping!</h2>
+        <p> 
+We appreciate your purchase and hope you enjoy it.
+A confirmation email has been sent with your order details.
+
+Need help? Contact our support team anytime.</p>
         <div className='w-[800px] mt-6 p-4 border rounded-lg bg-gray-100'>
             <h3 className='text-lg font-semibold mb-2'>Order Summary</h3>
             <p>Order Number: {order.orderNumber}</p>
