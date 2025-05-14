@@ -431,5 +431,20 @@ export const useAdminService = create((set) => ({
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to fetch user profile");
     }
+  },
+
+  getAdminNotifications: async () => {
+    try {
+      console.log("Fetching admin notifications for ID:");
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.get(`${API_URL}admin-notifications`);
+      console.log("Admin notifications:", response.data);
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching admin notifications:", error);
+      set({ isLoading: false, isError: true, errorMessage: error?.response?.data?.message || "Failed to fetch admin notifications" });
+      toast.error(error?.response?.data?.message || "Failed to fetch admin notifications");
+    }
   }
 }));

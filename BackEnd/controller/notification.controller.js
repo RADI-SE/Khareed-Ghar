@@ -1,5 +1,6 @@
 import { BuyerNotification } from "../model/buyer.notification.model.js";
 import { SellerNotification } from "../model/seller.notification.model.js";
+import { AdminNotification } from "../model/admin.notification.model.js";
 import jwt from "jsonwebtoken";
 
 export const getNotifications = async (req, res) => {
@@ -75,7 +76,20 @@ export const updateBuyerNotification = async (req, res) => {
 };  
 
 
-
-
+export const getAdminNotifications = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+    const notifications = await AdminNotification.find({ receipient: userId });
+    if(notifications.length === 0){
+      return res.status(404).json({ message: "No notifications found" });
+    }
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error("Error fetching admin notifications:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
 

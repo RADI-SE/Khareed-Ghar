@@ -7,12 +7,9 @@ const DashBoardView = () => {
   console.log("User ID:", id);
   const navigate = useNavigate();
   const { data = [] } = useFetchUserOrders();
-
-  // 67322fc629f3c194f356342a
-
-  // Filter orders that belong to the specific user
+ 
   const userOrders = data.filter((order) => order.user === id);
-
+  console.log("userOrders",userOrders);
   const handleRowClick = (order) => {
     navigate("order-details", { state: { order } });
   };
@@ -35,10 +32,12 @@ const DashBoardView = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {userOrders.map((order) => (
+              {userOrders.map((order) => 
+                order?.status === "Delivered" && (
                 <tr
                   key={order._id}
-                  className=""
+                  className="cursor-pointer hover:bg-gray-50"
+                  onClick={() => handleRowClick(order)}
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {order.user}
@@ -63,7 +62,9 @@ const DashBoardView = () => {
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
                 </tr>
-              ))}
+                )
+              )}
+
             </tbody>
           </table>
           {userOrders.length === 0 && (

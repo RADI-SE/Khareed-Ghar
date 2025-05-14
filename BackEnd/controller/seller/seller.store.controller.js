@@ -26,7 +26,7 @@ export const createSellerStore = async (req, res) => {
     const adminNotification = new AdminNotification({
         receipient: "6728e930dc54a1f881e1d0cd",
         userRequest: user._id,
-        message: `You have a new seller store request from ${user.name}`,
+        message: `New seller store request from ${user.name}`,
         read: false,
         readAt: null,
         link: `/seller/store/${newSellerStore._id}`

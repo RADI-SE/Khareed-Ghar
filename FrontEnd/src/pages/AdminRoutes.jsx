@@ -6,12 +6,11 @@ import CategoryManagement from "../components/admin/Category/rootRoutes";
 import OrderDetails from "../components/admin/OrderComponents/OrderDetails";
 import UserManagement from "../components/admin/User/rootRoutes";
 import OrderList from "../components/admin/OrderComponents/OrderList";
-import DetailedProductView from "../components/admin/Category/dashboard/view";
 import NotFound from "../components/NotFound";
 import RegionManagement from "../components/admin/Region/rootRoutes";
 import ProductManagement from "../components/admin/Product/rootRoutes";
 import CarouselEditor from "../components/admin/SlideImageChanger/CarouselEditor";
-
+import AdminProfile from "../components/admin/AdminProfile";
 const AdminRoutes = () => {
   return (
     <AdminLayout>
@@ -33,6 +32,7 @@ const AdminRoutesWrapper = () => {
         <Route path="categories" element={<CategoryManagement />} />
         <Route path="zoneManager" element={<RegionManagement />} />
         <Route path="products" element={<ProductManagement />} />
+        <Route path="profile" element={<AdminProfile />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

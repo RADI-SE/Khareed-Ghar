@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { Category } from "../../model/category.model.js";
 import { Product } from "../../model/product.model.js";
 import axios from "axios";
+import { AdminNotification } from "../../model/admin.notification.model.js";
 export const addProduct = async (req, res) => {
   try {
     const token = req.cookies.token;
@@ -92,7 +93,16 @@ export const addProduct = async (req, res) => {
       images: imagePath,
     });
     const savedProduct = await product.save();
-
+    const findUser = await User.findById(userId);
+    const adminNotification = new AdminNotification({
+      receipient: "6728e930dc54a1f881e1d0cd",
+      product: product._id,
+      message: `New product added by ${findUser.name} seller id ${userId}`,
+      read: false,
+      readAt: null,
+      link: `/admin/products/${product._id}`
+    });
+    await adminNotification.save();
     res.status(201).json({
       success: true,
       message: "Product created successfully.",

@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 import {FaBell} from "react-icons/fa";
-import { useFetchNotifications } from '../../hooks/seller/Notifications/useFetchNotifications';
+import { useFetchNotifications } from '../../hooks/admin/Notifications/useFetchNotifications';
+import { MdAccountCircle } from "react-icons/md";
+import { Link } from 'react-router-dom';
+ import { FaCheck, FaTimes } from 'react-icons/fa';
+import { MdOutlineCancel } from 'react-icons/md';
 
 function NavbarAdmin() {
 
@@ -10,7 +14,7 @@ function NavbarAdmin() {
     const navigate = useNavigate();
     const { data = [] } = useFetchNotifications();
     const [showNotifications, setShowNotifications] = useState(false);
-
+ 
     const handleLogout = async () => {
         await signout();
         navigate("/signin");
@@ -20,13 +24,18 @@ function NavbarAdmin() {
         <nav className='fixed top-0 left-0 right-0 bg-white shadow-md z-50'>
             <div className='w-full px-4 sm:px-6 lg:px-8'>
                 <div className='flex justify-between items-center h-16'>
-                    {/* left side menu */}
                     <div className='flex items-center'>
                         
                     </div>
-
                     {/* right side menu */}
                     <div className='flex items-center space-x-6'>
+                    <button 
+              onClick={() => navigate("profile")}
+              className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <MdAccountCircle className="w-6 h-6 text-[#10C8B8]" />
+            </button>
+
                         <button
                           onClick={() => setShowNotifications(!showNotifications)}
                           className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"

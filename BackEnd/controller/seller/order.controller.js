@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { SellerNotification } from "../../model/seller.notification.model.js";
 import {Auction} from "../../model/auction.model.js"
 import { User } from "../../model/user.model.js";
+import { AdminNotification } from "../../model/admin.notification.model.js";
 
 export const createOrder = async (req, res) => {
   try {
@@ -43,8 +44,8 @@ export const createOrder = async (req, res) => {
       paymentMethod: PAYMENT_METHOD,
       status: "Pending",
     });
-
-    // Notify sellers
+    console.log("test 1 ");
+ 
     for (const item of order.products) {
       const auction = await Auction.findOne({ productId: item.product });
       let sellerId = null;
@@ -60,6 +61,7 @@ export const createOrder = async (req, res) => {
           productName = product.name;
         }
       }
+      console.log("test 2 ");
 
       if (sellerId) {
         const sellerNotification = new SellerNotification({
@@ -72,9 +74,23 @@ export const createOrder = async (req, res) => {
           link: `/seller/orders/${order._id}`
         });
         await sellerNotification.save();
+
+  
+        const findUser = await User.findById(userId);
+        const adminNotification = new AdminNotification({
+          receipient: "6728e930dc54a1f881e1d0cd",
+          product: item.product,
+          order: order._id,
+          message: `New order placed by ${findUser.name} for product ${productName} seller id ${sellerId} status ${order.status}`,
+          read: false,
+          readAt: null,
+          link: `/admin/orders/${order._id}`
+        });
+        await adminNotification.save();
       }
     }
-
+    console.log("test 3 ");
+    
     await Cart.findByIdAndDelete(CART_ID);
     res.status(201).json({ message: "Order created successfully", order });
 
