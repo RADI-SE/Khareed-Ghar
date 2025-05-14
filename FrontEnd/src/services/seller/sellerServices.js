@@ -130,11 +130,7 @@ export const useSellerService = create((set) => ({
     images
   ) =>{
 
-    console.log("images",images);
-    console.log("name",name);
-    console.log("description",description);
-    console.log("specifications",specifications);
-    console.log("price",price);
+   
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
@@ -211,7 +207,6 @@ export const useSellerService = create((set) => ({
   // getUserProducts
   getUserProducts: async (id) => {
     try {
-      console.log("test 178r", id);
        set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(`http://localhost:5000/api/getProductsByUserId/${id}`);
       
@@ -234,10 +229,8 @@ export const useSellerService = create((set) => ({
 
   getSimilarProducts: async (id) => {
     try {
-      console.log("test 180r", id);
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.get(`http://localhost:5000/api/similarAuctions/${id}`);
-      console.log("test 181r", response.data.similarAuctions);
       return response.data.similarAuctions;
       } catch (error) {
       set({
@@ -327,9 +320,6 @@ export const useSellerService = create((set) => ({
 
   ) =>{
     try {
-      console.log("id",id);
-      console.log("startTime",startTime);
-      console.log("endTime",endTime);
       set({ isLoading: true, Error: null, isError: false });
       const response = await axios.put(
         `http://localhost:5000/api/editAuctions/${id}`,
@@ -339,7 +329,6 @@ export const useSellerService = create((set) => ({
 
         },
       ); 
-      console.log("response",response);
       if (response.status === 200) {
         set({ isLoading: false, Error: null });
       }
@@ -474,15 +463,27 @@ export const useSellerService = create((set) => ({
       });
     }
   },  
+
+  getFeedbackByProductId: async (id) => {
+    try { 
+      console.log("testid:::::::::::::::::::::::::::", id)
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.get(`http://localhost:5000/api/get-feedback-by-product-id/${id}`);
+      return response.data;
+    } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching feedback by product id.",
+      });
+    }
+  },
 }));
 
 export const useStoreService = create((set) => ({
   sellerStore: async(id) => {
     try {
-      console.log("test-1 from Services")
       const response = await axios.get(`http://localhost:5000/api/seller-store/${id}`);
-      console.log("test-2 from Services")
-      console.log("response",response);
       return response.data;
     } catch (error) {
       set({
@@ -504,10 +505,13 @@ export const useStoreService = create((set) => ({
         Error: error.message || "An error occurred while fetching similar auctions.",
       });
     }
-  }
+  },
+
   
 
 }));
+
+
 // {data: Array(1), status: 200, statusText: 'OK', headers: AxiosHeaders, config: {…}, …}
 // config
 // : 

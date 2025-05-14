@@ -68,7 +68,6 @@ const AuctionDetail = () => {
     navigate(`/product/${productId}`);
   };
 
-
   const handleBidSubmit = (e) => {
     e.preventDefault();
     const bidValue = parseFloat(bidAmount);

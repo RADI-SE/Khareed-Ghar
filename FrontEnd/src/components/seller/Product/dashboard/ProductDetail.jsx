@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import defaultImage from "../../../../assets/images/default.jpeg";
+import { useSellerService } from "../../../../services/seller/sellerServices";
+import FeedbackTable from "../../../Common/Feedback/FeedbackTable";
 
 const ProductDetail = ({ selectedProduct }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const { getFeedbackByProductId } = useSellerService();
+  const [feedbacks, setFeedbacks] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   
-  // Convert single image to array if needed and handle empty cases
   const productImages = selectedProduct?.images 
     ? Array.isArray(selectedProduct.images) 
       ? selectedProduct.images 
       : [selectedProduct.images]
-    : [defaultImage];
+    : [defaultImage]; 
+
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      if (selectedProduct?._id) {
+        setIsLoading(true);
+        try {
+          const response = await getFeedbackByProductId(selectedProduct._id);
+          setFeedbacks(response || []);
+        } catch (error) {
+          console.error("Error fetching feedbacks:", error);
+          setFeedbacks([]);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchFeedbacks();
+  }, [selectedProduct?._id, getFeedbackByProductId]);
 
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -19,7 +43,7 @@ const ProductDetail = ({ selectedProduct }) => {
           {/* Main Image */}
           <div className="aspect-square w-full relative rounded-lg overflow-hidden bg-gray-100">
             <img
-              src={`../../../../../public/images/${productImages[selectedImageIndex]}` || defaultImage}
+              src={productImages[selectedImageIndex] ? `../../../../../public/images/${productImages[selectedImageIndex]}` : defaultImage}
               alt={`${selectedProduct?.name || "Product"} - View ${selectedImageIndex + 1}`}
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />
@@ -38,7 +62,7 @@ const ProductDetail = ({ selectedProduct }) => {
                 }`}
               >
                 <img
-                  src={`../../../../../public/images/${image}` || defaultImage}
+                  src={image ? `../../../../../public/images/${image}` : defaultImage}
                   alt={`${selectedProduct?.name || "Product"} thumbnail ${index + 1}`}
                   className="w-full h-full object-cover hover:opacity-80 transition-opacity duration-200"
                 />
@@ -65,15 +89,15 @@ const ProductDetail = ({ selectedProduct }) => {
             <ul className="space-y-2">
               <li className="flex items-center text-gray-600">
                 <span className="font-medium mr-2">Capacity:</span>
-                {selectedProduct?.specifications.capacity || "N/A"}
+                {selectedProduct?.specifications?.capacity || "N/A"}
               </li>
               <li className="flex items-center text-gray-600">
                 <span className="font-medium mr-2">Color:</span>
-                {selectedProduct?.specifications.color || "N/A"}
+                {selectedProduct?.specifications?.color || "N/A"}
               </li>
               <li className="flex items-center text-gray-600">
                 <span className="font-medium mr-2">Condition:</span>
-                {selectedProduct?.specifications.condition || "N/A"}
+                {selectedProduct?.specifications?.condition || "N/A"}
               </li>
             </ul>
           </div>
@@ -93,8 +117,41 @@ const ProductDetail = ({ selectedProduct }) => {
           </div>
         </div>
       </div>
+
+      {/* Feedback Section */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Product Feedbacks</h2>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          <FeedbackTable feedbacks={feedbacks} />
+        )}
+      </div>
     </div>
   );
+};
+
+ProductDetail.propTypes = {
+  selectedProduct: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    price: PropTypes.number,
+    images: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string)
+    ]),
+    specifications: PropTypes.shape({
+      capacity: PropTypes.string,
+      color: PropTypes.string,
+      condition: PropTypes.string
+    }),
+    seller: PropTypes.shape({
+      name: PropTypes.string
+    })
+  })
 };
 
 export default ProductDetail;

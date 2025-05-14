@@ -14,7 +14,6 @@ const DetailedProductView = () => {
   } = useFetchProductsByUserId(id);
 
 
-  console.log("Productsss View", products)
   const handleProductClick = (product) => {
     setSelectedProduct(product);
   };

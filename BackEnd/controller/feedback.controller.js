@@ -7,9 +7,6 @@ import axios from "axios";
 export const getFeedBacksByProductId = async (req, res) => {
     try {
       const { id } = req.params;
-
-
-
       const product = await Product.findById(id);
       
       if (!product) {
@@ -125,5 +122,16 @@ export const getFeedbackByUserId = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 
+}
+
+
+export const getFeedbackByProductId = async (req, res) => {
+    try {
+        const { id } = req.params; 
+        const feedbacks = await Feedback.find({ productId: id });
+        res.status(200).json(feedbacks);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
