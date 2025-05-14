@@ -14,8 +14,19 @@ function SignUp() {
   const [error, setError] = useState("");
   const [isRegistered, setIsRegistered] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
+  const [isConsignee, setIsConsignee] = useState(false);
 
     const [sellerDetails, setSellerDetails] = useState({
+      storeName: '',
+      businessType: '',
+      physicalStoreAddress: '',
+      storeTagline: '',
+      phoneNumber: '',
+      bankName: '',
+      bankAccountNumber: '',
+    });
+
+        const [consigneeDetails, setConsigneeDetails] = useState({
       storeName: '',
       businessType: '',
       physicalStoreAddress: '',
@@ -28,6 +39,14 @@ function SignUp() {
     const handleChange = (e) => {
       const { name, value, files } = e.target;
       setSellerDetails(prev => ({
+        ...prev,
+        [name]: files ? files[0] : value
+      }));
+    };
+
+      const handleConsigneeChange = (e) => {
+      const { name, value, files } = e.target;
+      setConsigneeDetails(prev => ({
         ...prev,
         [name]: files ? files[0] : value
       }));
@@ -55,32 +74,68 @@ function SignUp() {
     e.preventDefault();
     setError("");
 
-    createUser(
-      { name, email, password, confirmPassword, role, isAgreeToTerms, storeName: sellerDetails.storeName, businessType: sellerDetails.businessType, storeTagline:  sellerDetails.storeTagline, physicalStoreAddress: sellerDetails.physicalStoreAddress, phoneNumber: sellerDetails.phoneNumber, bankAccountNumber: sellerDetails.bankAccountNumber, bankName: sellerDetails.bankName },
-      {
-        onSuccess: (data) => {
-          setIsRegistered(true);
-          localStorage.setItem("isVerified", data?.isVerified);
-        },
-        onError: (err) => {
-          console.error("Sign-up error:", err);
-          if (!err.response) {
-            setError("Network error: Please check your internet connection");
-          } else if (err.response.status === 500) {
-            setError("Server error: Please try again later");
-          } else {
-            setError(err.response?.data?.message || "Sign-up failed. Please try again.");
-          }
-        },
-      }
-    );
+    if(isSeller){
+      createUser(
+        { name, email, password, confirmPassword, role, isAgreeToTerms, storeName: sellerDetails.storeName, businessType: sellerDetails.businessType, storeTagline:  sellerDetails.storeTagline, physicalStoreAddress: sellerDetails.physicalStoreAddress, phoneNumber: sellerDetails.phoneNumber, bankAccountNumber: sellerDetails.bankAccountNumber, bankName: sellerDetails.bankName },
+        {
+          onSuccess: (data) => {
+            setIsRegistered(true);
+            localStorage.setItem("isVerified", data?.isVerified);
+          },
+          onError: (err) => {
+            console.error("Sign-up error:", err);
+            if (!err.response) {
+              setError("Network error: Please check your internet connection");
+            } else if (err.response.status === 500) {
+              setError("Server error: Please try again later");
+            } else {
+              setError(err.response?.data?.message || "Sign-up failed. Please try again.");
+            }
+          },
+        }
+      );}
+    else if(isConsignee){
+      createUser(
+        { name, email, password, confirmPassword, role, isAgreeToTerms, storeName: consigneeDetails.storeName, businessType: consigneeDetails.businessType, storeTagline:  consigneeDetails.storeTagline, physicalStoreAddress: consigneeDetails.physicalStoreAddress, phoneNumber: consigneeDetails.phoneNumber, bankAccountNumber: consigneeDetails.bankAccountNumber, bankName: consigneeDetails.bankName },
+        {
+          onSuccess: (data) => {
+            setIsRegistered(true);
+            localStorage.setItem("isVerified", data?.isVerified);
+          },
+          onError: (err) => {
+            console.error("Sign-up error:", err);
+            if (!err.response) {
+              setError("Network error: Please check your internet connection");
+            } else if (err.response.status === 500) {
+              setError("Server error: Please try again later");
+            } else {
+              setError(err.response?.data?.message || "Sign-up failed. Please try again.");
+            }
+          },
+        }
+      );
+    }
   };
 
   const handleSellerToggle = (e) => {
-    // setIsSeller(e.target.checked);
+    setIsSeller(e.target.checked);
+
     if(e.target.checked) {
-      setIsSeller(true);
       setRole("seller");
+      setIsConsignee(false); // Uncheck consignee if seller is checked
+    } else {
+      setIsSeller("");
+    }
+  };
+
+  const handleConsigneeToggle = (e) => {
+    setIsConsignee(e.target.checked);
+
+    if (e.target.checked) {
+      setRole("consignee");
+      setIsSeller(false); // Uncheck seller if consignee is checked
+    } else {
+      setRole(""); // or set to null/undefined if preferred
     }
   };
 
@@ -152,6 +207,26 @@ return (
                     Seller
                   </label>
                 </div>
+                {/* Consignee */}
+                  { !isSeller && (
+                    <div className="form-check form-check-inline">
+                  <input
+                    type="checkbox"
+                    id="consigneeRole"
+                    name="isConsignee"
+                    checked={isConsignee}
+                    value="consignee"
+                    // onChange={(e) => setRole(e.target.value)}
+                    onChange={handleConsigneeToggle}
+                    className="form-check-input"
+                  />
+                  <label htmlFor="consigneeRole" className="form-check-label">
+                    Consignee
+                  </label>
+                </div>
+                  )
+                  }
+                  
               </div>
 
               {error && (
@@ -280,7 +355,113 @@ return (
                     </div>
 
                   </div>
-                )}
+                ) 
+                }
+                {/* Consignee Store Form */}
+                {isConsignee && (
+                  <div className="bg-gray-100 p-4 rounded-lg space-y-4 mt-4">
+                    <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Store Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="storeName"
+                      value={consigneeDetails.storeName}
+                      onChange={handleConsigneeChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    </div>
+
+                    <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Business Type *
+                    </label>
+                    <input
+                      type="text"
+                      name="businessType"
+                      value={consigneeDetails.businessType}
+                      onChange={handleConsigneeChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    </div>
+
+                    <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Store Physical Address *
+                    </label>
+                    <input
+                      type="text"
+                      name="physicalStoreAddress"
+                      value={consigneeDetails.physicalStoreAddress}
+                      onChange={handleConsigneeChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Store Tagline *
+                      </label>
+                      <input
+                        type="text"
+                        name="storeTagline"
+                        value={consigneeDetails.storeTagline}
+                        onChange={handleConsigneeChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        name="phoneNumber"
+                        value={consigneeDetails.phoneNumber}
+                        onChange={handleConsigneeChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Bank Name *
+                      </label>
+                      <input
+                        type="bankName"
+                        name="bankName"
+                        value={consigneeDetails.bankName}
+                        onChange={handleConsigneeChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Bank Account Number *
+                      </label>
+                      <input
+                        type="text"
+                        name="bankAccountNumber"
+                        value={consigneeDetails.bankAccountNumber}
+                        onChange={handleConsigneeChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#10C8B8]"
+                      />
+                    </div>
+
+                  </div>
+                )
+
+                }
 
               <button
                 type="submit"
