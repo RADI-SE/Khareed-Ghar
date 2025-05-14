@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaSearch, FaShoppingCart, FaBell, FaBars, FaTimes } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import { useNavigate, Link } from "react-router-dom";
@@ -31,6 +31,7 @@ const Navbar = () => {
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
 
+  console.log("User", user);
   const handleLogin = () => {
     navigate("/auth/signin");
   }; 
@@ -52,6 +53,7 @@ const Navbar = () => {
 
   const handleSearch = async () => {
     navigate(`/search?q=${search}&type=${type}`);
+    setSearch("");
   };
 
   return (
@@ -121,6 +123,7 @@ const Navbar = () => {
               )}
             </button>
 
+            {user?.role !== 'seller' && user?.role !== 'admin' ? (
             <button 
               onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -132,13 +135,15 @@ const Navbar = () => {
                       </span>
                     )}
             </button>
-            
+            ) : null}
+            {user?.role !== 'seller' && user?.role !== 'admin' ? (
             <button 
               onClick={() => navigate("/profile")}
               className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
               <MdAccountCircle className="w-6 h-6 text-[#10C8B8]" />
             </button>
+            ) : null}
 
             {/* Notification Dropdown */}
             {showNotifications && (
@@ -240,6 +245,7 @@ const Navbar = () => {
                   )}
                 </button>
 
+                {user?.role !== 'seller' && user?.role !== 'admin' ? (
                 <button 
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -251,13 +257,15 @@ const Navbar = () => {
                       </span>
                     )}
                 </button>
-                
+                ) : null}
+               {user?.role !== 'seller' && user?.role !== 'admin' ? (
                 <button 
                   onClick={() => navigate("/profile")}
                   className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <MdAccountCircle className="w-6 h-6 text-[#10C8B8]" />
                 </button>
+               ) : null}
 
                 {/* Mobile Notification Dropdown */}
             {showNotifications && (
@@ -319,48 +327,46 @@ const Navbar = () => {
       </div>
 
       {/* Bottom Navigation */}
-      {user?.role !== 'seller' || user?.role !== 'admin' ? (
-      <div className="bg-[#10C8B8] lg:block md:block z-0">
-      <div className="flex justify-between mx-auto px-4">
-        <div className="mb-4 md:mb-0">
-          <p className="text-xl font-bold">
-            
-          </p>
+      {user?.role !== 'seller' && user?.role !== 'admin' ? (
+        <div className="bg-[#10C8B8] lg:block md:block z-0">
+          <div className="flex justify-between mx-auto px-4">
+            <div className="mb-4 md:mb-0">
+              <p className="text-xl font-bold">
+              </p>
+            </div>
+            <button
+              onClick={() => setShowSellerModal(true)}
+              className="bg-white text-[#10C8B8] hover:bg-indigo-100 font-medium py-2 px-6 rounded-full transition duration-300 ease-in-out transform border border-4 hover:scale-105"
+            >
+              BECOME A SELLER!
+            </button>
+          </div>
         </div>
-        <button
-          onClick={() => setShowSellerModal(true)}
-          className="bg-white text-[#10C8B8] hover:bg-indigo-100 font-medium py-2 px-6 rounded-full transition duration-300 ease-in-out transform border border-4 hover:scale-105"
-        >
-          BECOME A SELLER!
-        </button>
-      </div>
-    </div>
-    ) : 
-    (
-      <div className="bg-[#10C8B8] lg:block md:block z-0 collapse ">
-      <div className="flex justify-between mx-auto px-4">
-        <div className="mb-4 md:mb-0">
-          <p className="text-xl font-bold">
-            
-          </p>
+      ) : user?.role === 'seller' || user?.role === 'admin' ? (
+        <div className="bg-[#10C8B8] lg:block md:block z-0 collapse">
+          <div className="flex justify-between mx-auto px-4">
+            <div className="mb-4 md:mb-0">
+              <p className="text-xl font-bold">
+              </p>
+            </div>
+            <button
+              onClick={() => setShowSellerModal(true)}
+              className="bg-white text-[#10C8B8] hover:bg-indigo-100 font-medium py-2 px-6 rounded-full transition duration-300 ease-in-out transform border border-4 hover:scale-105"
+            >
+              BECOME A SELLER!
+            </button>
+          </div>
         </div>
-        <button
-          onClick={() => setShowSellerModal(true)}
-          className="bg-white text-[#10C8B8] hover:bg-indigo-100 font-medium py-2 px-6 rounded-full transition duration-300 ease-in-out transform border border-4 hover:scale-105"
-        >
-          BECOME A SELLER!
-        </button>
-      </div>
-    </div>
-    )
-    }
+      ) : null}
 
-    <BecomeSellerModal 
-      isOpen={showSellerModal} 
-      onClose={() => setShowSellerModal(false)} 
-    />
+      <BecomeSellerModal 
+        isOpen={showSellerModal} 
+        onClose={() => setShowSellerModal(false)} 
+      />
     </nav>
   );
+
 };
+
 
 export default Navbar;

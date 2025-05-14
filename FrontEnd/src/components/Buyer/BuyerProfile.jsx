@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { useAuthService } from "../../services/authService";
 import { useGetBuyerOrders } from "../../hooks/buyer/Buyer Profile/useGetBuyerOrders";
-import { userProfileServices } from "../../services/userProfileServices";
-import { Link } from "react-router-dom";
 import { EditModal } from "../Common/editProfileModal"; // Make sure path is correct
 import { useEditProfile } from "../../hooks/Users/useEditProfile";
 import { useProfileInfo } from "../../hooks/Users/useProfileInfo";
@@ -16,10 +14,10 @@ export const BuyerProfile = () => {
   const { data } = useProfileInfo();
 
   const { data: orders = [], isLoading: isLoadingOrders } = useGetBuyerOrders(user?._id);
+  console.log("Orders", orders);
   const { mutate: editUserProfile } = useEditProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+ 
 useEffect(() => {
   if (!isAuthenticated && !isCheckingAuth) {
     checkAuth();
@@ -46,10 +44,13 @@ useEffect(() => {
               handleClose();
             }, 1000);
           },
-          onError: (err) => {},
+          onError: (err) => {
+            console.log("Error", err);
+          },
         }
       );
     } catch (err) {
+      console.log("Error", err);
     }
   };
 

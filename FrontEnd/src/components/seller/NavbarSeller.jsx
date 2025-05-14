@@ -46,7 +46,7 @@ function NavbarSeller() {
             </div>
 
             <button 
-              onClick={() => navigate("/profile")}
+              onClick={() => navigate("profile")}
               className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
               <MdAccountCircle className="w-6 h-6 text-[#10C8B8]" />

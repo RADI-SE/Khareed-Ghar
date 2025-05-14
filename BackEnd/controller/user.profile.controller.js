@@ -6,14 +6,11 @@ import crypto from "crypto";
 
 export const editUserProfile = async (req, res) => {
   try {
-    console.log("Test 0 Passed");
-    // const { id } = req.params;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
     let user = await User.findById(userId);
-     const sellerStore = await SellerStore.find({ sellerId: user._id });
-    console.log("User", user);
+    const sellerStore = await SellerStore.find({ sellerId: user._id });
 
     if (!user) {
       return res
@@ -22,101 +19,96 @@ export const editUserProfile = async (req, res) => {
     }
 
     const { name, email, password, confirmPassword, storeName, isStore, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName } = req.body;
-   
-    console.log("req.body", req.body);
-    if(name){
-        user.name = name;
+    
+    let updateMessage = "Profile updated successfully";
+    let hasUpdates = false;
+    if (name) {
+      user.name = name;
+      hasUpdates = true;
     }
 
-    if(email){
-        user.email = email;
+    if (email) {
+      user.email = email;
+      hasUpdates = true;
     }
 
-    if(password && confirmPassword){
-        if (password !== confirmPassword) {
-            return res.status(400).json({
-                success: false,
-                message: "Passwords do not match",
-                showToast: true,
-            });
-        }
-        if (password.length < 8) {
-            return res.status(400).json({
-                success: false,
-                message: "Password must be at least 6 characters long",
-                showToast: true,
-            });
-        }
-        if (password === user.password) {
-            return res.status(400).json({
-                success: false,
-                message: "New password cannot be the same as the old password",
-                showToast: true,
-            });
-        }
-        
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const hashedConfirmPassword = await bcrypt.hash(confirmPassword, 10);
-
-        user.password = hashedPassword;
-        user.confirmPassword = hashedConfirmPassword;
-
-    }
-
-    console.log("Test 1 Passed");
-    isStore === true;
-    console.log("Test 2 Passed");
-
-
-
-        if(user.role === "seller" || user.role === "Seller" && isStore){
-
-          console.log("Test 3 Passed");
-          console.log("User ID", user._id);
-           
-
-            console.log("Test 4 Passed");
-            console.log("sellerStore", sellerStore);
-            if (sellerStore) {
-              console.log("Test 5 Passed");
-              // Update the existing seller store
-               if(storeName){
-                sellerStore[0].storeName = storeName; 
-               }
-               if(businessType){
-                sellerStore[0].businessType = businessType;
-               }
-               if(storeTagline){
-                sellerStore[0].storeTagline = storeTagline;
-               }
-               if(physicalStoreAddress){
-                sellerStore[0].physicalStoreAddress = physicalStoreAddress;
-               }
-               if(phoneNumber){
-                sellerStore[0].phoneNumber = phoneNumber;
-               }
-               if(bankAccountNumber){
-                sellerStore[0].bankAccountNumber = bankAccountNumber;
-               }
-               if(bankName){
-                sellerStore[0].bankName = bankName;
-               }
-            
-            }
-          }
-          
-          await user.save();
-          await sellerStore[0]?.save()
-
-          console.log("Test 6 Passed");
-          console.log("Seller Store", sellerStore);
-          
-
-        res.status(200).json({
-          success: true,
-          message: "User profile updated successfully",
+    // Handle password update
+    if (password?.oldPassword && password?.newPassword) {
+      if (password.newPassword.length < 8) {
+        return res.status(400).json({
+          success: false,
+          message: "New password must be at least 8 characters long",
+          showToast: true,
         });
-        
+      }
+
+      const isPasswordValid = await bcrypt.compare(password.oldPassword, user.password);
+      
+      if (!isPasswordValid) {
+        return res.status(400).json({
+          success: false,
+          message: "Current password is incorrect",
+          showToast: true,
+        });
+      }
+
+      const hashedNewPassword = await bcrypt.hash(password.newPassword, 10);
+      user.password = hashedNewPassword;
+      hasUpdates = true;
+      updateMessage = "Password updated successfully";
+    }
+
+    // Handle seller store updates
+    if (user.role === "seller" || user.role === "Seller") {
+      if (sellerStore && sellerStore.length > 0) {
+        if (storeName) {
+          sellerStore[0].storeName = storeName;
+          hasUpdates = true;
+        }
+        if (businessType) {
+          sellerStore[0].businessType = businessType;
+          hasUpdates = true;
+        }
+        if (storeTagline) {
+          sellerStore[0].storeTagline = storeTagline;
+          hasUpdates = true;
+        }
+        if (physicalStoreAddress) {
+          sellerStore[0].physicalStoreAddress = physicalStoreAddress;
+          hasUpdates = true;
+        }
+        if (phoneNumber) {
+          sellerStore[0].phoneNumber = phoneNumber;
+          hasUpdates = true;
+        }
+        if (bankAccountNumber) {
+          sellerStore[0].bankAccountNumber = bankAccountNumber;
+          hasUpdates = true;
+        }
+        if (bankName) {
+          sellerStore[0].bankName = bankName;
+          hasUpdates = true;
+        }
+
+        if (hasUpdates) {
+          await sellerStore[0].save();
+        }
+      }
+    }
+
+    if (hasUpdates) {
+      await user.save();
+      return res.status(200).json({
+        success: true,
+        message: updateMessage,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "No changes were made",
+    });
+
   } catch (error) {
     console.error("Error in editUserProfile:", error);
     res.status(500).json({
@@ -134,6 +126,7 @@ export const getUserProfile = async (req, res) => {
     const userId = decoded.userId;
 
     const user = await User.findById(userId).select("-password -confirmPassword");
+
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
