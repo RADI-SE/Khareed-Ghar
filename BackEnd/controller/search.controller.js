@@ -70,21 +70,18 @@ Instructions:
 
 if (type === "auction") {
   console.log("Test 1");
-  const auctions = await Auction.find({ _id: { $in: relevantIds } });
-
-  // Extract productIds from the auctions array
-  const productIds = auctions.map(a => a.productId);
-
-  // Fetch corresponding products
-  const products = await Product.find({ _id: { $in: productIds }, isAuction: true });
-
+  const auctions = await Auction.find()
+      .populate('productId', 'name price images')  
+      .populate('currentBidder', 'name'); 
   if (auctions.length === 0) {
     return res.status(404).json({ message: "No auctions found" });
   }
 
   if (auctions.length > 0) {
-    console.log("Modal Consol", auctions, products);
-    return res.status(200).json({ message: "Auctions found", auction: auctions, products });
+    
+    console.log("Test 2",relevantIds);
+
+    return res.status(200).json({ message: "Auctions found",products:auctions });
   }
 }
 
@@ -93,3 +90,5 @@ if (type === "auction") {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
+

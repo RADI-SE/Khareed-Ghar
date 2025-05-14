@@ -44,7 +44,7 @@ const SearchResults = () => {
           {results?.map((item) => (
             <div key={item._id} className="min-w-[200px] flex-shrink-0 sm:min-w-[250px]">
               {type === "auction" ? (
-                <AuctionCard auctions={results} />
+                <AuctionCard auctions={item} />
               ) : (
                 <ProductCard product={item} />
               )}

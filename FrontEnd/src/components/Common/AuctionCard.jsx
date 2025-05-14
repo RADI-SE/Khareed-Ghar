@@ -9,32 +9,7 @@ const AuctionCard = ({ auctions }) => {
     e.preventDefault();
     navigate(`/auction/${auctionId}`);
   };
-  console.log("eMessage Auction", auctions);
-
-//   {
-//     "specifications": {
-//         "capacity": "256GB",
-//         "color": "Black",
-//         "condition": "Used"
-//     },
-//     "_id": "6815c87db4dcf0eabe99a938",
-//     "name": "Iphone 15 Pro Max",
-//     "description": "Good Mobile but expensive",
-//     "price": 450,
-//     "isAuction": true,
-//     "category": "674f9d1ca625626a2353c332",
-//     "subcategory": "680396ea22cfe38489ffdd4b",
-//     "seller": "680ff23bf8c2f1f713ac8082",
-//     "images": [
-//         "/uploads/1746258044907-403171175-I15.jpeg"
-//     ],
-//     "createdAt": "2025-05-03T07:40:45.050Z",
-//     "updatedAt": "2025-05-03T07:40:45.050Z",
-//     "__v": 0
-// }
-console.log("Auctionss", auctions);
-
-
+   
   return (
   <>
     {auctions?.productId ? (
@@ -56,33 +31,6 @@ console.log("Auctionss", auctions);
         <div className="px-5 py-4 space-y-2 text-center">
           <h3 className="text-lg font-semibold text-gray-800">{auctions?.productId?.name || "Auction Item"}</h3>
           <p className="text-gray-600">Current Bid: ${auctions?.currentPrice || auctions?.startingPrice}</p>
-          <button
-            onClick={(e) => handleDetail(e, auctions._id)}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
-          >
-            View Details
-          </button>
-        </div>
-      </div>
-    ) : auctions?.products?._id  ? (
-      <div className="bg-white rounded-2xl shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300 overflow-hidden">
-        <div className="relative">
-          <img
-            src={auctions?.products?.images?.[0] ? `/public/images/${auctions?.products?.images[0]}` : defaultProduct}
-            alt={auctions?.products?.name || "Auction Item"}
-            className="w-full h-56 object-cover"
-          />
-          <div
-            className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold shadow-md ${
-              auctions?.status === "ongoing" ? "bg-green-600 text-white" : "bg-gray-400 text-white"
-            }`}
-          >
-            {auctions?.status === "ongoing" ? "Active" : "Inactive"}
-          </div>
-        </div>
-        <div className="px-5 py-4 space-y-2 text-center">
-          <h3 className="text-lg font-semibold text-gray-800">{auctions?.products?.name || "Auction Item"}</h3>
-          <p className="text-gray-600">Current Bid: ${auctions?.products?.currentPrice || auctions?.startingPrice}</p>
           <button
             onClick={(e) => handleDetail(e, auctions._id)}
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
