@@ -111,12 +111,13 @@ function VerifyEmail() {
       </div>
 
       <div className="image-section col-12 col-md-6 d-none d-md-block">
-        <h3>What is Lorem Ipsum?</h3>
+        <h3>  Verify Your Email </h3>
         <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
+       
+We've sent a verification link to your email address.
+Click the link to confirm your account and get started.
+
+Didn’t get the email? Check your spam or junk folder, or resend the email..
         </p>
       </div>
     </div>
