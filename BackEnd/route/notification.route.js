@@ -4,7 +4,7 @@ import { getNotifications, getSellerNotifications, updateNotification, updateBuy
 const router = express.Router();
 
 router.get("/buyer-notifications", getNotifications);
-router.put("/buyer-notifications/:id", updateBuyerNotification);
+router.put("/buyer-notifications/:feedbackId", updateBuyerNotification);
 
 router.get("/seller-notifications", getSellerNotifications);
 router.put("/seller-notifications/:id", updateNotification);

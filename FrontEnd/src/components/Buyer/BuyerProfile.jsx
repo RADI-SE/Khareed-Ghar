@@ -14,7 +14,7 @@ export const BuyerProfile = () => {
   const { data } = useProfileInfo();
 
   const { data: orders = [], isLoading: isLoadingOrders } = useGetBuyerOrders(user?._id);
-  console.log("Orders", orders);
+ 
   const { mutate: editUserProfile } = useEditProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
  

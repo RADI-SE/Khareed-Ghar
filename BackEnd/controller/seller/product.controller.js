@@ -368,9 +368,7 @@ Return ONLY the product Ids, one per line, with no bullet points, no extra text,
       _id: { $in: matchedTitles },
       isAuction: false,
     });
-
-    console.log("similarProducts",similarProducts);
-
+ 
     return res.status(200).json({ success: true, similarProducts });
 
   } catch (error) {

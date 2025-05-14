@@ -7,9 +7,10 @@ import { useBuyerService } from "../../services/buyer/buyerServices";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import FeedBackModal from "./FeedBackModal";
-import { FaStar, FaTrashAlt } from 'react-icons/fa';
+import { FaStar, FaTrashAlt, FaEdit } from 'react-icons/fa';
 import { useFetchFeedbacks } from "../../hooks/feedback/useFetchFeedbacks";
-
+import { useDeleteFeedback } from "../../hooks/feedback/useDeleteFeedback";
+ 
 const ProductDetail = () => {
   const userid = sessionStorage.getItem("id");
   const { id } = useParams(); 
@@ -26,11 +27,12 @@ const ProductDetail = () => {
   const [similarProducts, setSimilarProducts] = useState([]);
   const [storeName, setStoreName] = useState('');
   const [showFeedBackModal, setShowFeedBackModal] = useState(false);
+  const [editingFeedback, setEditingFeedback] = useState(null);
   const { data:feedbacks, isLoading:loadingFeedbacks } = useFetchFeedbacks(id);
-   console.log("feedbackssss", feedbacks);
-  const { addFeedback, deleteBuyerFeedback } = useBuyerService();
 
-  
+  const { addFeedback, updateFeedback } = useBuyerService();
+  const { mutate: deleteFeedback } = useDeleteFeedback();
+ 
   useEffect(() => {
     window.scrollTo(0, 0);
     setSelectedImage(0);
@@ -41,7 +43,6 @@ const ProductDetail = () => {
       
         try {
           const storeData = await sellerStore(id);
-          console.log("Store Data", storeData);
           setStoreName(storeData);
         } catch (error) {
           console.error("Error fetching store data:", error);
@@ -90,6 +91,8 @@ const ProductDetail = () => {
       return;
     }
 
+    
+
     setQuantity((prev) => prev + 1); 
     AddToCart({ id:userid, productId, quantity: quantity + 1 });
     setIsInCart(true);
@@ -131,27 +134,40 @@ const ProductDetail = () => {
   }
 
   const handleSubmit = (data) => {
-    addFeedback(product._id, data.rating, data.comment);
+    if (editingFeedback) {
+      console.log("Editing feedback", editingFeedback);
+      updateFeedback({ 
+        feedbackId: editingFeedback._id, 
+        rating: data.rating, 
+        comment: data.comment 
+      });
+      console.log("Updated feedback");
+    } else {
+      addFeedback(product._id, data.rating, data.comment);
+    }
     setShowFeedBackModal(false);
-    console.log("Daata", data);
-  };
-
-  // Filter out the current product and ensure we have valid products
+    setEditingFeedback(null);
+  }; 
   const filteredSimilarProducts = similarProducts.filter(p => p._id !== id);
+ 
 
-  console.log("Similar Products", similarProducts);
-  console.log("Feedback", feedbacks);
-
-  const handleDeleteClick = async (feedback) => {
-    try {
-      const deleted = await deleteBuyerFeedback(feedback._id);
-      console.log("Deleted:", deleted);
+  const handleDeleteClick = (feedback) => {
+    try { 
+      console.log("Feedback ID", feedback._id);
+      deleteFeedback({ feedbackId: feedback._id });
       // optionally remove from UI or refetch
+      console.log("Deleted feedback");
+      
     } catch (error) {
       console.error("Delete failed", error);
     }
+  }; 
+
+  const handleUpdateClick = (feedback) => {
+    setEditingFeedback(feedback);
+    setShowFeedBackModal(true);
   };
-  console.log("Teeeeeeeeeeeeeest",feedbacks?.user?._id)
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12 px-4 sm:px-6 lg:px-8">
@@ -341,94 +357,93 @@ const ProductDetail = () => {
             </h2>
 
             {loadingFeedbacks ? (
-              <p className="text-gray-500">Loading reviews...</p>
+              <div className="flex justify-center items-center py-4">
+                <p className="text-gray-500">Loading reviews...</p>
+              </div>
             ) : feedbacks && feedbacks.length > 0 ? (
-              // <div className="space-y-4">
-              //   {feedbacks.map((fb, index) => (
-              //     <div key={index} className="border border-gray-200 rounded-lg p-4">
-              //       <div className="flex items-center mb-2">
-              //         <div className="text-yellow-500 text-sm font-bold mr-2">
-              //           {Array.from({ length: fb.rating }).map((_, i) => (
-              //             <span key={i}>★</span>
-              //           ))}
-              //         </div>
-              //         <span className="text-sm text-gray-500">by {fb?.user?.name || 'Anonymous'}</span>
-              //       </div>
-              //       <p className="text-gray-700">{fb.comment}</p>
-              //     </div>
-              //   ))}
-              // </div>
-              <div>
-                        <h3 className="text-2xl font-semibold mb-4">Product Feedbacks</h3>
-                        <div className="flex flex-col md:flex-row justify-between space-x-0 md:space-x-10 mt-8">
-                          <div className="md:w-full">
-                            <div className="flex justify-between border-b item-center mb-4 text-xs font-bold">
-                              <div className="max-h-80 overflow-y-auto border rounded-md w-full">
-                                <div className="overflow-x-auto">
-                                  <table className="w-full min-w-max border-collapse">
-                                    <thead className="bg-gray-200 sticky top-0 text-sm">
-                                      <tr>
-                                        <th className="text-left px-4 py-2">Rating</th>
-                                        <th className="text-left px-4 py-2">Comment</th>
-                                        <th className="text-left px-4 py-2">Date</th>
-                                        <th className="text-left px-4 py-2">Action</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody className="text-sm md:text-base">
-                                      {feedbacks?.map((feedback) => (
-                                        <tr key={feedback._id} className="border-b hover:bg-gray-50">
-                                          <td className="px-4 py-2">
-                                            <div className="flex items-center">
-                                              {[...Array(5)].map((_, index) => (
-                                                <FaStar
-                                                  key={index}
-                                                  className={`w-4 h-4 ${
-                                                    index < feedback.rating
-                                                      ? 'text-yellow-400'
-                                                      : 'text-gray-300'
-                                                  }`}
-                                                />
-                                              ))}
-                                            </div>
-                                          </td>
-                                          <td className="px-4 py-2">{feedback.comment}</td>
-                                          <td className="px-4 py-2">
-                                            {new Date(feedback.createdAt).toLocaleDateString()}
-                                          </td>
-                                          
-                                          <td className="px-4 py-2">
-                                              <button
-                                                 className="w-4 h-5 text-red-500"
-                                                 onClick={() => handleDeleteClick(feedback)}
-                                              >
-                                                 <FaTrashAlt />
-                                              </button>
-                                          </td>
-              
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                </div>
+              <div className="mt-8">
+                <h3 className="text-2xl font-semibold mb-6">Product Reviews</h3>
+                <div className="bg-white rounded-lg shadow-sm">
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-max border-collapse">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="text-left px-6 py-3 text-sm font-semibold text-gray-600">Rating</th>
+                          <th className="text-left px-6 py-3 text-sm font-semibold text-gray-600">Comment</th>
+                          <th className="text-left px-6 py-3 text-sm font-semibold text-gray-600">Date</th>
+                          {userid && (
+                            <th className="text-left px-6 py-3 text-sm font-semibold text-gray-600">Action</th>
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {feedbacks?.map((feedback) => (
+                          <tr key={feedback._id} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-6 py-4">
+                              <div className="flex items-center space-x-1">
+                                {[...Array(5)].map((_, index) => (
+                                  <FaStar
+                                    key={index}
+                                    className={`w-4 h-4 ${
+                                      index < feedback.rating
+                                        ? 'text-yellow-400'
+                                        : 'text-gray-300'
+                                    }`}
+                                  />
+                                ))}
                               </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">{feedback.comment}</td>
+                            <td className="px-6 py-4 text-gray-500">
+                              {new Date(feedback.createdAt).toLocaleDateString()}
+                            </td>
+                            {userid && userid === feedback.userId.toString() && (
+                              <>
+                              <td className="px-6 py-4">
+                                <button
+                                  className="text-blue-500 hover:text-blue-700 transition-colors"
+                                  onClick={() => handleUpdateClick(feedback)}
+                                  title="Update review"
+                                  >
+                                  <FaEdit className="w-4 h-4" />
+                                </button>
+                              </td>
+
+                              <td className="px-6 py-4">
+                                <button
+                                  className="text-red-500 hover:text-red-700 transition-colors"
+                                  onClick={() => handleDeleteClick(feedback)}
+                                  title="Delete review"
+                                >
+                                  <FaTrashAlt className="w-4 h-4" />
+                                </button>
+                              </td>
+                            </>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             ) : (
-              <p className="text-gray-500">No reviews yet.</p>
+              <div className="flex justify-center items-center py-8">
+                <p className="text-gray-500">No reviews yet.</p>
+              </div>
             )}
 
           </div>
-
-
-
       </div>
       <FeedBackModal 
         isOpen={showFeedBackModal} 
-         onClose={() => setShowFeedBackModal(false)} 
-         onSubmit={handleSubmit}
-         />
+        onClose={() => {
+          setShowFeedBackModal(false);
+          setEditingFeedback(null);
+        }} 
+        onSubmit={handleSubmit}
+        initialData={editingFeedback}
+      />
     </div>
   );
 }

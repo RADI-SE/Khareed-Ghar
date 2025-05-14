@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import ProductCard from "../../components/Common/ProductCard";
 import { useFetchProducts } from "../../hooks/seller/useFetchProducts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,8 +10,7 @@ const ProductsOnHomePage = () => {
     isLoading: isLoadingProducts,
     isError: productsError,
   } = useFetchProducts();
-
-  // Group products by category
+ 
   const productsByCategory = products.reduce((acc, product) => {
     if (product.category) {
       const categoryId = product.category._id;
@@ -51,7 +50,7 @@ const ProductsOnHomePage = () => {
   return (
     <div className="container mx-auto py-12">
       {Object.entries(productsByCategory)
-        .filter(([_, categoryData]) => categoryData.products.length > 0)
+        .filter(([, categoryData]) => categoryData.products.length > 0)
         .map(([categoryId, categoryData]) => (
           <div key={categoryId} className="mb-12">
             <button 
@@ -72,16 +71,18 @@ const ProductsOnHomePage = () => {
                 ref={(el) => (scrollRefs.current[categoryId] = el)}
                 className="flex overflow-x-auto space-x-4 scrollbar-hide px-4"
               >
-                {categoryData.products.map((product) => (
-                  <div
-                    key={product._id}
-                    className="min-w-[200px] flex-shrink-0 sm:min-w-[250px]"
-                  >
-                    <ProductCard product={product} />
-                  </div>
-                ))}
+                {categoryData.products
+                  .filter(product => !product.isConsigned || (product.isConsigned && product.consigneeId))
+                  .map((product) => (
+                    <div
+                      key={product._id}
+                      className="min-w-[200px] flex-shrink-0 sm:min-w-[250px]"
+                    >
+                      <ProductCard product={product} />
+                    </div>
+                  ))}
               </div>
-
+              
               {/* Right Button */}
               <button
                 onClick={() => scroll(categoryId, "right")}

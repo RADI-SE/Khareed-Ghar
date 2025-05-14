@@ -45,11 +45,7 @@ export const getFeedBacksByProductId = async (req, res) => {
         },
         { headers: { "Content-Type": "application/json" } }
       );
-      console.log("Ai Response", aiResponse);
       const aiText = aiResponse?.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      
-      console.log("Test 6", aiText);
-
       const relevantIds = aiText
         .split("\n")
         .map(line => line.trim())
@@ -58,7 +54,6 @@ export const getFeedBacksByProductId = async (req, res) => {
       const filteredFeedbacks = feedbacks.filter(fb =>
         relevantIds.includes(fb._id.toString())
       );
-      console.log("Test 7", filteredFeedbacks);
   
       return res.status(200).json({ success: true, feedbacks: filteredFeedbacks });
   
@@ -84,18 +79,22 @@ export const addFeedback = async (req, res) => {
 
 export const updateFeedback = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { feedbackId } = req.params;
         const { rating, comment } = req.body;
         const token  = req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.userId;
-        console.log("test-1 update feedback")
-        const feedback = await Feedback.findByIdAndUpdate(id, { rating, comment, userId }, { new: true });
-        res.status(200).json(feedback);
+        const feedback = await Feedback.findById(feedbackId);
+        if(userId !== feedback.userId.toString()){
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
+        const updatedFeedback = await Feedback.findByIdAndUpdate(feedbackId, { rating, comment, userId }, { new: true });
+        res.status(200).json(updatedFeedback);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
+
 // delete feedback for sellers
 export const deleteFeedback = async (req, res) => {
     try {
@@ -104,6 +103,10 @@ export const deleteFeedback = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.userId;
         const feedback = await Feedback.findById(id);
+        const product = await Product.findById(feedback.productId);
+        if(userId !== product.userId.toString()){
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
         await Feedback.findByIdAndDelete(id);
         res.status(200).json({ message: 'Feedback deleted successfully' });
     } catch (error) {
@@ -113,20 +116,23 @@ export const deleteFeedback = async (req, res) => {
 // delete feedback for buyers
 export const deleteFeedbackBuyer = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { feedbackId } = req.params;
         const token  = req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.userId;
-        const feedback = await Feedback.findById(id);
-        if(userId !== feedback.userId){
+        const feedback = await Feedback.findById(feedbackId);
+        if(userId !== feedback.userId.toString()){
             return res.status(403).json({ message: 'Unauthorized' });
         }
-        await Feedback.findByIdAndDelete(id);
+        await Feedback.findByIdAndDelete(feedbackId);
         res.status(200).json({ message: 'Feedback deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
+
+
+
 
 export const getFeedbackByUserId = async (req, res) => {
     try {

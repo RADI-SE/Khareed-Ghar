@@ -216,21 +216,34 @@ export const useBuyerService = create((set) => ({
       set({ errorMessage: error.message, isLoading: false });
     }
   },
-  deleteBuyerFeedback: async (id) => {
+  deleteBuyerFeedback: async (feedbackId) => {
     try {
+      console.log("Feedback ID from service ", feedbackId);
       set({ isLoading: true, errorMessage: null });
-      const response = await axios.delete(`http://localhost:5000/api/delete-buyer-feedback/${id}`,
-        {
-        withCredentials: true // <-- this sends the cookie (token)
-      }
-      );
+      const response = await axios.delete(`http://localhost:5000/api/delete-buyer-feedback/${feedbackId}`);
+      console.log("Feedback ID from service ", response);
       set({ isLoading: false });
       return response.data;
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
     }
   },
-  
+  updateFeedback: async (feedbackId) => {
+    try {
+     
+      console.log("test-1 update feedback")
+      console.log(feedbackId)
+ 
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.put(`http://localhost:5000/api/update-feedback/${feedbackId.feedbackId}`, { rating: feedbackId.rating, comment: feedbackId.comment });
+      console.log("test-2 update feedback")
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+
+  },
 
 }));
 
