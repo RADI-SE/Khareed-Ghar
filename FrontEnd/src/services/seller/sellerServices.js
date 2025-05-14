@@ -234,9 +234,17 @@ export const useSellerService = create((set) => ({
 
   getSimilarProducts: async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/seller/getSimilarProducts/${id}`);
-      return response.data;
-    } catch (error) {
+      console.log("test 180r", id);
+      set({ isLoading: true, Error: null, isError: false });
+      const response = await axios.get(`http://localhost:5000/api/similarAuctions/${id}`);
+      console.log("test 181r", response.data.similarAuctions);
+      return response.data.similarAuctions;
+      } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching similar products.",
+      });
     }
   },
   // createAuction
@@ -418,6 +426,11 @@ export const useSellerService = create((set) => ({
       const response = await axios.get(`http://localhost:5000/api/seller-notifications`);
       return response.data;
     } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching notifications.",
+      });
     }
   },
 
@@ -427,6 +440,11 @@ export const useSellerService = create((set) => ({
       const response = await axios.get(`http://localhost:5000/api/buyer-notifications`);
       return response.data;
     } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching notifications.",
+      });
     }
   },
 
@@ -436,6 +454,11 @@ export const useSellerService = create((set) => ({
       const response = await axios.put(`http://localhost:5000/api/buyer-notifications/${id}`, { read } );
       return response.data;
     } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while updating notification.",
+      });
     }
   },  
   updateNotification: async (id, read) => {
@@ -443,7 +466,13 @@ export const useSellerService = create((set) => ({
     try {
       const response = await axios.put(`http://localhost:5000/api/seller-notifications/${id}`, { read } );
       return response.data;
-    } catch (error) {    }
+    } catch (error) { 
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while updating notification.",
+      });
+    }
   },  
 }));
 
@@ -456,13 +485,29 @@ export const useStoreService = create((set) => ({
       console.log("response",response);
       return response.data;
     } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching seller store.",
+      }); 
 
     }
+  },
+  getSimilarAuctions: async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/seller/similarAuctions/${id}`);
+      return response.data;
+    } catch (error) {
+      set({
+        isLoading: false,
+        isError: true,
+        Error: error.message || "An error occurred while fetching similar auctions.",
+      });
+    }
   }
+  
+
 }));
-
-
-// response 
 // {data: Array(1), status: 200, statusText: 'OK', headers: AxiosHeaders, config: {…}, …}
 // config
 // : 

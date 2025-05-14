@@ -10,6 +10,7 @@ import {
     deleteAuction,
     getCurrentLeftTime, 
     getAuctionStatus,  
+    getSimilarAuctions
 } from '../../controller/seller/auction.controller.js';
 
 import { verifyTokenForRole } from "../../middleware/verifyTokenForRole.js";
@@ -39,5 +40,6 @@ router.get('/userAuctions', getAuctionDetails);
 
 router.patch('/:auctionId/complete', verifySeller, completeAuction);
 
+router.get('/similarAuctions/:id', getSimilarAuctions);
 
  export default router;

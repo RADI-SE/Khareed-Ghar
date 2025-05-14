@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import defaultProduct from "../../assets/images/default.jpeg";
 import { useFetchAuctionsById } from "../../hooks/seller/Auctions/useFetchAuctionsById";
@@ -9,6 +9,7 @@ import { useCurrentLeftTime } from '../../hooks/seller/Auctions/useFetchCurrentL
 import { FaClock } from 'react-icons/fa';
 import { useAuthService } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
+import { useSellerService } from '../../services/seller/sellerServices';
 
 const AuctionDetail = () => {
   const { id } = useParams();
@@ -17,7 +18,10 @@ const AuctionDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const {data:product} = useFetchProductById(auction?.auction?.productId);
   const { data: currentLeftTime } = useCurrentLeftTime(id);
+  const scrollContainerRef = useRef(null);
+  const [similarAuctions, setSimilarAuctions] = useState([]);
   const navigate = useNavigate();
+  const { getSimilarProducts } = useSellerService();
   const { isAuthenticated, user } = useAuthService();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -26,7 +30,22 @@ const AuctionDetail = () => {
     if (isAuthenticated && user) {
       console.log(user);
     }
-  }, [isAuthenticated, user]);
+
+    const fetchSimilarProducts = async () => {
+      try {
+        const products = await getSimilarProducts(id);
+        console.log("test 182r:::::::::::::::::::::::::::::", products);
+        setSimilarAuctions(products || []);
+      } catch (error) {
+        console.error("Error fetching similar products:", error);
+        setSimilarAuctions([]);
+      }
+    };
+
+    if (id) {
+      fetchSimilarProducts();
+    } 
+  }, [isAuthenticated, user, getSimilarProducts, id]);
   const { mutate: bidNow } = useBidNow();
 
   if (isLoading) {
@@ -44,6 +63,11 @@ const AuctionDetail = () => {
       </div>
     );
   }
+
+  const handleSimilarProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
 
   const handleBidSubmit = (e) => {
     e.preventDefault();
@@ -66,6 +90,9 @@ const AuctionDetail = () => {
     }
     setBidAmount('');
   };
+
+
+  console.log("similarAuctions::::::::::::",similarAuctions);
 
   const productImages = auction?.productId?.images 
     ? Array.isArray(auction.productId.images)
@@ -238,6 +265,40 @@ const AuctionDetail = () => {
               </div>
             </div>
           </div>
+
+          <div 
+                ref={scrollContainerRef}
+                className="flex overflow-x-auto gap-4 sm:gap-6 pb-4 scrollbar-hide"
+              >
+                {similarAuctions.map((auction) => (
+                  <div
+                    key={auction._id}
+                    onClick={() => handleSimilarProductClick(auction._id)}
+                    className="flex-none w-48 sm:w-56 md:w-64 bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
+                  >
+                    <div className="h-40 sm:h-48 md:h-56 overflow-hidden">
+                      <img
+                        src={auction.productId?.images?.[0] ? `/images/${auction.productId.images[0]}` : defaultProduct}
+                        alt={auction.productId?.name}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-3 sm:p-4">
+                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1 sm:mb-2 line-clamp-2">
+                        {auction.productId?.name}
+                      </h3>
+                      <div className="flex flex-col gap-1">
+                        <p className="text-sm text-gray-600">
+                          Starting Bid: ${auction.startingBid?.toFixed(2)}
+                        </p>
+                        <p className="text-lg sm:text-xl font-bold text-blue-600">
+                          Current Bid: ${auction.currentBid?.toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
         </div>
       </div>
     </div>

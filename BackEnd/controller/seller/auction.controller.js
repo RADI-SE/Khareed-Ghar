@@ -6,6 +6,7 @@ import { AdminNotification } from "../../model/admin.notification.model.js";
 import { User } from "../../model/user.model.js";
 import { Cart } from "../../model/cart.model.js";
 import jwt from "jsonwebtoken"
+import axios from 'axios';
 
 
 function sleep(ms) {
@@ -512,3 +513,72 @@ export const getAuctionStatus = async (req, res) => {
   }
 };
 
+export const getSimilarAuctions = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const auction = await Auction.findById(id).populate('productId');
+    if (!auction) {
+      return res.status(404).json({ success: false, message: "Auction not found." });
+    }
+
+    const otherAuctions = await Auction.find({
+      _id: { $ne: id },
+      status: 'ongoing'
+    })
+    .populate('productId')
+    .limit(20);
+    
+    const prompt = `
+You are an AI assistant helping to find similar products.
+
+Here is the selected auction:
+---
+Title: ${auction.productId?.name || 'N/A'}
+Description: ${auction.productId?.description || 'N/A'}
+Category: ${auction.productId?.category || 'N/A'}
+Subcategory: ${auction.productId?.subcategory || 'N/A'}
+---
+
+Here are some other auctions:
+${otherAuctions.map((a, i) =>
+  `(${i + 1}) Title: ${a.productId?.name || 'N/A'} | Description: ${a.productId?.description || 'N/A'} | Id: ${a._id}`
+).join('\n')}
+
+Recommend the 5 most similar products based on title and description.
+
+Return ONLY the product Ids, one per line, with no bullet points, no extra text, and no formatting — just like this:
+
+6802ba4db60d654741244e05
+6802ba4db60d654741244e06
+6802ba4db60d654741244e07
+6802ba4db60d654741244e08
+6802ba4db60d654741244e09
+`;
+
+    const aiResponse = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        contents: [{ parts: [{ text: prompt }] }],
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    const aiText = aiResponse?.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    const matchedIds = aiText
+      .split("\n")
+      .map(line => line.trim())
+      .filter(Boolean);
+
+    const similarAuctions = await Auction.find({
+      _id: { $in: matchedIds },
+      status: 'ongoing'
+    }).populate('productId');
+
+    return res.status(200).json({ success: true, similarAuctions });
+
+  } catch (error) {
+    console.error("Error in getSimilarAuctions:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
