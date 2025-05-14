@@ -33,7 +33,7 @@ const AuctionCard = ({ auctions }) => {
           <p className="text-gray-600">Current Bid: ${auctions?.currentPrice || auctions?.startingPrice}</p>
           <button
             onClick={(e) => handleDetail(e, auctions._id)}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
+            className="w-full bg-[#10C8B8] hover:bg-[#0eb2a6] text-white py-2 rounded-lg transition-colors duration-200 font-medium text-sm"
           >
             View Details
           </button>

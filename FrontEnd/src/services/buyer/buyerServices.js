@@ -216,6 +216,20 @@ export const useBuyerService = create((set) => ({
       set({ errorMessage: error.message, isLoading: false });
     }
   },
+  deleteBuyerFeedback: async (id) => {
+    try {
+      set({ isLoading: true, errorMessage: null });
+      const response = await axios.delete(`http://localhost:5000/api/delete-buyer-feedback/${id}`,
+        {
+        withCredentials: true // <-- this sends the cookie (token)
+      }
+      );
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      set({ errorMessage: error.message, isLoading: false });
+    }
+  },
   
 
 }));

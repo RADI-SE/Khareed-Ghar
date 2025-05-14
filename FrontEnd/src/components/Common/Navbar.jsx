@@ -234,7 +234,7 @@ const Navbar = () => {
               {/* Mobile Navigation Items */}
               <div className="flex items-center justify-between">
                 <button 
-                  onClick={() => navigate("/cart")} 
+                  onClick={() => navigate("/cart")}
                   className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <FaShoppingCart className="w-6 h-6 text-[#10C8B8]" />

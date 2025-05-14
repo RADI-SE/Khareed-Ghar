@@ -96,8 +96,22 @@ export const updateFeedback = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-
+// delete feedback for sellers
 export const deleteFeedback = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const token  = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        const feedback = await Feedback.findById(id);
+        await Feedback.findByIdAndDelete(id);
+        res.status(200).json({ message: 'Feedback deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+// delete feedback for buyers
+export const deleteFeedbackBuyer = async (req, res) => {
     try {
         const { id } = req.params;
         const token  = req.cookies.token;
@@ -113,6 +127,7 @@ export const deleteFeedback = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
 export const getFeedbackByUserId = async (req, res) => {
     try {
         const { userId } = req.params;

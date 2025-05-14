@@ -10,6 +10,8 @@ import { FaClock } from 'react-icons/fa';
 import { useAuthService } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useSellerService } from '../../services/seller/sellerServices';
+import AuctionCard from './AuctionCard';
+
 
 const AuctionDetail = () => {
   const { id } = useParams();
@@ -110,7 +112,7 @@ const AuctionDetail = () => {
               <div>
                 <div className="relative h-[300px] overflow-hidden rounded-lg">
                   <img
-                    src={productImages[selectedImage] ? `/images/${productImages[selectedImage]}` : defaultProduct}
+                    src={product?.[selectedImage] ? `/images/${product?.[selectedImage]}` : defaultProduct}
                     alt={product?.name || 'Auction Item1'}
                     className="w-full h-full object-contain"
                   />
@@ -138,7 +140,7 @@ const AuctionDetail = () => {
 
               {/* Bidders Table */} 
               <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-4 py-2 sm:px-6 bg-blue-900">
+                <div className="px-4 py-2 sm:px-6 bg-[#10C8B8]">
                   <h3 className="text-lg font-medium leading-6 text-white">Auction Bidders</h3>
                   <p className="mt-1 max-w-2xl text-sm text-white">List of all bids placed on this item</p>
                 </div>
@@ -192,12 +194,12 @@ const AuctionDetail = () => {
 
                 <div className="space-y-2">
                   <h6 className="font-manrope font-semibold text-2xl leading-9 text-gray-900 pr-5 sm:border-r border-gray-200 mr-5">Starting Price: ${auction?.auction?.startingBid?.toFixed(2)}</h6>
-                  <p className="text-lg font-medium leading-8 text-indigo-600 mb-4">
+                  <p className="text-lg font-medium leading-8 text-[#10C8B8] mb-4">
                     Current Bid: ${(auction?.auction?.currentBid || auction?.auction?.startingBid)?.toFixed(2)}
                   </p>
                 </div>
 <div className="bg-white rounded-lg">
-                <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+                <h3 className="text-lg font-semibold text-[#10C8B8] mb-4 flex items-center">
                   <FaClock className="mr-2" />
                   Time Remaining
                 </h3>
@@ -242,14 +244,14 @@ const AuctionDetail = () => {
                     <input
                       type="number"
                       placeholder="Bid must be higher than current bid"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10C8B8] block w-full p-2.5"
                       value={bidAmount}
                       onChange={(e) => setBidAmount(e.target.value)}
                     />
 
                     <button
                       onClick={handleBidSubmit}
-                      className="text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2"
+                      className="text-white bg-[#10C8B8] hover:bg-[#0eb2a6] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2"
                     >
                       SUBMIT
                     </button>
@@ -264,41 +266,23 @@ const AuctionDetail = () => {
               </div>
             </div>
           </div>
+          </div>
 
+
+          {/* Other Auctions */}
+          <div className="bg-white my-5 rounded-2xl shadow overflow-hidden">
+            <h3 className='px-3 py-2'>Other Auctions</h3>
+          
           <div 
                 ref={scrollContainerRef}
-                className="flex overflow-x-auto gap-4 sm:gap-6 pb-4 scrollbar-hide"
+                className="flex overflow-x-auto gap-4 sm:gap-6 p-3 shadow scrollbar-hide"
               >
                 {similarAuctions.map((auction) => (
-                  <div
-                    key={auction._id}
-                    onClick={() => handleSimilarProductClick(auction._id)}
-                    className="flex-none w-48 sm:w-56 md:w-64 bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
-                  >
-                    <div className="h-40 sm:h-48 md:h-56 overflow-hidden">
-                      <img
-                        src={auction.productId?.images?.[0] ? `/images/${auction.productId.images[0]}` : defaultProduct}
-                        alt={auction.productId?.name}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <div className="p-3 sm:p-4">
-                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1 sm:mb-2 line-clamp-2">
-                        {auction.productId?.name}
-                      </h3>
-                      <div className="flex flex-col gap-1">
-                        <p className="text-sm text-gray-600">
-                          Starting Bid: ${auction.startingBid?.toFixed(2)}
-                        </p>
-                        <p className="text-lg sm:text-xl font-bold text-blue-600">
-                          Current Bid: ${auction.currentBid?.toFixed(2)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  <AuctionCard key={auction._id} auctions={auction} />
                 ))}
               </div>
-        </div>
+              </div>
+        
       </div>
     </div>
   );

@@ -64,14 +64,14 @@ const DetailAuction = ({
               {/* Product Title and Starting Bid */}
               <div>
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">{auction.productsName}</h1>
-                <p className="text-3xl font-bold text-blue-600">
+                <p className="text-3xl font-bold text-[#10C8B8]">
                   Starting Bid: ${auction.startingBid}
                 </p>
               </div>
 
               {/* Timer Section */}
               <div className="bg-white rounded-lg">
-                <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+                <h3 className="text-lg font-semibold text-[#10C8B8] mb-4 flex items-center">
                   <FaClock className="mr-2" />
                   Time Remaining
                 </h3>
@@ -113,7 +113,7 @@ const DetailAuction = ({
               {/* Bid History */}
               {/* Bidders Table */} 
               <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-4 py-2 sm:px-6 bg-blue-900">
+                <div className="px-4 py-2 sm:px-6 bg-[#10C8B8]">
                   <h3 className="text-lg font-medium leading-6 text-white">Auction Bidders</h3>
                   <p className="mt-1 max-w-2xl text-sm text-white">List of all bids placed on this item</p>
                 </div>

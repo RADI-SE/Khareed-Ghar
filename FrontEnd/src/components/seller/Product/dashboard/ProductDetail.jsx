@@ -36,6 +36,7 @@ const ProductDetail = ({ selectedProduct }) => {
   }, [selectedProduct?._id, getFeedbackByProductId]);
 
   return (
+    <>
     <div className="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Column - Image Gallery */}
@@ -57,7 +58,7 @@ const ProductDetail = ({ selectedProduct }) => {
                 onClick={() => setSelectedImageIndex(index)}
                 className={`aspect-square relative rounded-lg overflow-hidden ${
                   selectedImageIndex === index
-                    ? "ring-2 ring-blue-500"
+                    ? "ring-2 ring-[#10C8B8]"
                     : "ring-1 ring-gray-200"
                 }`}
               >
@@ -104,7 +105,7 @@ const ProductDetail = ({ selectedProduct }) => {
 
           <div className="flex flex-col space-y-4">
             <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-2xl font-bold text-green-600">
+              <h3 className="text-2xl font-bold text-[#10C8B8]">
                 ${selectedProduct?.price || "N/A"}
               </h3>
             </div>
@@ -117,8 +118,10 @@ const ProductDetail = ({ selectedProduct }) => {
           </div>
         </div>
       </div>
+    </div>
 
-      {/* Feedback Section */}
+        {/* Feedback Section */}
+        {feedbacks.length > 0 && (
       <div className="mt-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Product Feedbacks</h2>
         {isLoading ? (
@@ -129,7 +132,9 @@ const ProductDetail = ({ selectedProduct }) => {
           <FeedbackTable feedbacks={feedbacks} />
         )}
       </div>
-    </div>
+        )}
+
+    </>
   );
 };
 
