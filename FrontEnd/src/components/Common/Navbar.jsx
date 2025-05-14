@@ -319,7 +319,7 @@ const Navbar = () => {
       </div>
 
       {/* Bottom Navigation */}
-      {user?.role !== 'seller' ? (
+      {user?.role !== 'seller' || user?.role !== 'admin' ? (
       <div className="bg-[#10C8B8] lg:block md:block z-0">
       <div className="flex justify-between mx-auto px-4">
         <div className="mb-4 md:mb-0">

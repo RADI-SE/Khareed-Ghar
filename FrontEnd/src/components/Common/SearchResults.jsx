@@ -16,13 +16,9 @@ const SearchResults = () => {
     const fetchSearchResults = async () => {
       try {
         const res = await searchProduct(query, type);
-        console.log("Response 11",res );
-        if(res.message==='Auctions found'){
-          setResults(res || []);
-        }
-        else{
-          setResults(res?.products || []);
-        }
+        console.log("Response 11",res?.products );
+        
+        setResults(res?.products || []);
 
         console.log("Response",res);
       } catch (err) {
@@ -43,9 +39,9 @@ const SearchResults = () => {
       <h2 className="text-2xl font-semibold mb-4">Search Results for "{query}"</h2>
       {loading ? (
         <p>Loading...</p>
-      ) : results?.products?.length > 0 ? (
+      ) : results?.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {results?.products?.map((item) => (
+          {results?.map((item) => (
             <div key={item._id} className="min-w-[200px] flex-shrink-0 sm:min-w-[250px]">
               {type === "auction" ? (
                 <AuctionCard auctions={results} />

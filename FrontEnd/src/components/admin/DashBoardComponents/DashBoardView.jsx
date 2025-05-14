@@ -97,8 +97,8 @@ export const DashBoardView = () => {
               {currentData.map((order) => (
                 <tr
                   key={order._id}
-                  onClick={() => handleRowClick(order)}
-                  className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+               
+                  className="transition-colors duration-150  "
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {order?.user}

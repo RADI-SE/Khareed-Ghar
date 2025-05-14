@@ -8,19 +8,25 @@ export const getFeedBacksByProductId = async (req, res) => {
     try {
       const { id } = req.params;
 
+
+
       const product = await Product.findById(id);
+      
       if (!product) {
         return res.status(404).json({ success: false, message: "Product not found." });
       }
   
       const feedbacks = await Feedback.find({ productId: id });
+ 
       if (feedbacks.length === 0) {
         return res.status(200).json({ success: true, feedbacks: [] });
       }
+
    
       const allFeedbackText = feedbacks.map(fb =>
         `ID: ${fb._id}\nRating: ${fb.rating}\nComment: ${fb.comment}`
       ).join("\n---\n");
+
    
       const prompt = `
   You are an AI assistant helping filter user product feedback.
@@ -55,6 +61,7 @@ export const getFeedBacksByProductId = async (req, res) => {
       const filteredFeedbacks = feedbacks.filter(fb =>
         relevantIds.includes(fb._id.toString())
       );
+      console.log("Test 7", filteredFeedbacks);
   
       return res.status(200).json({ success: true, feedbacks: filteredFeedbacks });
   
