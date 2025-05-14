@@ -35,6 +35,14 @@ const ProductSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isConsigned: {
+      type: Boolean,
+      default: false,
+    },
+    consigneeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Subcategory' },
     seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

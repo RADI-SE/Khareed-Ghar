@@ -7,6 +7,7 @@ import {SellerStore} from "../model/seller.store.model.js";
 import { Product } from "../model/product.model.js";
 import { Auction } from "../model/auction.model.js";
 import { mongo } from "mongoose";
+import { Consignee } from "../model/consignee.model.js";
 
 
 function sleep(ms) {
@@ -18,6 +19,7 @@ function sleep(ms) {
 export const signup = async (req, res) => {
   const { name, email, password, confirmPassword, role, isAgreeToTerms, storeName, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName } = req.body;
 
+  console.log("test 1 signup for consignee ", role);
   try {
     // Validation checks
     if (!name) {
@@ -65,15 +67,14 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
       confirmPassword: hashedConfirmPassword,
-      role: role.toLowerCase() === "seller" ? "seller" : "buyer",
+      role: role.toLowerCase() === "seller" ? "seller" : role.toLowerCase() === "consignee" ? "consignee" : "buyer",
       isAgreeToTerms,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
     });
-
-    console.log("test 1 ", user);
+ 
     let bool = false;
-    if (role === "Seller" || role === "seller") {
+    if (role === "Seller" || role === "seller" || role === "Consignee" || role === "consignee" ) {
       bool = true;
 
     }
@@ -98,6 +99,13 @@ export const signup = async (req, res) => {
       });
       await sellerStore.save();
     }
+    if(role === "consignee"){
+      const consignee = new Consignee({
+        consigneeId: user._id,
+        consignedProducts: [],
+      });
+      await consignee.save();
+    }
 
     const message = `verification code is ${verificationToken}`;   
     try {
@@ -121,7 +129,6 @@ export const signup = async (req, res) => {
         
       });
     } catch (emailError) {
-      // If email fails, still create user but return a warning
       res.status(201).json({
         success: true,
         message: "User created successfully but verification email could not be sent",

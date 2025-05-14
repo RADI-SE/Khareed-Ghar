@@ -27,7 +27,7 @@ router.put("/seller/products/:id", verifySeller,editProduct);
 
 router.delete("/seller/products/:id", verifySeller, deleteProduct);
 
-router.post("/seller/getSimilarProducts", getSimilarProducts);
+router.post("/seller/getSimilarProducts/:id", getSimilarProducts);
 
 
 export default router;

@@ -12,7 +12,7 @@ export const addProduct = async (req, res) => {
       ? JSON.parse(req.body.specifications)
       : {};
 
-    const { name, description, price, category, subcategory, seller, isAuction } =
+    const { name, description, price, category, subcategory, seller, isAuction, isConsigned, consigneeId } =
       req.body;
 
     const file = req.file; 
@@ -90,10 +90,13 @@ export const addProduct = async (req, res) => {
       subcategory,
       seller: userId,
       isAuction,
+      isConsigned,
+      consigneeId,
       images: imagePath,
     });
     const savedProduct = await product.save();
     const findUser = await User.findById(userId);
+  
     const adminNotification = new AdminNotification({
       receipient: "6728e930dc54a1f881e1d0cd",
       product: product._id,
@@ -310,14 +313,13 @@ export const getSimilarProducts = async (req, res) => {
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found." });
     }
-
     const otherProducts = await Product.find({
       _id: { $ne: id },
       category: product.category,
       subcategory: product.subcategory,
       isAuction: false,
     }).limit(20); // limit context size
- 
+  
     const prompt = `
 You are an AI assistant helping to find similar products.
 
@@ -352,6 +354,7 @@ Return ONLY the product Ids, one per line, with no bullet points, no extra text,
       },
       { headers: { "Content-Type": "application/json" } }
     );
+  
 
     const aiText = aiResponse?.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
@@ -364,6 +367,8 @@ Return ONLY the product Ids, one per line, with no bullet points, no extra text,
       _id: { $in: matchedTitles },
       isAuction: false,
     });
+
+    console.log("similarProducts",similarProducts);
 
     return res.status(200).json({ success: true, similarProducts });
 

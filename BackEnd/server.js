@@ -18,6 +18,7 @@ import manageCarousel from "./route/admin/manage.carousel.js"
 import editUserProfile from "./route/edit.profile.route.js";
 import searchRoutes from "./route/buyer/search.routes.js";
 import feedbackRoutes from "./route/feedback.route.js";
+import consigneeRoutes from "./routes/consignee.routes.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -72,6 +73,8 @@ app.use("/api", editUserProfile);
 app.use("/api", searchRoutes);
 
 app.use("/api", feedbackRoutes);
+
+app.use("/api/consignee", consigneeRoutes);
 
 app.listen(PORT, () => {
 

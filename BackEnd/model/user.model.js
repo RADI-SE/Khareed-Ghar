@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin","buyer", "seller","moderator", "banned"],
+      enum: ["admin","buyer", "seller","consignee", "banned"],
       default: "buyer",
     },
     lastLogin: {

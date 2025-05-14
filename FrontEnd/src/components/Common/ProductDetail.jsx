@@ -139,6 +139,7 @@ const ProductDetail = () => {
   // Filter out the current product and ensure we have valid products
   const filteredSimilarProducts = similarProducts.filter(p => p._id !== id);
 
+  console.log("Similar Products", similarProducts);
   console.log("Feedback", feedbacks);
 
   const handleDeleteClick = async (feedback) => {

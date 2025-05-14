@@ -228,10 +228,10 @@ export const useSellerService = create((set) => ({
   },
 
   getSimilarProducts: async (id) => {
-    try {
+    try { ``
       set({ isLoading: true, Error: null, isError: false });
-      const response = await axios.get(`http://localhost:5000/api/similarAuctions/${id}`);
-      return response.data.similarAuctions;
+      const response = await axios.get(`http://localhost:5000/api/seller/getSimilarProducts/${id}`);
+      return response.data;
       } catch (error) {
       set({
         isLoading: false,
