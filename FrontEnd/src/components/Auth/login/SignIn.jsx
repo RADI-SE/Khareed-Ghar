@@ -54,6 +54,8 @@ function SignIn() {
         return <Navigate to="/admin" />;
       case "seller":
         return <Navigate to="/seller" />;
+        case "consignee":
+          return <Navigate to="/consignee" />;
       case "buyer":
         return <Navigate to="/" />;
    
