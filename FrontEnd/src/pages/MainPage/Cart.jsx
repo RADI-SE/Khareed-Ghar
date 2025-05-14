@@ -27,18 +27,18 @@ const Cart = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 min-h-96 px-4 md:px-16 lg:px-24">
+    <div className="container w-full py-8 min-h-96 px-4 md:px-2 lg:px-2">
       {items?.length > 0 ? (
         <div>
           <h3 className="text-2xl font-semibold mb-4">Shopping Cart</h3>
           <div className="flex flex-col md:flex-row justify-between space-x-0 md:space-x-10 mt-8">
             <div className="md:w-2/3">
               <div className="flex justify-between border-b item-center mb-4 text-xs font-bold">
-                <div className="max-h-80 overflow-y-auto border rounded-md w-full">
+                <div className="max-h-80 overflow-y-auto border rounded-md">
                  
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-max border-collapse">
-                      <thead className="bg-gray-200 sticky top-0 text-sm">
+                      <thead className="bg-[#10C8B8] sticky top-0 text-sm text-white">
                         <tr>
                           <th className="text-left px-4 py-2">Product</th>
                           <th className="text-left px-4 py-2">Name</th>
@@ -58,14 +58,14 @@ const Cart = () => {
                                 className="w-16 h-16 md:w-20 md:h-20 object-contain rounded"
                               />
                             </td>
-                            <td className="px-4 py-2 font-semibold">
+                            <td className="px-4 py-2 ">
                               {product?.name}
                             </td>
-                            <td className="px-4 py-2 font-semibold">
+                            <td className="px-4 py-2 ">
                               ${product?.price}
                             </td>
-                            <td className="px-4 py-2 font-semibold">{quantity}</td>
-                            <td className="px-4 py-2 font-semibold">${total}</td>
+                            <td className="px-4 py-2 ">{quantity}</td>
+                            <td className="px-4 py-2 ">${total}</td>
                             <td className="px-4 py-2">
                               <button
                                 className="text-red-500 hover:text-red-700"
@@ -86,7 +86,7 @@ const Cart = () => {
             </div>
 
             <div className="md:w-1/3 bg-white p-6 rounded-lg shadow-md border">
-              <h3 className="text-sm font-semibold mb-5">Summary</h3>
+              <h3 className="text-lg font-semibold font-semibold mb-5 text-[#0eb2a6]">Summary</h3>
               <div className="flex justify-between mb-5 border-b pb-1">
                 <span className="text-sm">Total Items</span>
                 <span>{items.length}</span>
@@ -96,7 +96,7 @@ const Cart = () => {
                 <span>${totalAmount.toFixed(2)}</span>
               </div>
               <button
-                className="w-full bg-blue-900 text-white py-2 hover:bg-blue-700 rounded-md"
+                className="w-full bg-[#10C8B8] hover:bg-[#0eb2a6] text-white py-2 rounded-md"
                 onClick={handleCheckOut}
               >
                 Checkout
