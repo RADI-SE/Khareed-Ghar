@@ -3,6 +3,7 @@ import { Category } from "../../model/category.model.js";
 import { Product } from "../../model/product.model.js";
 import axios from "axios";
 import { AdminNotification } from "../../model/admin.notification.model.js";
+import { User } from "../../model/user.model.js";
 export const addProduct = async (req, res) => {
   try {
     const token = req.cookies.token;

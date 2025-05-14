@@ -22,6 +22,7 @@ export const AddProductForm = () => {
   const [images, setImage] = useState([]);
 
   const [isAuction, setIsAuction] = useState(false);
+  const [isConsigned, setIsConsigned] = useState(false);
   const [auctionDetails, setAuctionDetails] = useState({
     startTime: "",
     endTime: "",
@@ -108,7 +109,8 @@ export const AddProductForm = () => {
         SubCategoryId,
         seller,
         images,
-        isAuction
+        isAuction,
+        isConsigned
       );
       
       if (isAuction && productId) {
@@ -122,7 +124,12 @@ export const AddProductForm = () => {
       
       handleResetChange();
     } catch (error) {
+      console.log(error);
     }
+  };
+
+  const handleConsignedToggle = (e) => {
+    setIsConsigned(e.target.checked);
   };
 
   return (
@@ -334,6 +341,14 @@ export const AddProductForm = () => {
                     </div>
                   </div>
                 )}
+                <div className="flex items-center space-x-2 mt-4">
+                  <label className="text-sm font-medium text-gray-700">Enable it to be Consigned?</label>
+                  <input
+                    type="checkbox"
+                    checked={isConsigned}
+                    onChange={handleConsignedToggle}
+                    />
+                </div>
               </div>
             </>
           )}

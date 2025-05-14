@@ -28,7 +28,9 @@ export const useSellerService = create((set) => ({
     subcategory,
     seller,
     images,
-    isAuction
+    isAuction,
+    isConsigned,
+
   ) => {
     try {
       // Set loading state while performing request
@@ -43,6 +45,7 @@ export const useSellerService = create((set) => ({
       formData.append("subcategory", subcategory);
       formData.append("seller", seller);
       formData.append("isAuction", isAuction);  
+      formData.append("isConsigned", isConsigned);
       // Loop through images array and append each file
       images.forEach((file) => {
         formData.append("file", file);
