@@ -49,6 +49,8 @@ function SignIn() {
       return <Navigate to="/auth/verify-email" />;
     }
 
+    console.log("User role:", userRole);
+
     switch (userRole) {
       case "admin":
         return <Navigate to="/admin" />;

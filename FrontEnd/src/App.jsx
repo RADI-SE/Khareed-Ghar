@@ -10,6 +10,7 @@ import { useAuthService } from "./services/authService";
 import HomeRoutes from "./pages/HomeRoutes";
 import AdminRoutes from "./pages/AdminRoutes";
 import SellerRoutes from "./pages/SellerRoutes";
+import ConsigneeRoutes from "./pages/ConsigneeRoutes";
 import AuthRoutes from "./pages/AuthRoutes";
 import NotFound from "./components/NotFound";
 import VerifyEmail from "./components/Auth/VerifyEmail";
@@ -103,6 +104,23 @@ const App = () => {
         { path: "orders/order-details", element: <Outlet /> },
         { path: "products", element: <Outlet /> },
         { path: "auctions", element: <Outlet /> },
+        { path: "*", element: <Outlet /> },
+      ],
+    },
+        {
+      path: "consignee/*",
+      element:
+        isAuthenticated && user?.role === "consignee" ? (
+          <ConsigneeRoutes />
+        ) : (
+          <Navigate to="/" />
+        ),
+      children: [
+        { path: "", element: <Outlet /> },
+        { path: "dashboard", element: <Outlet /> },
+        { path: "orders", element: <Outlet /> },
+        { path: "orders/order-details", element: <Outlet /> },
+        { path: "products", element: <Outlet /> },
         { path: "*", element: <Outlet /> },
       ],
     },

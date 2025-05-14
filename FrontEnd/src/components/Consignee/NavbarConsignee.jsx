@@ -7,6 +7,7 @@ import { useFetchNotifications } from '../../hooks/seller/Notifications/useFetch
 import { useSellerService } from '../../services/seller/sellerServices'
 import { useNavigate } from 'react-router-dom';
 
+
 function NavbarConsignee() {
   const [showNotifications, setShowNotifications] = useState(false);
   const { signout, user } = useAuthService();

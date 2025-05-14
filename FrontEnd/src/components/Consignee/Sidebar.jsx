@@ -57,7 +57,7 @@ const Sidebar = () => {
                     isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
-                to="/seller/dashboard"
+                to="/consignee/dashboard"
                 onClick={() => window.innerWidth < 1024 && setIsCollapsed(false)}
               >
                 Dashboard
@@ -71,7 +71,7 @@ const Sidebar = () => {
                     isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
-                to="/seller/orders"
+                to="/consignee/orders"
                 onClick={() => window.innerWidth < 1024 && setIsCollapsed(false)}
               >
                 Order Management
@@ -84,7 +84,7 @@ const Sidebar = () => {
                     isActive ? 'bg-[#0eb2a6]' : ''
                   }`
                 }
-                to="/seller/products"
+                to="/consignee/products"
                 onClick={() => window.innerWidth < 1024 && setIsCollapsed(false)}
               >
                 Product Management

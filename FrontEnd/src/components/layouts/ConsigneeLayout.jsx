@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../../components/Consignee/Sidebar";
 import { Outlet } from "react-router-dom";
-import NavbarConsignee from "../../components/Consignee/NavbarSeller";
+import NavbarConsignee from "../../components/Consignee/NavbarConsignee";
 const ConsigneeLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
