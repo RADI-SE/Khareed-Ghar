@@ -30,6 +30,8 @@ export const useSellerService = create((set) => ({
     images,
     isAuction,
     isConsigned,
+    consignmentStatus,
+
 
   ) => {
     try {
@@ -44,8 +46,9 @@ export const useSellerService = create((set) => ({
       formData.append("category", category);
       formData.append("subcategory", subcategory);
       formData.append("seller", seller);
-      formData.append("isAuction", isAuction);  
-      formData.append("isConsigned", isConsigned);
+      formData.append("isAuction", isAuction );  
+      formData.append("isConsigned", isConsigned || false);
+      formData.append("consignmentStatus", consignmentStatus || 'pending');
       // Loop through images array and append each file
       images.forEach((file) => {
         formData.append("file", file);
@@ -130,15 +133,20 @@ export const useSellerService = create((set) => ({
     description,
     specifications,
     price,
+    isConsigned,
+    consigneeId,
+    consignmentStatus,
     images
   ) =>{
 
-   
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
     formData.append("specifications", JSON.stringify(specifications));
     formData.append("price", price);
+    formData.append("isConsigned", isConsigned || false);
+    formData.append("consigneeId", consigneeId || null);
+    formData.append("consignmentStatus", consignmentStatus || 'pending');
     images.forEach((file) => {
       formData.append("file", file);
      });

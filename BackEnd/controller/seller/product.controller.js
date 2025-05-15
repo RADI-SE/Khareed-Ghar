@@ -4,6 +4,8 @@ import { Product } from "../../model/product.model.js";
 import axios from "axios";
 import { AdminNotification } from "../../model/admin.notification.model.js";
 import { User } from "../../model/user.model.js";
+import { UserNotification } from "../../model/user.notification.model.js";
+
 export const addProduct = async (req, res) => {
   try {
     const token = req.cookies.token;
@@ -218,8 +220,7 @@ export const editProduct = async (req, res) => {
       price,
     } = req.body;
 
-    console.log("req.body",req.body);
-    console.log("req.file",req.file);
+
     
     const file = req.file; 
     if (!file) {
@@ -267,6 +268,100 @@ export const editProduct = async (req, res) => {
   }
 };
 
+export const updateProductForConsignment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { consigneeId, consignmentStatus } = req.body;
+
+    // Validate consignment status
+    if (!['pending', 'accepted'].includes(consignmentStatus)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid consignment status. Must be either 'pending' or 'accepted'",
+      });
+    }
+
+    // Validate consigneeId if status is accepted
+    if (consignmentStatus === 'accepted' && !consigneeId) {
+      return res.status(400).json({
+        success: false,
+        message: "Consignee ID is required when accepting consignment",
+      });
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      {
+        consigneeId,
+        consignmentStatus,
+      },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found.",
+      });
+    }
+
+    if (consignmentStatus === 'accepted') {
+      const findUser = await User.findById(consigneeId);
+      if (!findUser) {
+        return res.status(404).json({
+          success: false,
+          message: "Consignee not found.",
+        });
+      }
+
+      const findSeller = await User.findById(updatedProduct.seller);
+      if (!findSeller) {
+        return res.status(404).json({
+          success: false,
+          message: "Seller not found.",
+        });
+      }
+
+      try {
+        const adminNotification = new AdminNotification({
+          receipient: "6728e930dc54a1f881e1d0cd",
+          product: id,
+          message: `Product ${updatedProduct.name} has been accepted by ${findUser.name}`,
+          read: false,
+          readAt: null,
+          link: `/admin/products/${id}`,
+        });
+        await adminNotification.save();
+
+        const sellerNotification = new UserNotification({
+          receipient: findSeller._id,
+          product: id,
+          message: `Product ${updatedProduct.name} has been accepted by ${findUser.name}`,
+          read: false,
+          readAt: null,
+          link: `/seller/products/${id}`,
+        });
+        await sellerNotification.save();
+      } catch (notificationError) {
+        console.error("Error creating notifications:", notificationError);
+        // Continue with the response even if notifications fail
+      }
+    }
+
+    return res.status(200).json({ 
+      success: true, 
+      message: "Product updated successfully",
+      updatedProduct 
+    });
+  } catch (error) {
+    console.error("Error updating product for consignment:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+};
 // Delete Product
 export const deleteProduct = async (req, res) => {
   try {

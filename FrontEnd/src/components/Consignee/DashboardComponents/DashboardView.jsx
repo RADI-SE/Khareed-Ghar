@@ -22,6 +22,7 @@ const DashboardView = () => {
   };
 
 
+  const productsConsigned = products.filter((product) => product.isConsigned === true);
   if (isLoadingProducts) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -45,7 +46,8 @@ const DashboardView = () => {
 
   return (  
     <>
-
+    {products.length > 0 ? (
+      <>
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       {selectedProduct ? (
         <div className="max-w-7xl mx-auto">
@@ -77,12 +79,22 @@ const DashboardView = () => {
               <h4 className="text-2xl font-bold text-gray-900">Products</h4>
             </div>
             <div className="p-6">
-              <ProductTable products={products} onProductClick={handleProductClick} />
+              {productsConsigned.length > 0 ? (
+                <ProductTable products={productsConsigned} onProductClick={handleProductClick} isConsignment={true} />
+              ) : (
+                <div className="text-2xl font-bold text-gray-900">No products found</div>
+              )}
             </div>
           </div>
         </div>
       )}
     </div>
+    </>
+    ) : (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-2xl font-bold text-gray-900">No products found</div>
+      </div>
+    )}
   </>
   );
 };

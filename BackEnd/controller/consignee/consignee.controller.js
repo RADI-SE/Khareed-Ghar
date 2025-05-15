@@ -2,25 +2,21 @@ import { Consignee } from "../../model/consignee.model.js";
 import { User } from "../../model/user.model.js";
 import { Product } from "../../model/product.model.js";
 import jwt from "jsonwebtoken";
+ 
 
-export const createConsignee = async (req, res) => {
+export const acceptConsignment = async (req, res) => {
     try {
         const token = req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.userId;
         const { consignedProducts } = req.body;
-
-        if (!consignedProducts || !Array.isArray(consignedProducts) || consignedProducts.length === 0) {
-            return res.status(400).json({ message: "Invalid or empty consigned products array" });
-        }
-
         const products = await Product.find({ _id: { $in: consignedProducts } });
         if (products.length === 0) {
             return res.status(400).json({ message: "No products found" });
         }
-
+        
         const consignee = await Consignee.create({ consigneeId: userId, consignedProducts: products });
-        res.status(201).json({ message: "Consignee created", consignee });
+        res.status(201).json({ status: 201, message: "Consignment accepted", consignee });
     } catch (error) {
         console.error("Error creating consignee:", error);
         res.status(500).json({ message: "Internal server error", error: error.message });

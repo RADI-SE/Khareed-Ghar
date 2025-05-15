@@ -15,33 +15,54 @@ export const useConsigneeService = create((set) => ({
     setError: (message) => set({ Error: message }),
     clearError: () => set({ Error: null, isError: false, isLoading: true }),
  
-    getConsigneeProducts: async () => {
-        try {
-             const response = await axios.get(API_URL + "consignee/get-consignee-products");
-            set({ consigneeProducts: response.data });
-        } catch (error) {
-            set({ isError: true, Error: error.response.data.message });
-        }
-    },
-    getConsigneeProducts: async () => {
+    acceptConsignment: async (consignedProducts) => {
         try {
             set({ isLoading: true });
-            const response = await axios.get(API_URL +"consignee/get-consignee-products");
-            set({ consigneeProducts: response.data });
+            const response = await axios.post(API_URL + "consignee/accept-consignment", { consignedProducts });
+            set({ isLoading: false });
             return response.data;
         } catch (error) {
             set({ isError: true, Error: error.response.data.message });
+            throw error;
         }
     },
+
+    updateProductForConsignment: async ({ id, consigneeId, consignmentStatus }) => {
+        try {
+            set({ isLoading: true, isError: false, Error: null });
+            const response = await axios.put(API_URL + "consignee/update-consignment/" + id, {
+                consigneeId,
+                consignmentStatus
+            });
+            set({ isLoading: false });
+            return response.data;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || "Failed to update consignment status";
+            set({ 
+                isLoading: false, 
+                isError: true, 
+                Error: errorMessage 
+            });
+            throw new Error(errorMessage);
+        }
+    },
+
     getConsigneeProducts: async () => {
         try {
             set({ isLoading: true });
-            const response = await axios.get(API_URL +"consignee/get-consignee-products");
-            set({ consigneeProducts: response.data });
-            console.log("response.data",response.data);
+            const response = await axios.get(API_URL + "consignee/get-consignee-products");
+            set({ 
+                consigneeProducts: response.data,
+                isLoading: false 
+            });
             return response.data;
         } catch (error) {
-            set({ isError: true, Error: error.response.data.message });
+            set({ 
+                isError: true, 
+                Error: error.response?.data?.message || "Failed to fetch consignee products",
+                isLoading: false 
+            });
+            throw error;
         }
     }
 }));

@@ -78,7 +78,9 @@ const ProductsOnHomePage = () => {
                       key={product._id}
                       className="min-w-[200px] flex-shrink-0 sm:min-w-[250px]"
                     >
-                      <ProductCard product={product} />
+                      <ProductCard product={product} 
+                      isConsigned={product.isConsigned}
+                      />
                     </div>
                   ))}
               </div>

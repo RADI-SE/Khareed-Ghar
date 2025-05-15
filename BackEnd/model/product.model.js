@@ -43,6 +43,11 @@ const ProductSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    consignmentStatus: {
+      type: String,
+      enum: ['pending', 'accepted'],
+      default: 'pending',
+    },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Subcategory' },
     seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
