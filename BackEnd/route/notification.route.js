@@ -1,5 +1,5 @@
 import express from "express";
-import { getNotifications, getSellerNotifications, updateNotification, updateBuyerNotification, getAdminNotifications } from "../controller/notification.controller.js";
+import { getNotifications, getSellerNotifications, updateNotification, updateBuyerNotification, getAdminNotifications, updateAdminNotification } from "../controller/notification.controller.js";
 
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.put("/seller-notifications/:id", updateNotification);
 
 
 router.get("/admin-notifications", getAdminNotifications);
+router.put("/admin-notifications/:id", updateAdminNotification);
 
 
 export default router;

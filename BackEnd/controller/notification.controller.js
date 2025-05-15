@@ -92,4 +92,26 @@ export const getAdminNotifications = async (req, res) => {
   }
 };
 
+export const updateAdminNotification = async (req, res) => {
+  try {
+ 
+    console.log("HI MESSAGE")
+    const {id} = req.params;
+    const notification = await AdminNotification.findById(id);
+    const { read } = req.body;
+    if(!notification){
+      return res.status(404).json({ message: "Notification not found" });
+    }
+    notification.read = read;
+    notification.readAt = new Date();
+    await notification.save();
+    console.log("pass")
+    res.status(200).json({ message: "Notification updated" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
 

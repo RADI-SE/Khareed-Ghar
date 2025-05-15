@@ -273,8 +273,7 @@ export const updateProductForConsignment = async (req, res) => {
     const { id } = req.params;
     const { consigneeId, consignmentStatus } = req.body;
 
-    // Validate consignment status
-    if (!['pending', 'accepted'].includes(consignmentStatus)) {
+     if (!['pending', 'accepted'].includes(consignmentStatus)) {
       return res.status(400).json({
         success: false,
         message: "Invalid consignment status. Must be either 'pending' or 'accepted'",

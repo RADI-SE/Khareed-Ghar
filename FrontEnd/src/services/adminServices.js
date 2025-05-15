@@ -435,16 +435,33 @@ export const useAdminService = create((set) => ({
 
   getAdminNotifications: async () => {
     try {
-      console.log("Fetching admin notifications for ID:");
-      set({ isLoading: true, errorMessage: null });
+       set({ isLoading: true, errorMessage: null });
       const response = await axios.get(`${API_URL}admin-notifications`);
-      console.log("Admin notifications:", response.data);
-      set({ isLoading: false });
-      return response.data;
+     if(response.status === 200){
+       set({ isLoading: false });
+       return response.data;
+     }
     } catch (error) {
       console.error("Error fetching admin notifications:", error);
       set({ isLoading: false, isError: true, errorMessage: error?.response?.data?.message || "Failed to fetch admin notifications" });
       toast.error(error?.response?.data?.message || "Failed to fetch admin notifications");
     }
-  }
+  },
+  updateAdminNotification: async (id, read) => {
+    try {
+      const response = await axios.put(`${API_URL}admin-notifications/${id}`, { read });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to update admin notification");
+    }
+  },
+  updateUserRole: async (id, role) => {
+    try {
+      const response = await axios.put(`${API_URL}update-user-role/${id}`, { role });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to update user role");
+    }
+  },
+  
 }));

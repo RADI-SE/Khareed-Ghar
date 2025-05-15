@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuthService } from "../../services/authService";
 import {FaBell} from "react-icons/fa";
 import { useFetchNotifications } from '../../hooks/admin/Notifications/useFetchNotifications';
 import { MdAccountCircle } from "react-icons/md";
 import { Link } from 'react-router-dom';
- import { FaCheck, FaTimes } from 'react-icons/fa';
+ import { FaCheck } from 'react-icons/fa';
 import { MdOutlineCancel } from 'react-icons/md';
-import { handleBecomeSellerRequest } from '../../services/admin/manageUsers';
+import { useAdminService } from '../../services/adminServices';
 
 function NavbarAdmin() {
 
@@ -15,12 +15,25 @@ function NavbarAdmin() {
     const navigate = useNavigate();
     const { data = [] } = useFetchNotifications();
     const [showNotifications, setShowNotifications] = useState(false);
- 
+    const { updateAdminNotification, updateUserRole } = useAdminService();
+
+    
+    const handleUpdateNotification = async (id) => {
+        await updateAdminNotification(id, true);
+    };
     const handleLogout = async () => {
         await signout();
         navigate("/signin");
       };
 
+      const handleAcceptRequest = async (id) => {
+        await updateUserRole(id, "seller");
+      };
+
+      const handleRejectRequest = async (id) => {
+        await updateUserRole(id, "buyer");
+      };
+    
   return (
     
         <nav className='fixed top-0 left-0 right-0 bg-white shadow-md z-50'>
@@ -68,34 +81,15 @@ function NavbarAdmin() {
                                                       <p className="text-xs text-gray-500 mt-1">{notification?.createdAt}</p>
                                                     </div>
                                                     
-                                                      {notification?.auctionEnded === true && (
+                                                      {notification?.userRequest && (
                                                     <div className="flex space-x-2 ml-2">
-                                                      <button className="p-1 hover:bg-green-100 rounded-full transition-colors" onClick={() => handleAuctionEnded(notification?.auction,true)}>
+                                                      <button className="p-1 hover:bg-green-100 rounded-full transition-colors" onClick={() => handleAcceptRequest(notification?.userRequest)}>
                                                         <FaCheck className="w-4 h-4 text-green-600"/>
                                                       </button>
-                                                      <button className="p-1 hover:bg-red-100 rounded-full transition-colors" onClick={() => handleAuctionEnded(notification?.auction,false)}>
+                                                      <button className="p-1 hover:bg-red-100 rounded-full transition-colors" onClick={() => handleRejectRequest(notification?.userRequest)}>
                                                         <MdOutlineCancel className="w-4 h-4 text-red-600"/>
                                                       </button>
                                                     </div>
-                                                    )}
-
-                                                    {/* Become a Seller Request */}
-                                                    
-                                                    {notification?.userRequest && (
-                                                      <div className="flex space-x-2 ml-2">
-                                                        <button
-                                                          className="p-1 hover:bg-green-100 rounded-full transition-colors"
-                                                          onClick={() => handleChangeRole(notification?.senderId, "approve")}
-                                                        >
-                                                          <FaCheck className="w-4 h-4 text-green-600" />
-                                                        </button>
-                                                        <button
-                                                          className="p-1 hover:bg-red-100 rounded-full transition-colors"
-                                                          onClick={() => handleChangeRole(notification?.senderId, "reject")}
-                                                        >
-                                                          <MdOutlineCancel className="w-4 h-4 text-red-600" />
-                                                        </button>
-                                                      </div>
                                                     )}
                                                   </div>
                                                 </div>

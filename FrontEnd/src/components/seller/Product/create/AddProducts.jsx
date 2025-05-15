@@ -115,6 +115,10 @@ export const AddProductForm = () => {
         isConsigned
       );
       
+      if(auctionDetails.startingBid < price){
+        toast.error("Starting bid cannot be less than the product price");
+        return;
+      }
       if (isAuction && productId) {
         await createAuction({
           productId: productId,

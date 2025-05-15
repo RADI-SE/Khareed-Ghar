@@ -18,11 +18,11 @@ export const editUserProfile = async (req, res) => {
         .json({ success: false, message: "User not found", showToast: true });
     }
 
-    const { name, email, password, confirmPassword, storeName, isStore, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName } = req.body;
+    const { name, email, password, storeName, businessType, storeTagline, physicalStoreAddress, phoneNumber, bankAccountNumber, bankName } = req.body;
     
     let updateMessage = "Profile updated successfully";
     let hasUpdates = false;
-    if (name) {
+    if (name) { 
       user.name = name;
       hasUpdates = true;
     }
@@ -32,7 +32,6 @@ export const editUserProfile = async (req, res) => {
       hasUpdates = true;
     }
 
-    // Handle password update
     if (password?.oldPassword && password?.newPassword) {
       if (password.newPassword.length < 8) {
         return res.status(400).json({
@@ -58,7 +57,6 @@ export const editUserProfile = async (req, res) => {
       updateMessage = "Password updated successfully";
     }
 
-    // Handle seller store updates
     if (user.role === "seller" || user.role === "Seller") {
       if (sellerStore && sellerStore.length > 0) {
         if (storeName) {
@@ -122,19 +120,41 @@ export const editUserProfile = async (req, res) => {
 export const getUserProfile = async (req, res) => {
   try {
     const token = req.cookies.token;
+    
+    if (!token) {
+      return res.status(401).json({ 
+        success: false,
+        message: "Authentication required. Please login to access your profile." 
+      });
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
 
     const user = await User.findById(userId).select("-password -confirmPassword");
 
-
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ 
+        success: false,
+        message: "User not found" 
+      });
     }
 
-    res.status(200).json({ user });
+    res.status(200).json({ 
+      success: true,
+      user 
+    });
   } catch (error) {
     console.error("Error in getUserProfile:", error);
-    res.status(500).json({ message: "Server error" });
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ 
+        success: false,
+        message: "Invalid token. Please login again." 
+      });
+    }
+    res.status(500).json({ 
+      success: false,
+      message: "Server error" 
+    });
   }
 }
