@@ -29,7 +29,7 @@ const DetailedProductView = () => {
     <div>
       {selectedCategory ? (
         <div>
-          <h4>Subcategories of {selectedCategory.name}</h4>
+          <p className="text-lg mt-3 font-semibold text-[#10C8B8]">Subcategories of {selectedCategory.name}</p>
           {selectedCategory.subcategories &&
           selectedCategory.subcategories.length > 0 ? (
             <SubcategoryTable

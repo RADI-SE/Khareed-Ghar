@@ -4,6 +4,7 @@ import { useFetchOrders } from "../../../hooks/admin/Orders/useFetchOrders";
 import dollar from "./icons/dollor.png";
 import reviews from "./icons/reviews.png";
 import sales from "./icons/sales.png";
+import { useFetchFeedbacks } from "../../../hooks/feedback/useFetchFeedbacks";
 
 export const DashBoardView = () => {
   const [currentPage, setCurrentPage] = useState(0);

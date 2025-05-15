@@ -63,7 +63,7 @@ const CarouselEditor = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Manage Carousel</h2>
+      <h2 className="text-2xl font-bold mb-4 text-[#10C8B8]">Manage Carousel</h2>
 
       <form onSubmit={handleUpload} className="mb-8">
         <input

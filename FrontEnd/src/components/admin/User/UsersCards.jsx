@@ -16,8 +16,8 @@ const UserCards = () => {
                   </svg>
                 </div>
               </div>
-              <h3 className="text-2xl font-bold text-white text-center mb-2">Moderators</h3>
-              <p className="text-white/90 text-center">Manage moderators and their roles</p>
+              <h3 className="text-2xl font-bold text-white text-center mb-2">Consignees</h3>
+              <p className="text-white/90 text-center">Manage Consignees and their roles</p>
             </div>
           </div>
         </Link>

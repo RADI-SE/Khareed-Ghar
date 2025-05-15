@@ -5,7 +5,7 @@ import DeleteCategory from './delete/DeleteCategory';
 import DetailedProductView from './dashboard/view';
 
 function CategoryManagement() {
-  const [searchTerm, setSearchTerm] = useState('');
+  // const [searchTerm, setSearchTerm] = useState('');
   const [currentView, setCurrentView] = useState('category'); 
 
   const tabs = [
@@ -47,7 +47,7 @@ function CategoryManagement() {
             </button>
           ))}
         </div>
-        {currentView === 'category' && (
+        {/* {currentView === 'category' && (
           <input 
             type="text"
             placeholder="Search by ID"
@@ -57,7 +57,7 @@ function CategoryManagement() {
             }}
             className="border p-2 mt-2 mr-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent"
           />
-        )}
+        )} */}
       </nav>
 
       <div className="view-container">{renderCurrentView()}</div>

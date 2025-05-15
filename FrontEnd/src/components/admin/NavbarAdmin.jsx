@@ -48,7 +48,7 @@ function NavbarAdmin() {
                             )}
                         </button>
                         {showNotifications && (
-                                        <div className="absolute right-0 mt-[150px] w-80 bg-white rounded-lg shadow-xl py-2 z-[9999]">
+                                        <div className="absolute right-0 mt-[150px] w-80 bg-white rounded-lg shadow-xl mt-[500px] z-[9999]">
                                           <div className="px-4 py-2 border-b border-gray-200">
                                             <h3 className="text-sm font-semibold text-gray-700">Notifications</h3>
                                           </div>

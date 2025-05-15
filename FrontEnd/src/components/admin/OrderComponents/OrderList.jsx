@@ -37,7 +37,7 @@ const OrderList = () => {
                     {order._id.substring(order._id.length - 6)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order.user}
+                    {order?.user}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${order.totalAmount}

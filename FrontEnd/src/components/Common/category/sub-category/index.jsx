@@ -4,12 +4,12 @@ const SubcategoryTable = ({ subcategories, selectedCategory, onBackClick }) => {
     return (
       <div>
         <div className="tablecss">
-          <button className="arrow-left btn-light" onClick={onBackClick}>
-            <FaArrowLeft />
+          <button className="bg-[#10C8B8] hover:bg-[#0eb2a6] text-white p-2 rounded mb-2" onClick={onBackClick}>
+            Back To Category
           </button>
          </div>
-        <table className="table table-striped table-bordered">
-          <thead className="thead-dark">
+        <table className="table">
+          <thead className="bg-[#10C8B8] text-white">
             <tr>
               <th>Subcategory Name</th>
               <th>Created Date</th>
