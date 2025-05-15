@@ -69,6 +69,20 @@ export const useConsigneeService = create((set) => ({
             });
             throw error;
         }
+        },
+
+    deleteConsignee: async (id) => {
+        try {
+            console.log(" from service   ",id);
+            set({ isLoading: true });
+            const response = await axios.delete(API_URL + "consignee/delete-consignee/" + id);
+            set({ isLoading: false });
+            return response.data;
+        } catch (error) {
+            set({ isError: true, Error: error.response.data.message });
+            throw error;
+        }
     }
+
 }));
 

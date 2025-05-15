@@ -7,8 +7,8 @@ import { useDeleteProduct } from "../../../../hooks/seller/useDeleteProduct";
 import defaultImage from "../../../../assets/images/default.jpeg";
 import PropTypes from 'prop-types';
 import { useConsigneeService } from "../../../../services/consignee/consigneeServices";
-
-const ProductTable = ({ products, onProductClick, onProductUpdate, isConsignment = false }) => {
+import { useDeleteConsignee } from "../../../../hooks/useDeleteConsignee";
+const ProductTable = ({ products, onProductClick, onProductUpdate, isConsignment = false, hideDelete = false }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 4;
   const startIndex = currentPage * rowsPerPage;
@@ -21,7 +21,7 @@ const ProductTable = ({ products, onProductClick, onProductUpdate, isConsignment
   const token = sessionStorage.getItem("token");
   const { acceptConsignment, updateProductForConsignment } = useConsigneeService();
   const [loading, setLoading] = useState(false);
-
+  const { mutate: deleteConsignee } = useDeleteConsignee();
   const paginatedProducts = products.slice(
     startIndex,
     startIndex + rowsPerPage
@@ -109,6 +109,22 @@ const ProductTable = ({ products, onProductClick, onProductUpdate, isConsignment
     );
   };
 
+  const handleDeleteConsignee = (product) => { 
+  
+    deleteConsignee({id:product._id},
+      {
+        onSuccess: () => {
+          setShowDeleteModal(false);
+          setModalMessage("Product deleted successfully!");
+          setShowMessageModal(true);
+          if (onProductUpdate) {
+            onProductUpdate();
+          }
+        },
+      }
+    );
+  };
+
   if (products.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -162,23 +178,8 @@ const ProductTable = ({ products, onProductClick, onProductUpdate, isConsignment
                 >
                   <FaEye />
                 </button>
-                {!isConsignment && (
-                  <>
-                    <button
-                      className="w-4 h-5 mr-2 text-green-600"
-                      onClick={() => handleEditClick(product)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="w-4 h-5 mr-2 text-red-500"
-                      onClick={() => handleDeleteClick(product)}
-                    >
-                      <FaTrashAlt />
-                    </button>
-                  </>
-                )}
-                {isConsignment && (
+              
+                {isConsignment && !hideDelete && (
                   <>
                     <button
                       className="w-4 h-5 mr-2 text-green-600"
@@ -186,15 +187,21 @@ const ProductTable = ({ products, onProductClick, onProductUpdate, isConsignment
                       title="Accept"
                       disabled={loading}
                     >
-                      {loading ? (
-                        <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-green-600"></div>
-                      ) : (
-                        <FaCheck />
-                      )}
+                      <FaCheck />
                     </button>
                   </>
                 )}
-              </td>
+                {isConsignment && hideDelete && (
+                  <>
+                    <button
+                      className="w-4 h-5 mr-2 text-red-500"
+                      onClick={() => handleDeleteConsignee(product)}
+                    >
+                      <FaTrashAlt />
+                    </button>
+                  </>
+                )}
+                </td>
             </tr>
           ))}
         </tbody>

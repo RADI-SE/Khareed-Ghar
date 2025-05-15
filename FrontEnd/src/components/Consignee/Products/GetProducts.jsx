@@ -74,7 +74,7 @@ const GetProducts = () => {
               <h4 className="text-2xl font-bold text-gray-900">Products</h4>
             </div>
             <div className="p-6">
-              <ProductTable products={products} onProductClick={handleProductClick} />
+              <ProductTable products={products} onProductClick={handleProductClick} isConsignment={true} hideDelete={true}/>
             </div>
           </div>
         </div>
