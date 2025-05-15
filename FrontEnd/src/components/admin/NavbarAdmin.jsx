@@ -7,6 +7,7 @@ import { MdAccountCircle } from "react-icons/md";
 import { Link } from 'react-router-dom';
  import { FaCheck, FaTimes } from 'react-icons/fa';
 import { MdOutlineCancel } from 'react-icons/md';
+import { handleBecomeSellerRequest } from '../../services/admin/manageUsers';
 
 function NavbarAdmin() {
 
@@ -19,6 +20,7 @@ function NavbarAdmin() {
         await signout();
         navigate("/signin");
       };
+
   return (
     
         <nav className='fixed top-0 left-0 right-0 bg-white shadow-md z-50'>
@@ -75,6 +77,25 @@ function NavbarAdmin() {
                                                         <MdOutlineCancel className="w-4 h-4 text-red-600"/>
                                                       </button>
                                                     </div>
+                                                    )}
+
+                                                    {/* Become a Seller Request */}
+                                                    
+                                                    {notification?.userRequest && (
+                                                      <div className="flex space-x-2 ml-2">
+                                                        <button
+                                                          className="p-1 hover:bg-green-100 rounded-full transition-colors"
+                                                          onClick={() => handleChangeRole(notification?.senderId, "approve")}
+                                                        >
+                                                          <FaCheck className="w-4 h-4 text-green-600" />
+                                                        </button>
+                                                        <button
+                                                          className="p-1 hover:bg-red-100 rounded-full transition-colors"
+                                                          onClick={() => handleChangeRole(notification?.senderId, "reject")}
+                                                        >
+                                                          <MdOutlineCancel className="w-4 h-4 text-red-600" />
+                                                        </button>
+                                                      </div>
                                                     )}
                                                   </div>
                                                 </div>
