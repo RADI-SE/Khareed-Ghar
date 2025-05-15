@@ -50,12 +50,17 @@ export const useConsigneeService = create((set) => ({
     getConsigneeProducts: async () => {
         try {
             set({ isLoading: true });
-            const response = await axios.get(API_URL + "consignee/get-consignee-products");
+            const response = await axios.get(API_URL + "consignee/get-consigned-products");
+            console.log("Response From Consignee Service:", response.data);
+            
+            // Extract the consignedProducts array from the response
+            const products = response.data?.consignedProducts || [];
+            
             set({ 
-                consigneeProducts: response.data,
+                consigneeProducts: products,
                 isLoading: false 
             });
-            return response.data;
+            return products;
         } catch (error) {
             set({ 
                 isError: true, 
